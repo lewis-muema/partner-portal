@@ -1,0 +1,214 @@
+<template>
+  <div>
+    <Header/>
+    <div class="login__log-cont" v-if="state === 'login'">
+      <div class="login__log-panel">
+        <p class="login__header-text">Log in to Sendy</p>
+        <div class="control-group">
+          <div class="login__element">
+            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input"></vue-tel-input>
+          </div>
+          <div class="login__element">
+            <input
+              class="login__password-input"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Password"
+              required
+              v-model="password"
+            >
+          </div>
+          <div id="loggin_error" class="error">{{ loginError }}</div>
+          <div class="login__element">
+            <button
+              class="form-control login__btn"
+              type="submit"
+              value="Log in"
+              id="login"
+              @click="postLogin"
+            >Log In</button>
+          </div>
+          <div class="login__inst">
+            <a href="#" @click="forgotPwd();" class="login__forgotPass">Forgot Password?</a>
+          </div>
+          <div class="login__inst">
+            Don't have an account?
+            <a
+              href="https://partner.sendyit.com/onboarding_portal/"
+              class="login__sign-up"
+            >Sign Up</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="login__log-cont" v-if="state === 'reset'">
+      <div class="login__log-panel">
+        <p class="login__header-text">Set Password</p>
+        <div id="reset_error" class="error">{{ loginError }}</div>
+        <div class="control-group">
+          <div class="login__element">
+            <vue-tel-input v-model="tel" v-bind="bindProps"></vue-tel-input>
+          </div>
+          <div class="login__element">
+            <button
+              class="form-control reset__btn"
+              type="submit"
+              value="Reset Password"
+              id="reset"
+              @click="postForgot"
+            >Set Password</button>
+          </div>
+          <a href="#" @click="forgotPwd();" class="login__forgotPass">Sign In</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import VueTelInput from 'vue-tel-input';
+import Header from '../components/headers/logInHeader';
+import 'vue-tel-input/dist/vue-tel-input.css';
+
+const sha1 = require('js-sha1');
+const axios = require('axios');
+
+export default {
+  components: {
+    Header,
+    VueTelInput,
+  },
+  data() {
+    return {
+      state: 'login',
+      tel: '',
+      password: '',
+      bindProps: {
+        defaultCountry: 'KE',
+        disabledFetchingCountry: false,
+        disabled: false,
+        disabledFormatting: false,
+        placeholder: 'Enter a phone number',
+        required: false,
+        enabledCountryCode: false,
+        enabledFlags: true,
+        preferredCountries: ['KE', 'UG', 'TZ'],
+        onlyCountries: [],
+        ignoredCountries: [],
+        autocomplete: 'off',
+        name: 'telephone',
+        maxLen: 25,
+        wrapperClasses: '',
+        inputClasses: '',
+        dropdownOptions: {
+          disabledDialCode: false,
+        },
+        inputOptions: {
+          showDialCode: false,
+        },
+      },
+      loginError: '',
+    };
+  },
+  computed: {
+    displayNo() {
+      return this.tel;
+    },
+  },
+  created() {
+    if (localStorage.expiryDate) {
+      localStorage.removeItem('expiryDate');
+      localStorage.removeItem('sessionData');
+      localStorage.removeItem('token');
+    }
+  },
+  methods: {
+    forgotPwd() {
+      if (this.state === 'login') {
+        this.state = 'reset';
+        this.loginError = '';
+      } else {
+        this.state = 'login';
+        this.loginError = '';
+      }
+    },
+    postForgot() {
+      // eslint-disable-next-line quotes
+      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
+      this.tel = this.tel.replace(/ /g, '');
+      const payload = JSON.stringify({
+        phone: this.tel,
+      });
+      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/account`, payload).then(response => {
+        if (response.status === 200) {
+          this.handleButton('SET PASSWORD');
+          this.error(response.data.msg, 7000);
+        } else {
+          this.handleButton('SET PASSWORD');
+          this.error('Please try again', 7000);
+        }
+      });
+    },
+    postLogin() {
+      // eslint-disable-next-line quotes
+      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
+      this.tel = this.tel.replace(/ /g, '');
+      const payload = JSON.stringify({
+        phone: this.tel,
+        password: sha1(this.password),
+      });
+      axios.post(`${process.env.VUE_APP_AUTH}rideradmin/login`, payload).then(response => {
+        if (response.status === 200) {
+          this.handleButton('LOG IN');
+          this.handleResponse(response);
+        } else {
+          this.handleButton('LOG IN');
+          this.error('Please try again', 7000);
+        }
+      });
+    },
+    handleResponse(response) {
+      if (typeof response.data === 'string') {
+        const dataToken = response.data.split('.')[1];
+        const sessionData = atob(dataToken);
+        localStorage.sessionData = sessionData;
+        localStorage.token = response.data;
+        const expiry = new Date();
+        expiry.setDate(expiry.getDate() + 3);
+        localStorage.expiryDate = expiry;
+        this.$router.push({ path: '/pending' });
+      } else {
+        this.error('Sorry, your details did not match!', 7000);
+      }
+    },
+    handleButton(data) {
+      if (this.state === 'login') {
+        const loginButton = document.querySelector('.login__btn');
+        loginButton.innerHTML = data;
+      } else {
+        const resetButton = document.querySelector('.reset__btn');
+        resetButton.innerHTML = data;
+      }
+    },
+    error(errorStatement, timeout) {
+      this.loginError = errorStatement;
+      setTimeout(() => {
+        this.loginError = '';
+      }, timeout);
+    },
+    reset() {},
+  },
+};
+</script>
+
+<style>
+p {
+  font-size: 24px;
+  color: #666;
+}
+a,
+a:hover {
+  color: #f57f20;
+}
+</style>
