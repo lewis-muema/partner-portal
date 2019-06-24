@@ -1,0 +1,139 @@
+.login__header {
+  background-color: #f57f20;
+  display: block;
+  padding-top: 9px;
+  padding-bottom: 9px;
+  text-align: center;
+  margin-bottom: -5px;
+}
+
+.login__header-text {
+  font-size: 24px;
+}
+
+.login__forgotPass,
+.login__sign-up {
+  color: #f57f20;
+}
+
+.login__forgotPass:hover,
+.login__sign-up:hover {
+  text-decoration: underline;
+}
+
+.login__logo {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  height: 61px;
+  cursor: pointer;
+}
+
+.reset__btn,
+.login__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reset__btn {
+  margin-bottom: 5px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 200;
+}
+
+input::-webkit-input-placeholder {
+  color: #b8b9ba !important;
+}
+
+.mainWrap {
+  height: 100%;
+}
+
+.login__log-cont {
+  text-align: center;
+  margin: 5px;
+}
+
+.login__log-panel {
+  max-width: 430px;
+  border: 1px solid #d8dfe6;
+  border-radius: 4px;
+  margin: 25px auto;
+  padding: 25px;
+}
+
+.control-group {
+  line-height: 180%;
+}
+
+.login__element {
+  padding-top: 15px;
+  font-size: 14px;
+}
+
+.control-group button[type='submit'] {
+  width: 100%;
+  background-color: #f57f20;
+  color: #fff;
+  letter-spacing: 1.1px !important;
+  font-weight: inherit;
+  padding: 6px;
+  height: 42px;
+  border: 1px solid #f57f20;
+  text-transform: uppercase;
+  font-size: medium !important;
+  cursor: pointer;
+}
+
+.login__password-input {
+  width: 100%;
+  display: block;
+  padding: 0;
+  border-radius: 4px;
+  height: 42px;
+  line-height: 1.25;
+  border-width: thin;
+  border-color: #b1b1b1;
+  border-style: solid;
+  box-sizing: border-box;
+  padding-left: 15px;
+}
+
+input {
+  font-size: 14px;
+}
+
+.hide {
+  display: none;
+}
+
+.error {
+  color: #1782c5;
+  text-align: center;
+  font-size: 80%;
+  line-height: 130%;
+  margin-top: 10px;
+}
+
+.login__inst {
+  margin-top: 20px;
+  margin-bottom: 5px;
+  color: #666;
+  line-height: 100%;
+  font-size: 17px;
+  font-weight: 200;
+}
+
+.intl-tel-input {
+  width: 100%;
+}
+
+.intl-tel-input .country-list {
+  max-width: 378px;
+  border-radius: 5px;
+}
