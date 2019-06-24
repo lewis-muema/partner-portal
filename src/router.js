@@ -7,6 +7,9 @@ import Orders from './views/orders.vue';
 import Dashboard from './views/dashboard.vue';
 import Banks from './views/banks.vue';
 import Loans from './views/loans.vue';
+import Savings from './views/savings.vue';
+import Statement from './views/statement.vue';
+import Vehicles from './views/vehicles.vue';
 
 Vue.use(Router);
 
@@ -48,6 +51,21 @@ export default new Router({
       path: '/loans',
       name: 'loans',
       component: Loans,
+    },
+    {
+      path: '/savings',
+      name: 'savings',
+      component: Savings,
+    },
+    {
+      path: '/statement',
+      name: 'statement',
+      component: Statement,
+    },
+    {
+      path: '/vehicles',
+      name: 'vehicles',
+      component: Vehicles,
     },
   ],
 });

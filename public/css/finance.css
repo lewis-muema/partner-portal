@@ -19,10 +19,26 @@ body.dt-print-view {
   background-color: #f57f20;
   color: #1782c5;
 }
-
+.snap-error {
+  top: 3px !important;
+}
 .print {
   padding: 20px 40px 20px 40px;
   height: 100vh;
+}
+.add-driver,
+.reassign-driver {
+  color: #f57f20;
+  cursor: pointer;
+}
+.cancel-allocation {
+  color: #0275d8;
+  cursor: pointer;
+}
+.add-driver:hover,
+.cancel-allocation:hover,
+.reassign-driver:hover {
+  text-decoration: underline;
 }
 .drivers-add-driver-btn {
   margin-bottom: 17px !important;
@@ -216,6 +232,11 @@ button.close {
   margin-bottom: 20px;
   height: 40px;
   font-size: 14px !important;
+  color: black !important;
+  background-color: white !important;
+  border-color: black !important;
+  margin-bottom: 10px !important;
+  height: 50px;
 }
 .vehicles__column-flex {
   flex-direction: column;
@@ -246,6 +267,8 @@ button.close {
 
 .mod-form {
   align-items: flex-start !important;
+  display: block !important;
+  overflow: scroll;
 }
 
 #vehStat th {
@@ -446,7 +469,11 @@ label {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
   border: 0;
 }
-
+.vehicles__documents-error {
+  color: #f57f20;
+  text-align: center;
+  margin-bottom: 10px;
+}
 .statement__dash-box {
   min-height: 0px;
   height: 42px;
@@ -469,10 +496,14 @@ label {
 }
 
 .vehicles__addc-title {
-  margin-bottom: 15px;
   font-size: 20px;
   text-align: center;
   font-weight: 600;
+}
+.vehicles__add-confirm {
+  margin-top: 30px;
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 .vehicles__addc-content {
@@ -482,6 +513,8 @@ label {
   border-radius: 10px;
   color: #000;
   background-color: rgb(216, 216, 216);
+  min-height: 140px;
+  overflow: scroll;
 }
 
 #vehAddModal {
@@ -547,6 +580,47 @@ input:-ms-input-placeholder {
   font-size: 15px;
 }
 
+.icon-material {
+  color: #1782c5;
+}
+
+.vehicle-tool-tip {
+  width: 75px;
+  color: white;
+}
+
+.fab {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100px;
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+}
+
+.fab-container {
+  right: 40px;
+  bottom: 40px;
+  height: 110px;
+  width: 60px;
+  position: fixed;
+}
+
+.fab-action-button {
+  background-color: #f57f20;
+  color: white;
+  width: 60px;
+  height: 60px;
+  border-radius: 100px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
 .fabdoit {
   padding: 0;
   position: fixed;
@@ -560,6 +634,26 @@ input:-ms-input-placeholder {
   cursor: pointer;
 }
 
+.fab-buttons {
+  position: fixed;
+  padding: 0;
+  z-index: 50;
+  transition: linear 0.3s;
+  bottom: 50px;
+  background-color: white;
+  box-shadow: 0px 0px 4px 1px #69696985;
+  border-radius: 100px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fab-container:hover .fab-buttons {
+  bottom: 105px;
+}
+
 .fab-actions {
   display: none;
   position: fixed;
@@ -569,6 +663,29 @@ input:-ms-input-placeholder {
   width: 100%;
   background-color: #1782c5;
   color: #fff;
+}
+.fab-buttons__link {
+  position: fixed;
+  height: 25px;
+  width: 0px;
+  color: white;
+  background-color: #0000008a;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: HelveticaNeue;
+  text-align: center;
+  padding-top: 5px;
+  overflow: hidden;
+  transition-property: width;
+  transition-duration: 0.1s;
+  transition-delay: 0s;
+  right: 105px;
+}
+
+.fab-container:hover .fab-buttons__link {
+  width: 75px;
+  transition-delay: 0.3s;
+  transition-duration: 0.5s;
 }
 
 .fab-act {
@@ -594,10 +711,11 @@ input:-ms-input-placeholder {
 }
 
 .modal-body {
-  min-height: 150px;
+  height: 100%;
   justify-content: center;
   align-items: center;
   display: flex;
+  overflow: scroll;
 }
 
 .modal-open {
@@ -605,8 +723,17 @@ input:-ms-input-placeholder {
 }
 
 .btn-primary {
-  background-color: #f57f20;
-  border-color: #f57f20;
+  background-color: #f57f20 !important;
+  border-color: #f57f20 !important;
+}
+
+.btn-secondary {
+  color: black !important;
+  background-color: white !important;
+}
+
+.btn-secondary:hover {
+  background-color: #cecece !important;
 }
 
 .statement__modAmt {
@@ -633,13 +760,21 @@ input:-ms-input-placeholder {
   font-size: 13px;
   line-height: 1.2;
   padding-top: 20px;
-  height: 100vh;
+  /* height: 100vh; */
 }
 
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+.fil-sub-disabled {
+  background-color: #bbbbbb !important;
+}
+
+.statement__radio-button-margin {
+  margin: 15% !important;
 }
 
 .disp-caption {
@@ -706,6 +841,16 @@ table.dataTable tfoot > tr > th {
 #disp th {
   border-bottom-width: 0px;
   text-align: left !important;
+  font-size: 15px;
+  color: black;
+}
+
+.savings__row {
+  padding: 1% !important;
+}
+
+.sorting {
+  padding: 1% !important;
 }
 
 .narr {
@@ -728,6 +873,7 @@ table.dataTable tfoot > tr > th {
   border-radius: 2px;
   line-height: 150%;
   border: 1px solid rgba(0, 0, 0, 0.2);
+  padding-left: 10px;
 }
 
 .mdshow {
@@ -764,8 +910,23 @@ table.dataTable tfoot > tr > th {
   color: #464a4c;
   font-weight: bold;
   font-size: 90%;
+  text-align: left;
   padding: 5px;
-  padding-left: 10px;
+  width: 40%;
+}
+.thead-mobile-row {
+  width: 60%;
+  padding: 3px;
+}
+
+table tr td[data-v-53282f60] {
+  padding: 10px !important;
+  height: 40px !important;
+}
+
+.row-mobile {
+  display: flex;
+  width: 100%;
 }
 
 .start-img {
@@ -900,6 +1061,11 @@ ul {
   border-radius: 10px;
   bottom: 0px;
   color: #fff;
+}
+
+.vehicles__driver-input {
+  width: 100%;
+  height: 40px;
 }
 
 .btn,
@@ -1195,6 +1361,8 @@ button.btn-floating {
 
 .vehicles__driver-error {
   color: #f17f3a;
+  position: absolute;
+  top: 15px;
 }
 .statement__withdraw-button {
   background-color: #f17f3a;

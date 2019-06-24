@@ -112,7 +112,7 @@ button {
   font-style: normal;
   font-weight: normal;
   line-height: normal;
-  font-size: 14px;
+  font-size: 14px !important;
 }
 
 .search-btn {
@@ -259,7 +259,7 @@ button {
   color: white;
   border-radius: 4px;
   height: 30px;
-  font-size: 10px;
+  font-size: 10px !important;
   font-weight: 600;
   display: block;
   margin-left: auto;

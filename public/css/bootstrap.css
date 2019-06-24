@@ -5853,6 +5853,9 @@ html {
     text-shadow: 0 1px 0 #fff;
     filter: alpha(opacity=20);
     opacity: .2;
+    padding: 0px !important;
+    font-size: 35px !important;
+    margin-top: -10px !important;
   }
   .close:hover,
   .close:focus {
@@ -5919,6 +5922,7 @@ html {
     outline: 0;
     -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
             box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            height: 100% !important;
   }
   .modal-backdrop {
     position: fixed;

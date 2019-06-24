@@ -1,0 +1,650 @@
+<template>
+  <div>
+    <verifier/>
+    <Header/>
+    <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
+      <p class="color-white">{{ notificationMessage }}</p>
+      <div class="loader" v-if="sendingWithdrawRequestStatus"></div>
+    </div>
+    <div class="statements__blinder">
+      <div class="statement__withdraw-popup statement__row">
+        <div class="popup-row statement__row">
+          <span>Withdraw cash</span>
+          <span>
+            <i class="material-icons statement__cancel-icon" @click="closePopup">cancel</i>
+          </span>
+        </div>
+        <div class="statement__row statement__add-bank-tab">
+          <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
+          <p class="small-margin color-white">{{ withdrawError }}</p>
+          <router-link to="/banks" v-if="addAccountStatus">
+            <p class="small-margin statement__bg-orange">+ Add a bank account</p>
+          </router-link>
+        </div>
+        <div class="statement__row statement__divided-row">
+          <span class="statement__column-3">
+            <i class="material-icons statement__wallet">account_balance_wallet</i>
+          </span>
+          <span class="statement__column-9">
+            <p class="no-margin large-font">Balance</p>
+            <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
+          </span>
+        </div>
+        <div class="statement__row">
+          <p class="no-margin x-large-font">How do you want to be paid?</p>
+        </div>
+        <div class="statement__row statement__scrollable-row">
+          <div class="statement__divided-row centered">
+            <input
+              type="radio"
+              class="statement__column-2 statement__radio-button-margin radio-1"
+              name="myRadio"
+              @click="checkedWithDrawal(1, 0)"
+            >
+            <span class="statement__column-10">
+              <p class="no-margin">M-Pesa</p>
+              <p class="no-margin small-font">{{ sessionInfo.phone }}</p>
+            </span>
+          </div>
+          <div
+            class="statement__divided-row centered bank-row"
+            v-for="bankAccount in bankAccounts"
+            :key="bankAccount.id"
+          >
+            <input
+              type="radio"
+              class="statement__column-2 statement__radio-button-margin radio-1"
+              name="myRadio"
+              @click="checkedWithDrawal(2, bankAccount.id)"
+            >
+            <span class="statement__column-10">
+              <p class="no-margin">Bank Account</p>
+              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
+              <p class="no-margin small-font">{{ bankAccount.bank_branch }}</p>
+              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
+            </span>
+          </div>
+        </div>
+        <div class="statement__row">
+          <input
+            type="text"
+            placeholder="Enter amount"
+            class="full-width input-height"
+            v-model="amount"
+            @input="checkDetails()"
+            @keyup.delete="checkDetails()"
+            :maxlength="amountLength"
+          >
+        </div>
+        <div class="statement__row">
+          <button
+            class="full-width input-height statement__withdraw-button"
+            v-if="sendWithdrawStatus"
+            @click="withdraw()"
+          >Withdraw</button>
+          <button class="full-width input-height" disabled v-else>Withdraw</button>
+        </div>
+      </div>
+    </div>
+    <div class="print">
+      <div class="printContain hidden-sm-down" v-if="windowWidth > 768">
+        <div class="row justify-content-between senta">
+          <div class="stat-filt col-6">
+            <div class="row justify-content-between">
+              <div class="col-2 padding">
+                <select class="dropdown-filter" v-model="riderId" @change="selectRider(riderId)">
+                  <option selected value>Driver</option>
+                  <option
+                    v-for="rider in riders"
+                    :value="rider.rider_id"
+                    :key="rider.rider_id"
+                  >{{ rider.f_name }} {{ rider.s_name }}</option>
+                </select>
+              </div>
+              <div class="col-2 padding">
+                <select class="dropdown-filter" v-model="vehicleId">
+                  <option selected value>vehicle</option>
+                  <option
+                    v-for="vehicle in vehicles"
+                    :value="vehicle.id"
+                    :key="vehicle.id"
+                  >{{ vehicle.registration_no }}</option>
+                </select>
+              </div>
+              <div class="col-3">
+                <datepicker
+                  v-model="from"
+                  input-class="filtIn"
+                  id="dtfrom"
+                  placeholder="From"
+                  name="from"
+                ></datepicker>
+              </div>
+              <div class="col-3">
+                <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+              </div>
+              <div class="subFilt col-2">
+                <button
+                  type="button"
+                  id="filtSub"
+                  name="button"
+                  class="btn btn_primary fil-sub"
+                  @click="filt();"
+                >
+                  <i class="fa fa-filter" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="stat-cards col-4">
+            <div class="row" style="justify-content: flex-end;">
+              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                <div class="statement__dash-box dashboard__dash-box">
+                  <span class="dashboard__box-icon statement__box-icon dashboard__box-icon-orange">
+                    <font-awesome-icon :icon="['fas', 'money-bill-alt']"/>
+                  </span>
+                  <div class="statement__box-content">
+                    <span class="statement__box-text">Today you can withdraw :</span>
+                    <br>
+                    <span class="statement__box-number">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-cards col-2">
+            <div class="subFilt">
+              <button
+                type="button"
+                id="filtSub"
+                name="button"
+                class="btn btn_primary fil-sub fil-sub-1 active-btn"
+                @click="closePopup();"
+                v-if="activeStatus"
+              >Withdraw cash</button>
+              <button
+                type="button"
+                id="filtSub"
+                name="button"
+                class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn"
+                @mouseover="showErr(true)"
+                @mouseleave="showErr(false)"
+                v-else
+              >Withdraw cash</button>
+              <p class="hidden-btn-error">The button is disabled. You cannot withdraw today</p>
+            </div>
+          </div>
+        </div>
+        <div class="search-error" id="err">{{ error }}</div>
+        <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
+          <div class="divider-top"></div>
+          <datatable
+            :columns="columns"
+            :rows="rows"
+            :title="`Statement for ${this.sessionInfo.name} for ${month()}`"
+            v-if="rows"
+            :per-page="[10, 20, 30, 40, 50]"
+            :default-per-page="10"
+            :clickable="false"
+            :sortable="true"
+            :exact-search="true"
+            :exportable="true"
+          ></datatable>
+        </table>
+      </div>
+      <div class="printContain hidden-md-up" v-else>
+        <div class="col-12 padding margin-bottom">
+          <datepicker
+            v-model="from"
+            input-class="filtIn"
+            id="dtfrom"
+            placeholder="From"
+            name="from"
+          ></datepicker>
+        </div>
+        <div class="col-12 padding margin-bottom">
+          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+        </div>
+        <div class="subFilt col-12 padding margin-bottom">
+          <button
+            type="button"
+            id="filtSub"
+            name="button"
+            class="btn btn_primary fil-sub centered-btn"
+            @click="filt();"
+          >
+            <i class="fa fa-filter" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="search-error" id="err">{{ error }}</div>
+        <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
+        <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
+          <table class="table-responsive mobile-table">
+            <thead class="thead-mobile">
+              <tr>
+                <th>Amount</th>
+                <th>Balance</th>
+              </tr>
+            </thead>
+            <tr class="divider">
+              <td class="statement__txt-orange">{{ row.amount }}</td>
+              <td class="statement__txt-blue">{{ row.running_balance }}</td>
+            </tr>
+            <tr>
+              <td>{{ row.txn }}&nbsp;({{ row.pay_narrative }})</td>
+              <td>{{ row.pay_time }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import $ from 'jquery';
+import DataTable from 'vue-materialize-datatable';
+import Datepicker from 'vuejs-datepicker';
+import verifier from '../components/verifier';
+import Header from '../components/headers/appHeader';
+
+const axios = require('axios');
+const moment = require('moment');
+
+export default {
+  components: {
+    verifier,
+    Header,
+    Datepicker,
+    datatable: DataTable,
+  },
+  data() {
+    return {
+      sessionInfo: '',
+      config: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.token,
+        },
+      },
+      columns: [{ label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }, { label: 'Driver Name', field: 'rider_name' }],
+      page: 1,
+      rows: [
+        {
+          rider_id: 1,
+          txn: 1,
+          pay_time: 1,
+          amount: 1,
+          running_balance: 1,
+          pay_narrative: 1,
+        },
+      ],
+      from: '',
+      to: '',
+      error: '',
+      windowWidth: '',
+      ownerRb: '',
+      bankAccounts: [],
+      allBanks: [],
+      opened: false,
+      sendWithdrawStatus: false,
+      amount: '',
+      bankId: '',
+      amountLength: '',
+      mpesaWithdrawal: false,
+      bankWithdrawal: false,
+      responseCount: 0,
+      selectedRow: '',
+      responseNumber: 0,
+      checked: 0,
+      withdrawError: '',
+      addAccountStatus: false,
+      withdrawHead: '',
+      notificationMessage: '',
+      notificationType: 'failed',
+      notificationName: 'message-box',
+      sendingWithdrawRequestStatus: false,
+      activeStatus: false,
+      withdrawDay: '',
+      withdrawTime: '',
+      day: '',
+      showWithdrawErr: '',
+      vehicles: [],
+      riders: [],
+      vehicleId: '',
+      riderId: '',
+      riderNames: 'all riders',
+      vehArray: [],
+    };
+  },
+  created() {
+    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+    const date = new Date();
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
+    const payload = JSON.stringify({
+      owner_id: this.sessionInfo.id,
+      from: firstDay,
+      to: lastDay,
+    });
+    const record = [];
+
+    axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
+      if (response.data.msg) {
+        this.ownerRb = response.data.msg.owner_balance;
+        response.data.msg.statement.forEach((row, i) => {
+          const rbRb = row.running_balance.split(' ')[1] * -1;
+          const currencyRb = row.running_balance.split(' ')[0];
+          const rbAmount = row.amount.split(' ')[1] * -1;
+          const currencyAmount = row.amount.split(' ')[0];
+          record.push({
+            txn: row.txn,
+            pay_time: row.pay_time,
+            amount: `${currencyAmount} ${rbAmount}`,
+            running_balance: `${currencyRb} ${rbRb}`,
+            pay_narrative: row.pay_narrative,
+            rider_name: row.rider_name,
+          });
+        });
+        this.rows = record;
+        this.showWithdrawButton();
+      } else {
+        this.rows = [];
+        setTimeout(() => {
+          if (document.getElementsByTagName('tbody').length > 0) {
+            const list = document.getElementsByTagName('tbody')[0];
+            list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No statement found for this period</td></tr>';
+          }
+        }, 500);
+      }
+    });
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+    this.getVehicles();
+    this.fetchAllBanks();
+    this.fetchOwnerBanks();
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    getVehicles() {
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+      });
+      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then(response => {
+        this.vehArray = response.data.msg;
+        this.listVehicles();
+        this.listRiders();
+      });
+    },
+    handleResize() {
+      this.windowWidth = window.innerWidth;
+    },
+    month() {
+      const date = new Date();
+      return `${date.toLocaleString('en-us', { month: 'long' })} ${date.getFullYear()}`;
+    },
+    filt() {
+      if (this.to === '' || this.from === '') {
+        this.error = 'Please select both a from and to date';
+        setTimeout(() => {
+          this.error = '';
+        }, 4000);
+      } else {
+        // eslint-disable-next-line quotes
+        document.getElementById('filtSub').innerHTML = `<div class='loading-spinner'></div> LOADING`;
+        const firstDay = new Date(this.from.getFullYear(), this.from.getMonth(), this.from.getDate()).toISOString().split('T')[0];
+        const lastDay = new Date(this.to.getFullYear(), this.to.getMonth(), this.to.getDate()).toISOString().split('T')[0];
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+          from: firstDay,
+          to: lastDay,
+          vehicle_id: this.vehicleId,
+          rider_id: this.riderId,
+        });
+        const record = [];
+
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
+          // eslint-disable-next-line quotes
+          document.getElementById('filtSub').innerHTML = `<i class="fa fa-filter" aria-hidden="true"></i>`;
+          const element = document.querySelector('.records-placeholder');
+          if (typeof element !== 'undefined' && element !== null) {
+            element.parentNode.removeChild(element);
+          }
+          if (response.data.msg.statement) {
+            this.ownerRb = response.data.msg.owner_balance;
+            response.data.msg.statement.forEach((row, i) => {
+              const rbRb = row.running_balance.split(' ')[1] * -1;
+              const currencyRb = row.running_balance.split(' ')[0];
+              const rbAmount = row.amount.split(' ')[1] * -1;
+              const currencyAmount = row.amount.split(' ')[0];
+              record.push({
+                txn: row.txn,
+                pay_time: row.pay_time,
+                amount: `${currencyAmount} ${rbAmount}`,
+                running_balance: `${currencyRb} ${rbRb}`,
+                pay_narrative: row.pay_narrative,
+                rider_name: row.rider_name,
+              });
+            });
+            this.rows = record;
+          } else {
+            this.error = 'No statement found for this period';
+            setTimeout(() => {
+              this.error = '';
+            }, 4000);
+            this.rows = [];
+            setTimeout(() => {
+              if (document.getElementsByTagName('tbody').length > 0) {
+                const list = document.getElementsByTagName('tbody')[0];
+                list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No statement found for this period</td></tr>';
+              }
+            }, 500);
+          }
+        });
+      }
+    },
+    closePopup() {
+      this.sendWithdrawStatus = false;
+      if (this.opened) {
+        this.opened = false;
+        document.querySelector('.statements__blinder').style.display = 'none';
+        document.querySelector('.statement__add-bank-tab').style.display = 'none';
+        this.addAccountStatus = false;
+      } else {
+        this.opened = true;
+        document.querySelector('.statements__blinder').style.display = 'flex';
+        this.amount = '';
+      }
+    },
+    checkDetails() {
+      this.amount = this.amount.toString().replace(/[^0-9]/g, '');
+      if (parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101 && this.checked === 1) {
+        this.sendWithdrawStatus = true;
+      } else {
+        this.sendWithdrawStatus = false;
+      }
+    },
+    checkedWithDrawal(option, value) {
+      if (option === 1) {
+        this.mpesaWithdrawal = true;
+        this.bankWithdrawal = false;
+        this.checked = 1;
+        this.checkDetails();
+      } else if (option === 2) {
+        this.selectedRow = value;
+        this.bankWithdrawal = true;
+        this.mpesaWithdrawal = false;
+        this.checked = 1;
+        this.checkDetails();
+        const bankName = this.bankAccounts[value].bank_name.toString();
+        const filterObj1 = this.allBanks.filter(e => e.name === bankName);
+        if (filterObj1.length > 0) {
+          this.bankId = filterObj1[0].payment_bank_id;
+        } else {
+          this.bankId = '';
+        }
+      }
+    },
+    withdraw() {
+      this.sendWithdrawStatus = false;
+      this.notificationName = 'message-box-up';
+      this.notificationType = 'sending';
+      this.notificationMessage = 'Sending request';
+      this.sendingWithdrawRequestStatus = true;
+      if (this.mpesaWithdrawal && !this.bankWithdrawal) {
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+          phone_no: this.sessionInfo.phone,
+          payment_type: 1,
+          amount: this.amount,
+        });
+        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
+          const parsedResponse = response.data;
+          if (parsedResponse.status_code) {
+            // this.trackMpesaWithdrawal();
+            if (this.opened) {
+              this.closePopup();
+            }
+            this.sendingWithdrawRequestStatus = false;
+            this.notificationType = 'success';
+            this.notificationMessage = `The withdrawal is currently being processed. The ${this.amount} will reflect in your m-pesa`;
+            setTimeout(() => {
+              this.notificationName = 'message-box-down';
+              window.location.reload();
+            }, 4000);
+          } else {
+            document.querySelector('.statement__add-bank-tab').style.display = 'grid';
+            this.withdrawHead = 'Withdrawal unsuccessful';
+            this.withdrawError = parsedResponse.message;
+            if (this.bankAccounts.length === 0) {
+              this.addAccountStatus = false;
+            }
+            setTimeout(() => {
+              this.notificationName = 'message-box-down';
+            }, 4000);
+          }
+        });
+      } else if (!this.mpesaWithdrawal && this.bankWithdrawal) {
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+          account_no: this.bankAccounts[this.selectedRow].account_no,
+          payment_type: 2,
+          amount: this.amount,
+          payment_bank_id: this.bankId,
+        });
+
+        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
+          const parsedResponse = response.data;
+          if (parsedResponse.status_code) {
+            // this.trackBankWithdrawal();
+            if (this.opened) {
+              this.closePopup();
+            }
+            this.sendingWithdrawRequestStatus = false;
+            this.notificationType = 'success';
+            this.notificationMessage = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
+            setTimeout(() => {
+              me.notificationName = 'message-box-down';
+              window.location.reload();
+            }, 4000);
+          } else {
+            document.querySelector('.statement__add-bank-tab').style.display = 'grid';
+            this.withdrawError = parsedResponse.message;
+            this.withdrawHead = 'Withdrawal unsuccessful';
+            this.notificationName = 'message-box-down';
+            this.sendWithdrawStatus = true;
+          }
+        });
+      }
+    },
+    fetchOwnerBanks() {
+      this.responseCount = 0;
+      this.bankAccounts = [];
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+      });
+      let counter = -1;
+
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config).then(response => {
+        const parsedResponse = response.data;
+        parsedResponse.data.forEach((row, i) => {
+          if (row.admin_approval === 1) {
+            counter += 1;
+            row.id = counter;
+            this.bankAccounts.push(row);
+          }
+        });
+      });
+    },
+    fetchAllBanks() {
+      axios.get(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`, this.config).then(response => {
+        const parsedResponse = response.data;
+        parsedResponse.data.forEach((row, i) => {
+          this.allBanks.push(row);
+        });
+      });
+    },
+    showErr(val) {
+      if (val) {
+        document.querySelector('.hidden-btn-error').style.display = 'block';
+      } else {
+        document.querySelector('.hidden-btn-error').style.display = 'none';
+      }
+    },
+    showWithdrawButton() {
+      if (this.ownerRb.is_withdrawal_day) {
+        this.activeStatus = true;
+        if (document.querySelector('.active-btn')) {
+          document.querySelector('.active-btn').style.display = 'block';
+        }
+      } else {
+        this.activeStatus = false;
+        document.querySelector('.inactive-btn').style.display = 'block';
+      }
+    },
+    listRiders() {
+      const vehCount = this.vehArray;
+      vehCount.forEach((row, g) => {
+        if (vehCount[g].rider !== null) {
+          this.riders.push(vehCount[g].rider);
+        }
+      });
+    },
+    listVehicles() {
+      const vehCount = this.vehArray;
+      vehCount.forEach((row, g) => {
+        if (vehCount[g].vehicle !== null) {
+          this.vehicles.push(vehCount[g].vehicle);
+        }
+      });
+    },
+    selectRider(id) {
+      const filterObj = this.riders.filter(e => e.rider_id === id);
+      if (filterObj.length > 0) {
+        this.riderNames = `${filterObj[0].f_name} ${filterObj[0].s_name}`;
+      } else {
+        this.riderNames = 'all riders';
+      }
+    },
+    trackBankWithdrawal() {
+      if (process.env.ENVIRONMENT === 'production') {
+        mixpanel.track('Withdraw to bank (partner portal)');
+      } else {
+        mixpanel.track('Test withdraw to bank (partner portal)');
+      }
+    },
+    trackMpesaWithdrawal() {
+      if (process.env.ENVIRONMENT === 'production') {
+        mixpanel.track('Withdraw to M-pesa (partner portal)');
+      } else {
+        mixpanel.track('Test withdraw to M-pesa (partner portal)');
+      }
+    },
+  },
+};
+</script>
+
+<style>
+</style>

@@ -33,11 +33,11 @@
         </div>
         <div class="search-error" id="err">{{ error }}</div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
-          <div class="divider-top"></div>
           <datatable
+            class="savings__row"
             :columns="columns"
             :rows="rows"
-            :title="`Loans for ${this.sessionInfo.name} for ${month()}`"
+            :title="`Savings for ${this.sessionInfo.name} for ${month()}`"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -73,7 +73,7 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No loans found for this period</p>
+        <p v-if="rows.length === 0" class="no-loans">No savings found for this period</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
@@ -125,16 +125,7 @@ export default {
       },
       columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }],
       page: 1,
-      rows: [
-        {
-          rider_id: 1,
-          txn: 1,
-          pay_time: 1,
-          amount: 1,
-          running_balance: 1,
-          pay_narrative: 1,
-        },
-      ],
+      rows: [],
       from: '',
       to: '',
       error: '',
@@ -158,7 +149,7 @@ export default {
     const record = [];
     let currency = '';
 
-    axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
+    axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/savings`, payload, this.config).then(response => {
       if (response.data.msg) {
         response.data.msg.forEach((row, i) => {
           this.sessionInfo.riders.forEach((rider, x) => {
@@ -181,7 +172,7 @@ export default {
         setTimeout(() => {
           if (document.getElementsByTagName('tbody').length > 0) {
             const list = document.getElementsByTagName('tbody')[0];
-            list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No loans found for this period</td></tr>';
+            list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No savings found for this period</td></tr>';
           }
         }, 500);
       }
@@ -223,7 +214,7 @@ export default {
         const record = [];
         let currency = '';
 
-        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/savings`, payload, this.config).then(response => {
           // eslint-disable-next-line quotes
           document.getElementById('filtSub').innerHTML = `<i class="fa fa-filter" aria-hidden="true"></i>`;
           const element = document.querySelector('.records-placeholder');
@@ -248,7 +239,7 @@ export default {
             });
             this.rows = record;
           } else {
-            this.error = 'No loans found for this period';
+            this.error = 'No savings found for this period';
             setTimeout(() => {
               this.error = '';
             }, 4000);
@@ -256,7 +247,7 @@ export default {
             setTimeout(() => {
               if (document.getElementsByTagName('tbody').length > 0) {
                 const list = document.getElementsByTagName('tbody')[0];
-                list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No loans found for this period</td></tr>';
+                list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No savings found for this period</td></tr>';
               }
             }, 500);
           }

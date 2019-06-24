@@ -34,6 +34,9 @@ hr {
 .font-16 {
   font-size: 16px;
 }
+.font-14 {
+  font-size: 14px;
+}
 .color-black {
   color: black;
 }
@@ -57,4 +60,7 @@ table {
   border: solid;
   border-color: #dee2e6;
   border-width: 0.5px;
+}
+.modal-footer {
+  height: 65px !important;
 }

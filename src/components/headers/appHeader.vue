@@ -22,13 +22,13 @@
                 @mouseover="timeout = 1000"
                 @mouseleave="timeout = 0"
               >
-                <router-link to="/pending" class="dropdown-link">
+                <router-link to="/vehicles" class="dropdown-link">
                   <p class="dropdown-item">Vehicles</p>
                 </router-link>
                 <router-link to="/pending" class="dropdown-link">
                   <p class="dropdown-item">Tracking</p>
                 </router-link>
-                <router-link to="/pending" class="dropdown-link">
+                <router-link to="/statement" class="dropdown-link">
                   <p class="dropdown-item">Statement</p>
                 </router-link>
                 <router-link to="/banks" class="dropdown-link">
@@ -37,7 +37,7 @@
                 <router-link to="/loans" class="dropdown-link">
                   <p class="dropdown-item">Loans</p>
                 </router-link>
-                <router-link to="/pending" class="dropdown-link">
+                <router-link to="/savings" class="dropdown-link">
                   <p class="dropdown-item">Savings</p>
                 </router-link>
 

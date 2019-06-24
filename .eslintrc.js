@@ -45,5 +45,6 @@ module.exports = {
     'vue/html-quotes': 'off',
     'no-plusplus': 'off',
     'vue/no-template-shadow': 'off',
+    'vue/no-v-html': 'off',
   },
 };
