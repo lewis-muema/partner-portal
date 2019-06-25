@@ -5,7 +5,7 @@ variables:
   PROD_IMAGE_NAME: sendy-docker-local.jfrog.io/node_private_api:prod_$CI_COMMIT_SHORT_SHA
 stages:
   - lint
-  # - test
+  - test
   - buildpush
   - deploy
 
@@ -36,7 +36,7 @@ unitTest:
     # install mocha
     - npm i mocha
     # Run tests
-    - npm run test:unit
+    # - npm run test:unit
   only:
     - dev
     - staging
