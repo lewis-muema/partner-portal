@@ -1,0 +1,64 @@
+image: node
+
+variables:                                                                                                                                                                                                                                                                                                                                                                    
+  STAGING_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:latest_$CI_COMMIT_SHORT_SHA
+  PROD_IMAGE_NAME: sendy-docker-local.jfrog.io/node_private_api:prod_$CI_COMMIT_SHORT_SHA
+stages:
+  - lint
+  # - test
+  - buildpush
+  - deploy
+
+# Lets name our Job eslint, because that's what it's doing.
+eslint:
+  # tell eslint what stage it is. (This could also be build or test for example)
+  stage: lint
+  # What scripts do we want to run?
+  tags:
+    - docker
+  script:
+    # install eslint
+    - npm i eslint
+    # Run eslint
+    - npm run lint
+  only:
+    - dev
+    - staging
+
+# Lets name our Job unitTest, because that's what it's doing.
+unitTest:
+  # tell eslint what stage it is. (This could also be build or test for example)
+  stage: test
+  # What scripts do we want to run?
+  tags:
+    - docker
+  script:
+    # install mocha
+    - npm i mocha
+    # Run tests
+    - npm run test:unit
+  only:
+    - dev
+    - staging
+ 
+
+#builds and pushes the docker image to the artifactory
+buildpushstaging:
+  stage: buildpush
+  tags:
+    - shell
+  script:
+    - docker build --build-arg DOCKER_ENV=testing --pull -t $STAGING_IMAGE_NAME -f Dockerfile .
+    - docker push $STAGING_IMAGE_NAME
+  only:
+    - staging
+
+#deploys the app to staging environment
+deployStaging:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - ssh -v -f -o StrictHostKeyChecking=no -l admin kubetest-master.sendyit.com "kubectl set image deploy vue-partner-portal  vue-partner-portal=$STAGING_IMAGE_NAME"
+  only:
+    - staging
