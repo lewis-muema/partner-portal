@@ -1,7 +1,7 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <div class="truckflow__container-tab">
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
@@ -14,7 +14,7 @@
               placeholder="Enter pickup"
               @input="filterPickup()"
               @keyup.delete="refresh()"
-            >
+            />
           </span>
           <span class="container__search-input">
             <input
@@ -25,7 +25,7 @@
               placeholder="Enter destination"
               @input="filterDest()"
               @keyup.delete="refresh()"
-            >
+            />
           </span>
           <span class="container__search-select">
             <select
@@ -162,7 +162,7 @@
                     <span class="map-details-go-back--span">Back</span>
                   </div>
                   <div class="map__column">
-                    <img :src="createStaticMapUrl(order)" class="map">
+                    <img :src="createStaticMapUrl(order)" class="map" />
                     <div class="map__details-row">
                       <div class="map__details-col">
                         <p class="map__details-pickup heading uppercase">pickup location</p>
@@ -214,6 +214,7 @@
     </div>
   </div>
 </template>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
 
 <script>
 import verifier from '../components/verifier';

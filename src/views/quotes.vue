@@ -1,7 +1,7 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <div class="truckflow__container-tab">
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
@@ -13,7 +13,7 @@
               placeholder="Enter pickup"
               @input="filterPickup()"
               @keyup.delete="refresh()"
-            >
+            />
           </span>
           <span class="container__search-input">
             <input
@@ -23,7 +23,7 @@
               placeholder="Enter destination"
               @input="filterDest()"
               @keyup.delete="refresh()"
-            >
+            />
           </span>
           <span class="container__search-select">
             <select
@@ -163,7 +163,7 @@
                     <span class="map-details-go-back--span">Back</span>
                   </div>
                   <div class="map__column">
-                    <img :src="createStaticMapUrl(order)" class="map">
+                    <img :src="createStaticMapUrl(order)" class="map" />
                     <div class="map__details-row">
                       <div class="map__details-col">
                         <p class="map__details-pickup heading uppercase">pickup location</p>
@@ -219,7 +219,7 @@
                             placeholder="Enter quote amount"
                             @input="confirm(order.id)"
                             v-model="quoteAmount"
-                          >
+                          />
                         </div>
                         <p
                           class="orders__bidvehicle-type heading uppercase"
@@ -257,14 +257,14 @@
                             placeholder="Enter Registration Number"
                             v-model="regNo"
                             @input="addRegNo(order.id)"
-                          >
+                          />
                           <input
                             type="text"
                             class="input orders__bid-input"
                             placeholder="Enter Insurance Number"
                             v-model="insuNo"
                             @input="addInsuNo(order.id)"
-                          >
+                          />
                         </div>
                         <p
                           class="orders__assigndriver heading uppercase"
@@ -302,7 +302,7 @@
                             placeholder="Enter Name"
                             v-model="driverName"
                             @input="addDriverName(order.id)"
-                          >
+                          />
                           <input
                             type="text"
                             class="input orders__bid-input"
@@ -310,7 +310,7 @@
                             v-model="ID"
                             @input="addId(order.id)"
                             maxlength="8"
-                          >
+                          />
                           <input
                             class="input orders__bid-input"
                             type="text"
@@ -321,7 +321,7 @@
                             @input="addPhone(order.id)"
                             @keyup.delete="clearPhone(order.id)"
                             maxlength="13"
-                          >
+                          />
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
                           <button
@@ -375,7 +375,7 @@
     </div>
   </div>
 </template>
-
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
 <script>
 import verifier from '../components/verifier';
 import Header from '../components/headers/appHeader';
