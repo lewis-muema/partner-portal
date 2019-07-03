@@ -26,8 +26,11 @@ COPY . /build/
 ARG DOCKER_ENV
 
 ENV DOCKER_ENV=$DOCKER_ENV
-
-RUN npm install && npm run build
+RUN echo ${DOCKER_ENV}
+RUN if [ "$DOCKER_ENV" = "production" ]; \
+        then npm install && npm run build; \
+        else npm install && npm run staging; \
+        fi
 
 RUN cp nginx/default.conf /etc/nginx/conf.d/default.conf && \
     cp -R /build/dist/*  /app/ && \
