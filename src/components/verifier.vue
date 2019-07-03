@@ -11,7 +11,6 @@ export default {
   },
   computed: {},
   created() {
-    console.log(process.env);
     if (this.date === undefined || new Date() > new Date(this.date) || localStorage.token === undefined || localStorage.sessionData === undefined) {
       this.$router.push({ path: '/' });
     }
