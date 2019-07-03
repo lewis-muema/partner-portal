@@ -1259,6 +1259,19 @@ button.btn-floating {
 }
 
 @media (max-width: 599px) {
+  .vehicles__documents-card {
+    width: 375px;
+  }
+  .doccard-img {
+    width: 375px;
+    height: 210px;
+  }
+  .v--modal-box {
+    margin-left: auto;
+    margin-right: auto;
+    left: 0px !important;
+    width: 400px !important;
+  }
   .stat-cards {
     padding: 0;
   }

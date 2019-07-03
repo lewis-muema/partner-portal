@@ -10,6 +10,7 @@ import Loans from './views/loans.vue';
 import Savings from './views/savings.vue';
 import Statement from './views/statement.vue';
 import Vehicles from './views/vehicles.vue';
+import Tracking from './views/tracking.vue';
 
 Vue.use(Router);
 
@@ -66,6 +67,11 @@ export default new Router({
       path: '/vehicles',
       name: 'vehicles',
       component: Vehicles,
+    },
+    {
+      path: '/tracking',
+      name: 'tracking',
+      component: Tracking,
     },
   ],
 });

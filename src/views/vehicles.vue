@@ -243,7 +243,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="mLabel">Add Vehicle</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            @click="hide('add-vehicle-modal')"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -358,7 +364,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="odLabel">Vehicle Documents</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            @click="hide('vehicle-documents-modal')"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -422,7 +434,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="odLabel">Vehicle Documents</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            @click="hide('vehicle-image-modal')"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -489,7 +507,13 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="vehAddLabel">Confirm Vehicle Addition</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            @click="hide('confirm-documents-modal')"
+          >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -591,7 +615,7 @@
         </table>
       </div>
       <div class="printContain hidden-md-up" v-for="row in rows" :key="row.registration_no" v-else>
-        <div class="table-responsive mobile-table" @click="logger()">
+        <div class="table-responsive mobile-table">
           <div class="row-mobile">
             <div class="thead-mobile">Make</div>
             <div class="thead-mobile-row">{{ row.make }}</div>
