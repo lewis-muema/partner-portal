@@ -25,7 +25,7 @@
                 <router-link to="/vehicles" class="dropdown-link">
                   <p class="dropdown-item">Vehicles</p>
                 </router-link>
-                <router-link to="/pending" class="dropdown-link">
+                <router-link to="/tracking" class="dropdown-link">
                   <p class="dropdown-item">Tracking</p>
                 </router-link>
                 <router-link to="/statement" class="dropdown-link">
