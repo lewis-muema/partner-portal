@@ -7,7 +7,7 @@
             class="icon"
             src="https://images.sendyit.com/web_platform/logo/Sendy_logo_whitewhite.png"
             @click="location.href='https://sendyit.com/';"
-          >
+          />
         </div>
         <div class="inner-right">
           <div class="navitem">
@@ -41,14 +41,11 @@
                   <p class="dropdown-item">Savings</p>
                 </router-link>
 
-                <router-link to="/pending" class="dropdown-link">
-                  <p
-                    class="dropdown-item"
-                    href="http://support.sendyit.com/collection/1-sendy-partner-training-manual"
-                  >Support</p>
-                </router-link>
-                <hr>
-                <router-link to="/" class="dropdown-link">
+                <div @click="trainingRedirect()" class="dropdown-link">
+                  <p class="dropdown-item">Support</p>
+                </div>
+                <hr />
+                <router-link to="/login" class="dropdown-link">
                   <p class="dropdown-item">Sign Out</p>
                 </router-link>
               </div>
@@ -61,7 +58,7 @@
       <div class="secondary-inner">
         <div class="secnav-container">
           <router-link to="/dashboard" class="secnav-page" :class="showActiveDashboard()">Dashboard</router-link>
-          <router-link to="/pending" class="secnav-page" :class="showActivePending()">Available</router-link>
+          <router-link to="/" class="secnav-page" :class="showActivePending()">Available</router-link>
           <router-link to="/quotes" class="secnav-page" :class="showActiveQuotes()">My Quotes</router-link>
           <router-link to="/orders" class="secnav-page" :class="showActiveOrders()">My Orders</router-link>
         </div>
@@ -102,7 +99,7 @@ export default {
       }
     },
     showActivePending() {
-      if (this.$route.path === '/pending') {
+      if (this.$route.path === '/') {
         return 'active';
       }
     },
@@ -115,6 +112,9 @@ export default {
       if (this.$route.path === '/orders') {
         return 'active';
       }
+    },
+    trainingRedirect() {
+      window.location.href = 'http://support.sendyit.com/collection/1-sendy-partner-training-manual';
     },
   },
 };

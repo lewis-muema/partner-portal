@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
     <div class="login__log-cont" v-if="state === 'login'">
       <div class="login__log-panel">
         <p class="login__header-text">Log in to Sendy</p>
@@ -17,7 +17,7 @@
               placeholder="Password"
               required
               v-model="password"
-            >
+            />
           </div>
           <div id="loggin_error" class="error">{{ loginError }}</div>
           <div class="login__element">
@@ -177,7 +177,7 @@ export default {
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + 3);
         localStorage.expiryDate = expiry;
-        this.$router.push({ path: '/pending' });
+        this.$router.push({ path: '/' });
       } else {
         this.error('Sorry, your details did not match!', 7000);
       }

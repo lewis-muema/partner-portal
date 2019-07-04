@@ -11,9 +11,8 @@ export default {
   },
   computed: {},
   created() {
-    
     if (this.date === undefined || new Date() > new Date(this.date) || localStorage.token === undefined || localStorage.sessionData === undefined) {
-      this.$router.push({ path: '/' });
+      this.$router.push({ path: '/login' });
     }
   },
   methods: {},

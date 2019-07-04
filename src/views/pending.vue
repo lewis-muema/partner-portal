@@ -60,14 +60,12 @@
                 <div class="orders__col-head center-action">action</div>
               </div>
               <div class="loading" v-if="loadingStatus"></div>
-              <div class="ready">
-                <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-                  <p class="no-records-par">There are no orders</p>
-                </div>
+              <div class="no-records" v-if="!loadingStatus && orders.length === 0">
+                <p class="no-records-par">There are no orders</p>
               </div>
               <template v-for="order in orders.slice().reverse()">
                 <div
-                  class="orders__list-toprow"
+                  class="orders__list-row"
                   @click="toggle(order.id)"
                   :class="{ opened: opened.includes(order.id) }"
                   v-if="showParentOrdercard(order.id)"
@@ -338,19 +336,16 @@
                             @input="addId(order.id)"
                             maxlength="8"
                           />
-                          <input
-                            class="input orders__bid-input"
-                            type="tel"
-                            name="phone"
-                            id="phone"
-                            placeholder="Driver's phone number"
-                            autocomplete="on"
-                            required
+                          <vue-tel-input
                             v-model="driverPhone"
+                            v-bind="bindProps"
+                            id="phone"
+                            name="phone"
+                            class="input orders__bid-input"
                             @input="addPhone(order.id)"
                             @keyup.delete="clearPhone(order.id)"
                             maxlength="13"
-                          />
+                          ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
                           <button
@@ -418,6 +413,8 @@
 <script>
 import verifier from '../components/verifier';
 import Header from '../components/headers/appHeader';
+import VueTelInput from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -428,6 +425,7 @@ export default {
   components: {
     verifier,
     Header,
+    VueTelInput,
   },
   data() {
     return {
@@ -494,6 +492,30 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      bindProps: {
+        defaultCountry: 'KE',
+        disabledFetchingCountry: false,
+        disabled: false,
+        disabledFormatting: false,
+        placeholder: 'Drivers phone number',
+        required: false,
+        enabledCountryCode: false,
+        enabledFlags: true,
+        preferredCountries: ['KE', 'UG', 'TZ'],
+        onlyCountries: [],
+        ignoredCountries: [],
+        autocomplete: 'off',
+        name: 'telephone',
+        maxLen: 25,
+        wrapperClasses: '',
+        inputClasses: '',
+        dropdownOptions: {
+          disabledDialCode: false,
+        },
+        inputOptions: {
+          showDialCode: false,
+        },
+      },
     };
   },
   computed: {},
@@ -508,6 +530,9 @@ export default {
         this.getOrders(response.data.msg);
       }
     });
+  },
+  beforeDestroy() {
+    clearInterval(interval); // stop the interval
   },
   methods: {
     setDriverStatus() {
@@ -578,10 +603,13 @@ export default {
       this.confirm(id);
     },
     addPhone(id) {
-      this.driverPhone = this.driverPhone
-        .toString()
-        .replace(/[^0-9+]/g, '')
-        .replace(/^(?!00[^0])0(\d{3})(\d{3})(\d{3})/, '+254$1$2$3');
+      this.driverPhone = this.driverPhone.toString().replace(/[^0-9+]/g, '');
+      if (this.driverPhone.toString().startsWith('+') && this.driverPhone.length < 13) {
+        // console.log(this.driverPhone);
+        const formattedPhone = this.driverPhone.slice(4, 100);
+        this.driverPhone = `0${formattedPhone}`;
+      }
+      // .replace(/^(?!00[^0])0(\d{3})(\d{3})(\d{3})/, '+254$1$2$3');
       setTimeout(() => {
         this.confirm(id);
       }, 200);
@@ -593,6 +621,7 @@ export default {
       });
     },
     clearPhone(id) {
+      console.log(this.driverPhone);
       if (this.driverPhone.toString().startsWith('+')) {
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
@@ -802,9 +831,9 @@ export default {
       if (!this.addDriverStatus) {
         this.addDriverStatus = true;
         this.newRider = true;
-        setTimeout(() => {
-          this.verifyTelInput();
-        }, 200);
+        // setTimeout(() => {
+        //   this.verifyTelInput();
+        // }, 200);
       } else {
         this.addDriverStatus = false;
         this.newRider = false;
@@ -1200,7 +1229,7 @@ export default {
       });
     },
     refresh() {
-      document.querySelectorAll('.bids-table-row').forEach(row => {
+      document.querySelectorAll('.orders__list-row').forEach(row => {
         row.style.display = 'grid';
       });
       const inputInp = document.getElementById('inp').value.toLowerCase();

@@ -59,14 +59,12 @@
               <div class="orders__col-head center-action uppercase">action</div>
             </div>
             <div class="loading" v-if="loadingStatus"></div>
-            <div class="ready">
-              <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-                <p class="no-records-par">There are no orders</p>
-              </div>
+            <div class="no-records" v-if="!loadingStatus && orders.length === 0">
+              <p class="no-records-par">There are no orders</p>
             </div>
             <template v-for="order in orders.slice().reverse()">
               <div
-                class="orders__list-toprow"
+                class="orders__list-row"
                 @click="toggle(order.id)"
                 :class="{ opened: opened.includes(order.id) }"
                 v-if="showParentOrdercard(order.id)"
@@ -294,6 +292,9 @@ export default {
     this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
     this.getOrders();
   },
+  beforeDestroy() {
+    clearInterval(interval); // stop the interval
+  },
   methods: {
     regcounter(id) {
       this.regOk = id;
@@ -491,7 +492,7 @@ export default {
       }
     },
     refresh() {
-      document.querySelectorAll('.orders__list-toprow').forEach(row => {
+      document.querySelectorAll('.orders__list-row').forEach(row => {
         row.style.display = 'grid';
       });
       const inputInp = document.getElementById('inp').value.toLowerCase();
@@ -584,7 +585,6 @@ export default {
       const orderPayload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-
       axios
         .post(`${this.auth}v1/list_owner_orders/`, orderPayload, this.config)
         .then(response => {
