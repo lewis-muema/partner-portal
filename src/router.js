@@ -19,12 +19,12 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/login',
       name: 'logIn',
       component: Login,
     },
     {
-      path: '/pending',
+      path: '/',
       name: 'pending',
       component: Pending,
     },

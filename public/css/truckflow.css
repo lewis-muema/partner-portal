@@ -173,7 +173,8 @@ button {
   font-weight: 400;
 }
 
-.orders__list-toprow {
+.orders__list-toprow,
+.orders__list-row {
   display: grid;
   grid-template-columns: repeat(16, 1fr);
   /* border-top-color: #8a8a8a; */

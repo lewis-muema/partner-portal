@@ -450,26 +450,31 @@ export default {
     setWindowVar(i, data) {
       const speedEl = document.querySelector(`.speed${i}`);
       const timeEl = document.querySelector(`.time${i}`);
-      speedEl.innerHTML = `Speed: <label class="spacer2"></label>${Math.round(data.speed * 10) / 10} Kmph`;
-      const timeDiff = new Date(data.time) - new Date(this.ridersWithTrackers[i].lastSeen);
-      if (timeDiff / 1000 < 1800) {
-        timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Online';
-      } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
-        timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
-      } else {
-        timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
+      if (speedEl && timeEl) {
+        speedEl.innerHTML = `Speed: <label class="spacer2"></label>${Math.round(data.speed * 10) / 10} Kmph`;
+        const timeDiff = new Date(data.time) - new Date(this.ridersWithTrackers[i].lastSeen);
+        if (timeDiff / 1000 < 1800) {
+          timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Online';
+        } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
+          timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
+        } else {
+          timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
+        }
       }
+
       this.ridersWithTrackers[i].lastSeen = data.time;
     },
     loopTimer(i) {
       const timeEl = document.querySelector(`.time${i}`);
-      const timeDiff = new Date().getTime() - new Date(this.ridersWithTrackers[i].lastSeen);
-      if (timeDiff / 1000 < 1800) {
-        timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Online';
-      } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
-        timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
-      } else {
-        timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
+      if (timeEl) {
+        const timeDiff = new Date().getTime() - new Date(this.ridersWithTrackers[i].lastSeen);
+        if (timeDiff / 1000 < 1800) {
+          timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Online';
+        } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
+          timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
+        } else {
+          timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
+        }
       }
     },
   },
