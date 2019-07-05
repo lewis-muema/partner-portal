@@ -516,6 +516,7 @@ export default {
       interval = setInterval(() => {
         let order = '';
         let openid = '';
+        let allDetails = '';
         if (this.opened[0]) {
           openid = this.opened[0];
           order = this.orders[openid - 1].orderNo;
@@ -530,47 +531,13 @@ export default {
             const unescaped = response.data;
             this.orders = [];
             unescaped.data.forEach((row, i) => {
-              const orderno = row.order_no;
-              const time = row.date_time;
-              const fromcity = row.from_city;
-              const variance = row.price_variance;
-              const tocity = row.to_city;
-              const vendorname = row.vendor_disp_name;
-              const fixedcost = row.fixed_cost;
-              const takehome = row.take_home;
-              const priceDetails = JSON.parse(row.price_details);
-              const unescaped1 = JSON.parse(row.order_details);
-              const orderDetails = unescaped1.values;
-              if (priceDetails.order_currency) {
-                orderDetails.currency = priceDetails.order_currency;
-              } else {
-                orderDetails.currency = 'KES';
-              }
-              if (row.order_notes) {
-                orderDetails.orderNotes = row.order_notes[0].msg;
-              }
-              if (row.customer_min_amount) {
-                orderDetails.bid_status = 1;
-                orderDetails.min_amount = row.min_take_home;
-              } else {
-                orderDetails.bid_status = 0;
-              }
-              orderDetails.id = i + 1;
-              orderDetails.fixedCost = fixedcost;
-              orderDetails.vendorname = vendorname;
-              orderDetails.fromCity = fromcity;
-              orderDetails.toCity = tocity;
-              orderDetails.bidPlaced = 0;
-              orderDetails.confirmed = 0;
-              orderDetails.orderTime = time;
-              orderDetails.takeHome = takehome;
-              orderDetails.orderNo = orderno;
-              if (order === orderno) {
+              allDetails = this.populateOrders(row, i);
+              if (order === allDetails.orderno) {
                 this.opened = [];
                 this.opened.push(i + 1);
               }
               if (!this.bikesOnly) {
-                this.orders.push(orderDetails);
+                this.orders.push(allDetails);
               }
             });
           })
@@ -592,47 +559,52 @@ export default {
         .then(response => {
           const unescaped = response.data;
           unescaped.data.forEach((row, i) => {
-            const orderno = row.order_no;
-            const time = row.date_time;
-            const driver = row.rider_name;
-            const vehicle = row.vehicle_reg_no;
-            const vendorname = row.vendor_disp_name;
-            const ordernotes = row.order_notes[0].msg;
-            const orderStatus = row.order_status;
-            const confirmStatus = row.confirm_status;
-            const unescaped1 = JSON.parse(row.order_details);
-            const orderDetails = unescaped1.values;
-            const priceDetails = JSON.parse(row.price_details);
-            if (priceDetails.order_currency) {
-              orderDetails.currency = priceDetails.order_currency;
-            } else {
-              orderDetails.currency = 'KES';
-            }
-            if (row.customer_min_amount) {
-              orderDetails.amount = row.amount;
-            } else {
-              orderDetails.amount = row.take_home;
-            }
-            orderDetails.orderNo = orderno;
-            orderDetails.id = i + 1;
-            orderDetails.confirmed = 0;
-            orderDetails.vendorname = vendorname;
-            orderDetails.orderTime = time;
-            orderDetails.orderNotes = ordernotes;
-            orderDetails.confirmedDriver = driver;
-            orderDetails.confirmedVehicle = vehicle;
-            orderDetails.orderStatus = orderStatus;
-            orderDetails.confirmStatus = confirmStatus;
-            this.orders.push(orderDetails);
+            this.orders.push(this.populateOrders(row, i));
             this.responseNo = 1;
             this.loadingStatus = false;
           });
+          this.refreshOrders();
         })
         .catch(error => {
           if (error.response) {
             this.loadingStatus = false;
           }
         });
+    },
+    populateOrders(row, i) {
+      const orderno = row.order_no;
+      const time = row.date_time;
+      const driver = row.rider_name;
+      const vehicle = row.vehicle_reg_no;
+      const vendorname = row.vendor_disp_name;
+      const orderStatus = row.order_status;
+      const confirmStatus = row.confirm_status;
+      const unescaped1 = JSON.parse(row.order_details);
+      const orderDetails = unescaped1.values;
+      const priceDetails = JSON.parse(row.price_details);
+      if (priceDetails.order_currency) {
+        orderDetails.currency = priceDetails.order_currency;
+      } else {
+        orderDetails.currency = 'KES';
+      }
+      if (row.order_notes) {
+        orderDetails.orderNotes = row.order_notes[0].msg;
+      }
+      if (row.customer_min_amount) {
+        orderDetails.amount = row.amount;
+      } else {
+        orderDetails.amount = row.take_home;
+      }
+      orderDetails.orderNo = orderno;
+      orderDetails.id = i + 1;
+      orderDetails.confirmed = 0;
+      orderDetails.vendorname = vendorname;
+      orderDetails.orderTime = time;
+      orderDetails.confirmedDriver = driver;
+      orderDetails.confirmedVehicle = vehicle;
+      orderDetails.orderStatus = orderStatus;
+      orderDetails.confirmStatus = confirmStatus;
+      return orderDetails;
     },
   },
 };

@@ -1120,7 +1120,7 @@ export default {
         }
       });
     },
-    getRiders() {
+    getRiders(id) {
       const riderload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
@@ -1132,6 +1132,9 @@ export default {
             row.count = v;
             this.riders.push(row);
           });
+          if (this.riders.length !== 0) {
+            this.autoSelectRiders(id);
+          }
         }
       });
     },
@@ -1150,6 +1153,9 @@ export default {
               this.vehicles.push(row);
             }
           });
+          if (this.vehicles.length !== 0) {
+            this.autoSelectVehicles(id);
+          }
         }
       });
     },
@@ -1171,70 +1177,24 @@ export default {
           .post(`${this.auth}v1/list_owner_bids/`, payload, this.config)
           .then(response => {
             const unescaped = response.data;
-            let ordernotes = '';
+            let allDetails = '';
             if (unescaped.status) {
               this.orders = [];
               const loop = unescaped.data.length;
               unescaped.data.forEach((row, i) => {
-                const orderno = row.order_no;
-                const time = row.date_time;
-                const bidamount = row.bid_amount;
-                const bidid = row.order_bid_id;
-                const variance = row.price_variance;
-                const fromcity = row.from_city;
-                const tocity = row.to_city;
-                const riderid = row.rider_id;
-                const vehicleid = row.vehicle_id;
-                const orderStatus = row.order_status;
-                const confirmStatus = row.confirm_status;
-                const awardStatus = row.award_status;
-                if (row.order_notes) {
-                  ordernotes = row.order_notes[0].msg;
-                }
-                const vendorname = row.vendor_disp_name;
-                if (row.order_details) {
-                  const unescaped1 = JSON.parse(row.order_details);
-                  const orderDetails = unescaped1.values;
-                  const priceDetails = JSON.parse(row.price_details);
-                  if (priceDetails.order_currency) {
-                    orderDetails.currency = priceDetails.order_currency;
-                  } else {
-                    orderDetails.currency = 'KES';
-                  }
-                  orderDetails.orderNo = orderno;
-                  orderDetails.id = i + 1;
-                  orderDetails.variance = variance;
-                  orderDetails.bid_status = 1;
-                  orderDetails.vendorname = vendorname;
-                  orderDetails.assignedVehicle = vehicleid;
-                  orderDetails.assignedRider = riderid;
-                  orderDetails.fromCity = fromcity;
-                  orderDetails.toCity = tocity;
-                  orderDetails.bidId = bidid;
-                  orderDetails.bidAmount = bidamount;
-                  orderDetails.bidPlaced = 0;
-                  orderDetails.confirmed = 0;
-                  orderDetails.orderTime = time;
-                  orderDetails.orderStatus = orderStatus;
-                  orderDetails.confirmStatus = confirmStatus;
-                  orderDetails.awardStatus = awardStatus;
-                  orderDetails.orderNotes = ordernotes;
-                  if (order === orderno) {
+                allDetails = this.populateOrders(row, i);
+                if (allDetails) {
+                  if (order === allDetails.orderno) {
                     this.opened = [];
                     this.opened.push(i + 1);
                   }
-                  if (row.customer_min_amount) {
-                    orderDetails.min_amount = row.min_take_home;
-                  } else {
-                    orderDetails.min_amount = 0;
-                  }
-                  this.orders.push(orderDetails);
+                  this.orders.push(allDetails);
                 }
               });
             }
           })
           .catch(error => {
-            //   this.loadingStatus = false;
+            // this.loadingStatus = false;
           });
       }, 60000);
     },
@@ -1250,60 +1210,11 @@ export default {
         .post(`${this.auth}v1/list_owner_bids/`, payload, this.config)
         .then(response => {
           const unescaped = response.data;
-          let ordernotes = '';
           if (unescaped.status) {
             const loop = unescaped.data.length;
             unescaped.data.forEach((row, i) => {
-              const orderno = row.order_no;
-              const time = row.date_time;
-              const bidamount = row.bid_amount;
-              const bidid = row.order_bid_id;
-              const variance = row.price_variance;
-              const fromcity = row.from_city;
-              const tocity = row.to_city;
-              const riderid = row.rider_id;
-              const vehicleid = row.vehicle_id;
-              const orderStatus = row.order_status;
-              const confirmStatus = row.confirm_status;
-              const awardStatus = row.award_status;
-              if (row.order_notes) {
-                ordernotes = row.order_notes[0].msg;
-              }
-              const vendorname = row.vendor_disp_name;
-              if (row.order_details) {
-                const unescaped1 = JSON.parse(row.order_details);
-                const orderDetails = unescaped1.values;
-                const priceDetails = JSON.parse(row.price_details);
-                if (priceDetails.order_currency) {
-                  orderDetails.currency = priceDetails.order_currency;
-                } else {
-                  orderDetails.currency = 'KES';
-                }
-                orderDetails.orderNo = orderno;
-                orderDetails.id = i + 1;
-                orderDetails.variance = variance;
-                orderDetails.bid_status = 1;
-                orderDetails.vendorname = vendorname;
-                orderDetails.assignedVehicle = vehicleid;
-                orderDetails.assignedRider = riderid;
-                orderDetails.fromCity = fromcity;
-                orderDetails.toCity = tocity;
-                orderDetails.bidId = bidid;
-                orderDetails.bidAmount = bidamount;
-                orderDetails.bidPlaced = 0;
-                orderDetails.confirmed = 0;
-                orderDetails.orderTime = time;
-                orderDetails.orderStatus = orderStatus;
-                orderDetails.confirmStatus = confirmStatus;
-                orderDetails.awardStatus = awardStatus;
-                orderDetails.orderNotes = ordernotes;
-                if (row.customer_min_amount) {
-                  orderDetails.min_amount = row.min_take_home;
-                } else {
-                  orderDetails.min_amount = 0;
-                }
-                this.orders.push(orderDetails);
-              }
+              // this.populateOrders(row, i);
+              this.orders.push(this.populateOrders(row, i));
               this.loadingStatus = false;
               this.responseNo = 1;
             });
@@ -1315,6 +1226,57 @@ export default {
         .catch(error => {
           this.loadingStatus = false;
         });
+    },
+    populateOrders(row, i) {
+      const orderno = row.order_no;
+      const time = row.date_time;
+      const bidamount = row.bid_amount;
+      const bidid = row.order_bid_id;
+      const variance = row.price_variance;
+      const fromcity = row.from_city;
+      const tocity = row.to_city;
+      const riderid = row.rider_id;
+      const vehicleid = row.vehicle_id;
+      const orderStatus = row.order_status;
+      const confirmStatus = row.confirm_status;
+      const awardStatus = row.award_status;
+      if (row.order_notes.length > 1) {
+        orderDetails.orderNotes = row.order_notes[0].msg;
+      }
+      const vendorname = row.vendor_disp_name;
+      if (row.order_details) {
+        const unescaped1 = JSON.parse(row.order_details);
+        const orderDetails = unescaped1.values;
+        const priceDetails = JSON.parse(row.price_details);
+        if (priceDetails.order_currency) {
+          orderDetails.currency = priceDetails.order_currency;
+        } else {
+          orderDetails.currency = 'KES';
+        }
+        if (row.customer_min_amount) {
+          orderDetails.min_amount = row.min_take_home;
+        } else {
+          orderDetails.min_amount = 0;
+        }
+        orderDetails.orderNo = orderno;
+        orderDetails.id = i + 1;
+        orderDetails.variance = variance;
+        orderDetails.bid_status = 1;
+        orderDetails.vendorname = vendorname;
+        orderDetails.assignedVehicle = vehicleid;
+        orderDetails.assignedRider = riderid;
+        orderDetails.fromCity = fromcity;
+        orderDetails.toCity = tocity;
+        orderDetails.bidId = bidid;
+        orderDetails.bidAmount = bidamount;
+        orderDetails.bidPlaced = 0;
+        orderDetails.confirmed = 0;
+        orderDetails.orderTime = time;
+        orderDetails.orderStatus = orderStatus;
+        orderDetails.confirmStatus = confirmStatus;
+        orderDetails.awardStatus = awardStatus;
+        return orderDetails;
+      }
     },
   },
 };
