@@ -520,16 +520,18 @@ export default {
   },
   computed: {},
   created() {
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    const payload = JSON.stringify({
-      owner_id: this.sessionInfo.id,
-    });
-    axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then(response => {
-      if (response.status === 200) {
-        this.allVehicles = response.data.msg;
-        this.getOrders(response.data.msg);
-      }
-    });
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+      });
+      axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then(response => {
+        if (response.status === 200) {
+          this.allVehicles = response.data.msg;
+          this.getOrders(response.data.msg);
+        }
+      });
+    }
   },
   beforeDestroy() {
     clearInterval(interval); // stop the interval

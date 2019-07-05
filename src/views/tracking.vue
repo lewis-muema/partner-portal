@@ -11,7 +11,7 @@
       <i class="vehicles-tracking-icons fa fa-chevron-right"></i>
     </div>
     <div class="selector" id="vehicles-tracking-dashboard">
-      <div class="selector--title selector--title__left">
+      <div class="selector--title selector--title__left" v-if="availableVendors.length > 0">
         <span v-for="availableVendor in availableVendors" :key="availableVendor.rider_id">
           <label class="vendor-name">
             <input
@@ -25,6 +25,7 @@
           </label>
         </span>
       </div>
+      <div class="selector--title selector--title__left" v-else>Vehicle Tracking</div>
       <div class="selector--content">
         <div v-if="ridersWithTrackers.length > 0">
           <div
@@ -72,7 +73,10 @@
         <div class="vehicle-tracking-info" v-else>
           You do not currently have a Sendy issued tracker installed on your vehicle.
           <br />Get in touch with our
-          <a href="mailto:support@sendyit.com">Partner Management Team</a> to get one today.
+          <a
+            href="mailto:support@sendyit.com"
+            class="color-orange"
+          >Partner Management Team</a> to get one today.
         </div>
       </div>
     </div>
@@ -123,49 +127,51 @@ export default {
     };
   },
   created() {
-    this.loadMapScript();
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    const riders = [];
-    const riderIds = [];
-    const payload = {
-      owner_id: this.sessionInfo.id,
-    };
-    const lastPositionPayload = {
-      rider_id: riderIds,
-    };
-    axios
-      .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, payload, this.config)
-      .then(response => {
-        if (response.data.status) {
-          response.data.riders.forEach((row, i) => {
-            riderIds.push(row.rider_id);
-            riders.push(row);
-          });
-        }
-      })
-      .then(() => {
-        axios.post(`${process.env.VUE_APP_AUTH}v1/last_partner_position`, lastPositionPayload, this.config).then(response => {
+    if (localStorage.sessionData) {
+      this.loadMapScript();
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const riders = [];
+      const riderIds = [];
+      const payload = {
+        owner_id: this.sessionInfo.id,
+      };
+      const lastPositionPayload = {
+        rider_id: riderIds,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, payload, this.config)
+        .then(response => {
           if (response.data.status) {
-            const vendorArray = [];
-            response.data.partnerArray.forEach((row, i) => {
-              const filterObject = riders.filter(e => e.rider_id === row.rider_id);
-              if (filterObject.length > 0) {
-                row.rider_details = filterObject[0];
-                this.ridersWithTrackers.push(row);
-                const vendorDetails = {
-                  vendor_type: row.rider_details.vendor_type,
-                  vendor_disp_name: row.rider_details.vendor_disp_name,
-                };
-                if (!vendorArray.includes(row.rider_details.vendor_type)) {
-                  vendorArray.push(row.rider_details.vendor_type);
-                  this.availableVendors.push(vendorDetails);
-                }
-              }
+            response.data.riders.forEach((row, i) => {
+              riderIds.push(row.rider_id);
+              riders.push(row);
             });
-            this.setMarkers();
           }
+        })
+        .then(() => {
+          axios.post(`${process.env.VUE_APP_AUTH}v1/last_partner_position`, lastPositionPayload, this.config).then(response => {
+            if (response.data.status) {
+              const vendorArray = [];
+              response.data.partnerArray.forEach((row, i) => {
+                const filterObject = riders.filter(e => e.rider_id === row.rider_id);
+                if (filterObject.length > 0) {
+                  row.rider_details = filterObject[0];
+                  this.ridersWithTrackers.push(row);
+                  const vendorDetails = {
+                    vendor_type: row.rider_details.vendor_type,
+                    vendor_disp_name: row.rider_details.vendor_disp_name,
+                  };
+                  if (!vendorArray.includes(row.rider_details.vendor_type)) {
+                    vendorArray.push(row.rider_details.vendor_type);
+                    this.availableVendors.push(vendorDetails);
+                  }
+                }
+              });
+              this.setMarkers();
+            }
+          });
         });
-      });
+    }
   },
   beforeDestroy() {
     this.ridersWithTrackers.forEach((row, i) => {
@@ -450,7 +456,7 @@ export default {
     setWindowVar(i, data) {
       const speedEl = document.querySelector(`.speed${i}`);
       const timeEl = document.querySelector(`.time${i}`);
-      if (speedEl && timeEl) {
+      if (speedEl && timeEl && this.ridersWithTrackers.length > 0) {
         speedEl.innerHTML = `Speed: <label class="spacer2"></label>${Math.round(data.speed * 10) / 10} Kmph`;
         const timeDiff = new Date(data.time) - new Date(this.ridersWithTrackers[i].lastSeen);
         if (timeDiff / 1000 < 1800) {
@@ -466,7 +472,7 @@ export default {
     },
     loopTimer(i) {
       const timeEl = document.querySelector(`.time${i}`);
-      if (timeEl) {
+      if (timeEl && this.ridersWithTrackers.length > 0) {
         const timeDiff = new Date().getTime() - new Date(this.ridersWithTrackers[i].lastSeen);
         if (timeDiff / 1000 < 1800) {
           timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Online';

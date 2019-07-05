@@ -1,7 +1,7 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
       <p class="color-white">{{ notificationMessage }}</p>
       <div class="loader" v-if="sendingWithdrawRequestStatus"></div>
@@ -40,7 +40,7 @@
               class="statement__column-2 statement__radio-button-margin radio-1"
               name="myRadio"
               @click="checkedWithDrawal(1, 0)"
-            >
+            />
             <span class="statement__column-10">
               <p class="no-margin">M-Pesa</p>
               <p class="no-margin small-font">{{ sessionInfo.phone }}</p>
@@ -56,7 +56,7 @@
               class="statement__column-2 statement__radio-button-margin radio-1"
               name="myRadio"
               @click="checkedWithDrawal(2, bankAccount.id)"
-            >
+            />
             <span class="statement__column-10">
               <p class="no-margin">Bank Account</p>
               <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
@@ -74,7 +74,7 @@
             @input="checkDetails()"
             @keyup.delete="checkDetails()"
             :maxlength="amountLength"
-          >
+          />
         </div>
         <div class="statement__row">
           <button
@@ -141,11 +141,11 @@
               <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                 <div class="statement__dash-box dashboard__dash-box">
                   <span class="dashboard__box-icon statement__box-icon dashboard__box-icon-orange">
-                    <font-awesome-icon :icon="['fas', 'money-bill-alt']"/>
+                    <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
                   </span>
                   <div class="statement__box-content">
                     <span class="statement__box-text">Today you can withdraw :</span>
-                    <br>
+                    <br />
                     <span class="statement__box-number">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</span>
                   </div>
                 </div>
@@ -318,51 +318,54 @@ export default {
     };
   },
   created() {
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    const date = new Date();
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
-    const payload = JSON.stringify({
-      owner_id: this.sessionInfo.id,
-      from: firstDay,
-      to: lastDay,
-    });
-    const record = [];
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const date = new Date();
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+        from: firstDay,
+        to: lastDay,
+      });
+      const record = [];
 
-    axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
-      if (response.data.msg) {
-        this.ownerRb = response.data.msg.owner_balance;
-        response.data.msg.statement.forEach((row, i) => {
-          const rbRb = row.running_balance.split(' ')[1] * -1;
-          const currencyRb = row.running_balance.split(' ')[0];
-          const rbAmount = row.amount.split(' ')[1] * -1;
-          const currencyAmount = row.amount.split(' ')[0];
-          record.push({
-            txn: row.txn,
-            pay_time: row.pay_time,
-            amount: `${currencyAmount} ${rbAmount}`,
-            running_balance: `${currencyRb} ${rbRb}`,
-            pay_narrative: row.pay_narrative,
-            rider_name: row.rider_name,
+      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
+        if (response.data.msg.statement !== null) {
+          this.ownerRb = response.data.msg.owner_balance;
+          response.data.msg.statement.forEach((row, i) => {
+            const rbRb = row.running_balance.split(' ')[1] * -1;
+            const currencyRb = row.running_balance.split(' ')[0];
+            const rbAmount = row.amount.split(' ')[1] * -1;
+            const currencyAmount = row.amount.split(' ')[0];
+            record.push({
+              txn: row.txn,
+              pay_time: row.pay_time,
+              amount: `${currencyAmount} ${rbAmount}`,
+              running_balance: `${currencyRb} ${rbRb}`,
+              pay_narrative: row.pay_narrative,
+              rider_name: row.rider_name,
+            });
           });
-        });
-        this.rows = record;
-        this.showWithdrawButton();
-      } else {
-        this.rows = [];
-        setTimeout(() => {
-          if (document.getElementsByTagName('tbody').length > 0) {
-            const list = document.getElementsByTagName('tbody')[0];
-            list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No statement found for this period</td></tr>';
-          }
-        }, 500);
-      }
-    });
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
-    this.getVehicles();
-    this.fetchAllBanks();
-    this.fetchOwnerBanks();
+          this.rows = record;
+          this.showWithdrawButton();
+        } else {
+          this.ownerRb = response.data.msg.owner_balance;
+          this.rows = [];
+          setTimeout(() => {
+            if (document.getElementsByTagName('tbody').length > 0) {
+              const list = document.getElementsByTagName('tbody')[0];
+              list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No statement found for this period</td></tr>';
+            }
+          }, 500);
+        }
+      });
+      window.addEventListener('resize', this.handleResize);
+      this.handleResize();
+      this.getVehicles();
+      this.fetchAllBanks();
+      this.fetchOwnerBanks();
+    }
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);

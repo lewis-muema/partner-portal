@@ -1,7 +1,7 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <div class="print">
       <div class="printContain hidden-sm-down" v-if="windowWidth > 768">
         <div class="stat-filt col-6">
@@ -142,52 +142,54 @@ export default {
     };
   },
   created() {
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    const date = new Date();
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
-    const riderIds = [];
-    this.sessionInfo.riders.forEach((row, i) => {
-      riderIds.push(parseInt(row.rider_id, 10));
-    });
-    const payload = JSON.stringify({
-      rider_id: riderIds,
-      from: firstDay,
-      to: lastDay,
-    });
-    const record = [];
-    let currency = '';
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const date = new Date();
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
+      const riderIds = [];
+      this.sessionInfo.riders.forEach((row, i) => {
+        riderIds.push(parseInt(row.rider_id, 10));
+      });
+      const payload = JSON.stringify({
+        rider_id: riderIds,
+        from: firstDay,
+        to: lastDay,
+      });
+      const record = [];
+      let currency = '';
 
-    axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
-      if (response.data.msg) {
-        response.data.msg.forEach((row, i) => {
-          this.sessionInfo.riders.forEach((rider, x) => {
-            if (rider.rider_id === row.rider_id) {
-              currency = rider.default_currency;
+      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
+        if (response.data.msg) {
+          response.data.msg.forEach((row, i) => {
+            this.sessionInfo.riders.forEach((rider, x) => {
+              if (rider.rider_id === row.rider_id) {
+                currency = rider.default_currency;
+              }
+            });
+            record.push({
+              rider_id: row.rider_id,
+              txn: row.txn,
+              pay_time: row.pay_time,
+              amount: `${currency} ${row.amount}`,
+              running_balance: `${currency} ${row.running_balance}`,
+              pay_narrative: row.pay_narrative,
+            });
+          });
+          this.rows = record;
+        } else {
+          this.rows = [];
+          setTimeout(() => {
+            if (document.getElementsByTagName('tbody').length > 0) {
+              const list = document.getElementsByTagName('tbody')[0];
+              list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No loans found for this period</td></tr>';
             }
-          });
-          record.push({
-            rider_id: row.rider_id,
-            txn: row.txn,
-            pay_time: row.pay_time,
-            amount: `${currency} ${row.amount}`,
-            running_balance: `${currency} ${row.running_balance}`,
-            pay_narrative: row.pay_narrative,
-          });
-        });
-        this.rows = record;
-      } else {
-        this.rows = [];
-        setTimeout(() => {
-          if (document.getElementsByTagName('tbody').length > 0) {
-            const list = document.getElementsByTagName('tbody')[0];
-            list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No loans found for this period</td></tr>';
-          }
-        }, 500);
-      }
-    });
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
+          }, 500);
+        }
+      });
+      window.addEventListener('resize', this.handleResize);
+      this.handleResize();
+    }
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
