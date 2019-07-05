@@ -4,7 +4,7 @@
       <div class="primary-inner">
         <div class="inner-left">
           <img
-            class="icon"
+            class="logo-icon"
             src="https://images.sendyit.com/web_platform/logo/Sendy_logo_whitewhite.png"
             @click="location.href='https://sendyit.com/';"
           />

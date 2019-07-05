@@ -1,7 +1,7 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <modal name="driver-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
@@ -63,7 +63,7 @@
                 alt="Driver Photo"
                 class="vehicles__driver--passport-img"
                 id="driPicPreview"
-              >
+              />
               <button
                 type="button"
                 name="button"
@@ -83,7 +83,7 @@
               id="driPicImg"
               style="display:none;"
               @change="upload('driPicImg');"
-            >
+            />
           </div>
 
           <label for="driDlNumber">Driving License Number</label>
@@ -94,7 +94,7 @@
             class="form-control"
             placeholder="Driving License Number"
             id="driDlNumber"
-          >
+          />
 
           <label for="driLocation">Location</label>
           <input
@@ -104,7 +104,7 @@
             class="form-control"
             placeholder="Operation Location"
             id="driLocation"
-          >
+          />
         </div>
         <div class="modal-footer">
           <button
@@ -280,7 +280,7 @@
             placeholder="Make"
             id="selMake"
             v-model="make"
-          >
+          />
           <label for="selModel">What is the model?</label>
           <input
             type="text"
@@ -290,7 +290,7 @@
             placeholder="Model"
             id="selModel"
             v-model="model"
-          >
+          />
           <label for="selYear">What is the year of manufacture?</label>
           <input
             type="text"
@@ -300,7 +300,7 @@
             placeholder="Year"
             id="selYear"
             v-model="mfg"
-          >
+          />
           <label for="selBox" id="selBoxLabel">Does your bike have a box?</label>
           <select class="form-control" id="selBox" v-model="box">
             <option value="0" selected>No</option>
@@ -320,7 +320,7 @@
             placeholder="Log Book Number"
             id="selLog"
             v-model="logBook"
-          >
+          />
           <label for="selReg">Enter Registration Number</label>
           <input
             type="text"
@@ -330,7 +330,7 @@
             placeholder="Registration Number"
             id="selReg"
             v-model="regNo"
-          >
+          />
           <label for="selInsu">Enter Insurance Number</label>
           <input
             type="text"
@@ -340,7 +340,7 @@
             placeholder="Insurance Number"
             id="selInsu"
             v-model="insuNo"
-          >
+          />
         </div>
         <div class="modal-footer">
           <button
@@ -385,7 +385,7 @@
                 alt="Log Book"
                 class="doccard-img"
                 id="logPreview"
-              >
+              />
               <button
                 type="button"
                 name="button"
@@ -405,7 +405,7 @@
               id="logBimg"
               style="display:none;"
               @change="upload('logBimg')"
-            >
+            />
           </div>
         </div>
         <div class="modal-footer">
@@ -453,7 +453,7 @@
                 alt="Vehicle"
                 class="doccard-img"
                 id="vehPreview"
-              >
+              />
               <button
                 type="button"
                 name="button"
@@ -472,7 +472,7 @@
               id="vehImag"
               style="display:none;"
               @change="upload('vehImag')"
-            >
+            />
           </div>
         </div>
         <div class="modal-footer">
@@ -566,7 +566,7 @@
                 alt="Log Book"
                 class="acc-img"
                 id="logaccPreview"
-              >
+              />
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
               <img
@@ -574,7 +574,7 @@
                 alt="Vehicle"
                 class="acc-img"
                 id="vehaccPreview"
-              >
+              />
             </div>
           </div>
         </div>
@@ -749,30 +749,32 @@ export default {
     };
   },
   created() {
-    this.fetchVehicles();
-    window.addEventListener('resize', this.handleResize);
-    this.handleResize();
-    const script = document.createElement('script');
-    script.onload = () => {
-      const albumBucketName = 'sendy-partner-docs';
-      const bucketRegion = 'eu-west-1';
-      const IdentityPoolId = 'eu-west-1:2812c134-0c22-4755-be2d-8fa850a041ee';
+    if (localStorage.sessionData) {
+      this.fetchVehicles();
+      window.addEventListener('resize', this.handleResize);
+      this.handleResize();
+      const script = document.createElement('script');
+      script.onload = () => {
+        const albumBucketName = 'sendy-partner-docs';
+        const bucketRegion = 'eu-west-1';
+        const IdentityPoolId = 'eu-west-1:2812c134-0c22-4755-be2d-8fa850a041ee';
 
-      AWS.config.update({
-        region: bucketRegion,
-        credentials: new AWS.CognitoIdentityCredentials({
-          IdentityPoolId,
-        }),
-      });
+        AWS.config.update({
+          region: bucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId,
+          }),
+        });
 
-      s3 = new AWS.S3({
-        apiVersion: '2006-03-01',
-        params: { Bucket: albumBucketName },
-      });
-    };
-    script.src = 'https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js';
+        s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: { Bucket: albumBucketName },
+        });
+      };
+      script.src = 'https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js';
 
-    document.head.appendChild(script);
+      document.head.appendChild(script);
+    }
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
@@ -795,7 +797,6 @@ export default {
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
         .then(response => {
           if (response.data.msg) {
-            console.log(response.data.msg);
             this.populateTable(response);
             document.body.addEventListener('click', this.logger);
           } else {

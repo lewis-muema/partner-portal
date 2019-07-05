@@ -1,7 +1,7 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <div class="banks__container">
       <!--notification messages-->
       <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
@@ -172,7 +172,7 @@
           <p
             class="banks__verify-text font-16"
           >For your security, Sendy wants to make sure it’s really you. An SMS with your verification code was sent to your phone. Resend code</p>
-          <input class="banks__verify-inputs" maxlength="4" type="text" v-model="inputCode">
+          <input class="banks__verify-inputs" maxlength="4" type="text" v-model="inputCode" />
           <button
             class="banks__verify-inputs banks__active-buttons"
             v-if="verifyCodeStatus"
@@ -215,7 +215,7 @@
                   type="text"
                   v-model="branch"
                   @input="bankBranchCheckpoint()"
-                >
+                />
               </span>
             </p>
             <p class="banks__input-width font-16">
@@ -226,7 +226,7 @@
                   type="text"
                   v-model="name"
                   @input="accountNameCheckpoint()"
-                >
+                />
               </span>
             </p>
             <p class="banks__input-width font-16">
@@ -237,7 +237,7 @@
                   type="text"
                   v-model="account"
                   @input="accountNoCheckpoint()"
-                >
+                />
               </span>
             </p>
             <button
@@ -304,27 +304,29 @@ export default {
     };
   },
   created() {
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    if (localStorage.time) {
-      if (Date() > localStorage.time) {
-        localStorage.requestId = '';
-        localStorage.time = '';
-        this.requestId = '';
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      if (localStorage.time) {
+        if (Date() > localStorage.time) {
+          localStorage.requestId = '';
+          localStorage.time = '';
+          this.requestId = '';
+        } else {
+          this.requestId = localStorage.requestId;
+        }
       } else {
-        this.requestId = localStorage.requestId;
+        this.requestId = '';
       }
-    } else {
-      this.requestId = '';
+      if (window.innerWidth > 450) {
+        this.Mobile = false;
+      } else {
+        this.Mobile = true;
+      }
+      window.addEventListener('resize', this.isMobile);
+      this.fetchOwnerBanks();
+      this.fetchAllBanks();
+      // this.trackPage();
     }
-    if (window.innerWidth > 450) {
-      this.Mobile = false;
-    } else {
-      this.Mobile = true;
-    }
-    window.addEventListener('resize', this.isMobile);
-    this.fetchOwnerBanks();
-    this.fetchAllBanks();
-    // this.trackPage();
   },
   methods: {
     isMobile() {

@@ -289,8 +289,10 @@ export default {
     };
   },
   created() {
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    this.getOrders();
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.getOrders();
+    }
   },
   beforeDestroy() {
     clearInterval(interval); // stop the interval

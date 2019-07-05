@@ -1,13 +1,13 @@
 <template>
   <div>
-    <verifier/>
-    <Header/>
+    <verifier />
+    <Header />
     <div class="page-dash" v-if="dataResponse">
       <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-blu">
-              <font-awesome-icon :icon="['fas', 'chart-bar']"/>
+              <font-awesome-icon :icon="['fas', 'chart-bar']" />
             </span>
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Cash made this month</span>
@@ -18,7 +18,7 @@
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-orange">
-              <font-awesome-icon :icon="['fas', 'money-bill-alt']"/>
+              <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
             </span>
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Cash made this week</span>
@@ -29,7 +29,7 @@
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-red">
-              <font-awesome-icon :icon="['fas', 'university']"/>
+              <font-awesome-icon :icon="['fas', 'university']" />
             </span>
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Next transfer</span>
@@ -40,7 +40,7 @@
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-grey">
-              <font-awesome-icon :icon="['fas', 'star']"/>
+              <font-awesome-icon :icon="['fas', 'star']" />
             </span>
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Rating this week</span>
@@ -141,49 +141,51 @@ export default {
     };
   },
   created() {
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    const payload = JSON.stringify({
-      owner_id: this.sessionInfo.id,
-    });
-    axios
-      .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
-      .then(response => {
-        this.dataStatus = true;
-        this.dataResponse = response.data;
-        const earnings = [];
-        let amount = '';
-        this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
-          amount = parseInt(row.amount, 10);
-          earnings.push({ label: row.month, y: amount });
-        });
-        this.options = {
-          exportEnabled: true,
-          animationEnabled: true,
-          axisY: {
-            lineColor: '#d3d3d3',
-            tickColor: '#d3d3d3',
-            labelFontColor: '#333',
-            gridColor: '#d3d3d3',
-            gridThickness: 1,
-          },
-          axisX: {
-            lineColor: '#d3d3d3',
-            tickColor: '#d3d3d3',
-            labelFontColor: '#333',
-          },
-          data: [
-            {
-              type: 'splineArea',
-              color: 'rgba(23,130,197,.8)',
-              dataPoints: earnings,
-            },
-          ],
-        };
-      })
-      .catch(error => {
-        this.dataStatus = true;
-        console.log(error.response);
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
       });
+      axios
+        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
+        .then(response => {
+          this.dataStatus = true;
+          this.dataResponse = response.data;
+          const earnings = [];
+          let amount = '';
+          this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
+            amount = parseInt(row.amount, 10);
+            earnings.push({ label: row.month, y: amount });
+          });
+          this.options = {
+            exportEnabled: true,
+            animationEnabled: true,
+            axisY: {
+              lineColor: '#d3d3d3',
+              tickColor: '#d3d3d3',
+              labelFontColor: '#333',
+              gridColor: '#d3d3d3',
+              gridThickness: 1,
+            },
+            axisX: {
+              lineColor: '#d3d3d3',
+              tickColor: '#d3d3d3',
+              labelFontColor: '#333',
+            },
+            data: [
+              {
+                type: 'splineArea',
+                color: 'rgba(23,130,197,.8)',
+                dataPoints: earnings,
+              },
+            ],
+          };
+        })
+        .catch(error => {
+          this.dataStatus = true;
+          console.log(error.response);
+        });
+    }
   },
   updated() {
     this.$nextTick(() => {
