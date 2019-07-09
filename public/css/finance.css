@@ -795,6 +795,9 @@ input[type='number']::-webkit-outer-spin-button {
 .table-bordered th {
   border-color: rgb(216, 216, 216);
   background-color: white;
+  padding-left: 10px !important;
+  padding-top: 10px !important;
+  height: 42px !important;
 }
 
 table.dataTable thead > tr > th.sorting,
@@ -867,7 +870,7 @@ table.dataTable tfoot > tr > th {
 }
 
 .mobile-table {
-  display: inline-table;
+  display: inline-table !important;
   text-align: center;
   background-color: #fff;
   border-radius: 2px;
