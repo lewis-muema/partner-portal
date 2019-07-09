@@ -146,7 +146,10 @@
                   <div class="statement__box-content">
                     <span class="statement__box-text">Today you can withdraw :</span>
                     <br />
-                    <span class="statement__box-number">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</span>
+                    <span
+                      class="statement__box-number"
+                      v-if="this.ownerRb"
+                    >{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</span>
                   </div>
                 </div>
               </div>
@@ -218,7 +221,7 @@
         </div>
         <div class="search-error" id="err">{{ error }}</div>
         <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
-        <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
+        <div class="statement__mobile-view" v-for="row in rows" :key="row.id">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
@@ -319,6 +322,14 @@ export default {
   },
   created() {
     if (localStorage.sessionData) {
+      this.fetchStatement();
+    }
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    fetchStatement() {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const date = new Date();
       const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
@@ -328,36 +339,16 @@ export default {
         from: firstDay,
         to: lastDay,
       });
-      const record = [];
-
+      this.rows = [];
+      this.displayFetchingStatus('Fetching statement', 100);
       axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
         if (response.data.msg.statement !== null) {
-          this.ownerRb = response.data.msg.owner_balance;
-          response.data.msg.statement.forEach((row, i) => {
-            const rbRb = row.running_balance.split(' ')[1] * -1;
-            const currencyRb = row.running_balance.split(' ')[0];
-            const rbAmount = row.amount.split(' ')[1] * -1;
-            const currencyAmount = row.amount.split(' ')[0];
-            record.push({
-              txn: row.txn,
-              pay_time: row.pay_time,
-              amount: `${currencyAmount} ${rbAmount}`,
-              running_balance: `${currencyRb} ${rbRb}`,
-              pay_narrative: row.pay_narrative,
-              rider_name: row.rider_name,
-            });
-          });
-          this.rows = record;
+          this.handleResponse(response);
           this.showWithdrawButton();
         } else {
           this.ownerRb = response.data.msg.owner_balance;
           this.rows = [];
-          setTimeout(() => {
-            if (document.getElementsByTagName('tbody').length > 0) {
-              const list = document.getElementsByTagName('tbody')[0];
-              list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No statement found for this period</td></tr>';
-            }
-          }, 500);
+          this.displayFetchingStatus('No statement found for this period', 500);
         }
       });
       window.addEventListener('resize', this.handleResize);
@@ -365,12 +356,7 @@ export default {
       this.getVehicles();
       this.fetchAllBanks();
       this.fetchOwnerBanks();
-    }
-  },
-  destroyed() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-  methods: {
+    },
     getVehicles() {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
@@ -406,47 +392,58 @@ export default {
           vehicle_id: this.vehicleId,
           rider_id: this.riderId,
         });
-        const record = [];
-
+        this.rows = [];
+        this.displayFetchingStatus('Fetching statement', 0);
         axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
           // eslint-disable-next-line quotes
           document.getElementById('filtSub').innerHTML = `<i class="fa fa-filter" aria-hidden="true"></i>`;
-          const element = document.querySelector('.records-placeholder');
-          if (typeof element !== 'undefined' && element !== null) {
-            element.parentNode.removeChild(element);
-          }
           if (response.data.msg.statement) {
-            this.ownerRb = response.data.msg.owner_balance;
-            response.data.msg.statement.forEach((row, i) => {
-              const rbRb = row.running_balance.split(' ')[1] * -1;
-              const currencyRb = row.running_balance.split(' ')[0];
-              const rbAmount = row.amount.split(' ')[1] * -1;
-              const currencyAmount = row.amount.split(' ')[0];
-              record.push({
-                txn: row.txn,
-                pay_time: row.pay_time,
-                amount: `${currencyAmount} ${rbAmount}`,
-                running_balance: `${currencyRb} ${rbRb}`,
-                pay_narrative: row.pay_narrative,
-                rider_name: row.rider_name,
-              });
-            });
-            this.rows = record;
+            this.handleResponse(response);
           } else {
             this.error = 'No statement found for this period';
             setTimeout(() => {
               this.error = '';
             }, 4000);
             this.rows = [];
-            setTimeout(() => {
-              if (document.getElementsByTagName('tbody').length > 0) {
-                const list = document.getElementsByTagName('tbody')[0];
-                list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No statement found for this period</td></tr>';
-              }
-            }, 500);
+            this.displayFetchingStatus('No statement found for this period', 500);
           }
         });
       }
+    },
+    displayFetchingStatus(message, time) {
+      setTimeout(() => {
+        if (document.getElementsByTagName('tbody').length > 0) {
+          const list = document.getElementsByTagName('tbody')[0];
+          list.innerHTML = `<tr class="records-placeholder"><td colspan="6" style="text-align: center;">${message}</td></tr>`;
+        }
+      }, time);
+    },
+    removeFetchingStatus() {
+      const element = document.querySelector('.records-placeholder');
+      if (typeof element !== 'undefined' && element !== null) {
+        element.parentNode.removeChild(element);
+      }
+    },
+    handleResponse(response) {
+      const record = [];
+      this.ownerRb = response.data.msg.owner_balance;
+      response.data.msg.statement.forEach((row, i) => {
+        const rbRb = row.running_balance.split(' ')[1] * -1;
+        const currencyRb = row.running_balance.split(' ')[0];
+        const rbAmount = row.amount.split(' ')[1] * -1;
+        const currencyAmount = row.amount.split(' ')[0];
+        record.push({
+          txn: row.txn,
+          pay_time: row.pay_time,
+          amount: `${currencyAmount} ${rbAmount}`,
+          running_balance: `${currencyRb} ${rbRb}`,
+          pay_narrative: row.pay_narrative,
+          rider_name: row.rider_name,
+          id: i,
+        });
+      });
+      this.removeFetchingStatus();
+      this.rows = record;
     },
     closePopup() {
       this.sendWithdrawStatus = false;
@@ -497,70 +494,65 @@ export default {
       this.notificationMessage = 'Sending request';
       this.sendingWithdrawRequestStatus = true;
       if (this.mpesaWithdrawal && !this.bankWithdrawal) {
-        const payload = JSON.stringify({
+        this.constructPayload(1);
+      } else if (!this.mpesaWithdrawal && this.bankWithdrawal) {
+        this.constructPayload(2);
+      }
+    },
+    constructPayload(paymethod) {
+      let payload = '';
+      let notification = '';
+      if (paymethod === 1) {
+        payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
           phone_no: this.sessionInfo.phone,
-          payment_type: 1,
+          payment_type: paymethod,
           amount: this.amount,
         });
-        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
-          const parsedResponse = response.data;
-          if (parsedResponse.status_code) {
-            // this.trackMpesaWithdrawal();
-            if (this.opened) {
-              this.closePopup();
-            }
-            this.sendingWithdrawRequestStatus = false;
-            this.notificationType = 'success';
-            this.notificationMessage = `The withdrawal is currently being processed. The ${this.amount} will reflect in your m-pesa`;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-              window.location.reload();
-            }, 4000);
-          } else {
-            document.querySelector('.statement__add-bank-tab').style.display = 'grid';
-            this.withdrawHead = 'Withdrawal unsuccessful';
-            this.withdrawError = parsedResponse.message;
-            if (this.bankAccounts.length === 0) {
-              this.addAccountStatus = false;
-            }
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          }
-        });
-      } else if (!this.mpesaWithdrawal && this.bankWithdrawal) {
-        const payload = JSON.stringify({
+        notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your m-pesa`;
+      } else {
+        payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
           account_no: this.bankAccounts[this.selectedRow].account_no,
-          payment_type: 2,
+          payment_type: paymethod,
           amount: this.amount,
           payment_bank_id: this.bankId,
         });
-
-        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
-          const parsedResponse = response.data;
-          if (parsedResponse.status_code) {
-            // this.trackBankWithdrawal();
-            if (this.opened) {
-              this.closePopup();
+        notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
+      }
+      this.sendWithdrawRequest(payload, notification, paymethod);
+    },
+    sendWithdrawRequest(payload, notification, paymethod) {
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
+        const parsedResponse = response.data;
+        if (parsedResponse.status_code) {
+          // this.trackMpesaWithdrawal();
+          // this.trackBankWithdrawal();
+          if (this.opened) {
+            this.closePopup();
+          }
+          this.sendingWithdrawRequestStatus = false;
+          this.notificationType = 'success';
+          this.notificationMessage = notification;
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+            this.fetchStatement();
+          }, 4000);
+        } else {
+          document.querySelector('.statement__add-bank-tab').style.display = 'grid';
+          this.withdrawHead = 'Withdrawal unsuccessful';
+          this.withdrawError = parsedResponse.message;
+          if (paymethod === 1) {
+            if (this.bankAccounts.length === 0) {
+              this.addAccountStatus = false;
             }
-            this.sendingWithdrawRequestStatus = false;
-            this.notificationType = 'success';
-            this.notificationMessage = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
-            setTimeout(() => {
-              me.notificationName = 'message-box-down';
-              window.location.reload();
-            }, 4000);
+            this.notificationName = 'message-box-down';
           } else {
-            document.querySelector('.statement__add-bank-tab').style.display = 'grid';
-            this.withdrawError = parsedResponse.message;
-            this.withdrawHead = 'Withdrawal unsuccessful';
             this.notificationName = 'message-box-down';
             this.sendWithdrawStatus = true;
           }
-        });
-      }
+        }
+      });
     },
     fetchOwnerBanks() {
       this.responseCount = 0;
@@ -604,7 +596,9 @@ export default {
         }
       } else {
         this.activeStatus = false;
-        document.querySelector('.inactive-btn').style.display = 'block';
+        if (document.querySelector('.inactive-btn')) {
+          document.querySelector('.inactive-btn').style.display = 'block';
+        }
       }
     },
     listRiders() {
