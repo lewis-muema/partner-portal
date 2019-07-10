@@ -1,0 +1,80 @@
+.driverRequest__request-outer {
+  font-size: 25px;
+  text-align: center;
+  margin-top: 30%;
+  padding: 30px;
+}
+
+.driverRequest__request-text {
+  font-size: 25px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.driverRequest__request-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.driverRequest__request-radio {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  width: 100px;
+  font-size: 20px;
+}
+
+.driverRequest__request-submit {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.driverRequest__request-submit > .btn {
+  width: 70%;
+  max-width: 400px;
+  cursor: pointer;
+  border: none;
+  background-color: #f57f20;
+}
+
+.driverRequest__request-radio > input[type='radio'] {
+  margin-right: 20px;
+}
+
+.drqBtn {
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+.driverRequest__toCap {
+  text-transform: capitalize;
+}
+
+.modal-header {
+  color: #fff;
+  background-color: #0275d8;
+}
+
+.modal-content {
+  border: 0;
+}
+
+.modal-footer {
+  padding: 0px;
+}
+
+#contBtn {
+  height: 45px;
+  width: 100%;
+  border-radius: 0;
+}
+
+@media (min-width: 560px) {
+  .driverRequest__request-outer {
+    margin-top: 15%;
+  }
+}
