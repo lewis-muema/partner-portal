@@ -784,8 +784,6 @@ export default {
     fetchVehicles() {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const date = new Date();
-      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
-      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
       const riderIds = [];
       this.sessionInfo.riders.forEach((row, i) => {
         riderIds.push(parseInt(row.rider_id, 10));
@@ -793,20 +791,18 @@ export default {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
+      this.rows = [];
+      this.displayFetchingStatus('Fetching vehicles', 0);
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
         .then(response => {
           if (response.data.msg) {
+            this.removeFetchingStatus();
             this.populateTable(response);
             document.body.addEventListener('click', this.logger);
           } else {
             this.rows = [];
-            setTimeout(() => {
-              if (document.getElementsByTagName('tbody').length > 0) {
-                const list = document.getElementsByTagName('tbody')[0];
-                list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No vehicles found</td></tr>';
-              }
-            }, 500);
+            this.displayFetchingStatus('No vehicles found', 0);
           }
         })
         .catch(error => {
@@ -816,41 +812,11 @@ export default {
     populateTable(response) {
       const record = [];
       response.data.msg.forEach((row, i) => {
-        let riderRow = '';
+        const riderRow = this.sortRidersActions(row);
         let vehicleRow = '';
-        let allocationRow = '';
-        let riderName = '';
-        let invitedPhone = '';
-        let action = '';
-        if (row.rider) {
-          riderRow = row.rider;
-          if (riderRow.f_name) {
-            riderName = `${riderRow.f_name} ${riderRow.s_name}`;
-          }
-          if (row.allocation && row.allocation[0].allocation_status === '1') {
-            action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
-          } else {
-            action = `<span class="reassign-driver" id="${row.vehicle.id}">Reassign driver</span>`;
-          }
-        } else {
-          if (row.allocation && row.allocation[0].allocation_status === '1') {
-            action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
-          } else {
-            action = `<span class="add-driver" id="${row.vehicle.id}">Add driver</span>`;
-          }
-        }
+        const invitedPhone = this.sortAllocationStatus(row);
         if (row.vehicle) {
           vehicleRow = row.vehicle;
-        }
-        if (row.allocation) {
-          allocationRow = row.allocation[0];
-          if (allocationRow.allocation_status === '1') {
-            invitedPhone = `${allocationRow.rider_phone} (Pending)`;
-          } else if (allocationRow.allocation_status === '2') {
-            invitedPhone = `${allocationRow.rider_phone} (Accepted)`;
-          } else if (allocationRow.allocation_status === '3') {
-            invitedPhone = `${allocationRow.rider_phone} (Rejected)`;
-          }
         }
         record.push({
           first: '',
@@ -858,14 +824,64 @@ export default {
           model: vehicleRow.model,
           registration_no: vehicleRow.registration_no,
           phone_no: riderRow.phone_no,
-          name: riderName,
+          name: riderRow.riderName,
           rider_phone: invitedPhone,
           rb: riderRow.rb,
-          options: action,
+          options: riderRow.action,
           insurance: riderRow.insurance_no,
         });
       });
       this.rows = record;
+    },
+    sortRidersActions(row) {
+      let riderRow = [];
+      if (row.rider) {
+        riderRow = row.rider;
+        if (riderRow.f_name) {
+          riderRow.riderName = `${riderRow.f_name} ${riderRow.s_name}`;
+        }
+        if (row.allocation && row.allocation[0].allocation_status === '1') {
+          riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
+        } else {
+          riderRow.action = `<span class="reassign-driver" id="${row.vehicle.id}">Reassign driver</span>`;
+        }
+      } else {
+        if (row.allocation && row.allocation[0].allocation_status === '1') {
+          riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
+        } else {
+          riderRow.action = `<span class="add-driver" id="${row.vehicle.id}">Add driver</span>`;
+        }
+      }
+      return riderRow;
+    },
+    sortAllocationStatus(row) {
+      let allocationRow = [];
+      let invitedPhone = '';
+      if (row.allocation) {
+        allocationRow = row.allocation[0];
+        if (allocationRow.allocation_status === '1') {
+          invitedPhone = `${allocationRow.rider_phone} (Pending)`;
+        } else if (allocationRow.allocation_status === '2') {
+          invitedPhone = `${allocationRow.rider_phone} (Accepted)`;
+        } else if (allocationRow.allocation_status === '3') {
+          invitedPhone = `${allocationRow.rider_phone} (Rejected)`;
+        }
+      }
+      return invitedPhone;
+    },
+    displayFetchingStatus(message, time) {
+      setTimeout(() => {
+        if (document.getElementsByTagName('tbody').length > 0) {
+          const list = document.getElementsByTagName('tbody')[0];
+          list.innerHTML = `<tr class="records-placeholder"><td colspan="9" style="text-align: center;">${message}</td></tr>`;
+        }
+      }, time);
+    },
+    removeFetchingStatus() {
+      const element = document.querySelector('.records-placeholder');
+      if (typeof element !== 'undefined' && element !== null) {
+        element.parentNode.removeChild(element);
+      }
     },
     handleResize() {
       this.windowWidth = window.innerWidth;
@@ -975,15 +991,12 @@ export default {
         return alert('Please choose a file to upload first.');
       }
       this.loadingLabel(id);
-
       const file = files[0];
       const fileType = files[0]['type'];
       const fileName = this.sanitizeFilename(file.name);
       console.log(fileName);
       const albumPhotosKey = `${encodeURIComponent('photo')}/`;
-
       const photoKey = albumPhotosKey + fileName;
-
       s3.upload(
         {
           Key: photoKey,
@@ -1000,9 +1013,6 @@ export default {
             this.generatePreview(id, fileName);
             this.resetLabel(id, 1);
           }
-          // setTimeout(() => {
-          //   $('#upErr').fadeOut('slow');
-          // }, 3000);
           // eslint-disable-next-line comma-dangle
         }
       );
@@ -1010,83 +1020,64 @@ export default {
     loadingLabel(id) {
       switch (id) {
         case 'logBimg': {
-          $('#logBimgFake').html('Uploading...');
-          $('#lgNext')
-            .prop('disabled', true)
-            .css('background-color', 'gray');
-          $('#logBimgFake').prop('disabled', true);
+          this.disableLoadingPreviews('logBimgFake', 'lgNext');
           break;
         }
         case 'vehImag': {
-          $('#vehImgFake').html('Uploading...');
-          $('#vehFin')
-            .prop('disabled', true)
-            .css('background-color', 'gray');
-          $('#vehImgFake').prop('disabled', true);
+          this.disableLoadingPreviews('vehImgFake', 'vehFin');
           break;
         }
         case 'driPicImg': {
-          $('#driPic').html('Uploading...');
-          $('#createDiverOwnerButton')
-            .prop('disabled', true)
-            .css('background-color', 'gray');
-          $('#driPic').prop('disabled', true);
+          this.disableLoadingPreviews('driPic', 'createDiverOwnerButton');
           break;
         }
         default:
       }
+    },
+    disableLoadingPreviews(className, buttonName) {
+      $(`#${className}`).html('Uploading...');
+      $(`#${buttonName}`)
+        .prop('disabled', true)
+        .css('background-color', 'gray');
+      $(`#${className}`).prop('disabled', true);
     },
     generatePreview(id, name) {
       switch (id) {
         case 'logBimg': {
           this.logName = name;
-          document.getElementById('logBimg').name = name;
-          const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${name}`;
-          $('#logPreview').attr('src', src);
+          this.fetchPreviewImage('logBimg', name, 'logPreview');
           break;
         }
         case 'vehImag': {
           this.vehImgName = name;
-
-          document.getElementById('vehImag').name = name;
-          const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${name}`;
-          $('#vehPreview').attr('src', src);
+          this.fetchPreviewImage('vehImag', name, 'vehPreview');
           break;
         }
         case 'driPicImg': {
-          document.getElementById('driPicImg').name = name;
-          const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${name}`;
-          $('#driPicPreview').attr('src', src);
+          this.fetchPreviewImage('driPicImg', name, 'driPicPreview');
           break;
         }
         default:
       }
     },
+    fetchPreviewImage(id, name, target) {
+      document.getElementById(id).name = name;
+      const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${name}`;
+      $(`#${target}`).attr('src', src);
+    },
     resetLabel(id, cod) {
       if (cod === 1) {
         switch (id) {
           case 'logBimg': {
-            $('#logBimgFake').html('Click here to change image');
-            $('#lgNext')
-              .prop('disabled', false)
-              .css('background-color', '#f57f20');
-            $('#logBimgFake').prop('disabled', false);
+            this.successfulLabelReset('logBimgFake', 'lgNext');
             break;
           }
           case 'vehImag': {
-            $('#vehImgFake').html('Click here to change image');
-            $('#vehFin')
-              .prop('disabled', false)
-              .css('background-color', '#f57f20');
-            $('#vehImgFake').prop('disabled', false);
+            this.successfulLabelReset('vehImgFake', 'vehFin');
             break;
           }
           case 'driPicImg': {
-            $('#driPic').html('Click here to change image');
-            $('#createDiverOwnerButton')
-              .prop('disabled', false)
-              .css('background-color', '#f57f20');
-            $('#driPic').prop('disabled', false);
+            this.successfulLabelReset('driPic', 'createDiverOwnerButton');
             break;
           }
           default:
@@ -1094,29 +1085,33 @@ export default {
       } else {
         switch (id) {
           case 'logBimg': {
-            $('#logBimgFake').html('Image upload failed, please try again');
-            $('#lgNext')
-              .prop('disabled', false)
-              .css('background-color', '#0275d8');
+            this.failedLabelReset('logBimgFake', 'lgNext');
             break;
           }
           case 'vehImag': {
-            $('#vehImgFake').html('Image upload failed, please try again');
-            $('#vehFin')
-              .prop('disabled', false)
-              .css('background-color', '#0275d8');
+            this.failedLabelReset('vehImgFake', 'vehFin');
             break;
           }
           case 'driPicImg': {
-            $('#driPic').html('Image upload failed, please try again');
-            $('#createDiverOwnerButton')
-              .prop('disabled', true)
-              .css('background-color', '#0275d8');
+            this.failedLabelReset('driPic', 'createDiverOwnerButton');
             break;
           }
           default:
         }
       }
+    },
+    successfulLabelReset(id, button) {
+      $(`#${id}`).html('Click here to change image');
+      $(`#${button}`)
+        .prop('disabled', false)
+        .css('background-color', '#f57f20');
+      $(`#${id}`).prop('disabled', false);
+    },
+    failedLabelReset(id, button) {
+      $(`#${id}`).html('Image upload failed, please try again');
+      $(`#${button}`)
+        .prop('disabled', false)
+        .css('background-color', '#0275d8');
     },
     sanitizeFilename(name) {
       const temp_name = new Date().getTime() + name.toLowerCase().replace(/\s/g, '');
@@ -1212,7 +1207,6 @@ export default {
         return false;
       }
       photo = photo.substring(photo.length, photo.lastIndexOf('/') + 1);
-
       const rider_details = {
         photo,
         dl_no,
@@ -1224,10 +1218,12 @@ export default {
         rider_details,
         owner_id,
       };
+      this.sendOwnerDriverRequest(payload);
+    },
+    sendOwnerDriverRequest(payload) {
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/create_owner_rider`, payload, this.config)
         .then(response => {
-          console.log(response);
           if (response.data.status) {
             this.$modal.hide('driver-owner-modal');
             this.fetchVehicles();

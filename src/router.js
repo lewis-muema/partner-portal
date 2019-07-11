@@ -11,6 +11,7 @@ import Savings from './views/savings.vue';
 import Statement from './views/statement.vue';
 import Vehicles from './views/vehicles.vue';
 import Tracking from './views/tracking.vue';
+import DriverRequest from './views/driverRequest.vue';
 
 Vue.use(Router);
 
@@ -72,6 +73,16 @@ export default new Router({
       path: '/tracking',
       name: 'tracking',
       component: Tracking,
+    },
+    {
+      path: '/driverRequest/:token',
+      name: 'driverRequest',
+      component: DriverRequest,
+    },
+    {
+      path: '/driverRequest',
+      name: 'driverRequestBlank',
+      component: DriverRequest,
     },
   ],
 });
