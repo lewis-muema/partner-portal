@@ -28,7 +28,7 @@
             type="button"
             name="button"
             class="btn btn-primary"
-            o@click="submitResponse();"
+            @click="submitResponse();"
             v-else
           >Sign up with Sendy</button>
         </div>
