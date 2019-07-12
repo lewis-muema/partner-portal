@@ -406,67 +406,64 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/check_verification`, payload, this.config)
         .then(response => {
-          const parsedResponse = response.data;
-          if (parsedResponse.status) {
-            console.log(parsedResponse);
-            this.sendOwnerBanks();
-            //   this.trackBankAddition();
-            setTimeout(() => {
-              this.verifyDetails();
-              this.confirmDetails();
-              this.addAccount();
-              this.fetchOwnerBanks();
-            }, 2000);
-            this.sendingCodeStatus = false;
-            localStorage.requestId = '';
-            this.requestId = '';
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          } else {
-            this.sendingCodeStatus = false;
-            this.notificationName = 'message-box-up';
-            this.notificationType = 'failed';
-            if (parsedResponse.message === 'The code provided does not match the expected value') {
-              const date = new Date();
-              const time = new Date(localStorage.time);
-              time.setMinutes(time.getMinutes() + 20);
-              if (Date() < localStorage.time && Date() > time) {
-                // nothing here
-              } else {
-                this.notificationMessage = 'Please enter the correct verification code';
-                this.verifyCodeStatus = true;
-              }
-            } else if (parsedResponse.message.indexOf('it has been verified already') > -1) {
-              this.notificationMessage = 'Failed to verify, Please request for another code';
-              localStorage.requestId = '';
-              this.requestId = '';
-              this.verifyCodeStatus = false;
-            } else if (parsedResponse.message.indexOf('Your request is incomplete and missing the mandatory parameter') > -1) {
-              this.notificationMessage = 'Please enter the full verification code';
-              this.verifyCodeStatus = true;
-            } else if (parsedResponse.message.indexOf('A wrong code was provided too many times') > -1) {
-              this.notificationMessage = 'A wrong code was entered too many times, Please request for another';
-              localStorage.requestId = '';
-              this.requestId = '';
-              this.verifyCodeStatus = false;
-            }
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          }
+          this.handleVerificatioResponse(response);
         })
         .catch(error => {
-          const parsedResponse = error.response.data;
-          console.log(parsedResponse);
-          this.sendingCodeStatus = false;
-          this.notificationName = 'message-box-up';
-          this.notificationType = 'failed';
-          this.notificationMessage = parsedResponse.message;
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
+          this.handleError(error, 1);
         });
+    },
+    handleVerificatioResponse(response) {
+      const parsedResponse = response.data;
+      if (parsedResponse.status) {
+        this.sendOwnerBanks();
+        //   this.trackBankAddition();
+        setTimeout(() => {
+          this.verifyDetails();
+          this.confirmDetails();
+          this.addAccount();
+          this.fetchOwnerBanks();
+        }, 2000);
+        this.sendingCodeStatus = false;
+        localStorage.requestId = '';
+        this.requestId = '';
+        setTimeout(() => {
+          this.notificationName = 'message-box-down';
+        }, 4000);
+      } else {
+        this.sendingCodeStatus = false;
+        this.notificationName = 'message-box-up';
+        this.notificationType = 'failed';
+        this.handleNotifications(parsedResponse);
+        setTimeout(() => {
+          this.notificationName = 'message-box-down';
+        }, 4000);
+      }
+    },
+    handleNotifications(parsedResponse) {
+      if (parsedResponse.message === 'The code provided does not match the expected value') {
+        const date = new Date();
+        const time = new Date(localStorage.time);
+        time.setMinutes(time.getMinutes() + 20);
+        if (Date() < localStorage.time && Date() > time) {
+          // nothing here
+        } else {
+          this.notificationMessage = 'Please enter the correct verification code';
+          this.verifyCodeStatus = true;
+        }
+      } else if (parsedResponse.message.indexOf('it has been verified already') > -1) {
+        this.notificationMessage = 'Failed to verify, Please request for another code';
+        localStorage.requestId = '';
+        this.requestId = '';
+        this.verifyCodeStatus = false;
+      } else if (parsedResponse.message.indexOf('Your request is incomplete and missing the mandatory parameter') > -1) {
+        this.notificationMessage = 'Please enter the full verification code';
+        this.verifyCodeStatus = true;
+      } else if (parsedResponse.message.indexOf('A wrong code was provided too many times') > -1) {
+        this.notificationMessage = 'A wrong code was entered too many times, Please request for another';
+        localStorage.requestId = '';
+        this.requestId = '';
+        this.verifyCodeStatus = false;
+      }
     },
     sendCode() {
       if (this.requestId !== '') {
@@ -489,40 +486,49 @@ export default {
         axios
           .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/verify_phone`, payload, this.config)
           .then(response => {
-            const parsedResponse = response.data;
-            if (parsedResponse.status) {
-              this.requestId = parsedResponse.request_id;
-              const date = new Date();
-              date.setMinutes(date.getMinutes() + 20);
-              localStorage.requestId = parsedResponse.request_id;
-              localStorage.time = date;
-              this.sendingCodeStatus = false;
-              this.notificationType = 'success';
-              this.notificationMessage = `Code has been sent to ${this.sessionInfo.phone}`;
-              this.inputCode = '';
-              this.verifyDetails();
-              setTimeout(() => {
-                this.notificationName = 'message-box-down';
-              }, 3000);
-            } else {
-              this.sendingCodeStatus = false;
-              this.notificationType = 'failed';
-              this.notificationMessage = parsedResponse.message;
-              setTimeout(() => {
-                this.notificationName = 'message-box-down';
-              }, 4000);
-            }
+            this.handleSendCodeResponse(response);
           })
           .catch(error => {
-            const parsedResponse = response.data;
-            this.sendingCodeStatus = false;
-            this.notificationType = 'failed';
-            this.notificationMessage = parsedResponse.message;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.handleError(error, 2);
           });
       }
+    },
+    handleSendCodeResponse(response) {
+      const parsedResponse = response.data;
+      if (parsedResponse.status) {
+        this.requestId = parsedResponse.request_id;
+        const date = new Date();
+        date.setMinutes(date.getMinutes() + 20);
+        localStorage.requestId = parsedResponse.request_id;
+        localStorage.time = date;
+        this.sendingCodeStatus = false;
+        this.notificationType = 'success';
+        this.notificationMessage = `Code has been sent to ${this.sessionInfo.phone}`;
+        this.inputCode = '';
+        this.verifyDetails();
+        setTimeout(() => {
+          this.notificationName = 'message-box-down';
+        }, 3000);
+      } else {
+        this.sendingCodeStatus = false;
+        this.notificationType = 'failed';
+        this.notificationMessage = parsedResponse.message;
+        setTimeout(() => {
+          this.notificationName = 'message-box-down';
+        }, 4000);
+      }
+    },
+    handleError(error, i) {
+      const parsedResponse = response.data;
+      this.sendingCodeStatus = false;
+      if (i === 1) {
+        this.notificationName = 'message-box-up';
+      }
+      this.notificationType = 'failed';
+      this.notificationMessage = parsedResponse.message;
+      setTimeout(() => {
+        this.notificationName = 'message-box-down';
+      }, 4000);
     },
     fetchOwnerBanks() {
       this.responseCount = 0;
@@ -542,7 +548,7 @@ export default {
           });
         })
         .catch(error => {
-          console.log(error.response);
+          this.handleError(error, 1);
         });
     },
     fetchAllBanks() {
@@ -559,7 +565,7 @@ export default {
           });
         })
         .catch(error => {
-          console.log(error.response);
+          this.handleError(error, 1);
         });
     },
     sendOwnerBanks() {
@@ -584,7 +590,7 @@ export default {
             }
           })
           .catch(error => {
-            console.log(error.response);
+            this.handleError(error, 1);
           });
       } else {
         axios
@@ -599,7 +605,7 @@ export default {
             }
           })
           .catch(error => {
-            console.log(error);
+            this.handleError(error, 1);
           });
       }
     },
