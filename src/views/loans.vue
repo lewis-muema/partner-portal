@@ -144,49 +144,7 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      const date = new Date();
-      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
-      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
-      const riderIds = [];
-      this.sessionInfo.riders.forEach((row, i) => {
-        riderIds.push(parseInt(row.rider_id, 10));
-      });
-      const payload = JSON.stringify({
-        rider_id: riderIds,
-        from: firstDay,
-        to: lastDay,
-      });
-      const record = [];
-      let currency = '';
-
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
-        if (response.data.msg) {
-          response.data.msg.forEach((row, i) => {
-            this.sessionInfo.riders.forEach((rider, x) => {
-              if (rider.rider_id === row.rider_id) {
-                currency = rider.default_currency;
-              }
-            });
-            record.push({
-              rider_id: row.rider_id,
-              txn: row.txn,
-              pay_time: row.pay_time,
-              amount: `${currency} ${row.amount}`,
-              running_balance: `${currency} ${row.running_balance}`,
-              pay_narrative: row.pay_narrative,
-            });
-          });
-          this.rows = record;
-        } else {
-          this.rows = [];
-          setTimeout(() => {
-            if (document.getElementsByTagName('tbody').length > 0) {
-              const list = document.getElementsByTagName('tbody')[0];
-              list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No loans found for this period</td></tr>';
-            }
-          }, 500);
-        }
-      });
+      this.fetchLoans(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
     }
@@ -209,60 +167,91 @@ export default {
           this.error = '';
         }, 4000);
       } else {
-        // eslint-disable-next-line quotes
-        document.getElementById('filtSub').innerHTML = `<div class='loading-spinner'></div> LOADING`;
-        const firstDay = new Date(this.from.getFullYear(), this.from.getMonth(), this.from.getDate()).toISOString().split('T')[0];
-        const lastDay = new Date(this.to.getFullYear(), this.to.getMonth(), this.to.getDate()).toISOString().split('T')[0];
-        const riderIds = [];
-        this.sessionInfo.riders.forEach((row, i) => {
-          riderIds.push(parseInt(row.rider_id, 10));
-        });
-        const payload = JSON.stringify({
-          rider_id: riderIds,
-          from: firstDay,
-          to: lastDay,
-        });
-        const record = [];
-        let currency = '';
-
-        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
-          // eslint-disable-next-line quotes
-          document.getElementById('filtSub').innerHTML = `<i class="fa fa-filter" aria-hidden="true"></i>`;
-          const element = document.querySelector('.records-placeholder');
-          if (typeof element !== 'undefined' && element !== null) {
-            element.parentNode.removeChild(element);
-          }
-          if (response.data.msg) {
-            response.data.msg.forEach((row, i) => {
-              this.sessionInfo.riders.forEach((rider, x) => {
-                if (rider.rider_id === row.rider_id) {
-                  currency = rider.default_currency;
-                }
-              });
-              record.push({
-                rider_id: row.rider_id,
-                txn: row.txn,
-                pay_time: row.pay_time,
-                amount: `${currency} ${row.amount}`,
-                running_balance: `${currency} ${row.running_balance}`,
-                pay_narrative: row.pay_narrative,
-              });
-            });
-            this.rows = record;
-          } else {
+        this.fetchLoans(2);
+      }
+    },
+    fetchLoans(requestType) {
+      const payload = this.definePayload(requestType);
+      this.displayFetchingStatus('Fetching loans', 0);
+      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config).then(response => {
+        if (requestType === 2) {
+          document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+          this.rows = [];
+          this.removeFetchingStatus();
+        }
+        if (response.data.msg) {
+          this.handleResponse(response);
+        } else {
+          if (requestType === 2) {
             this.error = 'No loans found for this period';
             setTimeout(() => {
               this.error = '';
             }, 4000);
-            this.rows = [];
-            setTimeout(() => {
-              if (document.getElementsByTagName('tbody').length > 0) {
-                const list = document.getElementsByTagName('tbody')[0];
-                list.innerHTML = '<tr class="records-placeholder"><td colspan="6" style="text-align: center;">No loans found for this period</td></tr>';
-              }
-            }, 500);
+          }
+          this.rows = [];
+          this.displayFetchingStatus('No loans found for this period', 0);
+        }
+      });
+    },
+    definePayload(requestType) {
+      let firstDay = '';
+      let lastDay = '';
+      if (requestType === 1) {
+        firstDay = moment()
+          .startOf('month')
+          .format('YYYY-MM-DD HH:mm:ss');
+        lastDay = moment()
+          .endOf('month')
+          .format('YYYY-MM-DD HH:mm:ss');
+      } else {
+        document.getElementById('filtSub').innerHTML = '<div class="loading-spinner"></div> LOADING';
+        firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
+        lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
+        this.rows = [];
+      }
+      const riderIds = [];
+      this.sessionInfo.riders.forEach((row, i) => {
+        riderIds.push(parseInt(row.rider_id, 10));
+      });
+      const payload = JSON.stringify({
+        rider_id: riderIds,
+        from: firstDay,
+        to: lastDay,
+      });
+      return payload;
+    },
+    handleResponse(response) {
+      const record = [];
+      let currency = '';
+      response.data.msg.forEach((row, i) => {
+        this.sessionInfo.riders.forEach((rider, x) => {
+          if (rider.rider_id === row.rider_id) {
+            currency = rider.default_currency;
           }
         });
+        record.push({
+          rider_id: row.rider_id,
+          txn: row.txn,
+          pay_time: row.pay_time,
+          amount: `${currency} ${row.amount}`,
+          running_balance: `${currency} ${row.running_balance}`,
+          pay_narrative: row.pay_narrative,
+        });
+      });
+      this.rows = record;
+    },
+    displayFetchingStatus(message, time) {
+      setTimeout(() => {
+        if (document.getElementsByTagName('tbody').length > 0) {
+          const list = document.getElementsByTagName('tbody')[0];
+          list.innerHTML = `<tr class="records-placeholder"><td colspan="9" style="text-align: center;">${message}</td></tr>`;
+        }
+      }, time);
+    },
+    removeFetchingStatus() {
+      const element = document.querySelector('.records-placeholder');
+      if (typeof element !== 'undefined' && element !== null) {
+        element.parentNode.removeChild(element);
       }
     },
   },

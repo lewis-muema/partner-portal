@@ -322,41 +322,19 @@ export default {
   },
   created() {
     if (localStorage.sessionData) {
-      this.fetchStatement();
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.fetchStatement(1);
+      window.addEventListener('resize', this.handleResize);
+      this.handleResize();
+      this.getVehicles();
+      this.fetchAllBanks();
+      this.fetchOwnerBanks();
     }
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
-    fetchStatement() {
-      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      const date = new Date();
-      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toISOString().split('T')[0];
-      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).toISOString().split('T')[0];
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-        from: firstDay,
-        to: lastDay,
-      });
-      this.rows = [];
-      this.displayFetchingStatus('Fetching statement', 100);
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
-        if (response.data.msg.statement !== null) {
-          this.handleResponse(response);
-          this.showWithdrawButton();
-        } else {
-          this.ownerRb = response.data.msg.owner_balance;
-          this.rows = [];
-          this.displayFetchingStatus('No statement found for this period', 500);
-        }
-      });
-      window.addEventListener('resize', this.handleResize);
-      this.handleResize();
-      this.getVehicles();
-      this.fetchAllBanks();
-      this.fetchOwnerBanks();
-    },
     getVehicles() {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
@@ -381,48 +359,67 @@ export default {
           this.error = '';
         }, 4000);
       } else {
-        // eslint-disable-next-line quotes
-        document.getElementById('filtSub').innerHTML = `<div class='loading-spinner'></div> LOADING`;
-        const firstDay = new Date(this.from.getFullYear(), this.from.getMonth(), this.from.getDate()).toISOString().split('T')[0];
-        const lastDay = new Date(this.to.getFullYear(), this.to.getMonth(), this.to.getDate()).toISOString().split('T')[0];
-        const payload = JSON.stringify({
+        this.fetchStatement(2);
+      }
+    },
+
+    fetchStatement(requestType) {
+      const payload = this.definePayload(requestType);
+      this.displayFetchingStatus('Fetching statement', 0);
+      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
+        if (requestType === 2) {
+          document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+          this.removeFetchingStatus();
+        }
+        if (response.data.msg.statement !== null) {
+          this.handleResponse(response);
+          if (requestType === 1) {
+            this.showWithdrawButton();
+          }
+        } else {
+          if (requestType === 2) {
+            this.error = 'No statement found for this period';
+            setTimeout(() => {
+              this.error = '';
+            }, 4000);
+          } else {
+            this.ownerRb = response.data.msg.owner_balance;
+          }
+          this.rows = [];
+          this.displayFetchingStatus('No statement found for this period', 0);
+        }
+      });
+    },
+    definePayload(requestType) {
+      let firstDay = '';
+      let lastDay = '';
+      let payload = '';
+      this.rows = [];
+      if (requestType === 1) {
+        firstDay = moment()
+          .startOf('month')
+          .format('YYYY-MM-DD HH:mm:ss');
+        lastDay = moment()
+          .endOf('month')
+          .format('YYYY-MM-DD HH:mm:ss');
+        payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+          from: firstDay,
+          to: lastDay,
+        });
+      } else {
+        document.getElementById('filtSub').innerHTML = '<div class="loading-spinner"></div> LOADING';
+        firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
+        lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
+        payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
           from: firstDay,
           to: lastDay,
           vehicle_id: this.vehicleId,
           rider_id: this.riderId,
         });
-        this.rows = [];
-        this.displayFetchingStatus('Fetching statement', 0);
-        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
-          // eslint-disable-next-line quotes
-          document.getElementById('filtSub').innerHTML = `<i class="fa fa-filter" aria-hidden="true"></i>`;
-          if (response.data.msg.statement) {
-            this.handleResponse(response);
-          } else {
-            this.error = 'No statement found for this period';
-            setTimeout(() => {
-              this.error = '';
-            }, 4000);
-            this.rows = [];
-            this.displayFetchingStatus('No statement found for this period', 500);
-          }
-        });
       }
-    },
-    displayFetchingStatus(message, time) {
-      setTimeout(() => {
-        if (document.getElementsByTagName('tbody').length > 0) {
-          const list = document.getElementsByTagName('tbody')[0];
-          list.innerHTML = `<tr class="records-placeholder"><td colspan="6" style="text-align: center;">${message}</td></tr>`;
-        }
-      }, time);
-    },
-    removeFetchingStatus() {
-      const element = document.querySelector('.records-placeholder');
-      if (typeof element !== 'undefined' && element !== null) {
-        element.parentNode.removeChild(element);
-      }
+      return payload;
     },
     handleResponse(response) {
       const record = [];
@@ -444,6 +441,35 @@ export default {
       });
       this.removeFetchingStatus();
       this.rows = record;
+    },
+    displayFetchingStatus(message, time) {
+      setTimeout(() => {
+        if (document.getElementsByTagName('tbody').length > 0) {
+          const list = document.getElementsByTagName('tbody')[0];
+          list.innerHTML = `<tr class="records-placeholder"><td colspan="9" style="text-align: center;">${message}</td></tr>`;
+        }
+      }, time);
+    },
+    removeFetchingStatus() {
+      const element = document.querySelector('.records-placeholder');
+      if (typeof element !== 'undefined' && element !== null) {
+        element.parentNode.removeChild(element);
+      }
+    },
+
+    displayFetchingStatus(message, time) {
+      setTimeout(() => {
+        if (document.getElementsByTagName('tbody').length > 0) {
+          const list = document.getElementsByTagName('tbody')[0];
+          list.innerHTML = `<tr class="records-placeholder"><td colspan="6" style="text-align: center;">${message}</td></tr>`;
+        }
+      }, time);
+    },
+    removeFetchingStatus() {
+      const element = document.querySelector('.records-placeholder');
+      if (typeof element !== 'undefined' && element !== null) {
+        element.parentNode.removeChild(element);
+      }
     },
     closePopup() {
       this.sendWithdrawStatus = false;

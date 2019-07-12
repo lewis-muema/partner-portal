@@ -1170,7 +1170,7 @@ export default {
         this.ownerPhone = this.sessionInfo.phone;
         const payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
-          to_date: moment().format(),
+          to_date: moment().format('YYYY-MM-DD HH:mm:ss'),
           from_date: '2019-02-09 00:00:00',
         });
         axios
@@ -1203,7 +1203,7 @@ export default {
       this.ownerPhone = this.sessionInfo.phone;
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
-        to_date: moment().format(),
+        to_date: moment().format('YYYY-MM-DD HH:mm:ss'),
         from_date: '2019-02-09 00:00:00',
       });
       axios
