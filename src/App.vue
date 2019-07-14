@@ -1,8 +1,23 @@
 <template>
   <div id="app">
-    <router-view/>
+    <loginHeader
+      v-if="this.$route.name === 'logIn' || this.$route.name === 'driverRequest' || this.$route.name === 'driverRequestBlank'"
+    />
+    <appHeader v-else />
+    <router-view />
   </div>
 </template>
+<script>
+import appHeader from './components/headers/appHeader';
+import loginHeader from './components/headers/logInHeader';
+
+export default {
+  components: {
+    appHeader,
+    loginHeader,
+  },
+};
+</script>
 
 <style>
 @font-face {

@@ -54,11 +54,6 @@
   text-transform: capitalize;
 }
 
-.modal-header {
-  color: #fff;
-  background-color: #0275d8;
-}
-
 .modal-content {
   border: 0;
 }

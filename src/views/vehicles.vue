@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <modal name="driver-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
@@ -674,7 +673,6 @@ import VueTelInput from 'vue-tel-input';
 import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -685,7 +683,6 @@ export default {
   components: {
     VueTelInput,
     verifier,
-    Header,
     datatable: DataTable,
   },
   data() {
@@ -885,10 +882,6 @@ export default {
     },
     handleResize() {
       this.windowWidth = window.innerWidth;
-    },
-    month() {
-      const date = new Date();
-      return `${date.toLocaleString('en-us', { month: 'long' })} ${date.getFullYear()}`;
     },
     logger(event) {
       if (event.target.className === 'add-driver' || event.target.className === 'reassign-driver') {

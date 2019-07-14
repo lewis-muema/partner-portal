@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="banks__container">
       <!--notification messages-->
       <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
@@ -255,7 +254,6 @@
 
 <script>
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -263,7 +261,6 @@ const moment = require('moment');
 export default {
   components: {
     verifier,
-    Header,
   },
   data() {
     return {

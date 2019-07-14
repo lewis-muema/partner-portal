@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="truckflow__container-tab">
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
@@ -386,7 +385,6 @@ let interval = '';
 export default {
   components: {
     verifier,
-    Header,
   },
   data() {
     return {

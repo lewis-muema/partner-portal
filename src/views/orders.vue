@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="truckflow__container-tab">
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
@@ -216,7 +215,6 @@
 
 <script>
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -226,7 +224,6 @@ let interval = '';
 export default {
   components: {
     verifier,
-    Header,
   },
   data() {
     return {

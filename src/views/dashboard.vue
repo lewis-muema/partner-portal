@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="page-dash" v-if="dataResponse">
       <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
@@ -116,7 +115,6 @@
 
 <script>
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -124,7 +122,6 @@ const moment = require('moment');
 export default {
   components: {
     verifier,
-    Header,
   },
   data() {
     return {
@@ -247,7 +244,7 @@ export default {
     },
     ratingPercentage() {
       if (this.dataResponse.msg.Average_Rating_this_Week) {
-        const percent = (this.dataResponse.msg.Average_Rating_this_Week * 5) / 100;
+        const percent = (this.dataResponse.msg.Average_Rating_this_Week / 5) * 100;
         return percent;
       } else {
         return 0;
@@ -255,7 +252,7 @@ export default {
     },
     ratingPercentageMonth() {
       if (this.dataResponse.msg.Average_Rating_this_Month) {
-        const percent = (this.dataResponse.msg.Average_Rating_this_Month * 5) / 100;
+        const percent = (this.dataResponse.msg.Average_Rating_this_Month / 5) * 100;
         return percent;
       } else {
         return 0;
@@ -263,7 +260,7 @@ export default {
     },
     hoursPercentageWeek() {
       if (this.dataResponse.msg.Hours_online_this_Week) {
-        const percent = (this.dataResponse.msg.Hours_online_this_Week * 5) / 100;
+        const percent = (this.dataResponse.msg.Hours_online_this_Week / 5) * 100;
         return percent;
       } else {
         return 0;
@@ -271,7 +268,7 @@ export default {
     },
     hoursPercentageMonth() {
       if (this.dataResponse.msg.Hours_online_this_Month) {
-        const percent = (this.dataResponse.msg.Hours_online_this_Month * 5) / 100;
+        const percent = (this.dataResponse.msg.Hours_online_this_Month / 5) * 100;
         return percent;
       } else {
         return 0;
