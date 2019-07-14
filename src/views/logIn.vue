@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <div class="login__log-cont" v-if="state === 'login'">
       <div class="login__log-panel">
         <p class="login__header-text">Log in to Sendy</p>
@@ -68,7 +67,6 @@
 
 <script>
 import VueTelInput from 'vue-tel-input';
-import Header from '../components/headers/logInHeader';
 import 'vue-tel-input/dist/vue-tel-input.css';
 
 const sha1 = require('js-sha1');
@@ -76,7 +74,6 @@ const axios = require('axios');
 
 export default {
   components: {
-    Header,
     VueTelInput,
   },
   data() {

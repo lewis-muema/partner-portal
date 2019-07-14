@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <div class="driverRequest__request-outer" v-if="message">
       <div class>
         <div class="driverRequest__request-text">
@@ -38,14 +37,9 @@
 </template>
 
 <script>
-import Header from '../components/headers/logInHeader';
-
 const axios = require('axios');
 
 export default {
-  components: {
-    Header,
-  },
   data() {
     return {
       token: '',

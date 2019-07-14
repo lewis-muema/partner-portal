@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="pending-tab">
       <div class="truckflow__container-tab">
         <div class="truckflow__container-outer">
@@ -412,7 +411,6 @@
 
 <script>
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 
@@ -424,7 +422,6 @@ let interval = '';
 export default {
   components: {
     verifier,
-    Header,
     VueTelInput,
   },
   data() {

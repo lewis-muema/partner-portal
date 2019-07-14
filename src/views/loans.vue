@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="print">
       <div class="printContain hidden-sm-down" v-if="windowWidth > 768">
         <div class="stat-filt col-6">
@@ -37,7 +36,7 @@
           <datatable
             :columns="columns"
             :rows="rows"
-            :title="`Loans for ${this.sessionInfo.name} for ${month()}`"
+            :title="`Loans for ${this.sessionInfo.name} for ${monthPeriod}`"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -102,7 +101,6 @@ import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -110,7 +108,6 @@ const moment = require('moment');
 export default {
   components: {
     verifier,
-    Header,
     Datepicker,
     datatable: DataTable,
   },
@@ -139,11 +136,13 @@ export default {
       to: '',
       error: '',
       windowWidth: '',
+      monthPeriod: '',
     };
   },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.monthPeriod = moment().format('MMMM YYYY');
       this.fetchLoans(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -156,10 +155,6 @@ export default {
     handleResize() {
       this.windowWidth = window.innerWidth;
     },
-    month() {
-      const date = new Date();
-      return `${date.toLocaleString('en-us', { month: 'long' })} ${date.getFullYear()}`;
-    },
     filt() {
       if (this.to === '' || this.from === '') {
         this.error = 'Please select both a from and to date';
@@ -167,6 +162,7 @@ export default {
           this.error = '';
         }, 4000);
       } else {
+        this.monthPeriod = `${moment(this.from).format('DD MMMM YYYY')} - ${moment(this.to).format('DD MMMM YYYY')}`;
         this.fetchLoans(2);
       }
     },

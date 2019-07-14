@@ -1,7 +1,6 @@
 <template>
   <div>
     <verifier />
-    <Header />
     <div class="map-div" id="map_area"></div>
     <div
       class="vehicles-tracking-dashboard__controls vehicles-tracking-dashboard__controls--left-control"
@@ -92,7 +91,6 @@
 <script>
 import $ from 'jquery';
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -108,7 +106,6 @@ const clientIdArray = [];
 export default {
   components: {
     verifier,
-    Header,
   },
   data() {
     return {
