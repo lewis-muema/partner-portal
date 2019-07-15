@@ -1,0 +1,311 @@
+.banks__container {
+  padding: 3% !important;
+}
+.banks__banks-table {
+  width: 100%;
+}
+.banks__table-head {
+  width: 100%;
+  background-color: gray;
+  height: 60px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+}
+.banks__table-head-col {
+  grid-column: span 2;
+  color: white;
+  padding-left: 10%;
+}
+.banks__table-col {
+  grid-column: span 2;
+  color: black;
+  padding-left: 10%;
+}
+.banks__table-rows {
+  width: 100%;
+  height: 60px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  align-items: center;
+  border-style: solid;
+  border-width: 1px;
+  border-top-width: 0px;
+}
+.banks__table-header--mobi {
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+.banks__table-head--mobi {
+  background-color: gray;
+  height: 50px;
+  display: grid;
+  align-items: center;
+}
+.banks__table-rows--mobi {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  border-style: solid;
+  border-width: thin;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+.bolded {
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+.banks__table-col--mobi {
+  grid-column: span 6;
+  padding: 5px;
+}
+.banks__new-accounts {
+  display: none;
+}
+.banks__new-bank-account-head,
+.banks__new-bank-account-body {
+  border-style: solid;
+  border-width: 1px;
+}
+.banks__new-bank-account-body {
+  border-top-color: white;
+  padding: 2%;
+  display: grid;
+  justify-content: center;
+  text-align: right;
+}
+.banks__new-bank-account-par {
+  padding: 2%;
+}
+.banks__new-account-input {
+  width: 60%;
+}
+.banks__input-width {
+  width: 400px;
+}
+.banks__input-button {
+  width: 50%;
+  display: block;
+  margin: auto;
+}
+.banks__confirm-banks-blinder {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0px;
+  top: 0px;
+  background-color: #0000007a;
+  z-index: 100;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.banks__confirm-banks-withdraw-popup {
+  width: 30%;
+  background: white;
+  padding: 2%;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+}
+.banks__confirm-banks-row {
+  grid-column: span 12;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+.banks__confirm-banks-last-row {
+  grid-column: span 6;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+.banks__confirm-banks-cancel-icon {
+  float: right;
+  cursor: pointer;
+}
+.confirm-details-section {
+  grid-column: span 12;
+}
+.banks__verify-code-section {
+  display: none;
+}
+.banks__verify-tab {
+  width: 400px;
+  display: grid;
+  margin: auto;
+  text-align: center;
+  padding: 2%;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #cccccc;
+}
+.banks__verify-inputs {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 20px;
+  height: 40px;
+}
+.banks__verify-text {
+  width: 75%;
+  display: block;
+  margin: auto;
+  margin-bottom: 20px;
+}
+.arrow,
+.banks__add-account-button,
+.submit {
+  cursor: pointer;
+}
+.banks__add-account-button {
+  margin-bottom: 35px;
+  background-color: #f78114;
+  color: white;
+  border-color: #f78114;
+  width: 200px;
+  height: 49px;
+}
+.banks__bank-text-head {
+  font-size: 20px;
+}
+.banks__edit-bank-details {
+  cursor: pointer;
+  color: #868686;
+}
+.banks__edit-bank-details--mobi {
+  cursor: pointer;
+  color: #f78114;
+}
+.banks__no-edit-bank-details {
+  cursor: not-allowed;
+  color: #868686;
+}
+.message-box-up,
+.message-box-down {
+  font-style: inherit;
+  font-size: 14px;
+  width: 200px;
+  margin-top: 10px;
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  position: fixed;
+  right: 100px;
+  text-align: center;
+  z-index: 200;
+}
+
+.message-box-down {
+  animation: dropdown 1s;
+  bottom: -140px;
+}
+
+@keyframes dropdown {
+  from {
+    bottom: 20px;
+  }
+  to {
+    bottom: -140px;
+  }
+}
+
+.message-box-up {
+  animation: goup 1s;
+  bottom: 20px;
+}
+
+@keyframes goup {
+  from {
+    bottom: -140px;
+  }
+  to {
+    bottom: 20px;
+  }
+}
+.pop-up-success {
+  background-color: #05c034;
+}
+.pop-up-failed {
+  background-color: red;
+}
+.pop-up-sending {
+  background-color: #f78114;
+}
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #f78114;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: spin 2s linear infinite;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  position: absolute;
+  right: 20px;
+  top: 14px;
+}
+.banks__loader {
+  border: 10px solid #f3f3f3;
+  border-top: 10px solid #f78114;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  animation: spin 2s linear infinite;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.banks__heavy-font {
+  font-weight: 600;
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.message-box {
+  display: none;
+}
+.small-font {
+  font-size: 14px;
+}
+.banks__active-buttons {
+  height: 40px;
+  background-color: #f8871c;
+  color: #fefffe;
+  border-color: #fb8f15;
+  border-radius: 3px;
+}
+.banks__no-banks-par {
+  text-align: center;
+  margin-top: 30px;
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 425px) {
+  .banks__new-account-input {
+    margin-right: 10px;
+    border: solid;
+    border-width: 1px;
+  }
+  .banks__confirm-banks-withdraw-popup {
+    width: 80%;
+    padding: 25px;
+  }
+  .banks__input-button {
+    border: solid;
+    border-width: 1px;
+  }
+  .banks__verify-inputs {
+    border: solid;
+    border-width: 1px;
+  }
+}
