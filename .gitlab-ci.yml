@@ -3,6 +3,7 @@ image: node
 variables:                                                                                                                                                                                                                                                                                                                                                                    
   STAGING_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:latest_$CI_COMMIT_SHORT_SHA
   PROD_IMAGE_NAME: sendy-docker-local.jfrog.io/node_private_api:prod_$CI_COMMIT_SHORT_SHA
+  BETA_IMAGE_NAME: sendy-docker-local.jfrog.io/node_private_api:beta_$CI_COMMIT_SHORT_SHA
 stages:
   - lint
   - test
@@ -42,7 +43,7 @@ unitTest:
     - staging
  
 
-#builds and pushes the docker image to the artifactory
+#builds and pushes the docker image to the artifactory staging 
 buildpushstaging:
   stage: buildpush
   tags:
@@ -62,3 +63,27 @@ deployStaging:
     - ssh -v -f -o StrictHostKeyChecking=no -l admin kubetest-master.sendyit.com "kubectl set image deploy vue-partner-portal  vue-partner-portal=$STAGING_IMAGE_NAME"
   only:
     - staging
+
+
+#builds and pushes the docker image to the artifactory prod
+buildpushbeta:
+  stage: buildpush
+  tags:
+    - shell
+  script:
+    - docker build --build-arg DOCKER_ENV=prod --pull -t $BETA_IMAGE_NAME -f Dockerfile .
+    - docker push $BETA_IMAGE_NAME
+  only:
+    - master 
+
+#deploys the app to beta environment
+deploybeta:
+  stage: deploy
+  tags:
+    - shell
+  script:
+    - docker run -t --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 silintl/ecs-deploy --cluster fe-prod --service-name vuebetapartnerportal -t 600 -i $BETA_IMAGE_NAME
+  only:
+
+  only:
+    - master 
