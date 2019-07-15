@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="pending-tab">
       <div class="truckflow__container-tab">
         <div class="truckflow__container-outer">
@@ -411,8 +412,10 @@
 
 <script>
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
+import { constants } from 'crypto';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -423,6 +426,7 @@ export default {
   components: {
     verifier,
     VueTelInput,
+    errorHandler,
   },
   data() {
     return {
@@ -513,6 +517,7 @@ export default {
           showDialCode: false,
         },
       },
+      errorObj: '',
     };
   },
   computed: {},
@@ -522,12 +527,17 @@ export default {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-      axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then(response => {
-        if (response.status === 200) {
-          this.allVehicles = response.data.msg;
-          this.getOrders(response.data.msg);
-        }
-      });
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            this.allVehicles = response.data.msg;
+            this.getOrders(response.data.msg);
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     }
   },
   beforeDestroy() {
@@ -1016,6 +1026,7 @@ export default {
           }
         })
         .catch(error => {
+          this.errorObj = error.response;
           if (error.response) {
             this.confirmButtonState = 'confirm order';
             if (!error.response.data.order_response) {
@@ -1113,6 +1124,7 @@ export default {
           }
         })
         .catch(error => {
+          this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
             this.error = `${error.response.data.message}`;
@@ -1251,33 +1263,43 @@ export default {
         owner_id: this.sessionInfo.id,
       });
 
-      axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config).then(response => {
-        if (response.status === 200) {
-          const unescaped = response.data;
-          unescaped.data.forEach((row, v) => {
-            row.count = v;
-            this.riders.push(row);
-          });
-        }
-      });
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            const unescaped = response.data;
+            unescaped.data.forEach((row, v) => {
+              row.count = v;
+              this.riders.push(row);
+            });
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     getVehicles(id) {
       const vehicleload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-      axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config).then(response => {
-        if (response.status === 200) {
-          const unescaped = response.data;
-          let counter = -1;
-          unescaped.data.forEach((row, v) => {
-            if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-              counter += 1;
-              row.count = counter;
-              this.vehicles.push(row);
-            }
-          });
-        }
-      });
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            const unescaped = response.data;
+            let counter = -1;
+            unescaped.data.forEach((row, v) => {
+              if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                counter += 1;
+                row.count = counter;
+                this.vehicles.push(row);
+              }
+            });
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     refreshOrders() {
       interval = setInterval(() => {
@@ -1309,9 +1331,7 @@ export default {
             });
           })
           .catch(error => {
-            if (error.response) {
-              // this.loadingStatus = false;
-            }
+            this.errorObj = error.response;
           });
       }, 60000);
     },
@@ -1340,6 +1360,7 @@ export default {
           this.refreshOrders();
         })
         .catch(error => {
+          this.errorObj = error.response;
           if (error.response) {
             this.loadingStatus = false;
           }

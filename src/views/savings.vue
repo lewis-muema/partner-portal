@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="print">
       <div class="printContain hidden-sm-down" v-if="windowWidth > 768">
         <div class="stat-filt col-6">
@@ -101,6 +102,7 @@ import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -110,6 +112,7 @@ export default {
     verifier,
     Datepicker,
     datatable: DataTable,
+    errorHandler,
   },
   data() {
     return {
@@ -128,6 +131,7 @@ export default {
       error: '',
       windowWidth: '',
       monthPeriod: '',
+      errorObj: '',
     };
   },
   created() {
@@ -164,25 +168,30 @@ export default {
     fetchSavings(requestType) {
       const payload = this.definePayload(requestType);
       this.displayFetchingStatus('Fetching savings', 0);
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/savings`, payload, this.config).then(response => {
-        if (requestType === 2) {
-          document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
-          this.rows = [];
-          this.removeFetchingStatus();
-        }
-        if (response.data.msg) {
-          this.handleResponse(response);
-        } else {
+      axios
+        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/savings`, payload, this.config)
+        .then(response => {
           if (requestType === 2) {
-            this.error = 'No savings found for this period';
-            setTimeout(() => {
-              this.error = '';
-            }, 4000);
+            document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+            this.rows = [];
+            this.removeFetchingStatus();
           }
-          this.rows = [];
-          this.displayFetchingStatus('No savings found for this period', 0);
-        }
-      });
+          if (response.data.msg) {
+            this.handleResponse(response);
+          } else {
+            if (requestType === 2) {
+              this.error = 'No savings found for this period';
+              setTimeout(() => {
+                this.error = '';
+              }, 4000);
+            }
+            this.rows = [];
+            this.displayFetchingStatus('No savings found for this period', 0);
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     definePayload(requestType) {
       let firstDay = '';

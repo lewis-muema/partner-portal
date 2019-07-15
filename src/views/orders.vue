@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="truckflow__container-tab">
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
@@ -215,6 +216,7 @@
 
 <script>
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -224,6 +226,7 @@ let interval = '';
 export default {
   components: {
     verifier,
+    errorHandler,
   },
   data() {
     return {
@@ -283,6 +286,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      errorObj: '',
     };
   },
   created() {
@@ -539,6 +543,7 @@ export default {
             });
           })
           .catch(error => {
+            this.errorObj = error.response;
             if (error.response) {
               //   this.loadingStatus = false;
             }
@@ -563,6 +568,7 @@ export default {
           this.refreshOrders();
         })
         .catch(error => {
+          this.errorObj = error.response;
           if (error.response) {
             this.loadingStatus = false;
           }
