@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="banks__container">
       <!--notification messages-->
       <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
@@ -254,6 +255,7 @@
 
 <script>
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -261,6 +263,7 @@ const moment = require('moment');
 export default {
   components: {
     verifier,
+    errorHandler,
   },
   data() {
     return {
@@ -298,6 +301,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      errorObj: '',
     };
   },
   created() {
@@ -406,6 +410,7 @@ export default {
           this.handleVerificatioResponse(response);
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.handleError(error, 1);
         });
     },
@@ -486,6 +491,7 @@ export default {
             this.handleSendCodeResponse(response);
           })
           .catch(error => {
+            this.errorObj = error.response;
             this.handleError(error, 2);
           });
       }
@@ -545,6 +551,7 @@ export default {
           });
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.handleError(error, 1);
         });
     },
@@ -562,6 +569,7 @@ export default {
           });
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.handleError(error, 1);
         });
     },
@@ -587,6 +595,7 @@ export default {
             }
           })
           .catch(error => {
+            this.errorObj = error.response;
             this.handleError(error, 1);
           });
       } else {
@@ -602,6 +611,7 @@ export default {
             }
           })
           .catch(error => {
+            this.errorObj = error.response;
             this.handleError(error, 1);
           });
       }

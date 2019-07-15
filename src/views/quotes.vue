@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="truckflow__container-tab">
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
@@ -375,7 +376,7 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
 <script>
 import verifier from '../components/verifier';
-import Header from '../components/headers/appHeader';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -385,6 +386,7 @@ let interval = '';
 export default {
   components: {
     verifier,
+    errorHandler,
   },
   data() {
     return {
@@ -450,6 +452,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      errorObj: '',
     };
   },
   computed: {},
@@ -948,6 +951,7 @@ export default {
           }
         })
         .catch(error => {
+          this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
             this.error = `${error.response.data.message}`;
@@ -984,6 +988,7 @@ export default {
           }
         })
         .catch(error => {
+          this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
             this.error = `${error.response.data.message}`;
@@ -1123,39 +1128,49 @@ export default {
         owner_id: this.sessionInfo.id,
       });
 
-      axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config).then(response => {
-        if (response.status === 200) {
-          const unescaped = response.data;
-          unescaped.data.forEach((row, v) => {
-            row.count = v;
-            this.riders.push(row);
-          });
-          if (this.riders.length !== 0) {
-            this.autoSelectRiders(id);
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            const unescaped = response.data;
+            unescaped.data.forEach((row, v) => {
+              row.count = v;
+              this.riders.push(row);
+            });
+            if (this.riders.length !== 0) {
+              this.autoSelectRiders(id);
+            }
           }
-        }
-      });
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     getVehicles(id) {
       const vehicleload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-      axios.post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config).then(response => {
-        if (response.status === 200) {
-          const unescaped = response.data;
-          let counter = -1;
-          unescaped.data.forEach((row, v) => {
-            if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-              counter += 1;
-              row.count = counter;
-              this.vehicles.push(row);
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            const unescaped = response.data;
+            let counter = -1;
+            unescaped.data.forEach((row, v) => {
+              if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                counter += 1;
+                row.count = counter;
+                this.vehicles.push(row);
+              }
+            });
+            if (this.vehicles.length !== 0) {
+              this.autoSelectVehicles(id);
             }
-          });
-          if (this.vehicles.length !== 0) {
-            this.autoSelectVehicles(id);
           }
-        }
-      });
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     refreshOrders() {
       interval = setInterval(() => {
@@ -1192,6 +1207,7 @@ export default {
             }
           })
           .catch(error => {
+            this.errorObj = error.response;
             // this.loadingStatus = false;
           });
       }, 60000);
@@ -1222,6 +1238,7 @@ export default {
           }
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.loadingStatus = false;
         });
     },

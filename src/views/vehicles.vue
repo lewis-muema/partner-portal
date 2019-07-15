@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <modal name="driver-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
@@ -673,6 +674,7 @@ import VueTelInput from 'vue-tel-input';
 import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -684,6 +686,7 @@ export default {
     VueTelInput,
     verifier,
     datatable: DataTable,
+    errorHandler,
   },
   data() {
     return {
@@ -743,6 +746,7 @@ export default {
       },
       driverTel: '',
       ownerDriverTel: '',
+      errorObj: '',
     };
   },
   created() {
@@ -803,7 +807,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          this.errorObj = error.response;
         });
     },
     populateTable(response) {
@@ -954,7 +958,6 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/add_vehicle`, payload, this.config)
         .then(response => {
-          console.log(response);
           if (response.data.status) {
             this.fetchVehicles();
             $('#upErr5')
@@ -974,7 +977,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error.response);
+          this.errorObj = error.response;
         });
     },
     upload(id) {
@@ -1159,7 +1162,7 @@ export default {
           }
         })
         .catch(() => {
-          console.log(error.response);
+          this.errorObj = error.response;
         });
     },
     cancelInvite() {
@@ -1183,7 +1186,7 @@ export default {
           }
         })
         .catch(() => {
-          console.log(error.response);
+          this.errorObj = error.response;
         });
     },
     createOwnerDriver() {
@@ -1230,7 +1233,7 @@ export default {
           }
         })
         .catch(() => {
-          console.log(error.response);
+          this.errorObj = error.response;
         });
     },
     showVehicleModal() {

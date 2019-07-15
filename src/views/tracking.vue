@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="map-div" id="map_area"></div>
     <div
       class="vehicles-tracking-dashboard__controls vehicles-tracking-dashboard__controls--left-control"
@@ -91,6 +92,7 @@
 <script>
 import $ from 'jquery';
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -106,6 +108,7 @@ const clientIdArray = [];
 export default {
   components: {
     verifier,
+    errorHandler,
   },
   data() {
     return {
@@ -121,6 +124,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      errorObj: '',
     };
   },
   created() {
@@ -146,27 +150,35 @@ export default {
           }
         })
         .then(() => {
-          axios.post(`${process.env.VUE_APP_AUTH}v1/last_partner_position`, lastPositionPayload, this.config).then(response => {
-            if (response.data.status) {
-              const vendorArray = [];
-              response.data.partnerArray.forEach((row, i) => {
-                const filterObject = riders.filter(e => e.rider_id === row.rider_id);
-                if (filterObject.length > 0) {
-                  row.rider_details = filterObject[0];
-                  this.ridersWithTrackers.push(row);
-                  const vendorDetails = {
-                    vendor_type: row.rider_details.vendor_type,
-                    vendor_disp_name: row.rider_details.vendor_disp_name,
-                  };
-                  if (!vendorArray.includes(row.rider_details.vendor_type)) {
-                    vendorArray.push(row.rider_details.vendor_type);
-                    this.availableVendors.push(vendorDetails);
+          axios
+            .post(`${process.env.VUE_APP_AUTH}v1/last_partner_position`, lastPositionPayload, this.config)
+            .then(response => {
+              if (response.data.status) {
+                const vendorArray = [];
+                response.data.partnerArray.forEach((row, i) => {
+                  const filterObject = riders.filter(e => e.rider_id === row.rider_id);
+                  if (filterObject.length > 0) {
+                    row.rider_details = filterObject[0];
+                    this.ridersWithTrackers.push(row);
+                    const vendorDetails = {
+                      vendor_type: row.rider_details.vendor_type,
+                      vendor_disp_name: row.rider_details.vendor_disp_name,
+                    };
+                    if (!vendorArray.includes(row.rider_details.vendor_type)) {
+                      vendorArray.push(row.rider_details.vendor_type);
+                      this.availableVendors.push(vendorDetails);
+                    }
                   }
-                }
-              });
-              this.setMarkers();
-            }
-          });
+                });
+                this.setMarkers();
+              }
+            })
+            .catch(error => {
+              this.errorObj = error.response;
+            });
+        })
+        .catch(error => {
+          this.errorObj = error.response;
         });
     }
   },

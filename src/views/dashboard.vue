@@ -1,6 +1,7 @@
 <template>
   <div>
     <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="page-dash" v-if="dataResponse">
       <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
@@ -115,6 +116,7 @@
 
 <script>
 import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 const axios = require('axios');
 const moment = require('moment');
@@ -122,6 +124,7 @@ const moment = require('moment');
 export default {
   components: {
     verifier,
+    errorHandler,
   },
   data() {
     return {
@@ -135,6 +138,7 @@ export default {
       },
       dataResponse: '',
       options: '',
+      errorObj: '',
     };
   },
   created() {
@@ -179,8 +183,8 @@ export default {
           };
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.dataStatus = true;
-          console.log(error.response);
         });
     }
   },
