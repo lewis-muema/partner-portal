@@ -1,7 +1,7 @@
 FROM nginx:latest
 
 RUN apt-get update && \
-    apt-get install -y sudo curl bzip2 wget git vim gnupg
+        apt-get install -y sudo curl bzip2 wget git vim gnupg
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 
@@ -13,7 +13,7 @@ RUN sudo apt-get clean
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
-    ln -sf /dev/stderr /var/log/nginx/error.log
+        ln -sf /dev/stderr /var/log/nginx/error.log
 
 COPY ./nginx/default.conf  /etc/nginx/conf.d/
 
@@ -27,14 +27,14 @@ ARG DOCKER_ENV
 
 ENV DOCKER_ENV=$DOCKER_ENV
 RUN echo ${DOCKER_ENV}
-RUN if [ "$DOCKER_ENV" = "production" ]; \
-        then npm install && npm run build; \
-        else npm install && npm run staging; \
+RUN if [ "$DOCKER_ENV" = "testing" ]; \
+        then npm install && npm run staging; \
+        else npm install && npm run build; \
         fi
 
 RUN cp nginx/default.conf /etc/nginx/conf.d/default.conf && \
-    cp -R /build/dist/*  /app/ && \
-    rm -fr /build
+        cp -R /build/dist/*  /app/ && \
+        rm -fr /build
 
 WORKDIR /app
 
