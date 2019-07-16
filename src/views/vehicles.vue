@@ -816,6 +816,10 @@ export default {
         const riderRow = this.sortRidersActions(row);
         let vehicleRow = '';
         const invitedPhone = this.sortAllocationStatus(row);
+        let riderRb = '';
+        if (riderRow.rb) {
+          riderRb = `${riderRow.rb.split(' ')[0]} ${riderRow.rb.split(' ')[1] * -1}`;
+        }
         if (row.vehicle) {
           vehicleRow = row.vehicle;
         }
@@ -827,7 +831,7 @@ export default {
           phone_no: riderRow.phone_no,
           name: riderRow.riderName,
           rider_phone: invitedPhone,
-          rb: riderRow.rb,
+          rb: riderRb,
           options: riderRow.action,
           insurance: riderRow.insurance_no,
         });

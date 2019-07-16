@@ -173,8 +173,6 @@ export default {
         .then(response => {
           if (requestType === 2) {
             document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
-            this.rows = [];
-            this.removeFetchingStatus();
           }
           if (response.data.msg) {
             this.handleResponse(response);
@@ -238,6 +236,7 @@ export default {
           pay_narrative: row.pay_narrative,
         });
       });
+      this.removeFetchingStatus();
       this.rows = record;
     },
     displayFetchingStatus(message, time) {
