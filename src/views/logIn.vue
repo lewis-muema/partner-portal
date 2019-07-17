@@ -5,7 +5,12 @@
         <p class="login__header-text">Log in to Sendy</p>
         <div class="control-group">
           <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input"></vue-tel-input>
+            <vue-tel-input
+              v-model="tel"
+              v-bind="bindProps"
+              class="login__phone-input"
+              @input="validatePhone()"
+            ></vue-tel-input>
           </div>
           <div class="login__element">
             <input
@@ -16,6 +21,7 @@
               placeholder="Password"
               required
               v-model="password"
+              @input="validatePassword()"
             />
           </div>
           <div id="loggin_error" class="error">{{ loginError }}</div>
@@ -33,10 +39,7 @@
           </div>
           <div class="login__inst">
             Don't have an account?
-            <a
-              href="https://partner.sendyit.com/onboarding_portal/"
-              class="login__sign-up"
-            >Sign Up</a>
+            <a href="#" @click="redirect()" class="login__sign-up">Sign Up</a>
           </div>
         </div>
       </div>
@@ -95,7 +98,7 @@ export default {
         ignoredCountries: [],
         autocomplete: 'off',
         name: 'telephone',
-        maxLen: 25,
+        maxLen: 13,
         wrapperClasses: '',
         inputClasses: '',
         dropdownOptions: {
@@ -104,6 +107,7 @@ export default {
         inputOptions: {
           showDialCode: false,
         },
+        validCharactersOnly: true,
       },
       loginError: '',
     };
@@ -129,6 +133,21 @@ export default {
         this.state = 'login';
         this.loginError = '';
       }
+    },
+    redirect() {
+      if (process.env.VUE_APP_AUTH.includes('test')) {
+        window.location.href = 'https://partnertest.sendyit.com/onboarding_portal/#/';
+      } else {
+        window.location.href = 'https://partner.sendyit.com/onboarding_portal/#/';
+      }
+    },
+    validatePhone() {
+      setTimeout(() => {
+        this.tel = this.tel.toString().replace(/[^0-9+]/g, '');
+      }, 0);
+    },
+    validatePassword() {
+      this.password = this.password.toString().replace(/[^0-9+]/g, '');
     },
     postForgot() {
       // eslint-disable-next-line quotes
