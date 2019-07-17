@@ -114,7 +114,7 @@ export default {
       }
     },
     trainingRedirect() {
-      window.location.href = 'http://support.sendyit.com/collection/1-sendy-partner-training-manual';
+      window.open('http://support.sendyit.com/collection/1-sendy-partner-training-manual', '_blank');
     },
   },
 };
