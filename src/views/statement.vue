@@ -255,6 +255,7 @@ const axios = require('axios');
 const moment = require('moment');
 
 export default {
+  title: 'Partner Portal - Statement',
   components: {
     verifier,
     Datepicker,

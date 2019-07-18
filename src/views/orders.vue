@@ -224,6 +224,7 @@ const moment = require('moment');
 let interval = '';
 
 export default {
+  title: 'Partner Portal - My Orders',
   components: {
     verifier,
     errorHandler,
