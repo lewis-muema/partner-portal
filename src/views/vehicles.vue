@@ -682,6 +682,7 @@ const moment = require('moment');
 let s3 = '';
 
 export default {
+  title: 'Partner Portal - Vehicles',
   components: {
     VueTelInput,
     verifier,

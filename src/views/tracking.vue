@@ -106,6 +106,7 @@ const loopInterval = [];
 const clientIdArray = [];
 
 export default {
+  title: 'Partner Portal - Tracking',
   components: {
     verifier,
     errorHandler,

@@ -76,6 +76,7 @@ const sha1 = require('js-sha1');
 const axios = require('axios');
 
 export default {
+  title: 'Partner Portal - Log In',
   components: {
     VueTelInput,
   },
