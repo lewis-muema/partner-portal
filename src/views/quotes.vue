@@ -384,6 +384,7 @@ const moment = require('moment');
 let interval = '';
 
 export default {
+  title: 'Partner Portal - My Quotes',
   components: {
     verifier,
     errorHandler,

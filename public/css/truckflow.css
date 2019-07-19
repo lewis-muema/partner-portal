@@ -177,13 +177,6 @@ button {
 .orders__list-row {
   display: grid;
   grid-template-columns: repeat(16, 1fr);
-  /* border-top-color: #8a8a8a; */
-  /* border-radius: 5px; */
-  /* margin-top: 4px; */
-  /* border-style: solid; */
-  /* border-bottom-color: white; */
-  /* border-left-color: white; */
-  /* border-right-color: white; */
   border-top: 1px solid #8a8a8a;
   padding: 5px;
 }
@@ -773,6 +766,12 @@ button {
     color: #8a8a8a;
     margin-bottom: 0.4em;
     text-transform: uppercase;
+  }
+  .orders__list-row {
+    grid-template-columns: repeat(4, 1fr);
+    border-style: solid;
+    margin-bottom: 25px;
+    border: 1px solid #8080807a;
   }
   .price-align {
     display: grid;

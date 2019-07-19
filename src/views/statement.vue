@@ -144,12 +144,12 @@
                     <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
                   </span>
                   <div class="statement__box-content">
-                    <span class="statement__box-text">Today you can withdraw :</span>
+                    <span class="statement__box-text">You can withdraw :</span>
                     <br />
                     <span
                       class="statement__box-number"
                       v-if="this.ownerRb"
-                    >{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</span>
+                    >{{ ownerRb.currency }} {{ Math.floor(ownerRb.rb * -1) }}</span>
                   </div>
                 </div>
               </div>
@@ -255,6 +255,7 @@ const axios = require('axios');
 const moment = require('moment');
 
 export default {
+  title: 'Partner Portal - Statement',
   components: {
     verifier,
     Datepicker,

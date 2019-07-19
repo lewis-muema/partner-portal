@@ -682,6 +682,7 @@ const moment = require('moment');
 let s3 = '';
 
 export default {
+  title: 'Partner Portal - Vehicles',
   components: {
     VueTelInput,
     verifier,
@@ -818,7 +819,7 @@ export default {
         const invitedPhone = this.sortAllocationStatus(row);
         let riderRb = '';
         if (riderRow.rb) {
-          riderRb = `${riderRow.rb.split(' ')[0]} ${riderRow.rb.split(' ')[1] * -1}`;
+          riderRb = `${riderRow.rb.split(' ')[0]} ${Math.floor(riderRow.rb.split(' ')[1] * -1)}`;
         }
         if (row.vehicle) {
           vehicleRow = row.vehicle;

@@ -7,9 +7,12 @@ import {
  faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VuePageTitle from 'vue-page-title';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+
+Vue.use(VuePageTitle);
 
 library.add(faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity);
 

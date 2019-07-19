@@ -40,6 +40,7 @@
 const axios = require('axios');
 
 export default {
+  title: 'Driver Request',
   data() {
     return {
       token: '',
