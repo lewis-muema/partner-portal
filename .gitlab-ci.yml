@@ -2,8 +2,8 @@ image: node
 
 variables:                                                                                                                                                                                                                                                                                                                                                                    
   STAGING_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:latest_$CI_COMMIT_SHORT_SHA
-  PROD_IMAGE_NAME: sendy-docker-local.jfrog.io/node_private_api:prod_$CI_COMMIT_SHORT_SHA
-  BETA_IMAGE_NAME: sendy-docker-local.jfrog.io/node_private_api:beta_$CI_COMMIT_SHORT_SHA
+  PROD_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:prod_$CI_COMMIT_SHORT_SHA
+  BETA_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:beta_$CI_COMMIT_SHORT_SHA
 stages:
   - lint
   - test
