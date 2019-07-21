@@ -115,11 +115,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+import moment from 'moment';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-
-const axios = require('axios');
-const moment = require('moment');
 
 export default {
   title: 'Partner Portal - Dashboard',

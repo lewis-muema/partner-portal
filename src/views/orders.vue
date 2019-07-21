@@ -119,34 +119,38 @@
                 <div class="orders__list-col bid-in"></div>
                 <div class="orders__list-col center-action">
                   <P class="orders__mobile-col uppercase">action</P>
-                  <p
-                    class="orders__confirm-icon confirmedbutton uppercase"
-                    v-if="order.confirmStatus === 1 && order.orderStatus === 1"
-                  >
-                    confirmed
-                    <i
-                      class="material-icons icon arrow"
-                      v-if="opened.includes(order.id)"
-                    >keyboard_arrow_down</i>
-                    <i
-                      class="material-icons icon arrow"
-                      v-if="!opened.includes(order.id)"
-                    >keyboard_arrow_right</i>
-                  </p>
-                  <p
-                    class="orders__confirm-icon cancelledButton uppercase"
-                    v-if="order.orderStatus === 2 || order.orderStatus === 0"
-                  >
-                    cancelled
-                    <i
-                      class="material-icons icon arrow"
-                      v-if="opened.includes(order.id)"
-                    >keyboard_arrow_down</i>
-                    <i
-                      class="material-icons icon arrow"
-                      v-if="!opened.includes(order.id)"
-                    >keyboard_arrow_right</i>
-                  </p>
+                  <div class="orders__statuses">
+                    <span>
+                      <p
+                        class="orders__confirm-icon confirmedbutton orders__buttons"
+                        v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 0"
+                      >confirmed</p>
+                      <p
+                        class="orders__confirm-icon in-transitButton orders__buttons"
+                        v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 2"
+                      >in transit</p>
+                      <p
+                        class="orders__confirm-icon deliveredButton orders__buttons"
+                        v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 3"
+                      >delivered</p>
+                      <p
+                        class="orders__confirm-icon cancelledButton orders__buttons"
+                        v-if="order.orderStatus === 2 || order.orderStatus === 0"
+                      >cancelled</p>
+                    </span>
+                    <span>
+                      <i
+                        class="material-icons icon arrow"
+                        :class="orderStatuses(order)"
+                        v-if="opened.includes(order.id)"
+                      >keyboard_arrow_down</i>
+                      <i
+                        class="material-icons icon arrow"
+                        :class="orderStatuses(order)"
+                        v-if="!opened.includes(order.id)"
+                      >keyboard_arrow_right</i>
+                    </span>
+                  </div>
                 </div>
               </div>
               <div
@@ -217,9 +221,8 @@
 <script>
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-
-const axios = require('axios');
-const moment = require('moment');
+import axios from 'axios';
+import moment from 'moment';
 
 let interval = '';
 
@@ -344,6 +347,17 @@ export default {
     timeFormat(id) {
       const timer = moment(this.orders[id - 1].orderTime).format('ddd, Do MMM');
       return timer;
+    },
+    orderStatuses(order) {
+      if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 0) {
+        return 'confirmedbutton';
+      } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 2) {
+        return 'in-transitButton';
+      } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 3) {
+        return 'deliveredButton';
+      } else {
+        return 'cancelledButton';
+      }
     },
     currencyFormat(id) {
       const amount = this.orders[id - 1].amount;
@@ -608,6 +622,7 @@ export default {
       orderDetails.confirmedVehicle = vehicle;
       orderDetails.orderStatus = orderStatus;
       orderDetails.confirmStatus = confirmStatus;
+      orderDetails.delivery_status = row.delivery_status;
       return orderDetails;
     },
   },

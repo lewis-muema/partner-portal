@@ -91,12 +91,11 @@
 </template>
 <script>
 import $ from 'jquery';
+import axios from 'axios';
+import moment from 'moment';
+import mqtt from 'mqtt';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-
-const axios = require('axios');
-const moment = require('moment');
-const mqtt = require('mqtt');
 
 let client = '';
 
