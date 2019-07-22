@@ -101,11 +101,10 @@
 import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
+import axios from 'axios';
+import moment from 'moment';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-
-const axios = require('axios');
-const moment = require('moment');
 
 export default {
   title: 'Partner Portal - Savings',

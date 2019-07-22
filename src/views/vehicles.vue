@@ -673,11 +673,10 @@ import $ from 'jquery';
 import VueTelInput from 'vue-tel-input';
 import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
+import axios from 'axios';
+import moment from 'moment';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-
-const axios = require('axios');
-const moment = require('moment');
 
 let s3 = '';
 
