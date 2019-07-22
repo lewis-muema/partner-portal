@@ -41,6 +41,8 @@
               <option value="14T Truck">14 Tonne Truck</option>
               <option value="20T Truck">20 Tonne Truck</option>
               <option value="28T Truck">28 Tonne Truck</option>
+              <option value="Freight">Freight Truck</option>
+
             </select>
           </span>
         </div>
