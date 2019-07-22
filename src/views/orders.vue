@@ -134,6 +134,10 @@
                         v-if="deliveredStatus(order)"
                       >delivered</p>
                       <p
+                        class="orders__confirm-icon pendingDnotes orders__buttons"
+                        v-if="pendingDnotes(order)"
+                      >pending d.notes</p>
+                      <p
                         class="orders__confirm-icon cancelledButton orders__buttons"
                         v-if="cancelledStatus(order)"
                       >cancelled</p>
@@ -204,6 +208,10 @@
                       <div class="assigned">
                         <p class="order__amount heading uppercase">driver assigned to this order</p>
                         <p class="order__amount par">{{ confirmedDriver }}</p>
+                      </div>
+                      <div class="assigned" v-if="pendingDnotes(order)">
+                        <p class="order__amount heading uppercase">delivery status</p>
+                        <p class="order__amount par">D Notes NOT delivered</p>
                       </div>
                     </div>
                   </div>
@@ -364,6 +372,11 @@ export default {
         return true;
       }
     },
+    pendingDnotes(order) {
+      if (this.orderStatuses(order) === 'pendingDnotes') {
+        return true;
+      }
+    },
     cancelledStatus(order) {
       if (this.orderStatuses(order) === 'cancelledButton') {
         return true;
@@ -375,7 +388,11 @@ export default {
       } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 2) {
         return 'in-transitButton';
       } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 3) {
-        return 'deliveredButton';
+        if (order.delivery_verification.hasOwnProperty('physical_delivery_note_status') && order.delivery_verification.physical_delivery_note_status) {
+          return 'pendingDnotes';
+        } else {
+          return 'deliveredButton';
+        }
       } else {
         return 'cancelledButton';
       }
@@ -621,6 +638,9 @@ export default {
       const unescaped1 = JSON.parse(row.order_details);
       const orderDetails = unescaped1.values;
       const priceDetails = JSON.parse(row.price_details);
+      if (row.rider_deliver_img) {
+        orderDetails.delivery_notes = JSON.parse(row.rider_deliver_img);
+      }
       if (priceDetails.order_currency) {
         orderDetails.currency = priceDetails.order_currency;
       } else {

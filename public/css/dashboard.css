@@ -19,7 +19,10 @@
   border-radius: 2px;
   margin-bottom: 15px;
 }
-
+.dashboard__box-container {
+  width: 19%;
+  margin-right: 1%;
+}
 .dashboard__box-icon {
   color: #fff;
   border-top-left-radius: 2px;
@@ -147,7 +150,10 @@
   color: #fff;
   text-align: center;
 }
-
+.dashboard__row {
+  margin-left: 2% !important;
+  margin-right: 0 !important;
+}
 .dashboard__box-icon-blu,
 .dashboard__rate-bar-blu {
   background-color: #1782c5 !important;
@@ -168,6 +174,10 @@
   background-color: #f0ad4e !important;
 }
 
+.dashboard__box-icon-green {
+  background-color: #02a65a !important;
+}
+
 .dashboard__box-number > sup {
   top: -0em !important;
 }
@@ -179,6 +189,10 @@
 @media (max-width: 599px) {
   .chart {
     height: 270px;
+  }
+  .dashboard__box-container {
+    width: 100%;
+    margin-right: 1%;
   }
 }
 
