@@ -123,19 +123,19 @@
                     <span>
                       <p
                         class="orders__confirm-icon confirmedbutton orders__buttons"
-                        v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 0"
+                        v-if="confirmedStatus(order)"
                       >confirmed</p>
                       <p
                         class="orders__confirm-icon in-transitButton orders__buttons"
-                        v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 2"
+                        v-if="inTransitStatus(order)"
                       >in transit</p>
                       <p
                         class="orders__confirm-icon deliveredButton orders__buttons"
-                        v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 3"
+                        v-if="deliveredStatus(order)"
                       >delivered</p>
                       <p
                         class="orders__confirm-icon cancelledButton orders__buttons"
-                        v-if="order.orderStatus === 2 || order.orderStatus === 0"
+                        v-if="cancelledStatus(order)"
                       >cancelled</p>
                     </span>
                     <span>
@@ -302,6 +302,7 @@ export default {
   beforeDestroy() {
     clearInterval(interval); // stop the interval
   },
+  computed: {},
   methods: {
     regcounter(id) {
       this.regOk = id;
@@ -347,6 +348,26 @@ export default {
     timeFormat(id) {
       const timer = moment(this.orders[id - 1].orderTime).format('ddd, Do MMM');
       return timer;
+    },
+    confirmedStatus(order) {
+      if (this.orderStatuses(order) === 'confirmedbutton') {
+        return true;
+      }
+    },
+    inTransitStatus(order) {
+      if (this.orderStatuses(order) === 'in-transitButton') {
+        return true;
+      }
+    },
+    deliveredStatus(order) {
+      if (this.orderStatuses(order) === 'deliveredButton') {
+        return true;
+      }
+    },
+    cancelledStatus(order) {
+      if (this.orderStatuses(order) === 'cancelledButton') {
+        return true;
+      }
     },
     orderStatuses(order) {
       if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 0) {
