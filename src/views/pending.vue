@@ -416,9 +416,8 @@ import errorHandler from '../components/errorHandler';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
-
-const axios = require('axios');
-const moment = require('moment');
+import axios from 'axios';
+import moment from 'moment';
 
 let interval = '';
 

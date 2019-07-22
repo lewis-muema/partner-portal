@@ -377,9 +377,8 @@
 <script>
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-
-const axios = require('axios');
-const moment = require('moment');
+import axios from 'axios';
+import moment from 'moment';
 
 let interval = '';
 
