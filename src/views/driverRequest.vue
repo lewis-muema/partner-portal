@@ -37,7 +37,7 @@
 </template>
 
 <script>
-const axios = require('axios');
+import axios from 'axios';
 
 export default {
   title: 'Driver Request',

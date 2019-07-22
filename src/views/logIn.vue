@@ -71,9 +71,8 @@
 <script>
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
-
-const sha1 = require('js-sha1');
-const axios = require('axios');
+import axios from 'axios';
+import sha1 from 'js-sha1';
 
 export default {
   title: 'Partner Portal - Log In',

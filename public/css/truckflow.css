@@ -180,6 +180,10 @@ button {
   border-top: 1px solid #8a8a8a;
   padding: 5px;
 }
+.orders__statuses {
+  display: flex;
+  font-weight: 800;
+}
 .order__bidtimer-duration {
   grid-template-columns: repeat(16, 1fr);
   display: grid;
@@ -294,6 +298,7 @@ button {
 .arrow {
   vertical-align: middle;
   height: auto;
+  margin-bottom: 8px;
 }
 .cancel-quote {
   color: #bc5000;
@@ -607,8 +612,7 @@ button {
 .force-leftalign {
   justify-content: flex-start;
 }
-.confirmedbutton {
-  color: #51a65b !important;
+.orders__buttons {
   background-color: #ffffff !important;
   border-color: #ffffff !important;
   font-size: 12px;
@@ -616,17 +620,19 @@ button {
   margin-bottom: 0px;
   justify-content: center;
   text-transform: uppercase;
+  cursor: pointer;
 }
-
+.confirmedbutton {
+  color: #ffc800 !important;
+}
+.in-transitButton {
+  color: #51a65b !important;
+}
+.deliveredButton {
+  color: #1b7fc3 !important;
+}
 .cancelledButton {
   color: purple !important;
-  background-color: #ffffff !important;
-  border-color: #ffffff !important;
-  font-size: 12px;
-  text-align: center;
-  margin-bottom: 0px;
-  justify-content: center;
-  text-transform: uppercase;
 }
 .assigned {
   height: 30%;
@@ -714,6 +720,10 @@ button {
   .bid-in {
     grid-column: span 2;
     display: none;
+  }
+  .arrow {
+    margin-bottom: -28px;
+    margin-left: -25px;
   }
   .center-action {
     grid-column: span 4;
