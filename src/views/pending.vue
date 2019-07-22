@@ -610,7 +610,6 @@ export default {
       }
     },
     displayVehicles(id) {
-      console.log('vehicle  ', this.vehicles[id]);
 
       if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
         return `(${this.vehicles[id].load_capacity} Tonnes)`;
