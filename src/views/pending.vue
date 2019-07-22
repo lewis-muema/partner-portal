@@ -581,7 +581,7 @@ export default {
   },
   methods: {
     formatVendorName(order) {
-      if (order.vendorname == 'Freight') {
+      if (order.vendorname === 'Freight') {
         // add load weight
         let packageDetails = order.package_details;
 
