@@ -42,7 +42,6 @@
               <option value="20T Truck">20 Tonne Truck</option>
               <option value="28T Truck">28 Tonne Truck</option>
               <option value="Freight">Freight Truck</option>
-
             </select>
           </span>
         </div>
@@ -391,7 +390,11 @@ export default {
         return 'in-transitButton';
       } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 3) {
         if (order.delivery_verification.hasOwnProperty('physical_delivery_note_status') && order.delivery_verification.physical_delivery_note_status) {
-          return 'pendingDnotes';
+          if (order.delivery_notes[0].hasOwnProperty('physical_delivery_note_status') && order.delivery_notes[0].physical_delivery_note_status === 2) {
+            return 'deliveredButton';
+          } else {
+            return 'pendingDnotes';
+          }
         } else {
           return 'deliveredButton';
         }
