@@ -55,7 +55,11 @@
             </span>
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Pending D Notes</span>
-              <span class="dashboard__box-number">{{ ratingThisWeek() }}</span>
+              <span class="dashboard__box-number" v-if="count">{{ count }}</span>
+              <span class="dashboard__box-subscript" v-if="amount">
+                (Amount
+                <span class="bold">{{ currency }} {{ amount }}</span>)
+              </span>
             </div>
           </div>
         </div>
@@ -150,6 +154,9 @@ export default {
       dataResponse: '',
       options: '',
       errorObj: '',
+      count: '',
+      amount: '',
+      currency: '',
     };
   },
   created() {
@@ -157,6 +164,19 @@ export default {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
+      });
+      const riderIds = [];
+      this.sessionInfo.riders.forEach((row, i) => {
+        riderIds.push(row.rider_id);
+      });
+      const riderPayload = JSON.stringify({
+        rider_ids: riderIds,
+      });
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/pending_delivery_notes`, riderPayload, this.config).then(response => {
+        if (response.data.status) {
+          this.count = response.data.pendingDeliveryNotesData[0].count;
+          this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
+        }
       });
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
@@ -234,6 +254,7 @@ export default {
     },
     nextTransfer() {
       const cashval = this.dataResponse.msg.Next_transfer;
+      this.currency = cashval.split(' ')[0];
       if (cashval.split(' ')[1] < 0) {
         return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
           .toString()
