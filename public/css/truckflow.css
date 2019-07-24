@@ -631,6 +631,9 @@ button {
 .deliveredButton {
   color: #1b7fc3 !important;
 }
+.pendingDnotes {
+  color: red !important;
+}
 .cancelledButton {
   color: purple !important;
 }

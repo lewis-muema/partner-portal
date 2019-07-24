@@ -3,8 +3,8 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="page-dash" v-if="dataResponse">
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+      <div class="row dashboard__row">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-blu">
               <font-awesome-icon :icon="['fas', 'chart-bar']" />
@@ -15,7 +15,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-orange">
               <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
@@ -26,9 +26,9 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
-            <span class="dashboard__box-icon dashboard__box-icon-red">
+            <span class="dashboard__box-icon dashboard__box-icon-green">
               <font-awesome-icon :icon="['fas', 'university']" />
             </span>
             <div class="dashboard__box-content">
@@ -37,13 +37,24 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-grey">
               <font-awesome-icon :icon="['fas', 'star']" />
             </span>
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Rating this week</span>
+              <span class="dashboard__box-number">{{ ratingThisWeek() }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard__box-container">
+          <div class="dashboard__dash-box">
+            <span class="dashboard__box-icon dashboard__box-icon-red">
+              <font-awesome-icon :icon="['fas', 'spinner']" />
+            </span>
+            <div class="dashboard__box-content">
+              <span class="dashboard__box-text">Pending D Notes</span>
               <span class="dashboard__box-number">{{ ratingThisWeek() }}</span>
             </div>
           </div>
