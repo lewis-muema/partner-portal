@@ -176,7 +176,6 @@ export default {
       });
       axios.post(`${process.env.VUE_APP_AUTH}rideradmin/login`, payload).then(response => {
         if (response.status === 200) {
-          this.handleButton('LOG IN');
           this.handleResponse(response);
         } else {
           this.handleButton('LOG IN');
@@ -187,14 +186,43 @@ export default {
     handleResponse(response) {
       if (typeof response.data === 'string') {
         const dataToken = response.data.split('.')[1];
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: response.data,
+          },
+        };
         const sessionData = atob(dataToken);
-        localStorage.sessionData = sessionData;
         localStorage.token = response.data;
+        const parsedData = JSON.parse(sessionData);
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + 3);
         localStorage.expiryDate = expiry;
-        this.$router.push({ path: '/' });
+        const riders = [];
+        const payload = {
+          owner_id: parsedData.payload.id,
+        };
+        axios
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, payload, config)
+          .then(res => {
+            this.handleButton('LOG IN');
+            if (res.data.status) {
+              res.data.riders.forEach((row, i) => {
+                riders.push(row);
+              });
+              parsedData.payload.riders = riders;
+              localStorage.sessionData = JSON.stringify(parsedData);
+              this.$router.push({ path: '/' });
+            } else {
+              this.error('Something went wrong, Please try again!', 7000);
+            }
+          })
+          .catch(error => {
+            this.handleButton('LOG IN');
+            this.error('Something went wrong, Please try again!', 7000);
+          });
       } else {
+        this.handleButton('LOG IN');
         this.error('Sorry, your details did not match!', 7000);
       }
     },
