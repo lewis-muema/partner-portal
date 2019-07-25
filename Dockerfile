@@ -3,7 +3,7 @@ FROM nginx:latest
 RUN apt-get update && \
         apt-get install -y sudo curl bzip2 wget git vim gnupg
 
-RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 
 RUN sudo apt-get -y install build-essential
 
