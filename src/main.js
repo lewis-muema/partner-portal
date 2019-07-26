@@ -6,11 +6,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
  faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
+import VueMask from 'v-mask';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VuePageTitle from 'vue-page-title';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+
+Vue.use(VueMask);
 
 Vue.use(VuePageTitle);
 
