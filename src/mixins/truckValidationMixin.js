@@ -23,7 +23,7 @@ const truckValidationMixin = {
     },
 
     validateLoadCapacity() {
-      const capacity = parseInt(this.loadCapacity, 10);
+      const capacity = parseFloat(this.loadCapacity);
       const size = parseInt(this.truckSize, 10);
 
       if (this.truckSize.length === 0 && capacity > 0) {
