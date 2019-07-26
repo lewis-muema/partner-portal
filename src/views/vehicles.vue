@@ -881,7 +881,6 @@ export default {
     document.body.removeEventListener('click', this.logger);
   },
   methods: {
-    
     fetchVehicles() {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const date = new Date();

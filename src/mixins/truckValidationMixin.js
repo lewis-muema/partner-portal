@@ -70,12 +70,13 @@ const truckValidationMixin = {
       this.truckValidationErrorMessage = '';
       return true;
     },
-  },
-  tonnageValidity() {
-    if (parseInt(this.vendorType, 10) === 25) {
-      return this.validateLoadCapacity() && this.validateTruckSize();
-    }
-    return true;
+
+    tonnageValidity() {
+      if (parseInt(this.vendorType, 10) === 25) {
+        return this.validateLoadCapacity() && this.validateTruckSize();
+      }
+      return true;
+    },
   },
 };
 
