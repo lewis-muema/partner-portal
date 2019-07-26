@@ -256,192 +256,174 @@
         <div class="modal-body mod-form">
           <div class="vehicles__documents-error" id="upErr4"></div>
           <div class="form--input-wrap">
-
-          <label for="selVendor">Is this a bike, van, truck or something else?</label>
-          <select class="form-control" id="selVendor" v-model="vendorType">
-            <option value="1" selected>Bike</option>
-            <option value="2">Pickup</option>
-            <option value="3">Van</option>
-            <option value="12">Tuk Tuk</option>
-            <option value="6">3T Truck</option>
-            <option value="10">5T Truck</option>
-            <option value="13">7T Truck</option>
-            <option value="14">10T Truck</option>
-            <option value="17">14T Truck</option>
-            <option value="25">Freight (Over 18 Tonnes)</option>
-          </select>
+            <label for="selVendor">Is this a bike, van, truck or something else?</label>
+            <select class="form-control" id="selVendor" v-model="vendorType">
+              <option value="1" selected>Bike</option>
+              <option value="2">Pickup</option>
+              <option value="3">Van</option>
+              <option value="12">Tuk Tuk</option>
+              <option value="6">3T Truck</option>
+              <option value="10">5T Truck</option>
+              <option value="13">7T Truck</option>
+              <option value="14">10T Truck</option>
+              <option value="17">14T Truck</option>
+              <option value="25">Freight (Over 18 Tonnes)</option>
+            </select>
           </div>
 
-          <div class="form--input-wrap"  v-show="truckVendors.includes(parseInt(computedVendorType,10))">
-
-          <label for="selCarrierType"
-          >What is the Type of your Truck?
-          </label>
-          <select
-            class="form-control"
-            id="selCarrierType"
-            v-model="carrierType"
+          <div
+            class="form--input-wrap"
+            v-show="truckVendors.includes(parseInt(computedVendorType,10))"
           >
-            <option value="0" selected>Open</option>
-            <option value="1">Closed/Boxed body</option>
-            <option value="2">Any</option>
-            <option value="3">Refrigerated</option>
-            <option value="4">Flatbed/Skeleton</option>
-            <option value="5">Tipper</option>
-            <option value="6">Reefer</option>
-            <option value="7">Highside</option>
-          </select>
-
+            <label for="selCarrierType">What is the Type of your Truck?</label>
+            <select class="form-control" id="selCarrierType" v-model="carrierType">
+              <option value="0" selected>Open</option>
+              <option value="1">Closed/Boxed body</option>
+              <option value="3">Refrigerated</option>
+              <option value="4">Flatbed/Skeleton</option>
+              <option value="5">Tipper</option>
+              <option value="6">Reefer</option>
+              <option value="7">Highside</option>
+            </select>
           </div>
           <div class="form--input-wrap" v-show="parseInt(computedVendorType, 10) === 25">
-          <label
-            for="selTruckSize"
-          >What is the Size of your Truck?</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control tonnage-input"
-            placeholder="Truck Size"
-            id="selTruckSize"
-            v-model="truckSize"
-            @keyup="matchTruckSize"
-          />
-          <div v-if="!validateTruckSize() && parseInt(computedVendorType, 10) === 25" class="validation-error--message">
-          {{ validationErrorMessage }}
+            <label for="selTruckSize">What is the Size of your Truck?</label>
+            <input
+              type="number"
+              min="18"
+              max="33"
+              class="form-control tonnage-input"
+              placeholder="Truck Size"
+              id="selTruckSize"
+              v-model="truckSize"
+              @keyup="matchTruckSize"
+              v-mask="'##'"
+            />
+            <div
+              v-show="truckSizeErrorStatus === true"
+              class="form--input-wrap validation-error--message"
+            >{{ truckValidationErrorMessage }}</div>
           </div>
+          <div class="form--input-wrap" v-show="parseInt(computedVendorType, 10) === 25">
+            <label for="selLoadCapacity">How many Tonnes can you actually carry?</label>
+            <input
+              type="text"
+              class="form-control tonnage-input"
+              placeholder="Load Capacity"
+              id="selLoadCapacity"
+              v-model="loadCapacity"
+              @keyup="matchLoadCapacity"
+              v-mask="'##.##'"
+            />
+            <div
+              v-show="loadCapacityErrorStatus === true"
+              class="validation-error--message"
+            >{{ validationErrorMessage }}</div>
           </div>
 
-           <div class="form--input-wrap" v-show="parseInt(computedVendorType, 10) === 25">
-          <label
-            for="selLoadCapacity"
-          >How many Tonnes can you actually carry?</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control tonnage-input"
-            placeholder="Load Capacity"
-            id="selLoadCapacity"
-            v-model="loadCapacity"
-            @keyup="matchLoadCapacity"
-          />
-             <div v-if="!validateLoadCapacity() && parseInt(computedVendorType, 10) === 25" class="validation-error--message">
-          {{ validationErrorMessage }}
+          <div class="form--input-wrap">
+            <label for="selMake">What is the make?</label>
+            <input
+              type="text"
+              name
+              value
+              class="form-control"
+              placeholder="Make"
+              id="selMake"
+              v-model="make"
+            />
           </div>
+          <div class="form--input-wrap">
+            <label for="selModel">What is the model?</label>
+            <input
+              type="text"
+              name
+              value
+              class="form-control"
+              placeholder="Model"
+              id="selModel"
+              v-model="model"
+            />
           </div>
-                     <div class="form--input-wrap">
-
-
-          <label for="selMake">What is the make?</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control"
-            placeholder="Make"
-            id="selMake"
-            v-model="make"
-          />
+          <div class="form--input-wrap">
+            <label for="selYear">What is the year of manufacture?</label>
+            <input
+              type="text"
+              name
+              value
+              class="form-control"
+              placeholder="Year"
+              id="selYear"
+              v-model="mfg"
+            />
           </div>
-                     <div class="form--input-wrap">
-
-          <label for="selModel">What is the model?</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control"
-            placeholder="Model"
-            id="selModel"
-            v-model="model"
-          />
+          <div class="form--input-wrap">
+            <label
+              for="selBox"
+              id="selBoxLabel"
+              v-show="parseInt(computedVendorType,10) === 1"
+            >Does your bike have a box?</label>
+            <select
+              v-show="parseInt(computedVendorType,10) === 1"
+              class="form-control"
+              id="selBox"
+              v-model="box"
+            >
+              <option value="0" selected>No</option>
+              <option value="1">Yes</option>
+            </select>
           </div>
-                     <div class="form--input-wrap">
-
-          <label for="selYear">What is the year of manufacture?</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control"
-            placeholder="Year"
-            id="selYear"
-            v-model="mfg"
-          />
+          <div class="form--input-wrap">
+            <label
+              for="selFridge"
+              id="selFridgeLabel"
+              v-show="computedVendorType > 1 && computedVendorType < 25 "
+            >Is your vehicle covered or open?</label>
+            <select
+              class="form-control"
+              id="selFridge"
+              v-model="covered"
+              v-show="computedVendorType > 1 && computedVendorType < 25 "
+            >
+              <option value="0" selected>Open</option>
+              <option value="1">Covered</option>
+            </select>
           </div>
-                     <div class="form--input-wrap">
-
-          <label
-            for="selBox"
-            id="selBoxLabel"
-            v-show="parseInt(computedVendorType,10) === 1"
-          >Does your bike have a box?</label>
-          <select
-            v-show="parseInt(computedVendorType,10) === 1"
-            class="form-control"
-            id="selBox"
-            v-model="box"
-          >
-            <option value="0" selected>No</option>
-            <option value="1">Yes</option>
-          </select>
+          <div class="form--input-wrap">
+            <label for="selLog">Enter Log Book Number</label>
+            <input
+              type="text"
+              name
+              value
+              class="form-control"
+              placeholder="Log Book Number"
+              id="selLog"
+              v-model="logBook"
+            />
           </div>
-                     <div class="form--input-wrap">
-
-          <label
-            for="selFridge"
-            id="selFridgeLabel"
-            v-show="computedVendorType > 1 && computedVendorType < 25 "
-          >Is your vehicle covered or open?</label>
-          <select
-            class="form-control"
-            id="selFridge"
-            v-model="covered"
-            v-show="computedVendorType > 1 && computedVendorType < 25 "
-          >
-            <option value="0" selected>Open</option>
-            <option value="1">Covered</option>
-          </select>
+          <div class="form--input-wrap">
+            <label for="selReg">Enter Registration Number</label>
+            <input
+              type="text"
+              name
+              value
+              class="form-control"
+              placeholder="Registration Number"
+              id="selReg"
+              v-model="regNo"
+            />
           </div>
-                     <div class="form--input-wrap">
-
-          <label for="selLog">Enter Log Book Number</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control"
-            placeholder="Log Book Number"
-            id="selLog"
-            v-model="logBook"
-          />
-          </div>
-                     <div class="form--input-wrap">
-
-          <label for="selReg">Enter Registration Number</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control"
-            placeholder="Registration Number"
-            id="selReg"
-            v-model="regNo"
-          />
-          </div>
-                     <div class="form--input-wrap">
-
-          <label for="selInsu">Enter Insurance Number</label>
-          <input
-            type="text"
-            name
-            value
-            class="form-control"
-            placeholder="Insurance Number"
-            id="selInsu"
-            v-model="insuNo"
-          />
+          <div class="form--input-wrap">
+            <label for="selInsu">Enter Insurance Number</label>
+            <input
+              type="text"
+              name
+              value
+              class="form-control"
+              placeholder="Insurance Number"
+              id="selInsu"
+              v-model="insuNo"
+            />
           </div>
         </div>
         <div class="modal-footer">
@@ -785,6 +767,7 @@ import axios from 'axios';
 import moment from 'moment';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
+import truckValidationMixin from '../mixins/truckValidationMixin';
 
 let s3 = '';
 
@@ -796,11 +779,9 @@ export default {
     datatable: DataTable,
     errorHandler,
   },
+  mixins: [truckValidationMixin],
   data() {
     return {
-      validationErrorMessage: '',
-      truckSize: 0,
-      loadCapacity: 0,
       carrierType: 2,
       truckVendors: [6, 10, 13, 14, 17, 25],
       vendorName: '',
@@ -862,10 +843,10 @@ export default {
       errorObj: '',
     };
   },
-  computed:{
-    computedVendorType(){
+  computed: {
+    computedVendorType() {
       return this.vendorType;
-    }
+    },
   },
   created() {
     if (localStorage.sessionData) {
@@ -900,57 +881,7 @@ export default {
     document.body.removeEventListener('click', this.logger);
   },
   methods: {
-    tonnageValidity() {
-      if (parseInt(this.vendorType, 10) === 25) {
-        return this.validateLoadCapacity() && this.validateTruckSize();
-      }
-      return true;
-    },
-    matchLoadCapacity() {
-      const match = /(\d{0,2})[^.]*((?:\.\d{0,2})?)/g.exec(this.loadCapacity.replace(/[^\d.]/g, ''));
-      this.loadCapacity = match[1] + match[2];
-      this.validateLoadCapacity();
-    },
-    matchTruckSize() {
-      const match = /(\d{0,2})[^.]*((?:\.\d{0,2})?)/g.exec(this.truckSize.replace(/[^\d.]/g, ''));
-      this.truckSize = match[1] + match[2];
-      this.validateTruckSize();
-    },
-
-    validateLoadCapacity() {
-      const capacity = parseInt(this.loadCapacity, 10);
-      const size = parseInt(this.truckSize, 10);
-
-      if (capacity === 0) {
-        this.validationErrorMessage = 'input the loading capacity of the truck';
-        return false;
-      }
-      if (capacity > size) {
-        this.validationErrorMessage = 'loading capacity cannot be more than the truck size';
-        return false;
-      }
-      if ((capacity < 18 || capacity > 33) && capacity <= size) {
-        this.validationErrorMessage = 'loading capacity cannot be less than 18 tonnes or more than 33 tonnes';
-        return false;
-      }
-      
-      this.validationErrorMessage = '';
-      return true;
-    },
-    validateTruckSize() {
-      const size = parseFloat(this.truckSize);
-      if (size === 0) {
-        this.validationErrorMessage = 'input the size of your truck';
-        return false;
-      }
-      if (size < 18 || size > 33) {
-        this.validationErrorMessage = 'the truck size cannot be less than 18 tonnes or more than 33 tonnes';
-        return false;
-      }
-      this.validationErrorMessage = '';
-      return true;
-    },
-
+    
     fetchVehicles() {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const date = new Date();
@@ -1421,7 +1352,7 @@ export default {
 
 <style scoped>
 .validation-error--message {
-  color: #f17f3a
+  color: #f17f3a;
 }
 .slide-enter-active,
 .slide-leave {
