@@ -36,8 +36,14 @@
           >
             <p class="hide" :class="`vehicle-index${ridersWithTracker.indexer}`">true</p>
             <img
+              :src="`https://s3-eu-west-1.amazonaws.com/images.sendyit.com/web_platform/vendor_type/side/${ridersWithTracker.rider_details.vendor_type}.svg`"
+              class="truck-img"
+              v-if="ridersWithTracker.rider_details.vendor_type <= 3"
+            />
+            <img
               src="https://images.sendyit.com/partner_portal/images/partnerTruck.jpg"
               class="truck-img"
+              v-else
             />
             <label>
               <span
