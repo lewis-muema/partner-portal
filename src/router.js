@@ -75,12 +75,12 @@ export default new Router({
       component: Tracking,
     },
     {
-      path: '/driverRequest/:token',
+      path: '/driveRequest/:token',
       name: 'driverRequest',
       component: DriverRequest,
     },
     {
-      path: '/driverRequest',
+      path: '/driveRequest',
       name: 'driverRequestBlank',
       component: DriverRequest,
     },

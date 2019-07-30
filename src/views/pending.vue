@@ -190,7 +190,7 @@
                       </div>
                     </div>
                     <div class="order__column">
-                      <p class="order__weight heading uppercase">approximate weight of the order</p>
+                      <p class="order__weight heading uppercase">weight of the order</p>
                       <p class="order__weight par" v-if="!weight">Not applicable</p>
                       <p class="order__weight par" v-else>{{ weight }}</p>
                       <p class="order__loader heading uppercase">loader(s) needed</p>
@@ -293,19 +293,34 @@
                             @input="addInsuNo(order.id)"
                           />
                           <input
-                            type="text"
+                            type="number"
+                            min="18"
+                            max="33"
+                            @keyup="matchTruckSize"
+                            v-mask="'##'"
                             class="input orders__bid-input"
                             placeholder="Enter Truck Size in Tonnes"
                             v-model="truckSize"
                             @input="addTruckSize(order.id)"
                           />
+                          <div
+                            v-show="truckSizeErrorStatus === true"
+                            class="form--input-wrap validation-error--message"
+                          >{{ truckValidationErrorMessage }}</div>
+
                           <input
                             type="text"
                             class="input orders__bid-input"
                             placeholder="Enter Loading Capacity in Tonnes"
-                            v-model="loadingCapacity"
+                            v-model="loadCapacity"
+                            @keyup="matchLoadCapacity"
+                            v-mask="'##.##'"
                             @input="addLoadingCapacity(order.id)"
                           />
+                          <div
+                            v-show="loadCapacityErrorStatus === true"
+                            class="validation-error--message"
+                          >{{ validationErrorMessage }}</div>
 
                           <select
                             class="input orders__bid-input"
@@ -450,6 +465,7 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
+import truckValidationMixin from '../mixins/truckValidationMixin';
 
 let interval = '';
 
@@ -460,6 +476,8 @@ export default {
     VueTelInput,
     errorHandler,
   },
+  mixins: [truckValidationMixin],
+
   data() {
     return {
       allVehicles: '',
@@ -477,8 +495,6 @@ export default {
       regNo: null,
       insuNo: null,
       truckType: null,
-      truckSize: null,
-      loadingCapacity: null,
       box: '0',
       vendorType: null,
       ownerId: null,
@@ -553,7 +569,7 @@ export default {
         },
       },
       errorObj: '',
-      carrierTypes: ['Open', 'Closed/Boxed body', 'Any', 'Refrigerated', 'Flatbed/Skeleton', 'Tipper', 'Reefer', 'Highside'],
+      carrierTypes: ['Open', 'Closed/Boxed body', 'Refrigerated', 'Flatbed/Skeleton', 'Tipper', 'Reefer', 'Highside'],
     };
   },
   computed: {},
@@ -610,7 +626,6 @@ export default {
       }
     },
     displayVehicles(id) {
-
       if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
         return `(${this.vehicles[id].load_capacity} Tonnes)`;
       } else if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
@@ -652,11 +667,9 @@ export default {
       this.confirm(id);
     },
     addTruckSize(id) {
-      this.truckSize = this.truckSize;
       this.confirm(id);
     },
     addLoadingCapacity(id) {
-      this.loadingCapacity = this.loadingCapacity;
       this.confirm(id);
     },
     changeTruckType(id) {
@@ -1013,7 +1026,7 @@ export default {
         closed: '1',
         insurance_no: this.insuNo,
         carrier_type: this.truckType,
-        load_capacity: this.loadingCapacity,
+        load_capacity: this.loadCapacity,
         vehicle_size: this.truckSize,
         new_vehicle: this.newVehicle,
       };
@@ -1483,5 +1496,8 @@ p {
 }
 a {
   color: rgb(154, 172, 192);
+}
+.validation-error--message {
+  color: #f17f3a;
 }
 </style>

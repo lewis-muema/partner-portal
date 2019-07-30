@@ -102,7 +102,7 @@
                   </div>
                   <div class="dashboard__rate-group">
                     <span class="dashboard__rate-text">Hours online this month</span>
-                    <span class="dashboard__rate-number">{{ hoursOnlineThisWeek() }} / 5</span>
+                    <span class="dashboard__rate-number">{{ hoursOnlineThisWeek() }}</span>
                     <div class="dashboard__rate-sm">
                       <div
                         class="dashboard__rate-bar dashboard__rate-bar-orange"
@@ -112,7 +112,7 @@
                   </div>
                   <div class="dashboard__rate-group">
                     <span class="dashboard__rate-text">Hours online this week</span>
-                    <span class="dashboard__rate-number">{{ hoursOnlineThisMonth() }} / 5</span>
+                    <span class="dashboard__rate-number">{{ hoursOnlineThisMonth() }}</span>
                     <div class="dashboard__rate-sm">
                       <div
                         class="dashboard__rate-bar dashboard__rate-bar-grey"
@@ -297,7 +297,7 @@ export default {
     },
     hoursPercentageWeek() {
       if (this.dataResponse.msg.Hours_online_this_Week) {
-        const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Week) / 5) * 100;
+        const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Week) / 168) * 100;
         return percent;
       } else {
         return 0;
@@ -305,7 +305,7 @@ export default {
     },
     hoursPercentageMonth() {
       if (this.dataResponse.msg.Hours_online_this_Month) {
-        const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Month) / 5) * 100;
+        const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Month) / (moment().daysInMonth() * 24)) * 100;
         return percent;
       } else {
         return 0;
