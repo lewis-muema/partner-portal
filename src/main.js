@@ -4,7 +4,7 @@ import VueAxios from 'vue-axios';
 import VModal from 'vue-js-modal';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
- faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity,
+ faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VuePageTitle from 'vue-page-title';
@@ -14,7 +14,7 @@ import store from './store';
 
 Vue.use(VuePageTitle);
 
-library.add(faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity);
+library.add(faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
