@@ -56,6 +56,7 @@
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Pending D Notes</span>
               <span class="dashboard__box-number" v-if="count">{{ count }}</span>
+              <span class="dashboard__box-number" v-else>0</span>
               <span class="dashboard__box-subscript" v-if="amount">
                 (Amount
                 <span class="bold">{{ currency }} {{ amount }}</span>)
