@@ -125,5 +125,9 @@
   }
   .selector {
     min-width: 0px;
+    width: 300px;
+  }
+  .vehicles-tracking-dashboard__controls--right-control {
+    left: 37.2em;
   }
 }
