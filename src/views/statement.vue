@@ -374,23 +374,21 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config)
         .then(response => {
-          if (requestType === 2) {
+          if (requestType === 1) {
+            this.ownerRb = response.data.msg.owner_balance;
+            this.showWithdrawButton();
+          } else {
             document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
             this.removeFetchingStatus();
           }
           if (response.data.msg.statement !== null) {
             this.handleResponse(response);
-            if (requestType === 1) {
-              this.showWithdrawButton();
-            }
           } else {
             if (requestType === 2) {
               this.error = 'No statement found for this period';
               setTimeout(() => {
                 this.error = '';
               }, 4000);
-            } else {
-              this.ownerRb = response.data.msg.owner_balance;
             }
             this.rows = [];
             this.displayFetchingStatus('No statement found for this period', 0);
