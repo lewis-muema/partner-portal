@@ -214,7 +214,13 @@ export default {
               localStorage.sessionData = JSON.stringify(parsedData);
               this.$router.push({ path: '/' });
             } else {
-              this.error('Something went wrong, Please try again!', 7000);
+              if (res.data.message === 'No Drivers available for this owner') {
+                parsedData.payload.riders = [];
+                localStorage.sessionData = JSON.stringify(parsedData);
+                this.$router.push({ path: '/' });
+              } else {
+                this.error('Something went wrong, Please try again!', 7000);
+              }
             }
           })
           .catch(error => {
