@@ -213,19 +213,17 @@ export default {
               parsedData.payload.riders = riders;
               localStorage.sessionData = JSON.stringify(parsedData);
               this.$router.push({ path: '/' });
-            } else {
-              if (res.data.message === 'No Drivers available for this owner') {
-                parsedData.payload.riders = [];
-                localStorage.sessionData = JSON.stringify(parsedData);
-                this.$router.push({ path: '/' });
-              } else {
-                this.error('Something went wrong, Please try again!', 7000);
-              }
             }
           })
           .catch(error => {
             this.handleButton('LOG IN');
-            this.error('Something went wrong, Please try again!', 7000);
+            if ('message' in error.response.data && error.response.data.message === 'No Drivers available for this owner') {
+              parsedData.payload.riders = [];
+              localStorage.sessionData = JSON.stringify(parsedData);
+              this.$router.push({ path: '/' });
+            } else {
+              this.error('Something went wrong, Please try again!', 7000);
+            }
           });
       } else {
         this.handleButton('LOG IN');
