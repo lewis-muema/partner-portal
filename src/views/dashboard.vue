@@ -3,8 +3,8 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="page-dash" v-if="dataResponse">
-      <div class="row">
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+      <div class="row dashboard__row">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-blu">
               <font-awesome-icon :icon="['fas', 'chart-bar']" />
@@ -15,7 +15,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-orange">
               <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
@@ -26,9 +26,9 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
-            <span class="dashboard__box-icon dashboard__box-icon-red">
+            <span class="dashboard__box-icon dashboard__box-icon-green">
               <font-awesome-icon :icon="['fas', 'university']" />
             </span>
             <div class="dashboard__box-content">
@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <div class="dashboard__box-container">
           <div class="dashboard__dash-box">
             <span class="dashboard__box-icon dashboard__box-icon-grey">
               <font-awesome-icon :icon="['fas', 'star']" />
@@ -45,6 +45,22 @@
             <div class="dashboard__box-content">
               <span class="dashboard__box-text">Rating this week</span>
               <span class="dashboard__box-number">{{ ratingThisWeek() }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="dashboard__box-container">
+          <div class="dashboard__dash-box">
+            <span class="dashboard__box-icon dashboard__box-icon-red">
+              <font-awesome-icon :icon="['fas', 'spinner']" />
+            </span>
+            <div class="dashboard__box-content">
+              <span class="dashboard__box-text">Pending D Notes</span>
+              <span class="dashboard__box-number" v-if="count">{{ count }}</span>
+              <span class="dashboard__box-number" v-else>0</span>
+              <span class="dashboard__box-subscript" v-if="amount">
+                (Amount
+                <span class="bold">{{ currency }} {{ amount }}</span>)
+              </span>
             </div>
           </div>
         </div>
@@ -171,6 +187,19 @@ export default {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
+      const riderIds = [];
+      this.sessionInfo.riders.forEach((row, i) => {
+        riderIds.push(row.rider_id);
+      });
+      const riderPayload = JSON.stringify({
+        rider_ids: riderIds,
+      });
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/pending_delivery_notes`, riderPayload, this.config).then(response => {
+        if (response.data.status) {
+          this.count = response.data.pendingDeliveryNotesData[0].count;
+          this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
+        }
+      });
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
         .then(response => {
@@ -254,6 +283,7 @@ export default {
     },
     nextTransfer() {
       const cashval = this.dataResponse.msg.Next_transfer;
+      this.currency = cashval.split(' ')[0];
       if (cashval.split(' ')[1] < 0) {
         return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
           .toString()

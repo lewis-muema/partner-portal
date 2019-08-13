@@ -42,9 +42,11 @@
                 <option value="14T Truck">14 Tonne Truck</option>
                 <option value="20T Truck">20 Tonne Truck</option>
                 <option value="28T Truck">28 Tonne Truck</option>
+                <option value="Freight">Freight Truck</option>
               </select>
             </span>
           </div>
+
           <div class="bids">
             <div id="orders__list-table" class="orders__list-table">
               <div class="orders__list-toprow table-head">
@@ -107,7 +109,7 @@
                   </div>
                   <div class="orders__list-col truck">
                     <p class="orders__mobile-col">Truck</p>
-                    <p class="row3">{{ order.vendorname }}</p>
+                    <p class="row3">{{ formatVendorName(order) }}</p>
                   </div>
                   <div class="orders__list-col orderNo">
                     <p class="orders__mobile-col">order number</p>
@@ -188,7 +190,7 @@
                       </div>
                     </div>
                     <div class="order__column">
-                      <p class="order__weight heading uppercase">approximate weight of the order</p>
+                      <p class="order__weight heading uppercase">weight of the order</p>
                       <p class="order__weight par" v-if="!weight">Not applicable</p>
                       <p class="order__weight par" v-else>{{ weight }}</p>
                       <p class="order__loader heading uppercase">loader(s) needed</p>
@@ -290,6 +292,51 @@
                             v-model="insuNo"
                             @input="addInsuNo(order.id)"
                           />
+                          <input
+                            type="number"
+                            min="18"
+                            max="33"
+                            @keyup="matchTruckSize"
+                            v-mask="'##'"
+                            class="input orders__bid-input"
+                            placeholder="Enter Truck Size in Tonnes"
+                            v-model="truckSize"
+                            @input="addTruckSize(order.id)"
+                          />
+                          <div
+                            v-show="truckSizeErrorStatus === true"
+                            class="form--input-wrap validation-error--message"
+                          >{{ truckValidationErrorMessage }}</div>
+
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="Enter Loading Capacity in Tonnes"
+                            v-model="loadCapacity"
+                            @keyup="matchLoadCapacity"
+                            v-mask="'##.##'"
+                            @input="addLoadingCapacity(order.id)"
+                          />
+                          <div
+                            v-show="loadCapacityErrorStatus === true"
+                            class="validation-error--message"
+                          >{{ validationErrorMessage }}</div>
+
+                          <select
+                            class="input orders__bid-input"
+                            v-model="truckType"
+                            @change="changeTruckType(order.id)"
+                          >
+                            <option class selected value="null">Select truck type</option>
+
+                            <option
+                              class
+                              v-for="(carrier, index) in carrierTypes"
+                              :value="index"
+                              :label="carrier"
+                              :key="index"
+                            ></option>
+                          </select>
                         </div>
                         <p
                           class="orders__assigndriver heading uppercase"
@@ -418,6 +465,7 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
+import truckValidationMixin from '../mixins/truckValidationMixin';
 
 let interval = '';
 
@@ -428,6 +476,8 @@ export default {
     VueTelInput,
     errorHandler,
   },
+  mixins: [truckValidationMixin],
+
   data() {
     return {
       allVehicles: '',
@@ -444,6 +494,7 @@ export default {
       count1: null,
       regNo: null,
       insuNo: null,
+      truckType: null,
       box: '0',
       vendorType: null,
       ownerId: null,
@@ -518,6 +569,7 @@ export default {
         },
       },
       errorObj: '',
+      carrierTypes: ['Open', 'Closed/Boxed body', 'Refrigerated', 'Flatbed/Skeleton', 'Tipper', 'Reefer', 'Highside'],
     };
   },
   computed: {},
@@ -544,6 +596,17 @@ export default {
     clearInterval(interval); // stop the interval
   },
   methods: {
+    formatVendorName(order) {
+      if (order.vendorname === 'Freight') {
+        // add load weight
+        let packageDetails = order.package_details;
+
+        if ('load_weight' in packageDetails && packageDetails.load_weight > 0) {
+          return `${order.vendorname}  (${packageDetails.load_weight} T)`;
+        }
+      }
+      return order.vendorname;
+    },
     setDriverStatus() {
       this.addDriverStatus = false;
     },
@@ -563,7 +626,9 @@ export default {
       }
     },
     displayVehicles(id) {
-      if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
+      if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
+        return `(${this.vehicles[id].load_capacity} Tonnes)`;
+      } else if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
         return `(${this.vehicles[id].make} ${this.vehicles[id].model})`;
       } else {
         return '';
@@ -599,6 +664,16 @@ export default {
         this.insuNo = this.insuNo.toUpperCase();
         this.insuNo = this.insuNo.replace(/[^A-Z]/g, '');
       }
+      this.confirm(id);
+    },
+    addTruckSize(id) {
+      this.confirm(id);
+    },
+    addLoadingCapacity(id) {
+      this.confirm(id);
+    },
+    changeTruckType(id) {
+      this.truckType = this.truckType;
       this.confirm(id);
     },
     addDriverName(id) {
@@ -792,7 +867,9 @@ export default {
       this.partnerVendor = null;
       if (this.orders[id - 1].package_details) {
         if (this.orders[id - 1].package_details.load_weight) {
-          this.weight = `${this.orders[id - 1].package_details.load_weight} ${this.orders[id - 1].package_details.load_units}`;
+          const loadUnits = this.orders[id - 1].package_details.load_units;
+          const loadUnitsCapitalized = loadUnits.charAt(0).toUpperCase() + loadUnits.slice(1);
+          this.weight = `${this.orders[id - 1].package_details.load_weight} ${loadUnitsCapitalized}`;
         } else {
           this.weight = 'No weight provided';
         }
@@ -948,6 +1025,9 @@ export default {
         owner_id: this.ownerId.toString(),
         closed: '1',
         insurance_no: this.insuNo,
+        carrier_type: this.truckType,
+        load_capacity: this.loadCapacity,
+        vehicle_size: this.truckSize,
         new_vehicle: this.newVehicle,
       };
       const existingVehiclePayload = {
@@ -1338,7 +1418,7 @@ export default {
     getOrders(vehicleCount) {
       this.loadingStatus = true;
       const vehCount = vehicleCount.forEach((row, g) => {
-        if (['6', '2', '3', '10', '13', '14', '17', '18', '19', '20'].includes(vehicleCount[g].vehicle.vendor_type)) {
+        if (['6', '2', '3', '10', '13', '14', '17', '18', '19', '20', '25'].includes(vehicleCount[g].vehicle.vendor_type)) {
           this.bikesOnly = false;
         }
       });
@@ -1416,5 +1496,8 @@ p {
 }
 a {
   color: rgb(154, 172, 192);
+}
+.validation-error--message {
+  color: #f17f3a;
 }
 </style>
