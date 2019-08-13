@@ -59,7 +59,8 @@
               <div class="row">
                 <div class="col-lg-8">
                   <p class="text-center head-smol">Monthly Stat Comparison: Cash Made</p>
-                  <div class="chart" id="chartContain"></div>
+                  <!-- <div class="chart" id="chartContain"></div> -->
+                  <chart :data="dataPoints" :options="dataOptions" />
                   <div class="dashboard__blinder"></div>
                 </div>
                 <div class="col-lg-4">
@@ -117,6 +118,7 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import chart from '../components/chart.vue';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -125,6 +127,7 @@ export default {
   components: {
     verifier,
     errorHandler,
+    chart,
   },
   data() {
     return {
@@ -139,6 +142,27 @@ export default {
       dataResponse: '',
       options: '',
       errorObj: '',
+      dataPoints: '',
+      dataOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          xAxes: [
+            {
+              gridLines: {
+                drawOnChartArea: false,
+              },
+            },
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                drawOnChartArea: false,
+              },
+            },
+          ],
+        },
+      },
     };
   },
   created() {
@@ -152,12 +176,25 @@ export default {
         .then(response => {
           this.dataStatus = true;
           this.dataResponse = response.data;
-          const earnings = [];
           let amount = '';
+          const earnings = [];
+          const months = [];
+          const amountArray = [];
           this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
             amount = parseInt(row.amount, 10);
-            earnings.push({ label: row.month, y: amount });
+            months.push(row.month);
+            amountArray.push(amount);
           });
+          this.dataPoints = {
+            labels: months,
+            datasets: [
+              {
+                label: 'Amount',
+                backgroundColor: 'rgba(23,130,197,.8)',
+                data: amountArray,
+              },
+            ],
+          };
           this.options = {
             exportEnabled: true,
             animationEnabled: true,
@@ -187,12 +224,6 @@ export default {
           this.dataStatus = true;
         });
     }
-  },
-  updated() {
-    this.$nextTick(() => {
-      const chart = new CanvasJS.Chart('chartContain', this.options);
-      chart.render();
-    });
   },
   methods: {
     cashMadeThisMonth() {
@@ -265,7 +296,7 @@ export default {
     hoursPercentageWeek() {
       if (this.dataResponse.msg.Hours_online_this_Week) {
         const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Week) / 168) * 100;
-        return percent;
+        return Math.floor(percent);
       } else {
         return 0;
       }
@@ -273,7 +304,7 @@ export default {
     hoursPercentageMonth() {
       if (this.dataResponse.msg.Hours_online_this_Month) {
         const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Month) / (moment().daysInMonth() * 24)) * 100;
-        return percent;
+        return Math.floor(percent);
       } else {
         return 0;
       }
