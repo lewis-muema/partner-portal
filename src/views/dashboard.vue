@@ -156,9 +156,11 @@ export default {
         },
       },
       dataResponse: '',
-      options: '',
       errorObj: '',
       dataPoints: '',
+      count: '',
+      amount: '',
+      currency: '',
       dataOptions: {
         responsive: true,
         maintainAspectRatio: false,
@@ -221,29 +223,6 @@ export default {
                 label: 'Amount',
                 backgroundColor: 'rgba(23,130,197,.8)',
                 data: amountArray,
-              },
-            ],
-          };
-          this.options = {
-            exportEnabled: true,
-            animationEnabled: true,
-            axisY: {
-              lineColor: '#d3d3d3',
-              tickColor: '#d3d3d3',
-              labelFontColor: '#333',
-              gridColor: '#d3d3d3',
-              gridThickness: 1,
-            },
-            axisX: {
-              lineColor: '#d3d3d3',
-              tickColor: '#d3d3d3',
-              labelFontColor: '#333',
-            },
-            data: [
-              {
-                type: 'splineArea',
-                color: 'rgba(23,130,197,.8)',
-                dataPoints: earnings,
               },
             ],
           };
