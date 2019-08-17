@@ -629,7 +629,10 @@ export default {
         from_date: '2014-02-09',
         limit: `${this.orderRange.split(' ')[0]}, ${100}`,
       };
-      document.getElementById('vend').value = '';
+      let vendfilter = document.getElementById('vend');
+      if (vendfilter) {
+        vendfilter.value = '';
+      }
       this.getOrders(payload);
     },
     getOrders(ordpayload) {
@@ -651,7 +654,6 @@ export default {
             this.orders.push(this.populateOrders(row, i));
             this.responseNo = 1;
             this.loadingStatus = false;
-            this.content = 100;
           });
           this.refreshOrders();
         })
