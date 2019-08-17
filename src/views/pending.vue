@@ -996,7 +996,6 @@ export default {
           polyline: 'encoded_string',
         },
       });
-
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {

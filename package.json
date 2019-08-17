@@ -24,6 +24,7 @@
     "jsdom-global": "^3.0.2",
     "mocha-webpack": "^1.1.0",
     "moment": "^2.24.0",
+    "moxios": "^0.4.0",
     "mqtt": "^3.0.0",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
