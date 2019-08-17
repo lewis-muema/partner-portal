@@ -654,7 +654,6 @@ export default {
             this.orders.push(this.populateOrders(row, i));
             this.responseNo = 1;
             this.loadingStatus = false;
-            this.content = 100;
           });
           this.refreshOrders();
         })
