@@ -87,7 +87,6 @@ a {
   height: 46px;
   background-color: #fff;
 }
-
 .container__search-element2 {
   height: 100%;
   width: 100%;
@@ -106,7 +105,6 @@ select {
   line-height: normal;
   font-size: 14px;
 }
-
 button {
   font-family: inherit;
   font-style: normal;
@@ -114,7 +112,6 @@ button {
   line-height: normal;
   font-size: 14px !important;
 }
-
 .search-btn {
   background: #1b7fc3;
   border-radius: 4px;
@@ -129,28 +126,23 @@ button {
   outline: none;
   cursor: pointer;
 }
-
 .expanded-row {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   padding: 1%;
 }
-
 .map__details-row {
   display: grid;
   width: 100%;
   grid-template-columns: repeat(12, 1fr);
 }
-
 .map__column {
   grid-column: span 6;
   min-height: 400px;
 }
-
 .map__details-col {
   grid-column: span 6;
 }
-
 .order__column {
   grid-column: span 3;
   padding-left: 2%;
@@ -172,7 +164,6 @@ button {
   text-align: center;
   font-weight: 400;
 }
-
 .orders__list-toprow,
 .orders__list-row {
   display: grid;
@@ -210,7 +201,6 @@ button {
 .uppercase {
   text-transform: uppercase;
 }
-
 #map-img {
   width: 95%;
   margin-left: 2%;
@@ -252,7 +242,6 @@ button {
   text-transform: uppercase;
   cursor: pointer;
 }
-
 .button-menu {
   color: white;
   border-radius: 4px;
@@ -265,17 +254,14 @@ button {
   min-width: 70%;
   text-transform: uppercase;
 }
-
 .confirmed-for-others-button-menu {
   background-color: grey;
   border-color: grey;
 }
-
 .awarded-to-you-button-menu {
   background-color: #ffc800;
   border-color: #ffc800;
 }
-
 .orders__confirm-icon {
   background-color: #51a65b;
   border-color: #51a65b;
@@ -284,17 +270,14 @@ button {
   background-color: #ffc800;
   border-color: #ffc800;
 }
-
 .cancelled-button-menu {
   background-color: purple;
   border-color: purple;
 }
-
 .orders__sendquote-icon {
   background-color: #f57f20;
   border-color: #f57f20;
 }
-
 .arrow {
   vertical-align: middle;
   height: auto;
@@ -316,11 +299,9 @@ button {
   background-color: #bc5000;
   border-color: #bc5000;
 }
-
 .order__quote-amount {
   margin-bottom: 20px;
 }
-
 .orders__confirm-button {
   color: white;
   background-color: #51a65b;
@@ -439,12 +420,10 @@ button {
   position: fixed;
   right: 100px;
 }
-
 .message-box-down {
   animation: dropdown 1s;
   bottom: -140px;
 }
-
 @keyframes dropdown {
   from {
     bottom: 20px;
@@ -453,12 +432,10 @@ button {
     bottom: -140px;
   }
 }
-
 .message-box-up {
   animation: goup 1s;
   bottom: 20px;
 }
-
 @keyframes goup {
   from {
     bottom: -140px;
@@ -593,7 +570,6 @@ button {
 .center-action {
   grid-column: span 2;
 }
-
 .load {
   display: none;
   grid-column: span 2;
@@ -654,7 +630,6 @@ button {
   margin-top: 50px;
   margin-bottom: 50px;
 }
-
 @keyframes spin {
   0% {
     transform: rotate(0deg);
@@ -663,7 +638,6 @@ button {
     transform: rotate(360deg);
   }
 }
-
 .no-records {
   height: 200px;
   display: flex;
@@ -672,7 +646,6 @@ button {
   font-size: 20px;
   font-weight: 600;
 }
-
 .tooltiptext {
   display: none;
   width: 120px;
