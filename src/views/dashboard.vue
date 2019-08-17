@@ -157,10 +157,10 @@ export default {
       },
       dataResponse: '',
       errorObj: '',
-      dataPoints: '',
       count: '',
       amount: '',
       currency: '',
+      dataPoints: '',
       dataOptions: {
         responsive: true,
         maintainAspectRatio: false,
