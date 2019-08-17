@@ -564,7 +564,7 @@ describe('Pending.vue', () => {
     wrapper.vm.confirm(1);
     expect(wrapper.vm.buttonDisabledStatus).equal(1);
   });
-  it('Check if the the details checker function for selecting a driver and selecting a vehicle verifies that all fields are present', () => {
+  it('Check if the details checker function for selecting a driver and selecting a vehicle verifies that all fields are present', () => {
     wrapper.vm.ownerId = 10;
     wrapper.vm.vehicleId = 100;
     wrapper.vm.newVehicle = false;
@@ -575,7 +575,7 @@ describe('Pending.vue', () => {
     wrapper.vm.partnerVendor = 3;
     expect(wrapper.vm.detailsCheckForSelectingDriversAndSelectingVehicles()).equal(true);
   });
-  it('Check if the the details checker function for selecting a driver and adding a vehicle verifies that all fields are present', () => {
+  it('Check if the details checker function for selecting a driver and adding a vehicle verifies that all fields are present', () => {
     wrapper.vm.ownerId = 10;
     wrapper.vm.newVehicle = true;
     wrapper.vm.driverPhone = '+254700707070';
@@ -587,7 +587,7 @@ describe('Pending.vue', () => {
     wrapper.vm.box = 1;
     expect(wrapper.vm.detailsCheckForSelectingDriversAndAddingVehicles()).equal(true);
   });
-  it('Check if the the details checker function for adding a driver and adding a vehicle verifies that all fields are present', () => {
+  it('Check if the details checker function for adding a driver and adding a vehicle verifies that all fields are present', () => {
     wrapper.vm.ownerId = 10;
     wrapper.vm.newVehicle = true;
     wrapper.vm.driverPhone = '+254700707070';
@@ -602,7 +602,7 @@ describe('Pending.vue', () => {
     wrapper.vm.driverName = 'Test Driver';
     expect(wrapper.vm.detailsCheckForAddingDriversAndAddingVehicles()).equal(true);
   });
-  it('Check if the the details checker function for adding a driver and selecting a vehicle verifies that all fields are present', () => {
+  it('Check if the details checker function for adding a driver and selecting a vehicle verifies that all fields are present', () => {
     wrapper.vm.ownerId = 10;
     wrapper.vm.vehicleId = 10;
     wrapper.vm.newVehicle = false;
