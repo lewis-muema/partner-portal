@@ -592,7 +592,7 @@ export default {
         }
       });
     },
-    refreshOrders() {
+    refreshOrders(ordpayload) {
       interval = setInterval(() => {
         let order = '';
         let openid = '';
@@ -602,9 +602,7 @@ export default {
           order = this.orders[openid - 1].orderNo;
         }
         this.ownerPhone = this.sessionInfo.phone;
-        const orderPayload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
-        });
+        const orderPayload = JSON.stringify(ordpayload);
         axios
           .post(`${this.auth}v1/list_owner_orders/`, orderPayload, this.config)
           .then(response => {
@@ -665,7 +663,7 @@ export default {
             this.responseNo = 1;
             this.loadingStatus = false;
           });
-          this.refreshOrders();
+          this.refreshOrders(ordpayload);
         })
         .catch(error => {
           this.errorObj = error.response;
