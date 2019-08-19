@@ -55,6 +55,15 @@
             </select>
           </span>
         </div>
+        <select
+          name
+          class="order-range"
+          @change="definePayload()"
+          v-model="orderRange"
+          v-if="ordercount.length > 0"
+        >
+          <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
+        </select>
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
