@@ -1,6 +1,6 @@
 image: node
 
-variables:                                                                                                                                                                                                                                                                                                                                                                    
+variables:
   STAGING_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:latest_$CI_COMMIT_SHORT_SHA
   PROD_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:prod_$CI_COMMIT_SHORT_SHA
   BETA_IMAGE_NAME: sendy-docker-local.jfrog.io/vue_partner_portal:beta_$CI_COMMIT_SHORT_SHA
@@ -37,13 +37,12 @@ unitTest:
     # install mocha
     - npm i mocha
     # Run tests
-    # - npm run test:unit
+    - npm run test:unit
   only:
     - dev
     - staging
- 
 
-#builds and pushes the docker image to the artifactory staging 
+#builds and pushes the docker image to the artifactory staging
 buildpushstaging:
   stage: buildpush
   tags:
@@ -64,7 +63,6 @@ deployStaging:
   only:
     - staging
 
-
 #builds and pushes the docker image to the artifactory prod
 buildpushbeta:
   stage: buildpush
@@ -74,9 +72,7 @@ buildpushbeta:
     - docker build --build-arg DOCKER_ENV=prod --pull -t $BETA_IMAGE_NAME -f Dockerfile .
     - docker push $BETA_IMAGE_NAME
   only:
-    - master 
-
-
+    - master
 
 #deploys the app to beta environment
 deploybeta:
@@ -87,8 +83,7 @@ deploybeta:
     - docker run -t --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 silintl/ecs-deploy --cluster fe-prod --service-name vuebetapartnerportal -t 600 -i $BETA_IMAGE_NAME
 
   only:
-    - master 
-
+    - master
 
 #builds and pushes the docker image to the artifactory prod
 buildpushprod:
@@ -99,8 +94,7 @@ buildpushprod:
     - docker build --build-arg DOCKER_ENV=prod --pull -t $PROD_IMAGE_NAME -f Dockerfile .
     - docker push $PROD_IMAGE_NAME
   only:
-    - Production 
-
+    - Production
 
 # deploy to prod
 deployProd:
@@ -109,6 +103,6 @@ deployProd:
     - shell
   script:
     - docker run -t --rm -e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY -e AWS_DEFAULT_REGION=eu-west-1 silintl/ecs-deploy --cluster fe-prod --service-name vueprodpartnerportal -t 600 -i $PROD_IMAGE_NAME
-    
+
   only:
     - Production
