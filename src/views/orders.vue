@@ -55,6 +55,15 @@
             </select>
           </span>
         </div>
+        <select
+          name
+          class="order-range"
+          @change="definePayload()"
+          v-model="orderRange"
+          v-if="ordercount.length > 0"
+        >
+          <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
+        </select>
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
@@ -649,6 +658,7 @@ export default {
               this.ordercount.push(`${i * 100} - ${(i + 1) * 100}`);
             }
             this.ordercount.push(`${Math.floor(multiplier) * 100} - ${response.data.count}`);
+            this.orderRange = this.ordercount[0];
           }
           unescaped.data.forEach((row, i) => {
             this.orders.push(this.populateOrders(row, i));
