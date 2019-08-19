@@ -649,6 +649,7 @@ export default {
               this.ordercount.push(`${i * 100} - ${(i + 1) * 100}`);
             }
             this.ordercount.push(`${Math.floor(multiplier) * 100} - ${response.data.count}`);
+            this.orderRange = this.ordercount[0];
           }
           unescaped.data.forEach((row, i) => {
             this.orders.push(this.populateOrders(row, i));
