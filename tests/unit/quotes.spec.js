@@ -1,65 +1,17 @@
 import axios from 'axios';
 import moxios from 'moxios';
 import { expect } from 'chai';
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Quotes from '@/views/quotes.vue';
 import './localStorage';
 
+const localVue = createLocalVue();
+
 describe('Quotes.vue', () => {
-  beforeEach(() => {
-    moxios.install(axios);
-  });
-  afterEach(() => {
-    moxios.uninstall();
-  });
   const wrapper = shallowMount(Quotes, {
     sync: false,
+    localVue,
   });
-  const sessionData = {
-    state: '1',
-    default_currency: 'KES',
-    date_added: '2018-01-29 09:41:31',
-    status: '1',
-    email: 'psamoei@sendy.co.ke',
-    referer: null,
-    kra_pin_cert: null,
-    nok_name: null,
-    id_no: '25417014',
-    nok_phone: null,
-    portal_password: 'f2d8d5236a766c84513c58adc0873d79886d410a',
-    name: 'Phil Samoei',
-    owner_type: '0',
-    stage: '1',
-    id: '1198',
-    kra_pin: null,
-    date_time: '0000-00-00 00:00:00',
-    token: 'jftrc4yTuX',
-    phone: '+254722511046',
-    country_code: 'KE',
-    id_card: '1505381066719image.jpg',
-    riders: [
-      {
-        vendor_disp_name: '28T Truck',
-        registration_no: 'KMCH',
-        vendor_type: 20,
-        rider_id: 1444,
-        tracker: 0,
-        default_currency: 'KES',
-        f_name: 'Phil',
-        s_name: 'Samoei',
-      },
-      {
-        vendor_disp_name: '28T Truck',
-        registration_no: 'KCJ-846VO',
-        vendor_type: 20,
-        rider_id: 3142,
-        tracker: 0,
-        default_currency: 'KES',
-        f_name: 'ttttty',
-        s_name: 'yyuyuy',
-      },
-    ],
-  };
   const order = [
     {
       duration_read: 12,
@@ -410,7 +362,7 @@ describe('Quotes.vue', () => {
       return: true,
       orderNotes: 'NOTES: Notes for this order',
       bid_status: 0,
-      id: 130,
+      id: 1,
       fixedCost: true,
       vendorname: 'Freight',
       fromCity: 'Nairobi',
@@ -476,10 +428,60 @@ describe('Quotes.vue', () => {
       count: 2,
     },
   ];
-  wrapper.vm.loadingStatus = false;
+  const sessionData = {
+    state: '1',
+    default_currency: 'KES',
+    date_added: '2018-01-29 09:41:31',
+    status: '1',
+    email: 'psamoei@sendy.co.ke',
+    referer: null,
+    kra_pin_cert: null,
+    nok_name: null,
+    id_no: '25417014',
+    nok_phone: null,
+    portal_password: 'f2d8d5236a766c84513c58adc0873d79886d410a',
+    name: 'Phil Samoei',
+    owner_type: '0',
+    stage: '1',
+    id: '1198',
+    kra_pin: null,
+    date_time: '0000-00-00 00:00:00',
+    token: 'jftrc4yTuX',
+    phone: '+254722511046',
+    country_code: 'KE',
+    id_card: '1505381066719image.jpg',
+    riders: [
+      {
+        vendor_disp_name: '28T Truck',
+        registration_no: 'KMCH',
+        vendor_type: 20,
+        rider_id: 1444,
+        tracker: 0,
+        default_currency: 'KES',
+        f_name: 'Phil',
+        s_name: 'Samoei',
+      },
+      {
+        vendor_disp_name: '28T Truck',
+        registration_no: 'KCJ-846VO',
+        vendor_type: 20,
+        rider_id: 3142,
+        tracker: 0,
+        default_currency: 'KES',
+        f_name: 'ttttty',
+        s_name: 'yyuyuy',
+      },
+    ],
+  };
   wrapper.vm.orders = order;
   wrapper.vm.vehicles = vehicle;
   wrapper.vm.riders = rider;
+  beforeEach(() => {
+    moxios.install(axios);
+  });
+  afterEach(() => {
+    moxios.uninstall();
+  });
   it('Check whether setDriverStatus changes the add driver status', () => {
     wrapper.vm.setDriverStatus();
     expect(wrapper.vm.addDriverStatus).equal(false);
@@ -623,7 +625,7 @@ describe('Quotes.vue', () => {
   it('Check whether the browser is mobile', () => {
     expect(wrapper.vm.isMobile()).equal(false);
   });
-  it('Check whether the get riders function fetches the correct data', () => {
+  it('Check whether the get riders function fetches the correct data', done => {
     wrapper.vm.sessionInfo = sessionData;
     wrapper.vm.riders = [];
     wrapper.vm.getRiders();
@@ -638,12 +640,15 @@ describe('Quotes.vue', () => {
           },
         })
         .then(() => {
-          expect(wrapper.vm.riders).equal(rider);
+          expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
           done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
         });
     });
   });
-  it('Check whether the get vehicles function fetches the correct data', () => {
+  it('Check whether the get vehicles function fetches the correct data', done => {
     wrapper.vm.sessionInfo = sessionData;
     wrapper.vm.getVehicles(1);
     moxios.wait(() => {
@@ -659,6 +664,9 @@ describe('Quotes.vue', () => {
         .then(() => {
           expect(wrapper.vm.vehicles).equal(vehicle);
           done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
         });
     });
   });

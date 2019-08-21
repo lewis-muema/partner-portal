@@ -309,17 +309,13 @@
                             @input="addId(order.id)"
                             maxlength="8"
                           />
-                          <input
-                            class="input orders__bid-input"
-                            type="text"
-                            name="phone"
-                            id="phone"
-                            placeholder="Driver's phone number"
+                          <vue-tel-input
                             v-model="driverPhone"
+                            v-bind="bindProps"
+                            class="input orders__bid-input"
+                            id="phone"
                             @input="addPhone(order.id)"
-                            @keyup.delete="clearPhone(order.id)"
-                            maxlength="13"
-                          />
+                          ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
                           <button
@@ -375,6 +371,8 @@
 </template>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
 <script>
+import VueTelInput from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 import axios from 'axios';
@@ -387,6 +385,7 @@ export default {
   components: {
     verifier,
     errorHandler,
+    VueTelInput,
   },
   data() {
     return {
@@ -450,6 +449,30 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+        },
+      },
+      bindProps: {
+        defaultCountry: 'KE',
+        disabledFetchingCountry: false,
+        disabled: false,
+        disabledFormatting: false,
+        placeholder: 'Drivers phone number',
+        required: false,
+        enabledCountryCode: false,
+        enabledFlags: true,
+        preferredCountries: ['KE', 'UG', 'TZ'],
+        onlyCountries: [],
+        ignoredCountries: [],
+        autocomplete: 'off',
+        name: 'phone',
+        maxLen: 13,
+        wrapperClasses: '',
+        inputClasses: '',
+        dropdownOptions: {
+          disabledDialCode: false,
+        },
+        inputOptions: {
+          showDialCode: false,
         },
       },
       errorObj: '',
@@ -518,26 +541,14 @@ export default {
       this.confirm(id);
     },
     addPhone(id) {
-      this.driverPhone = this.driverPhone
-        .toString()
-        .replace(/[^0-9+]/g, '')
-        .replace(/^(?!00[^0])0(\d{3})(\d{3})(\d{3})/, '+254$1$2$3');
-      setTimeout(() => {
-        this.confirm(id);
-      }, 200);
-    },
-    verifyTelInput() {
-      const iti = window.intlTelInput(document.querySelector('#phone'), {
-        initialCountry: 'ke',
-        preferredCountries: ['ke', 'ug', 'tz'],
-      });
-    },
-    clearPhone(id) {
-      if (this.driverPhone.toString().startsWith('+')) {
+      this.driverPhone = this.driverPhone.toString().replace(/[^0-9+]/g, '');
+      if (this.driverPhone.toString().startsWith('+') && this.driverPhone.length < 13) {
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
       }
-      this.confirm(id);
+      setTimeout(() => {
+        this.confirm(id);
+      }, 200);
     },
     showFromTooltip(id) {
       const tooltiprow = document.querySelector(`.sp${id}`);
@@ -769,9 +780,6 @@ export default {
       if (!this.addDriverStatus) {
         this.addDriverStatus = true;
         this.newRider = true;
-        setTimeout(() => {
-          this.verifyTelInput();
-        }, 200);
       } else {
         this.addDriverStatus = false;
         this.newRider = false;

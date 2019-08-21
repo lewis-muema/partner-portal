@@ -6,13 +6,6 @@ import Pending from '@/views/pending.vue';
 import './localStorage';
 
 describe('Pending.vue', () => {
-  beforeEach(() => {
-    moxios.install(axios);
-    window.axios = axios;
-  });
-  afterEach(() => {
-    moxios.uninstall();
-  });
   const wrapper = shallowMount(Pending, {
     sync: false,
   });
@@ -411,7 +404,7 @@ describe('Pending.vue', () => {
       return: true,
       orderNotes: 'NOTES: Notes for this order',
       bid_status: 0,
-      id: 130,
+      id: 1,
       fixedCost: true,
       vendorname: 'Freight',
       fromCity: 'Nairobi',
@@ -478,6 +471,14 @@ describe('Pending.vue', () => {
   ];
   wrapper.vm.loadingStatus = false;
   wrapper.vm.orders = order;
+  wrapper.vm.vehicles = vehicle;
+  wrapper.vm.riders = rider;
+  beforeEach(() => {
+    moxios.install(axios);
+  });
+  afterEach(() => {
+    moxios.uninstall();
+  });
   // it('Check vendor format function formats the name based on the tonnage of the truck', () => {
   //   expect(wrapper.vm.formatVendorName(order[0])).equal('Freight  (12 T)');
   // });
@@ -635,7 +636,7 @@ describe('Pending.vue', () => {
   it('Check whether the browser is mobile', () => {
     expect(wrapper.vm.isMobile()).equal(false);
   });
-  it('Check whether the get riders function fetches the correct data', () => {
+  it('Check whether the get riders function fetches the correct data', done => {
     wrapper.vm.sessionInfo = sessionData;
     wrapper.vm.riders = [];
     wrapper.vm.getRiders();
@@ -646,38 +647,21 @@ describe('Pending.vue', () => {
           status: 200,
           response: {
             status: true,
-            data: [
-              {
-                rider_id: '749',
-                rider_name: 'Evans Meshack',
-                id_no: '31211160',
-                phone_no: '0736202130',
-                rider_stat: '1',
-              },
-              {
-                rider_id: '1380',
-                rider_name: 'Charles Kung&#039;u',
-                id_no: '8979594',
-                phone_no: '0715458867',
-                rider_stat: '1',
-              },
-              {
-                rider_id: '17128',
-                rider_name: 'Lewis Muema',
-                id_no: '32652490',
-                phone_no: '+254795510443',
-                rider_stat: '1',
-              },
-            ],
+            data: rider,
           },
         })
         .then(() => {
-          expect(wrapper.vm.riders).equal(rider);
+          expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
+          expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
+          expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
           done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
         });
     });
   });
-  it('Check whether the get vehicles function fetches the correct data', () => {
+  it('Check whether the get vehicles function fetches the correct data', done => {
     wrapper.vm.sessionInfo = sessionData;
     wrapper.vm.getVehicles(1);
     moxios.wait(() => {
@@ -687,57 +671,15 @@ describe('Pending.vue', () => {
           status: 200,
           response: {
             status: true,
-            data: [
-              {
-                vehicle_id: '562',
-                registration_no: 'KAA 100K',
-                model: 'maserati',
-                make: 'maserati',
-                vendor_disp_name: '5T Truck',
-                carrier_type: '0',
-                load_capacity: null,
-                vehicle_size: '0',
-                vendor_type: '10',
-              },
-              {
-                vehicle_id: '1219',
-                registration_no: 'KZZ 999 Z',
-                model: '2018',
-                make: 'Tesla',
-                vendor_disp_name: 'Bike',
-                carrier_type: '0',
-                load_capacity: null,
-                vehicle_size: '0',
-                vendor_type: '1',
-              },
-              {
-                vehicle_id: '1249',
-                registration_no: 'KAP 2500L',
-                model: null,
-                make: null,
-                vendor_disp_name: '5T Truck',
-                carrier_type: '0',
-                load_capacity: null,
-                vehicle_size: '0',
-                vendor_type: '10',
-              },
-              {
-                vehicle_id: '1440',
-                registration_no: 'KCS 8223F',
-                model: 'NisVan',
-                make: 'Nissan',
-                vendor_disp_name: 'Freight',
-                carrier_type: '0',
-                load_capacity: '20.2',
-                vehicle_size: '0',
-                vendor_type: '25',
-              },
-            ],
+            data: vehicle,
           },
         })
         .then(() => {
           expect(wrapper.vm.vehicles).equal(vehicle);
           done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
         });
     });
   });

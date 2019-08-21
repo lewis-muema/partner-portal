@@ -340,11 +340,8 @@
                             v-model="driverPhone"
                             v-bind="bindProps"
                             id="phone"
-                            name="phone"
                             class="input orders__bid-input"
                             @input="addPhone(order.id)"
-                            @keyup.delete="clearPhone(order.id)"
-                            maxlength="13"
                           ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
@@ -506,8 +503,8 @@ export default {
         onlyCountries: [],
         ignoredCountries: [],
         autocomplete: 'off',
-        name: 'telephone',
-        maxLen: 25,
+        name: 'phone',
+        maxLen: 13,
         wrapperClasses: '',
         inputClasses: '',
         dropdownOptions: {
@@ -617,23 +614,9 @@ export default {
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
       }
-      // .replace(/^(?!00[^0])0(\d{3})(\d{3})(\d{3})/, '+254$1$2$3');
       setTimeout(() => {
         this.confirm(id);
       }, 200);
-    },
-    verifyTelInput() {
-      const iti = window.intlTelInput(document.querySelector('#phone'), {
-        initialCountry: 'ke',
-        preferredCountries: ['ke', 'ug', 'tz'],
-      });
-    },
-    clearPhone(id) {
-      if (this.driverPhone.toString().startsWith('+')) {
-        const formattedPhone = this.driverPhone.slice(4, 100);
-        this.driverPhone = `0${formattedPhone}`;
-      }
-      this.confirm(id);
     },
     showFromTooltip(id) {
       const tooltiprow = document.querySelector(`.sp${id}`);
