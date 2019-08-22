@@ -378,7 +378,7 @@ export default {
             this.ownerRb = response.data.msg.owner_balance;
             this.showWithdrawButton();
           } else {
-            document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
             this.removeFetchingStatus();
           }
           if (response.data.msg.statement !== null) {
@@ -416,7 +416,7 @@ export default {
           to: lastDay,
         });
       } else {
-        document.getElementById('filtSub').innerHTML = '<div class="loading-spinner"></div> LOADING';
+        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
         firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
         lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
         payload = JSON.stringify({

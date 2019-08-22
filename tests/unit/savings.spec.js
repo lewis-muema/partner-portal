@@ -3,10 +3,10 @@ import moxios from 'moxios';
 import moment from 'moment';
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
-import Loans from '@/views/loans.vue';
+import Savings from '@/views/savings.vue';
 import './localStorage';
 
-describe('Loans.vue', () => {
+describe('Savings.vue', () => {
   beforeEach(() => {
     moxios.install(axios);
     window.axios = axios;
@@ -14,7 +14,7 @@ describe('Loans.vue', () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  const wrapper = shallowMount(Loans, {
+  const wrapper = shallowMount(Savings, {
     sync: false,
   });
   const sessionData = {
@@ -102,7 +102,7 @@ describe('Loans.vue', () => {
     expect(wrapper.vm.monthPeriod).equal('01 August 2019 - 31 August 2019');
   });
   it('Check whether the fetchloans function returns the correct data on load', done => {
-    wrapper.vm.fetchLoans(1);
+    wrapper.vm.fetchSavings(1);
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request
@@ -122,7 +122,7 @@ describe('Loans.vue', () => {
     });
   });
   it('Check whether the fetchloans function returns an error when the records returned are null on filter', done => {
-    wrapper.vm.fetchLoans(2);
+    wrapper.vm.fetchSavings(2);
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request
@@ -131,7 +131,7 @@ describe('Loans.vue', () => {
           response: { status: false, msg: null },
         })
         .then(() => {
-          expect(wrapper.vm.error).equal('No loans found for this period');
+          expect(wrapper.vm.error).equal('No savings found for this period');
           done();
         })
         .catch(error => {
