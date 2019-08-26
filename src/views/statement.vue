@@ -454,21 +454,6 @@ export default {
       setTimeout(() => {
         if (document.getElementsByTagName('tbody').length > 0) {
           const list = document.getElementsByTagName('tbody')[0];
-          list.innerHTML = `<tr class="records-placeholder"><td colspan="9" style="text-align: center;">${message}</td></tr>`;
-        }
-      }, time);
-    },
-    removeFetchingStatus() {
-      const element = document.querySelector('.records-placeholder');
-      if (typeof element !== 'undefined' && element !== null) {
-        element.parentNode.removeChild(element);
-      }
-    },
-
-    displayFetchingStatus(message, time) {
-      setTimeout(() => {
-        if (document.getElementsByTagName('tbody').length > 0) {
-          const list = document.getElementsByTagName('tbody')[0];
           list.innerHTML = `<tr class="records-placeholder"><td colspan="6" style="text-align: center;">${message}</td></tr>`;
         }
       }, time);

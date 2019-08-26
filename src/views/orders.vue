@@ -663,7 +663,9 @@ export default {
             this.responseNo = 1;
             this.loadingStatus = false;
           });
-          this.refreshOrders(ordpayload);
+          if (this.$route.path === '/orders') {
+            this.refreshOrders(ordpayload);
+          }
         })
         .catch(error => {
           this.errorObj = error.response;

@@ -1334,7 +1334,9 @@ export default {
             }
             this.loadingStatus = false;
           });
-          this.refreshOrders();
+          if (this.$route.path === '/') {
+            this.refreshOrders();
+          }
         })
         .catch(error => {
           this.errorObj = error.response;

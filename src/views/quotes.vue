@@ -1240,7 +1240,9 @@ export default {
               this.loadingStatus = false;
               this.responseNo = 1;
             });
-            this.refreshOrders();
+            if (this.$route.path === '/quotes') {
+              this.refreshOrders();
+            }
           } else {
             this.loadingStatus = false;
           }

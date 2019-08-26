@@ -69,6 +69,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import axios from 'axios';
@@ -232,11 +233,9 @@ export default {
     },
     handleButton(data) {
       if (this.state === 'login') {
-        const loginButton = document.querySelector('.login__btn');
-        loginButton.innerHTML = data;
+        $('.login__btn').html(data);
       } else {
-        const resetButton = document.querySelector('.reset__btn');
-        resetButton.innerHTML = data;
+        $('.reset__btn').html(data);
       }
     },
     error(errorStatement, timeout) {

@@ -101,7 +101,7 @@ describe('Savings.vue', () => {
     wrapper.vm.filt();
     expect(wrapper.vm.monthPeriod).equal('01 August 2019 - 31 August 2019');
   });
-  it('Check whether the fetchloans function returns the correct data on load', done => {
+  it('Check whether the fetchSavings function returns the correct data on load', done => {
     wrapper.vm.fetchSavings(1);
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
@@ -121,7 +121,7 @@ describe('Savings.vue', () => {
         });
     });
   });
-  it('Check whether the fetchloans function returns an error when the records returned are null on filter', done => {
+  it('Check whether the fetchSavings function returns an error when the records returned are null on filter', done => {
     wrapper.vm.fetchSavings(2);
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
