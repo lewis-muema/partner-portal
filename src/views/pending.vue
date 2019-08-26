@@ -689,7 +689,6 @@ export default {
     addPhone(id) {
       this.driverPhone = this.driverPhone.toString().replace(/[^0-9+]/g, '');
       if (this.driverPhone.toString().startsWith('+') && this.driverPhone.length < 13) {
-        // console.log(this.driverPhone);
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
       }
@@ -705,7 +704,6 @@ export default {
       });
     },
     clearPhone(id) {
-      console.log(this.driverPhone);
       if (this.driverPhone.toString().startsWith('+')) {
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
@@ -917,9 +915,6 @@ export default {
       if (!this.addDriverStatus) {
         this.addDriverStatus = true;
         this.newRider = true;
-        // setTimeout(() => {
-        //   this.verifyTelInput();
-        // }, 200);
       } else {
         this.addDriverStatus = false;
         this.newRider = false;
@@ -1081,7 +1076,6 @@ export default {
           polyline: 'encoded_string',
         },
       });
-
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
