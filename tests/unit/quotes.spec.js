@@ -1,59 +1,17 @@
 import axios from 'axios';
 import moxios from 'moxios';
 import { expect } from 'chai';
-import { shallowMount } from '@vue/test-utils';
-import Pending from '@/views/pending.vue';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
+import Quotes from '@/views/quotes.vue';
 import './localStorage';
 
-describe('Pending.vue', () => {
-  const wrapper = shallowMount(Pending, {
+const localVue = createLocalVue();
+
+describe('Quotes.vue', () => {
+  const wrapper = shallowMount(Quotes, {
     sync: false,
+    localVue,
   });
-  const sessionData = {
-    state: '1',
-    default_currency: 'KES',
-    date_added: '2018-01-29 09:41:31',
-    status: '1',
-    email: 'psamoei@sendy.co.ke',
-    referer: null,
-    kra_pin_cert: null,
-    nok_name: null,
-    id_no: '25417014',
-    nok_phone: null,
-    portal_password: 'f2d8d5236a766c84513c58adc0873d79886d410a',
-    name: 'Phil Samoei',
-    owner_type: '0',
-    stage: '1',
-    id: '1198',
-    kra_pin: null,
-    date_time: '0000-00-00 00:00:00',
-    token: 'jftrc4yTuX',
-    phone: '+254722511046',
-    country_code: 'KE',
-    id_card: '1505381066719image.jpg',
-    riders: [
-      {
-        vendor_disp_name: '28T Truck',
-        registration_no: 'KMCH',
-        vendor_type: 20,
-        rider_id: 1444,
-        tracker: 0,
-        default_currency: 'KES',
-        f_name: 'Phil',
-        s_name: 'Samoei',
-      },
-      {
-        vendor_disp_name: '28T Truck',
-        registration_no: 'KCJ-846VO',
-        vendor_type: 20,
-        rider_id: 3142,
-        tracker: 0,
-        default_currency: 'KES',
-        f_name: 'ttttty',
-        s_name: 'yyuyuy',
-      },
-    ],
-  };
   const order = [
     {
       duration_read: 12,
@@ -413,6 +371,7 @@ describe('Pending.vue', () => {
       confirmed: 0,
       orderTime: '2019-08-15T11:20:14.000Z',
       takeHome: 3920,
+      bidAmount: 3920,
       orderNo: 'AC44AC153-X41',
       min_amount: 3500,
     },
@@ -469,7 +428,51 @@ describe('Pending.vue', () => {
       count: 2,
     },
   ];
-  wrapper.vm.loadingStatus = false;
+  const sessionData = {
+    state: '1',
+    default_currency: 'KES',
+    date_added: '2018-01-29 09:41:31',
+    status: '1',
+    email: 'psamoei@sendy.co.ke',
+    referer: null,
+    kra_pin_cert: null,
+    nok_name: null,
+    id_no: '25417014',
+    nok_phone: null,
+    portal_password: 'f2d8d5236a766c84513c58adc0873d79886d410a',
+    name: 'Phil Samoei',
+    owner_type: '0',
+    stage: '1',
+    id: '1198',
+    kra_pin: null,
+    date_time: '0000-00-00 00:00:00',
+    token: 'jftrc4yTuX',
+    phone: '+254722511046',
+    country_code: 'KE',
+    id_card: '1505381066719image.jpg',
+    riders: [
+      {
+        vendor_disp_name: '28T Truck',
+        registration_no: 'KMCH',
+        vendor_type: 20,
+        rider_id: 1444,
+        tracker: 0,
+        default_currency: 'KES',
+        f_name: 'Phil',
+        s_name: 'Samoei',
+      },
+      {
+        vendor_disp_name: '28T Truck',
+        registration_no: 'KCJ-846VO',
+        vendor_type: 20,
+        rider_id: 3142,
+        tracker: 0,
+        default_currency: 'KES',
+        f_name: 'ttttty',
+        s_name: 'yyuyuy',
+      },
+    ],
+  };
   wrapper.vm.orders = order;
   wrapper.vm.vehicles = vehicle;
   wrapper.vm.riders = rider;
@@ -479,9 +482,6 @@ describe('Pending.vue', () => {
   afterEach(() => {
     moxios.uninstall();
   });
-  // it('Check vendor format function formats the name based on the tonnage of the truck', () => {
-  //   expect(wrapper.vm.formatVendorName(order[0])).equal('Freight  (12 T)');
-  // });
   it('Check whether setDriverStatus changes the add driver status', () => {
     wrapper.vm.setDriverStatus();
     expect(wrapper.vm.addDriverStatus).equal(false);
@@ -489,14 +489,6 @@ describe('Pending.vue', () => {
   it('Check whether setDriverStatus changes the add driver status', () => {
     wrapper.vm.setVehicleStatus();
     expect(wrapper.vm.addVehicleStatus).equal(false);
-  });
-  // it('Check whether displayVehicles returns the correct truck capacity for 25 T', () => {
-  //   wrapper.vm.vehicles = vehicle;
-  //   expect(wrapper.vm.displayVehicles(0)).equal('(28 Tonnes)');
-  // });
-  it('Check whether displayVehicles returns the correct truck capacity For other vendor types with make defined', () => {
-    wrapper.vm.vehicles = vehicle;
-    expect(wrapper.vm.displayVehicles(1)).equal('(Mercedes Actros)');
   });
   it('Check for order notes on the order', () => {
     expect(wrapper.vm.orderNotes(1)).equal('Notes for this order');
@@ -527,7 +519,6 @@ describe('Pending.vue', () => {
     expect(wrapper.vm.count).equal(null);
     expect(wrapper.vm.regNo).equal(null);
     expect(wrapper.vm.insuNo).equal(null);
-    expect(wrapper.vm.refrigirated).equal('0');
     expect(wrapper.vm.vehicleId).equal(null);
     expect(wrapper.vm.buttonDisabledStatus).equal(0);
     expect(wrapper.vm.addVehicleStatus).equal(true);
@@ -541,11 +532,9 @@ describe('Pending.vue', () => {
     expect(wrapper.vm.riderId).equal(null);
     expect(wrapper.vm.DL).equal(null);
     expect(wrapper.vm.ID).equal('');
-    expect(wrapper.vm.refrigirated).equal('0');
-    expect(wrapper.vm.vehicleId).equal(null);
     expect(wrapper.vm.buttonDisabledStatus).equal(0);
     expect(wrapper.vm.addVehicleStatus).equal(true);
-    expect(wrapper.vm.newVehicle).equal(true);
+    expect(wrapper.vm.newRider).equal(true);
   });
   it('Check if the confirm function verifies the all fields are not present and deactivates the button', () => {
     wrapper.vm.confirm(1);
@@ -652,8 +641,6 @@ describe('Pending.vue', () => {
         })
         .then(() => {
           expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
-          expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
-          expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
           done();
         })
         .catch(error => {

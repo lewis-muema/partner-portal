@@ -2,11 +2,18 @@ import axios from 'axios';
 import moxios from 'moxios';
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
-import Pending from '@/views/pending.vue';
+import Orders from '@/views/orders.vue';
 import './localStorage';
 
-describe('Pending.vue', () => {
-  const wrapper = shallowMount(Pending, {
+describe('Orders.vue', () => {
+  beforeEach(() => {
+    moxios.install(axios);
+    window.axios = axios;
+  });
+  afterEach(() => {
+    moxios.uninstall();
+  });
+  const wrapper = shallowMount(Orders, {
     sync: false,
   });
   const sessionData = {
@@ -413,6 +420,8 @@ describe('Pending.vue', () => {
       confirmed: 0,
       orderTime: '2019-08-15T11:20:14.000Z',
       takeHome: 3920,
+      bidAmount: 3920,
+      amount: 3920,
       orderNo: 'AC44AC153-X41',
       min_amount: 3500,
     },
@@ -473,31 +482,6 @@ describe('Pending.vue', () => {
   wrapper.vm.orders = order;
   wrapper.vm.vehicles = vehicle;
   wrapper.vm.riders = rider;
-  beforeEach(() => {
-    moxios.install(axios);
-  });
-  afterEach(() => {
-    moxios.uninstall();
-  });
-  // it('Check vendor format function formats the name based on the tonnage of the truck', () => {
-  //   expect(wrapper.vm.formatVendorName(order[0])).equal('Freight  (12 T)');
-  // });
-  it('Check whether setDriverStatus changes the add driver status', () => {
-    wrapper.vm.setDriverStatus();
-    expect(wrapper.vm.addDriverStatus).equal(false);
-  });
-  it('Check whether setDriverStatus changes the add driver status', () => {
-    wrapper.vm.setVehicleStatus();
-    expect(wrapper.vm.addVehicleStatus).equal(false);
-  });
-  // it('Check whether displayVehicles returns the correct truck capacity for 25 T', () => {
-  //   wrapper.vm.vehicles = vehicle;
-  //   expect(wrapper.vm.displayVehicles(0)).equal('(28 Tonnes)');
-  // });
-  it('Check whether displayVehicles returns the correct truck capacity For other vendor types with make defined', () => {
-    wrapper.vm.vehicles = vehicle;
-    expect(wrapper.vm.displayVehicles(1)).equal('(Mercedes Actros)');
-  });
   it('Check for order notes on the order', () => {
     expect(wrapper.vm.orderNotes(1)).equal('Notes for this order');
   });
@@ -507,180 +491,16 @@ describe('Pending.vue', () => {
   it('Check if the currency format function returns the take home amount with the thousands separator', () => {
     expect(wrapper.vm.currencyFormat(1)).equal('3,920');
   });
-  it('Check if the bid currency format function returns the min amount with the thousands separator', () => {
-    expect(wrapper.vm.bidcurrencyFormat(1)).equal('3,500');
-  });
   it('Check if the format distance function returns the rounded off value of distance', () => {
     expect(wrapper.vm.formatDistance(1)).equal(4);
   });
   it('Check if the short from name function returns a smaller pick up name to fit in the table column', () => {
-    expect(wrapper.vm.shortFromName(1)).equal('Junction Mall Parkin...');
+    expect(wrapper.vm.shortFromName(1)).equal('Junction Mall Parking Hall');
   });
   it('Check if the short to name function returns a smaller destination name to fit in the table column', () => {
     expect(wrapper.vm.shortToName(1)).equal('Yaya Centre');
   });
-  it('Check if the vehicle name function returns the vendor_disp_name of the vehicle', () => {
-    expect(wrapper.vm.vehicleName(0)).equal('10T Truck');
-  });
-  it('Check if the toggle vehicle function resets the required fields', () => {
-    wrapper.vm.toggleVehicle(1);
-    expect(wrapper.vm.count).equal(null);
-    expect(wrapper.vm.regNo).equal(null);
-    expect(wrapper.vm.insuNo).equal(null);
-    expect(wrapper.vm.refrigirated).equal('0');
-    expect(wrapper.vm.vehicleId).equal(null);
-    expect(wrapper.vm.buttonDisabledStatus).equal(0);
-    expect(wrapper.vm.addVehicleStatus).equal(true);
-    expect(wrapper.vm.newVehicle).equal(true);
-  });
-  it('Check if the toggle rider function resets the required fields', () => {
-    wrapper.vm.toggleDriver();
-    expect(wrapper.vm.count1).equal(null);
-    expect(wrapper.vm.driverName).equal(null);
-    expect(wrapper.vm.driverPhone).equal('');
-    expect(wrapper.vm.riderId).equal(null);
-    expect(wrapper.vm.DL).equal(null);
-    expect(wrapper.vm.ID).equal('');
-    expect(wrapper.vm.refrigirated).equal('0');
-    expect(wrapper.vm.vehicleId).equal(null);
-    expect(wrapper.vm.buttonDisabledStatus).equal(0);
-    expect(wrapper.vm.addVehicleStatus).equal(true);
-    expect(wrapper.vm.newVehicle).equal(true);
-  });
-  it('Check if the confirm function verifies the all fields are not present and deactivates the button', () => {
-    wrapper.vm.confirm(1);
-    expect(wrapper.vm.buttonDisabledStatus).equal(0);
-  });
-  it('Check if the confirm function verifies the all fields are present and activates the button', () => {
-    wrapper.vm.addDriverStatus = false;
-    wrapper.vm.addVehicleStatus = false;
-    wrapper.vm.ownerId = 10;
-    wrapper.vm.vehicleId = 100;
-    wrapper.vm.newVehicle = false;
-    wrapper.vm.driverPhone = '+254700707070';
-    wrapper.vm.orderNo = 'AC44AC153-X41';
-    wrapper.vm.newRider = false;
-    wrapper.vm.riderId = 3;
-    wrapper.vm.partnerVendor = 3;
-    wrapper.vm.confirm(1);
-    expect(wrapper.vm.buttonDisabledStatus).equal(1);
-  });
-  it('Check if the details checker function for selecting a driver and selecting a vehicle verifies that all fields are present', () => {
-    wrapper.vm.ownerId = 10;
-    wrapper.vm.vehicleId = 100;
-    wrapper.vm.newVehicle = false;
-    wrapper.vm.driverPhone = '+254700707070';
-    wrapper.vm.orderNo = 'AC44AC153-X41';
-    wrapper.vm.newRider = false;
-    wrapper.vm.riderId = 3;
-    wrapper.vm.partnerVendor = 3;
-    expect(wrapper.vm.detailsCheckForSelectingDriversAndSelectingVehicles()).equal(true);
-  });
-  it('Check if the details checker function for selecting a driver and adding a vehicle verifies that all fields are present', () => {
-    wrapper.vm.ownerId = 10;
-    wrapper.vm.newVehicle = true;
-    wrapper.vm.driverPhone = '+254700707070';
-    wrapper.vm.orderNo = 'AC44AC153-X41';
-    wrapper.vm.newRider = false;
-    wrapper.vm.insuNo = 'C00000';
-    wrapper.vm.vendorType = 3;
-    wrapper.vm.regNo = 'KAX 334L';
-    wrapper.vm.box = 1;
-    expect(wrapper.vm.detailsCheckForSelectingDriversAndAddingVehicles()).equal(true);
-  });
-  it('Check if the details checker function for adding a driver and adding a vehicle verifies that all fields are present', () => {
-    wrapper.vm.ownerId = 10;
-    wrapper.vm.newVehicle = true;
-    wrapper.vm.driverPhone = '+254700707070';
-    wrapper.vm.orderNo = 'AC44AC153-X41';
-    wrapper.vm.newRider = true;
-    wrapper.vm.insuNo = 'C00000';
-    wrapper.vm.vendorType = 3;
-    wrapper.vm.regNo = 'KAX 334L';
-    wrapper.vm.box = 1;
-    wrapper.vm.ID = '32000000';
-    wrapper.vm.ownerPhone = '+254700000000';
-    wrapper.vm.driverName = 'Test Driver';
-    expect(wrapper.vm.detailsCheckForAddingDriversAndAddingVehicles()).equal(true);
-  });
-  it('Check if the details checker function for adding a driver and selecting a vehicle verifies that all fields are present', () => {
-    wrapper.vm.ownerId = 10;
-    wrapper.vm.vehicleId = 10;
-    wrapper.vm.newVehicle = false;
-    wrapper.vm.driverPhone = '+254700707070';
-    wrapper.vm.orderNo = 'AC44AC153-X41';
-    wrapper.vm.newRider = true;
-    wrapper.vm.insuNo = 'C00000';
-    wrapper.vm.vendorType = 3;
-    wrapper.vm.regNo = 'KAX 334L';
-    wrapper.vm.box = 1;
-    wrapper.vm.ID = '32000000';
-    wrapper.vm.ownerPhone = '+254700000000';
-    wrapper.vm.driverName = 'Test Driver';
-    wrapper.vm.partnerVendor = 3;
-    expect(wrapper.vm.detailsCheckForAddingDriverSAndSelectingVehicles()).equal(true);
-  });
-  it('Check whether the driver selector function preloads all the required fields in preparation for sending payload', () => {
-    wrapper.vm.riders = rider;
-    wrapper.vm.count1 = 0;
-    wrapper.vm.driverSelector(1);
-    expect(wrapper.vm.driverName).equal('Evans Meshack');
-  });
-  it('Check whether the vehicle selector function preloads all the required fields in preparation for sending payload', () => {
-    wrapper.vm.vehicles = vehicle;
-    wrapper.vm.count = 0;
-    wrapper.vm.vehicleSelector(1);
-    expect(wrapper.vm.regNo).equal('KAB 675T');
-    expect(wrapper.vm.vehicleId).equal('1342');
-  });
   it('Check whether the browser is mobile', () => {
     expect(wrapper.vm.isMobile()).equal(false);
-  });
-  it('Check whether the get riders function fetches the correct data', done => {
-    wrapper.vm.sessionInfo = sessionData;
-    wrapper.vm.riders = [];
-    wrapper.vm.getRiders();
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request
-        .respondWith({
-          status: 200,
-          response: {
-            status: true,
-            data: rider,
-          },
-        })
-        .then(() => {
-          expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
-          expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
-          expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
-          done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
-    });
-  });
-  it('Check whether the get vehicles function fetches the correct data', done => {
-    wrapper.vm.sessionInfo = sessionData;
-    wrapper.vm.getVehicles(1);
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request
-        .respondWith({
-          status: 200,
-          response: {
-            status: true,
-            data: vehicle,
-          },
-        })
-        .then(() => {
-          expect(wrapper.vm.vehicles).equal(vehicle);
-          done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
-    });
   });
 });
