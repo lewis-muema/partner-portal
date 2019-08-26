@@ -102,7 +102,7 @@ body.dt-print-view {
 }
 .statement__row {
   grid-column: span 12;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   margin-top: 10px;
 }
 .statement__scrollable-row {

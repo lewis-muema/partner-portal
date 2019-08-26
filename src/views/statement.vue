@@ -14,6 +14,7 @@
             <i class="material-icons statement__cancel-icon" @click="closePopup">cancel</i>
           </span>
         </div>
+        <div v-if="payable_amount" class="withdraw-modal-screen">
         <div class="statement__row statement__add-bank-tab">
           <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
           <p class="small-margin color-white">{{ withdrawError }}</p>
@@ -30,41 +31,41 @@
             <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
           </span>
         </div>
-        <div class="statement__row">
-          <p class="no-margin x-large-font">How do you want to be paid?</p>
-        </div>
-        <div class="statement__row statement__scrollable-row">
-          <div class="statement__divided-row centered">
-            <input
-              type="radio"
-              class="statement__column-2 statement__radio-button-margin radio-1"
-              name="myRadio"
-              @click="checkedWithDrawal(1, 0)"
-            />
-            <span class="statement__column-10">
-              <p class="no-margin">M-Pesa</p>
-              <p class="no-margin small-font">{{ sessionInfo.phone }}</p>
-            </span>
-          </div>
-          <div
-            class="statement__divided-row centered bank-row"
-            v-for="bankAccount in bankAccounts"
-            :key="bankAccount.id"
-          >
-            <input
-              type="radio"
-              class="statement__column-2 statement__radio-button-margin radio-1"
-              name="myRadio"
-              @click="checkedWithDrawal(2, bankAccount.id)"
-            />
-            <span class="statement__column-10">
-              <p class="no-margin">Bank Account</p>
-              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
-              <p class="no-margin small-font">{{ bankAccount.bank_branch }}</p>
-              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
-            </span>
-          </div>
-        </div>
+<!--        <div class="statement__row">-->
+<!--          <p class="no-margin x-large-font">How do you want to be paid?</p>-->
+<!--        </div>-->
+<!--        <div class="statement__row statement__scrollable-row">-->
+<!--          <div class="statement__divided-row centered">-->
+<!--            <input-->
+<!--              type="radio"-->
+<!--              class="statement__column-2 statement__radio-button-margin radio-1"-->
+<!--              name="myRadio"-->
+<!--              @click="checkedWithDrawal(1, 0)"-->
+<!--            />-->
+<!--            <span class="statement__column-10">-->
+<!--              <p class="no-margin">M-Pesa</p>-->
+<!--              <p class="no-margin small-font">{{ sessionInfo.phone }}</p>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--          <div-->
+<!--            class="statement__divided-row centered bank-row"-->
+<!--            v-for="bankAccount in bankAccounts"-->
+<!--            :key="bankAccount.id"-->
+<!--          >-->
+<!--            <input-->
+<!--              type="radio"-->
+<!--              class="statement__column-2 statement__radio-button-margin radio-1"-->
+<!--              name="myRadio"-->
+<!--              @click="checkedWithDrawal(2, bankAccount.id)"-->
+<!--            />-->
+<!--            <span class="statement__column-10">-->
+<!--              <p class="no-margin">Bank Account</p>-->
+<!--              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>-->
+<!--              <p class="no-margin small-font">{{ bankAccount.bank_branch }}</p>-->
+<!--              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>-->
+<!--            </span>-->
+<!--          </div>-->
+<!--        </div>-->
         <div class="statement__row">
           <input
             type="text"
@@ -80,9 +81,65 @@
           <button
             class="full-width input-height statement__withdraw-button"
             v-if="sendWithdrawStatus"
-            @click="withdraw()"
-          >Withdraw</button>
-          <button class="full-width input-height" disabled v-else>Withdraw</button>
+            @click="goNext()"
+          >Next</button>
+          <button class="full-width input-height" disabled v-else>Next</button>
+        </div>
+<!--        <div class="statement__row">-->
+<!--          <button-->
+<!--            class="full-width input-height statement__withdraw-button"-->
+<!--            v-if="sendWithdrawStatus"-->
+<!--            @click="withdraw()"-->
+<!--          >Next</button>-->
+<!--        </div>-->
+        </div>
+        <div class="withdraw-modal-screen-2" v-if="payment_options">
+          <div class="statement__row">
+            <p class="no-margin x-large-font">How do you want to be paid?</p>
+          </div>
+          <div class="statement__row statement__scrollable-row">
+            <div class="withdraw-payment-options">
+              <input
+                type="radio"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                name="myRadio"
+                @click="checkedWithDrawal(1, 0)"
+              />
+              <span class="statement__column-10">
+                <p class="no-margin">Mobile Money</p>
+              </span>
+            </div>
+            <div class="withdraw-payment-options">
+              <input
+                type="radio"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                name="myRadio"
+                @click="checkedWithDrawal(2, bankAccount.id)"
+              />
+              <span class="statement__column-10">
+                <p class="no-margin">Bank Transfer</p>
+              </span>
+            </div>
+            <div class="withdraw-payment-options">
+              <input
+                type="radio"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                name="myRadio"
+                @click="checkedWithDrawal(2, bankAccount.id)"
+              />
+              <span class="statement__column-10">
+                <p class="no-margin">Cheque</p>
+              </span>
+            </div>
+          </div>
+          <div class="statement__row">
+            <button
+              class="full-width input-height statement__withdraw-button"
+              v-if="sendWithdrawStatus"
+              @click="goNext()"
+            >Withdraw Cash</button>
+            <button class="input-height" disabled v-else>Withdraw Cash</button>
+          </div>
         </div>
       </div>
     </div>
@@ -260,7 +317,6 @@
 </template>
 
 <script>
-import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
@@ -279,6 +335,8 @@ export default {
   data() {
     return {
       sessionInfo: '',
+      payment_options: false,
+      payable_amount: true,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -495,7 +553,7 @@ export default {
     },
     checkDetails() {
       this.amount = this.amount.toString().replace(/[^0-9]/g, '');
-      if (parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101 && this.checked === 1) {
+      if (parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101) {
         this.sendWithdrawStatus = true;
       } else {
         this.sendWithdrawStatus = false;
@@ -521,6 +579,10 @@ export default {
           this.bankId = '';
         }
       }
+    },
+    goNext() {
+      this.payment_options = true;
+      this.payable_amount = false;
     },
     withdraw() {
       this.sendWithdrawStatus = false;
@@ -640,7 +702,7 @@ export default {
       }
     },
     showWithdrawButton() {
-      if (this.ownerRb.is_withdrawal_day) {
+      if (!this.ownerRb.is_withdrawal_day) {
         this.activeStatus = true;
         if (document.querySelector('.active-btn')) {
           document.querySelector('.active-btn').style.display = 'block';
@@ -695,4 +757,5 @@ export default {
 </script>
 
 <style>
+  @import "../assets/css/style.css";
 </style>
