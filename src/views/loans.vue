@@ -177,7 +177,7 @@ export default {
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config)
         .then(response => {
           if (requestType === 2) {
-            document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
           }
           if (response.data.msg) {
             this.handleResponse(response);
@@ -207,7 +207,7 @@ export default {
           .endOf('month')
           .format('YYYY-MM-DD HH:mm:ss');
       } else {
-        document.getElementById('filtSub').innerHTML = '<div class="loading-spinner"></div> LOADING';
+        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
         firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
         lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
         this.rows = [];

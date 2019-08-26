@@ -675,6 +675,7 @@ button {
   border-color: #c2c2c2;
   color: black;
 }
+
 @media only screen and (max-width: 425px) {
   .order-range {
     display: block;

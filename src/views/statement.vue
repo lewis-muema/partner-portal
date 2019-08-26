@@ -378,7 +378,7 @@ export default {
             this.ownerRb = response.data.msg.owner_balance;
             this.showWithdrawButton();
           } else {
-            document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
             this.removeFetchingStatus();
           }
           if (response.data.msg.statement !== null) {
@@ -416,7 +416,7 @@ export default {
           to: lastDay,
         });
       } else {
-        document.getElementById('filtSub').innerHTML = '<div class="loading-spinner"></div> LOADING';
+        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
         firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
         lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
         payload = JSON.stringify({
@@ -450,21 +450,6 @@ export default {
       this.removeFetchingStatus();
       this.rows = record;
     },
-    displayFetchingStatus(message, time) {
-      setTimeout(() => {
-        if (document.getElementsByTagName('tbody').length > 0) {
-          const list = document.getElementsByTagName('tbody')[0];
-          list.innerHTML = `<tr class="records-placeholder"><td colspan="9" style="text-align: center;">${message}</td></tr>`;
-        }
-      }, time);
-    },
-    removeFetchingStatus() {
-      const element = document.querySelector('.records-placeholder');
-      if (typeof element !== 'undefined' && element !== null) {
-        element.parentNode.removeChild(element);
-      }
-    },
-
     displayFetchingStatus(message, time) {
       setTimeout(() => {
         if (document.getElementsByTagName('tbody').length > 0) {
