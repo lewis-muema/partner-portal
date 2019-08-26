@@ -1,0 +1,13 @@
+.withdraw-modal-screen{
+    width: 825% !important;
+    text-align: center !important;
+}
+.withdraw-modal-screen-2 {
+    width: 485% !important;
+    text-align: center !important;
+}
+.withdraw-payment-options{
+    display: inline-block;
+    margin-right: 50px;
+    margin-right: 20px;
+}
