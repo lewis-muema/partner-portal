@@ -31,46 +31,11 @@
             <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
           </span>
         </div>
-<!--        <div class="statement__row">-->
-<!--          <p class="no-margin x-large-font">How do you want to be paid?</p>-->
-<!--        </div>-->
-<!--        <div class="statement__row statement__scrollable-row">-->
-<!--          <div class="statement__divided-row centered">-->
-<!--            <input-->
-<!--              type="radio"-->
-<!--              class="statement__column-2 statement__radio-button-margin radio-1"-->
-<!--              name="myRadio"-->
-<!--              @click="checkedWithDrawal(1, 0)"-->
-<!--            />-->
-<!--            <span class="statement__column-10">-->
-<!--              <p class="no-margin">M-Pesa</p>-->
-<!--              <p class="no-margin small-font">{{ sessionInfo.phone }}</p>-->
-<!--            </span>-->
-<!--          </div>-->
-<!--          <div-->
-<!--            class="statement__divided-row centered bank-row"-->
-<!--            v-for="bankAccount in bankAccounts"-->
-<!--            :key="bankAccount.id"-->
-<!--          >-->
-<!--            <input-->
-<!--              type="radio"-->
-<!--              class="statement__column-2 statement__radio-button-margin radio-1"-->
-<!--              name="myRadio"-->
-<!--              @click="checkedWithDrawal(2, bankAccount.id)"-->
-<!--            />-->
-<!--            <span class="statement__column-10">-->
-<!--              <p class="no-margin">Bank Account</p>-->
-<!--              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>-->
-<!--              <p class="no-margin small-font">{{ bankAccount.bank_branch }}</p>-->
-<!--              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>-->
-<!--            </span>-->
-<!--          </div>-->
-<!--        </div>-->
         <div class="statement__row">
           <input
             type="text"
             placeholder="Enter amount"
-            class="full-width input-height"
+            class="full-width input-height input-border"
             v-model="amount"
             @input="checkDetails()"
             @keyup.delete="checkDetails()"
@@ -79,64 +44,60 @@
         </div>
         <div class="statement__row">
           <button
-            class="full-width input-height statement__withdraw-button"
+            class="full-width input-height withdraw-buttons statement__withdraw-button"
             v-if="sendWithdrawStatus"
             @click="goNext()"
           >Next</button>
-          <button class="full-width input-height" disabled v-else>Next</button>
+          <button class="full-width input-height withdraw-buttons" disabled v-else>Next</button>
         </div>
-<!--        <div class="statement__row">-->
-<!--          <button-->
-<!--            class="full-width input-height statement__withdraw-button"-->
-<!--            v-if="sendWithdrawStatus"-->
-<!--            @click="withdraw()"-->
-<!--          >Next</button>-->
-<!--        </div>-->
         </div>
         <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
             <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>
-          <div class="statement__row statement__scrollable-row">
+          <div class="statement__row statement__scrollable-row"
+          v-for="method in payment_methods"
+          :key="method.payment_method_id"
+          >
             <div class="withdraw-payment-options">
-              <input
-                type="radio"
-                class="statement__column-2 statement__radio-button-margin radio-1"
-                name="myRadio"
-                @click="checkedWithDrawal(1, 0)"
-              />
-              <span class="statement__column-10">
-                <p class="no-margin">Mobile Money</p>
-              </span>
+            <input
+              type="radio"
+              v-model="payment_method"
+              name="profileImg"
+              class="statement__column-2 statement__radio-button-margin radio-1"
+              :value="method.payment_method_id"
+              @click="checkedWithDrawal(method.payment_method_id, 0)"
+            >
+            <span class="statement__column-10">
+              <p class="no-margin">{{method.name}}</p>
+            </span>
             </div>
-            <div class="withdraw-payment-options">
-              <input
-                type="radio"
-                class="statement__column-2 statement__radio-button-margin radio-1"
-                name="myRadio"
-                @click="checkedWithDrawal(2, bankAccount.id)"
-              />
+          </div>
+          <div v-if="displayAccounts" class="withdraw-bank-accounts-list">
+            <div
+              class="statement__divided-row centered bank-row "
+              v-for="bankAccount in bankAccounts"
+              :key="bankAccount.id"
+            >
+            <input
+              type="radio"
+              v-model="payment_account"
+              name="profileImg"
+              class="statement__column-2 statement__radio-button-margin radio-1"
+              :value="bankAccount.id"
+              @click="checkedWithDrawal(payment_method, bankAccount.id)"
+            >
               <span class="statement__column-10">
-                <p class="no-margin">Bank Transfer</p>
-              </span>
-            </div>
-            <div class="withdraw-payment-options">
-              <input
-                type="radio"
-                class="statement__column-2 statement__radio-button-margin radio-1"
-                name="myRadio"
-                @click="checkedWithDrawal(2, bankAccount.id)"
-              />
-              <span class="statement__column-10">
-                <p class="no-margin">Cheque</p>
+              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
+              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
               </span>
             </div>
           </div>
           <div class="statement__row">
             <button
-              class="full-width input-height statement__withdraw-button"
+              class="full-width input-height withdraw-buttons statement__withdraw-button"
               v-if="sendWithdrawStatus"
-              @click="goNext()"
+              @click="withdraw()"
             >Withdraw Cash</button>
             <button class="input-height" disabled v-else>Withdraw Cash</button>
           </div>
@@ -220,7 +181,7 @@
                 name="button"
                 class="btn btn_primary fil-sub fil-sub-1 active-btn"
                 @click="closePopup();"
-                v-if="activeStatus"
+                v-if="!activeStatus"
               >Withdraw cash</button>
               <button
                 type="button"
@@ -321,11 +282,19 @@ export default {
     return {
       sessionInfo: '',
       payment_options: false,
+      payment_methods: [],
+      payment_method: '',
+      payment_account: '',
       payable_amount: true,
       config: {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+        },
+      },
+      service_config: {
+        headers: {
+          'Content-Type': 'application/json',
         },
       },
       columns: [{ label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }, { label: 'Driver Name', field: 'rider_name' }],
@@ -354,6 +323,7 @@ export default {
       amountLength: '',
       mpesaWithdrawal: false,
       bankWithdrawal: false,
+      chequeWithdrawal: false,
       responseCount: 0,
       selectedRow: '',
       responseNumber: 0,
@@ -380,10 +350,16 @@ export default {
       errorObj: '',
     };
   },
+  computed: {
+    displayAccounts() {
+      return this.payment_method === 10;
+    },
+  },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.monthPeriod = moment().format('MMMM YYYY');
+      this.getPaymentOptions();
       this.fetchStatement(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -396,6 +372,23 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getPaymentOptions() {
+      const payload = {
+        country_code: this.sessionInfo.country_code,
+        user_type: 'Owner',
+        entry_point: 'Partner Portal',
+      };
+      const proxyurl = 'https://cors-anywhere.herokuapp.com/';
+      axios
+        .post(`${proxyurl}${process.env.VUE_APP_PAYMENT_SERVICE}getusertypepaymentmethods`, payload, this.service_config)
+        .then(response => {
+          // this.payment_options = JSON.stringify(response.data.payment_methods);
+          this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
+    },
     getVehicles() {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
@@ -539,7 +532,10 @@ export default {
     },
     closePopup() {
       this.sendWithdrawStatus = false;
+      this.payable_amount = true;
+      this.payment_options = false;
       if (this.opened) {
+        this.notificationName = 'message-box-down';
         this.opened = false;
         document.querySelector('.statements__blinder').style.display = 'none';
         document.querySelector('.statement__add-bank-tab').style.display = 'none';
@@ -552,22 +548,21 @@ export default {
     },
     checkDetails() {
       this.amount = this.amount.toString().replace(/[^0-9]/g, '');
-      if (parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101) {
-        this.sendWithdrawStatus = true;
-      } else {
-        this.sendWithdrawStatus = false;
-      }
+      this.sendWithdrawStatus = parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101;
     },
     checkedWithDrawal(option, value) {
       if (option === 1) {
         this.mpesaWithdrawal = true;
         this.bankWithdrawal = false;
+        this.chequeWithdrawal = false;
         this.checked = 1;
         this.checkDetails();
-      } else if (option === 2) {
+      } else if (option === 10) {
+        // this.displayAccounts();
         this.selectedRow = value;
         this.bankWithdrawal = true;
         this.mpesaWithdrawal = false;
+        this.chequeWithdrawal = false;
         this.checked = 1;
         this.checkDetails();
         const bankName = this.bankAccounts[value].bank_name.toString();
@@ -577,6 +572,12 @@ export default {
         } else {
           this.bankId = '';
         }
+      } else if (option === 4) {
+        this.mpesaWithdrawal = false;
+        this.bankWithdrawal = false;
+        this.chequeWithdrawal = true;
+        this.checked = 1;
+        this.checkDetails();
       }
     },
     goNext() {
@@ -626,28 +627,38 @@ export default {
           if (parsedResponse.status_code) {
             // this.trackMpesaWithdrawal();
             // this.trackBankWithdrawal();
-            if (this.opened) {
-              this.closePopup();
-            }
             this.sendingWithdrawRequestStatus = false;
             this.notificationType = 'success';
-            this.notificationMessage = notification;
+            this.notificationMessage = response.data.message;
             setTimeout(() => {
               this.notificationName = 'message-box-down';
               this.fetchStatement();
             }, 4000);
+            if (this.opened) {
+              this.closePopup();
+            }
           } else {
-            document.querySelector('.statement__add-bank-tab').style.display = 'grid';
-            this.withdrawHead = 'Withdrawal unsuccessful';
-            this.withdrawError = parsedResponse.message;
-            if (paymethod === 1) {
-              if (this.bankAccounts.length === 0) {
-                this.addAccountStatus = false;
-              }
+            // document.querySelector('.statement__add-bank-tab').style.display = 'grid';
+            // this.withdrawHead = 'Withdrawal unsuccessful';
+            // this.withdrawError = parsedResponse.message;
+            // if (paymethod === 1) {
+            //   if (this.bankAccounts.length === 0) {
+            //     this.addAccountStatus = false;
+            //   }
+            //   this.notificationName = 'message-box-down';
+            // } else {
+            //   this.notificationName = 'message-box-down';
+            //   this.sendWithdrawStatus = true;
+            // }
+            this.sendingWithdrawRequestStatus = false;
+            this.notificationType = 'failed';
+            this.notificationMessage = response.data.message;
+            setTimeout(() => {
               this.notificationName = 'message-box-down';
-            } else {
-              this.notificationName = 'message-box-down';
-              this.sendWithdrawStatus = true;
+              this.fetchStatement();
+            }, 4000);
+            if (this.opened) {
+              this.closePopup();
             }
           }
         })
