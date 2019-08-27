@@ -1,0 +1,28 @@
+.withdraw-modal-screen{
+    width: 825% !important;
+    text-align: center !important;
+}
+.withdraw-modal-screen-2 {
+    width: 485% !important;
+    text-align: center !important;
+}
+.withdraw-payment-options{
+    display: inline-block;
+    margin-right: 50px;
+    margin-right: 20px;
+}
+.withdraw-buttons{
+ width: 40%;
+ border-radius: 5px;
+}
+.input-border{
+    border: none;
+    border-bottom: 1px solid #909399;
+}
+*:focus {
+    outline: none;
+}
+.withdraw-bank-accounts-list {
+    max-height: 145px;
+    overflow: scroll;
+}
