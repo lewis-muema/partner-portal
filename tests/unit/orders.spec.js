@@ -411,7 +411,7 @@ describe('Orders.vue', () => {
       return: true,
       orderNotes: 'NOTES: Notes for this order',
       bid_status: 0,
-      id: 130,
+      id: 1,
       fixedCost: true,
       vendorname: 'Freight',
       fromCity: 'Nairobi',
