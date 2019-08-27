@@ -181,7 +181,7 @@
                 name="button"
                 class="btn btn_primary fil-sub fil-sub-1 active-btn"
                 @click="closePopup();"
-                v-if="!activeStatus"
+                v-if="activeStatus"
               >Withdraw cash</button>
               <button
                 type="button"
@@ -278,6 +278,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
@@ -398,7 +399,6 @@ export default {
       axios
         .post(`${proxyurl}${process.env.VUE_APP_PAYMENT_SERVICE}getusertypepaymentmethods`, payload, this.service_config)
         .then(response => {
-          // this.payment_options = JSON.stringify(response.data.payment_methods);
           this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
         })
         .catch(error => {
@@ -640,18 +640,6 @@ export default {
               this.closePopup();
             }
           } else {
-            // document.querySelector('.statement__add-bank-tab').style.display = 'grid';
-            // this.withdrawHead = 'Withdrawal unsuccessful';
-            // this.withdrawError = parsedResponse.message;
-            // if (paymethod === 1) {
-            //   if (this.bankAccounts.length === 0) {
-            //     this.addAccountStatus = false;
-            //   }
-            //   this.notificationName = 'message-box-down';
-            // } else {
-            //   this.notificationName = 'message-box-down';
-            //   this.sendWithdrawStatus = true;
-            // }
             this.sendingWithdrawRequestStatus = false;
             this.notificationType = 'failed';
             this.notificationMessage = response.data.message;
@@ -713,7 +701,7 @@ export default {
       }
     },
     showWithdrawButton() {
-      if (!this.ownerRb.is_withdrawal_day) {
+      if (this.ownerRb.is_withdrawal_day) {
         this.activeStatus = true;
         if (document.querySelector('.active-btn')) {
           document.querySelector('.active-btn').style.display = 'block';
