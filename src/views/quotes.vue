@@ -41,7 +41,26 @@
               <option value="28T Truck">28 Tonne Truck</option>
             </select>
           </span>
+          <span class="container__search-select" v-if="ordercount.length > 0">
+            <select
+              name
+              class="container__search-element select-font"
+              @change="definePayload()"
+              v-model="orderRange"
+            >
+              <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
+            </select>
+          </span>
         </div>
+        <select
+          name
+          class="order-range"
+          @change="definePayload()"
+          v-model="orderRange"
+          v-if="ordercount.length > 0"
+        >
+          <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
+        </select>
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
@@ -476,13 +495,15 @@ export default {
         },
       },
       errorObj: '',
+      ordercount: [],
+      orderRange: '0 - 100',
     };
   },
   computed: {},
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.getOrders();
+      this.definePayload();
     }
   },
   beforeDestroy() {
@@ -954,7 +975,7 @@ export default {
             this.orders = [];
             this.responseNo = 0;
             clearInterval(interval); // stop the interval
-            this.getOrders();
+            this.definePayload();
             // this.trackSendBid(payload);  set up mixpanel first
           }
         })
@@ -991,7 +1012,7 @@ export default {
             this.orders = [];
             this.responseNo = 0;
             clearInterval(interval); // stop the interval
-            this.getOrders();
+            this.definePayload();
             // this.trackSendBid(payload);  set up mixpanel first
           }
         })
@@ -1201,7 +1222,6 @@ export default {
             let allDetails = '';
             if (unescaped.status) {
               this.orders = [];
-              const loop = unescaped.data.length;
               unescaped.data.forEach((row, i) => {
                 allDetails = this.populateOrders(row, i);
                 if (allDetails) {
@@ -1220,7 +1240,22 @@ export default {
           });
       }, 60000);
     },
-    getOrders() {
+    definePayload() {
+      clearInterval(interval);
+      this.orders = [];
+      const payload = {
+        owner_id: this.sessionInfo.id,
+        to_date: moment().format('YYYY-MM-DD'),
+        from_date: '2014-02-09',
+        limit: `${this.orderRange.split(' ')[0]}, ${100}`,
+      };
+      let vendfilter = document.getElementById('vend');
+      if (vendfilter) {
+        vendfilter.value = '';
+      }
+      this.getOrders(payload);
+    },
+    getOrders(ordpaylaod) {
       this.loadingStatus = true;
       this.ownerPhone = this.sessionInfo.phone;
       const payload = JSON.stringify({
@@ -1232,10 +1267,16 @@ export default {
         .post(`${this.auth}v1/list_owner_bids/`, payload, this.config)
         .then(response => {
           const unescaped = response.data;
+          if (this.ordercount.length === 0) {
+            const multiplier = response.data.count / 100;
+            for (let i = 0; i < Math.floor(multiplier); i++) {
+              this.ordercount.push(`${i * 100} - ${(i + 1) * 100}`);
+            }
+            this.ordercount.push(`${Math.floor(multiplier) * 100} - ${response.data.count}`);
+            this.orderRange = this.ordercount[0];
+          }
           if (unescaped.status) {
-            const loop = unescaped.data.length;
             unescaped.data.forEach((row, i) => {
-              // this.populateOrders(row, i);
               this.orders.push(this.populateOrders(row, i));
               this.loadingStatus = false;
               this.responseNo = 1;
