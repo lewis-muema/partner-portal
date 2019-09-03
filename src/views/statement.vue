@@ -15,81 +15,82 @@
           </span>
         </div>
         <div v-if="payable_amount" class="withdraw-modal-screen">
-        <div class="statement__row statement__add-bank-tab">
-          <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
-          <p class="small-margin color-white">{{ withdrawError }}</p>
-          <router-link to="/banks" v-if="addAccountStatus">
-            <p class="small-margin statement__bg-orange">+ Add a bank account</p>
-          </router-link>
-        </div>
-        <div class="statement__row statement__divided-row">
-          <span class="statement__column-3">
-            <i class="material-icons statement__wallet">account_balance_wallet</i>
-          </span>
-          <span class="statement__column-9">
-            <p class="no-margin large-font">Balance</p>
-            <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
-          </span>
-        </div>
-        <div class="statement__row">
-          <input
-            type="text"
-            placeholder="Enter amount"
-            class="full-width input-height input-border"
-            v-model="amount"
-            @input="checkDetails()"
-            @keyup.delete="checkDetails()"
-            :maxlength="amountLength"
-          />
-        </div>
-        <div class="statement__row">
-          <button
-            class="full-width input-height withdraw-buttons statement__withdraw-button"
-            v-if="sendWithdrawStatus"
-            @click="goNext()"
-          >Next</button>
-          <button class="full-width input-height withdraw-buttons" disabled v-else>Next</button>
-        </div>
+          <div class="statement__row statement__add-bank-tab">
+            <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
+            <p class="small-margin color-white">{{ withdrawError }}</p>
+            <router-link to="/banks" v-if="addAccountStatus">
+              <p class="small-margin statement__bg-orange">+ Add a bank account</p>
+            </router-link>
+          </div>
+          <div class="statement__row statement__divided-row">
+            <span class="statement__column-3">
+              <i class="material-icons statement__wallet">account_balance_wallet</i>
+            </span>
+            <span class="statement__column-9">
+              <p class="no-margin large-font">Balance</p>
+              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
+            </span>
+          </div>
+          <div class="statement__row">
+            <input
+              type="text"
+              placeholder="Enter amount"
+              class="full-width input-height input-border"
+              v-model="amount"
+              @input="checkDetails()"
+              @keyup.delete="checkDetails()"
+              :maxlength="amountLength"
+            />
+          </div>
+          <div class="statement__row">
+            <button
+              class="full-width input-height withdraw-buttons statement__withdraw-button"
+              v-if="sendWithdrawStatus"
+              @click="goNext()"
+            >Next</button>
+            <button class="full-width input-height withdraw-buttons" disabled v-else>Next</button>
+          </div>
         </div>
         <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
             <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>
-          <div class="statement__row statement__scrollable-row"
-          v-for="method in payment_methods"
-          :key="method.payment_method_id"
+          <div
+            class="statement__row statement__scrollable-row"
+            v-for="method in payment_methods"
+            :key="method.payment_method_id"
           >
             <div class="withdraw-payment-options">
-            <input
-              type="radio"
-              v-model="payment_method"
-              name="profileImg"
-              class="statement__column-2 statement__radio-button-margin radio-1"
-              :value="method.payment_method_id"
-              @click="checkedWithDrawal(method.payment_method_id, 0)"
-            >
-            <span class="statement__column-10">
-              <p class="no-margin">{{method.name}}</p>
-            </span>
+              <input
+                type="radio"
+                v-model="payment_method"
+                name="profileImg"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                :value="method.payment_method_id"
+                @click="checkedWithDrawal(method.payment_method_id, 0)"
+              />
+              <span class="statement__column-10">
+                <p class="no-margin">{{ method.name }}</p>
+              </span>
             </div>
           </div>
           <div v-if="displayAccounts" class="withdraw-bank-accounts-list">
             <div
-              class="statement__divided-row centered bank-row "
+              class="statement__divided-row centered bank-row"
               v-for="bankAccount in bankAccounts"
               :key="bankAccount.id"
             >
-            <input
-              type="radio"
-              v-model="payment_account"
-              name="profileImg"
-              class="statement__column-2 statement__radio-button-margin radio-1"
-              :value="bankAccount.id"
-              @click="checkedWithDrawal(payment_method, bankAccount.id)"
-            >
+              <input
+                type="radio"
+                v-model="payment_account"
+                name="profileImg"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                :value="bankAccount.id"
+                @click="checkedWithDrawal(payment_method, bankAccount.id)"
+              />
               <span class="statement__column-10">
-              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
-              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
+                <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
+                <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
               </span>
             </div>
           </div>
@@ -349,6 +350,7 @@ export default {
       vehArray: [],
       monthPeriod: '',
       errorObj: '',
+      payload: '',
     };
   },
   computed: {
@@ -602,6 +604,7 @@ export default {
         });
         notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
       }
+      this.payload = payload;
       this.sendWithdrawRequest(payload, notification, paymethod);
     },
     sendWithdrawRequest(payload, notification, paymethod) {
@@ -739,5 +742,5 @@ export default {
 </script>
 
 <style>
-  @import "../assets/css/style.css";
+@import '../assets/css/style.css';
 </style>

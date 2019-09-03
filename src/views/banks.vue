@@ -254,6 +254,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import axios from 'axios';
 import moment from 'moment';
 import verifier from '../components/verifier';
@@ -356,12 +357,12 @@ export default {
       }
       if (this.addAccountStatus) {
         this.addAccountStatus = false;
-        document.querySelector('.banks__new-accounts').style.display = 'none';
-        document.querySelector('.banks__existing-accounts').style.display = 'block';
+        $('.banks__new-accounts').css('display', 'none');
+        $('.banks__existing-accounts').css('display', 'block');
       } else {
         this.addAccountStatus = true;
-        document.querySelector('.banks__new-accounts').style.display = 'block';
-        document.querySelector('.banks__existing-accounts').style.display = 'none';
+        $('.banks__new-accounts').css('display', 'block');
+        $('.banks__existing-accounts').css('display', 'none');
       }
     },
     getBankName(id) {
@@ -372,24 +373,24 @@ export default {
     confirmDetails() {
       if (this.confirmAccountStatus) {
         this.confirmAccountStatus = false;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'none';
+        $('.banks__confirm-banks-blinder').css('display', 'none');
       } else {
         this.confirmAccountStatus = true;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'flex';
+        $('.banks__confirm-banks-blinder').css('display', 'flex');
       }
     },
     verifyDetails() {
       this.verifyCodeStatus = true;
       if (this.verifyDetailsStatus) {
         this.verifyDetailsStatus = false;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'flex';
-        document.querySelector('.banks__new-accounts').style.display = 'block';
-        document.querySelector('.banks__verify-code-section').style.display = 'none';
+        $('.banks__confirm-banks-blinder').css('display', 'flex');
+        $('.banks__new-accounts').css('display', 'block');
+        $('.banks__verify-code-section').css('display', 'none');
       } else {
         this.verifyDetailsStatus = true;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'none';
-        document.querySelector('.banks__new-accounts').style.display = 'none';
-        document.querySelector('.banks__verify-code-section').style.display = 'block';
+        $('.banks__confirm-banks-blinder').css('display', 'none');
+        $('.banks__new-accounts').css('display', 'none');
+        $('.banks__verify-code-section').css('display', 'block');
       }
     },
     verifyCode() {
@@ -407,14 +408,14 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/check_verification`, payload, this.config)
         .then(response => {
-          this.handleVerificatioResponse(response);
+          this.handleVerificationResponse(response);
         })
         .catch(error => {
           this.errorObj = error.response;
           this.handleError(error, 1);
         });
     },
-    handleVerificatioResponse(response) {
+    handleVerificationResponse(response) {
       const parsedResponse = response.data;
       if (parsedResponse.status) {
         this.sendOwnerBanks();

@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import moment from 'moment';
 import { shallowMount } from '@vue/test-utils';
 import Dashboard from '@/views/dashboard.vue';
 import './localStorage';
@@ -54,6 +55,6 @@ describe('Dashboard.vue', () => {
     expect(wrapper.vm.hoursPercentageWeek()).equal(17);
   });
   it('Check whether monthly hours online percentage function always calculates the correct percentage', () => {
-    expect(wrapper.vm.hoursPercentageMonth()).equal(53);
+    expect(wrapper.vm.hoursPercentageMonth()).equal(Math.floor((wrapper.vm.dataResponse.msg.Hours_online_this_Month / (moment().daysInMonth() * 24)) * 100));
   });
 });
