@@ -1060,16 +1060,16 @@ describe('Statement.vue', () => {
   //   expect(wrapper.vm.bankWithdrawal).equal(false);
   //   expect(wrapper.vm.checked).equal(1);
   // });
-  it('Check whether the checkedWithDrawal function preps for withdrawal to bank', () => {
-    wrapper.vm.bankAccounts = ownerBanks;
-    wrapper.vm.allBanks = paymentBanks;
-    wrapper.vm.checkedWithDrawal(2, 1);
-    expect(wrapper.vm.mpesaWithdrawal).equal(false);
-    expect(wrapper.vm.bankWithdrawal).equal(true);
-    expect(wrapper.vm.selectedRow).equal(1);
-    expect(wrapper.vm.checked).equal(1);
-    expect(wrapper.vm.bankId).equal(2);
-  });
+  // it('Check whether the checkedWithDrawal function preps for withdrawal to bank', () => {
+  //   wrapper.vm.bankAccounts = ownerBanks;
+  //   wrapper.vm.allBanks = paymentBanks;
+  //   wrapper.vm.checkedWithDrawal(2, 1);
+  //   expect(wrapper.vm.mpesaWithdrawal).equal(false);
+  //   expect(wrapper.vm.bankWithdrawal).equal(true);
+  //   expect(wrapper.vm.selectedRow).equal(1);
+  //   expect(wrapper.vm.checked).equal(1);
+  //   expect(wrapper.vm.bankId).equal(2);
+  // });
   // it('Check whether the withdraw function intitiates withdrawal for mpesa', done => {
   //   wrapper.vm.mpesaWithdrawal = true;
   //   wrapper.vm.bankWithdrawal = false;

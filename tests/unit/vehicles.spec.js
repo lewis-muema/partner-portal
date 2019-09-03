@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import moxios from 'moxios';
-import moment from 'moment';
+import VueMask from 'v-mask';
 import VModal from 'vue-js-modal';
 import VueRouter from 'vue-router';
 import { expect } from 'chai';
@@ -10,6 +10,7 @@ import Vehicles from '@/views/vehicles.vue';
 import './localStorage';
 
 Vue.use(VModal);
+Vue.use(VueMask);
 
 describe('Vehicles.vue', () => {
   beforeEach(() => {
