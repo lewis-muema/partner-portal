@@ -537,6 +537,361 @@ describe('Statement.vue', () => {
       },
     },
   };
+  const ownerBanks = [
+    {
+      owner_bank_account_id: 41,
+      owner_id: 3,
+      account_no: '1114202819',
+      payment_bank_id: 1,
+      account_name: 'Jude',
+      bank_branch: 'NHIF',
+      admin_approval: 1,
+      decline_reason: 'undefined',
+      bank_name: 'KENYA COMMERCIAL BANK LTD',
+      bank_paybill: 522522,
+    },
+    {
+      owner_bank_account_id: 33,
+      owner_id: 3,
+      account_no: '00067855875',
+      payment_bank_id: 2,
+      account_name: 'Lewis',
+      bank_branch: 'Nairobi',
+      admin_approval: 1,
+      decline_reason: 'undefined',
+      bank_name: 'STANDARD CHARTERED',
+      bank_paybill: 329329,
+    },
+    {
+      owner_bank_account_id: 47,
+      owner_id: 3,
+      account_no: '11221122323',
+      payment_bank_id: 2,
+      account_name: 'Lewis MM',
+      bank_branch: 'Nairobi',
+      admin_approval: 0,
+      decline_reason: null,
+      bank_name: 'STANDARD CHARTERED',
+      bank_paybill: 329329,
+    },
+  ];
+  const paymentBanks = [
+    {
+      payment_bank_id: 1,
+      name: 'KENYA COMMERCIAL BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 522522,
+    },
+    {
+      payment_bank_id: 2,
+      name: 'STANDARD CHARTERED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 329329,
+    },
+    {
+      payment_bank_id: 3,
+      name: 'BARCLAYS BANK OF KENYA LIMITED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 303030,
+    },
+    {
+      payment_bank_id: 4,
+      name: 'BANK OF INDIA',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 5,
+      name: 'BANK OF BARODA',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 6,
+      name: 'COMMERCIAL BANK OF AFRICA LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 880100,
+    },
+    {
+      payment_bank_id: 7,
+      name: 'HABIB BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 8,
+      name: 'CENTRAL BANK OF KENYA',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 9,
+      name: 'PRIME BANK LIMITED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 10,
+      name: 'CO-OPERATIVE BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 400200,
+    },
+    {
+      payment_bank_id: 11,
+      name: 'NATIONAL BANK OF KENYA',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 625625,
+    },
+    {
+      payment_bank_id: 12,
+      name: 'ORIENTAL COMMERCIAL BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 13,
+      name: 'CITIBANK N.A.',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 14,
+      name: 'HABIB BANK A.G.',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 15,
+      name: 'MIDDLE EAST BANK (K) LIMITED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 16,
+      name: 'BANK OF AFRICA KENYA LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: 972900,
+    },
+    {
+      payment_bank_id: 17,
+      name: 'DUBAI BANK OF KENYA LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 18,
+      name: 'CONSOLIDATED BANK OF KENYA LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 19,
+      name: 'CREDIT BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 20,
+      name: 'TRANS-NATIONAL BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 21,
+      name: 'CHASE BANK (KENYA) LIMITED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 22,
+      name: 'STANBIC BANK KENYA LIMITED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 23,
+      name: 'AFRICAN BANKING CORPORATION',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 24,
+      name: 'IMPERIAL BANK LIMITED',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 25,
+      name: 'NIC BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 26,
+      name: 'GIRO BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 27,
+      name: 'ECOBANK KENYA LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 28,
+      name: 'EQUITORIAL COMMERCIAL BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 29,
+      name: 'PARAMOUNT UNIVERSAL BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 30,
+      name: 'JAMII BORA BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 31,
+      name: 'GUARANTY TRUST (KENYA) LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 32,
+      name: 'VICTORIA COMMERCIAL BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 33,
+      name: 'GUARDIAN BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 34,
+      name: 'INVESTMENTS AND MORTGAGES',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 35,
+      name: 'DEVELOPMENT BANK OF KENYA',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 36,
+      name: 'FIDELITY COMMERCIAL BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 37,
+      name: 'HOUSING FINANCE CORPORATION OF KENYA',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 38,
+      name: 'DIAMOND TRUST BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 39,
+      name: 'CHARTERHOUSE BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 40,
+      name: 'K-REP BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 41,
+      name: 'EQUITY BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 42,
+      name: 'FAMILY BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 43,
+      name: 'GULF AFRICAN BANK LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 44,
+      name: 'FIRST COMMUNITY BANK',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+    {
+      payment_bank_id: 45,
+      name: 'UBA KENYA LTD',
+      status: 1,
+      date_time: '2019-03-08T10:13:16.000Z',
+      paybill: null,
+    },
+  ];
   wrapper.vm.sessionInfo = sessionData;
   it('Check whether the getVehicles function fetches the vehicles and riders object and separates it into separate arrays', done => {
     wrapper.vm.getVehicles();
@@ -632,5 +987,156 @@ describe('Statement.vue', () => {
     expect(wrapper.vm.rows[0].rider_name).equal('Mike Kihiu');
     expect(wrapper.vm.rows[0].txn).equal('AC27CH753-D31');
     expect(wrapper.vm.rows[0].pay_narrative).equal('Sendy Commission');
+  });
+  // it('Check whether the closePopup function changes the attibutes of the blinder and changes required data elements', () => {
+  //   wrapper.vm.opened = true;
+  //   wrapper.vm.closePopup();
+  //   const blinder = wrapper.find('.statements__blinder');
+  //   expect(blinder.exists()).equal(true);
+  //   expect(blinder.attributes().style).equal('display: none;');
+  //   expect(wrapper.vm.sendWithdrawStatus).equal(false);
+  //   expect(wrapper.vm.addAccountStatus).equal(false);
+  // });
+  it('Check whether the checkDetails function activates the withdraw button if all conditions are met', () => {
+    wrapper.vm.sendWithdrawStatus = false;
+    wrapper.vm.amount = 200;
+    wrapper.vm.ownerRb = {
+      currency: 'KES',
+      rb: -3606,
+      is_withdrawal_day: true,
+    };
+    wrapper.vm.checked = 1;
+    wrapper.vm.checkDetails();
+    expect(wrapper.vm.sendWithdrawStatus).equal(true);
+  });
+  it('Check whether the fetchOwnerBanks function fetches owner banks', done => {
+    wrapper.vm.fetchOwnerBanks();
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status: true,
+            data: ownerBanks,
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.bankAccounts[0].owner_bank_account_id).equal(41);
+          expect(wrapper.vm.bankAccounts.length).equal(2);
+          done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
+  it('Check whether the fetchAllBanks function fetches all banks', done => {
+    wrapper.vm.fetchAllBanks();
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status: true,
+            data: paymentBanks,
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.allBanks[0].payment_bank_id).equal(1);
+          expect(wrapper.vm.allBanks[0].name).equal('KENYA COMMERCIAL BANK LTD');
+          expect(wrapper.vm.allBanks.length).equal(45);
+          done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
+  it('Check whether the checkedWithDrawal function preps for withdrawal to mpesa', () => {
+    wrapper.vm.checkedWithDrawal(1, 0);
+    expect(wrapper.vm.mpesaWithdrawal).equal(true);
+    expect(wrapper.vm.bankWithdrawal).equal(false);
+    expect(wrapper.vm.checked).equal(1);
+  });
+  it('Check whether the checkedWithDrawal function preps for withdrawal to bank', () => {
+    wrapper.vm.bankAccounts = ownerBanks;
+    wrapper.vm.allBanks = paymentBanks;
+    wrapper.vm.checkedWithDrawal(2, 1);
+    expect(wrapper.vm.mpesaWithdrawal).equal(false);
+    expect(wrapper.vm.bankWithdrawal).equal(true);
+    expect(wrapper.vm.selectedRow).equal(1);
+    expect(wrapper.vm.checked).equal(1);
+    expect(wrapper.vm.bankId).equal(2);
+  });
+  it('Check whether the withdraw function intitiates withdrawal for mpesa', done => {
+    wrapper.vm.mpesaWithdrawal = true;
+    wrapper.vm.bankWithdrawal = false;
+    wrapper.vm.withdraw();
+    expect(wrapper.vm.payload).equal('{"owner_id":"1198","phone_no":"+254722511046","payment_type":1,"amount":"200"}');
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status_code: 1,
+            message: 'Request accepted for processing',
+            status: true,
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.notificationType).equal('success');
+          expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your m-pesa');
+          done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
+  it('Check whether the withdraw function intitiates withdrawal for bank', done => {
+    wrapper.vm.mpesaWithdrawal = false;
+    wrapper.vm.bankWithdrawal = true;
+    wrapper.vm.withdraw();
+    expect(wrapper.vm.payload).equal('{"owner_id":"1198","account_no":"00067855875","payment_type":2,"amount":"200","payment_bank_id":2}');
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status_code: 1,
+            message: 'Request accepted for processing',
+            status: true,
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.notificationType).equal('success');
+          expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your bank account');
+          done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
+  it('Check whether the listRiders function populates the riders array', () => {
+    wrapper.vm.riders = [];
+    wrapper.vm.listRiders();
+    expect(wrapper.vm.riders[1].f_name).equal('Samuel ');
+    expect(wrapper.vm.riders[1].s_name).equal('Geno');
+  });
+  it('Check whether the listVehicles function populates the vehicles array', () => {
+    wrapper.vm.vehicles = [];
+    wrapper.vm.listVehicles();
+    expect(wrapper.vm.vehicles[1].model).equal('mondo');
+  });
+  it('Check whether the selectRider function gets the rider names using the rider_id', () => {
+    wrapper.vm.selectRider('16933');
+    expect(wrapper.vm.riderNames).equal('Mike Kihiu');
+    wrapper.vm.selectRider('678');
+    expect(wrapper.vm.riderNames).equal('Samuel  Geno');
   });
 });
