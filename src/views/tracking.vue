@@ -137,6 +137,19 @@ export default {
     if (localStorage.sessionData) {
       this.loadMapScript();
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.fetchTrackers();
+    }
+  },
+  beforeDestroy() {
+    this.ridersWithTrackers.forEach((row, i) => {
+      client.unsubscribe(`partner_app_positions/${this.get_driver_city_and_tracking_no(this.ridersWithTrackers[i].sim_card_sn, this.ridersWithTrackers[i].partner_city_id)}`, {
+        qos: 0,
+      });
+    });
+    loopInterval.forEach(clearInterval);
+  },
+  methods: {
+    fetchTrackers() {
       const riders = [];
       const riderIds = [];
       const payload = {
@@ -186,17 +199,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
         });
-    }
-  },
-  beforeDestroy() {
-    this.ridersWithTrackers.forEach((row, i) => {
-      client.unsubscribe(`partner_app_positions/${this.get_driver_city_and_tracking_no(this.ridersWithTrackers[i].sim_card_sn, this.ridersWithTrackers[i].partner_city_id)}`, {
-        qos: 0,
-      });
-    });
-    loopInterval.forEach(clearInterval);
-  },
-  methods: {
+    },
     loadMapScript() {
       if (window.google && window.google.maps) {
         setTimeout(() => {
