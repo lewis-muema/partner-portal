@@ -183,7 +183,7 @@
                 name="button"
                 class="btn btn_primary fil-sub fil-sub-1 active-btn"
                 @click="closePopup();"
-                v-if="!activeStatus"
+                v-if="activeStatus"
               >Withdraw cash</button>
               <button
                 type="button"
