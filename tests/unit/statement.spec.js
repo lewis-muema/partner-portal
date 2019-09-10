@@ -1070,7 +1070,7 @@ describe('Statement.vue', () => {
     expect(wrapper.vm.checked).equal(1);
     expect(wrapper.vm.bankId).equal(2);
   });
-  it('Check whether the withdraw function intitiates withdrawal for mpesa', () => {
+  it('Check whether the withdraw function intitiates withdrawal for mpesa', done => {
     wrapper.vm.mpesaWithdrawal = true;
     wrapper.vm.bankWithdrawal = false;
     wrapper.vm.withdraw();
@@ -1088,14 +1088,15 @@ describe('Statement.vue', () => {
         })
         .then(() => {
           expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your m-pesa');
+          expect(wrapper.vm.notificationMessage).equal('Request accepted for processing');
+          done();
         })
         .catch(error => {
           console.log('caught', error.message);
         });
     });
   });
-  it('Check whether the withdraw function intitiates withdrawal for bank', () => {
+  it('Check whether the withdraw function intitiates withdrawal for bank', done => {
     wrapper.vm.mpesaWithdrawal = false;
     wrapper.vm.bankWithdrawal = true;
     wrapper.vm.withdraw();
@@ -1113,7 +1114,8 @@ describe('Statement.vue', () => {
         })
         .then(() => {
           expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your bank account');
+          expect(wrapper.vm.notificationMessage).equal('Request accepted for processing');
+          done();
         })
         .catch(error => {
           console.log('caught', error.message);
