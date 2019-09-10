@@ -462,6 +462,7 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 import truckValidationMixin from '../mixins/truckValidationMixin';
 
 let interval = '';
