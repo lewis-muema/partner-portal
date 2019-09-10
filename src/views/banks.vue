@@ -262,12 +262,6 @@ import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
-let env = '';
-if (process.env.VUE_APP_AUTH.includes('test')) {
-  env = 'Staging';
-} else {
-  env = 'Production';
-}
 export default {
   title: 'Partner Portal - Banks',
   components: {
@@ -654,7 +648,7 @@ export default {
     },
     TrackBankAddition(payload) {
       const data = JSON.parse(payload);
-      mixpanel.track(`Owner Bank Addition (${env})`, data);
+      mixpanel.track(`Owner Bank Addition (${process.env.NODE_ENV})`, data);
     },
   },
 };

@@ -249,13 +249,7 @@ export default {
       }, timeout);
     },
     TrackLogin(response) {
-      let env = '';
-      if (process.env.VUE_APP_AUTH.includes('test')) {
-        env = 'Staging';
-      } else {
-        env = 'Production';
-      }
-      mixpanel.track(`Owner Login Web (${env})`, {
+      mixpanel.track(`Owner Login Web (${process.env.NODE_ENV})`, {
         Name: response.name,
         Phone: response.phone,
         Id_no: response.id_no,
