@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "cross-env VUE_APP_AUTH=\"https://auth.sendyit.com/\" vue-cli-service build",
-    "staging": "cross-env VUE_APP_AUTH=\"https://authtest.sendyit.com/\" vue-cli-service build",
+    "staging": "cross-env VUE_APP_AUTH=\"https://authtest.sendyit.com/\" NODE_ENV=\"staging\" vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
@@ -22,6 +22,7 @@
     "js-sha1": "^0.6.0",
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
+    "mixpanel": "^0.10.2",
     "mocha-webpack": "^1.1.0",
     "moment": "^2.24.0",
     "moxios": "^0.4.0",

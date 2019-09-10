@@ -257,9 +257,11 @@
 import $ from 'jquery';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 export default {
   title: 'Partner Portal - Banks',
   components: {
@@ -327,7 +329,6 @@ export default {
       window.addEventListener('resize', this.isMobile);
       this.fetchOwnerBanks();
       this.fetchAllBanks();
-      // this.trackPage();
     }
   },
   methods: {
@@ -419,7 +420,6 @@ export default {
       const parsedResponse = response.data;
       if (parsedResponse.status) {
         this.sendOwnerBanks();
-        //   this.trackBankAddition();
         setTimeout(() => {
           this.verifyDetails();
           this.confirmDetails();
@@ -590,6 +590,7 @@ export default {
             if (response.data.status) {
               this.notificationType = 'success';
               this.notificationMessage = response.data.message;
+              this.TrackBankAddition(payload);
             } else {
               this.notificationType = 'failed';
               this.notificationMessage = response.data.message;
@@ -645,21 +646,9 @@ export default {
         this.submitStatus = false;
       }
     },
-    trackBankAddition() {
-      const env = '<?php echo ENVIRONMENT; ?>';
-      if (env === 'production') {
-        mixpanel.track('Bank application submit (partner portal)');
-      } else {
-        mixpanel.track('Test Bank application submit (partner portal)');
-      }
-    },
-    trackPage() {
-      const env = '<?php echo ENVIRONMENT; ?>';
-      if (env === 'production') {
-        mixpanel.track('Bank page view (partner portal)');
-      } else {
-        mixpanel.track('Test Bank page view (partner portal)');
-      }
+    TrackBankAddition(payload) {
+      const data = JSON.parse(payload);
+      mixpanel.track(`Owner Bank Addition (${process.env.NODE_ENV})`, data);
     },
   },
 };

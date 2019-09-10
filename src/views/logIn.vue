@@ -74,6 +74,9 @@ import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import axios from 'axios';
 import sha1 from 'js-sha1';
+import Mixpanel from 'mixpanel';
+
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 
 export default {
   title: 'Partner Portal - Log In',
@@ -213,6 +216,7 @@ export default {
               });
               parsedData.payload.riders = riders;
               localStorage.sessionData = JSON.stringify(parsedData);
+              this.TrackLogin(parsedData.payload);
               this.$router.push({ path: '/' });
             }
           })
@@ -244,7 +248,17 @@ export default {
         this.loginError = '';
       }, timeout);
     },
-    reset() {},
+    TrackLogin(response) {
+      mixpanel.track(`Owner Login Web (${process.env.NODE_ENV})`, {
+        Name: response.name,
+        Phone: response.phone,
+        Id_no: response.id_no,
+        email: response.email,
+        Owner_id: response.id,
+        Country: response.country_code,
+        Currency: response.default_currency,
+      });
+    },
   },
 };
 </script>
