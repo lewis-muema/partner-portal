@@ -415,9 +415,11 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
+// import truckValidationMixin from '../mixins/truckValidationMixin';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
-
 export default {
   title: 'Partner Portal - Available Orders',
   components: {
@@ -982,25 +984,17 @@ export default {
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
-          if (response.data.order_response.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 1;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.opened = [];
-            this.orders = [];
-            this.responseNo = 0;
-            clearInterval(interval); // stop the interval
-            this.getOrders(this.allVehicles);
-          } else {
-            this.error = response.data.order_response.reason;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          }
+          this.notificationName = 'message-box-up';
+          this.message = 1;
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+          }, 4000);
+          this.opened = [];
+          this.orders = [];
+          this.responseNo = 0;
+          this.TrackOrderConfirmation(payload);
+          clearInterval(interval); // stop the interval
+          this.getOrders(this.allVehicles);
         })
         .catch(error => {
           this.errorObj = error.response;
@@ -1095,9 +1089,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackSendBid(payload);
             clearInterval(interval); // stop the interval
             this.getOrders(this.allVehicles);
-            // this.trackSendBid(payload);  set up mixpanel first
           }
         })
         .catch(error => {
@@ -1112,15 +1106,6 @@ export default {
             }, 4000);
           }
         });
-    },
-    trackSendBid(payload) {
-      try {
-        if (window.env === 'production') {
-          window.mixpanel.track('Send Order Bid', JSON.parse(payload));
-        }
-      } catch (er) {
-        console.log(er);
-      }
     },
     driverSelector(id) {
       const q = this.count1;
@@ -1383,6 +1368,16 @@ export default {
       orderDetails.takeHome = takehome;
       orderDetails.orderNo = orderno;
       return orderDetails;
+    },
+    TrackOrderConfirmation(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Confirmation Web', JSON.parse(payload));
+      }
+    },
+    trackSendBid(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Bidding Web', JSON.parse(payload));
+      }
     },
   },
 };
