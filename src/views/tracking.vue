@@ -505,12 +505,14 @@ export default {
     },
     mixpanelTrackVehicles() {
       const sessionInfo = JSON.parse(localStorage.sessionData);
-      mixpanel.track(`Owner tracking Web (${process.env.NODE_ENV})`, {
-        'Number of vehicles with trackers': this.ridersWithTrackers.length,
-        'Id number': sessionInfo.payload.id,
-        Name: sessionInfo.payload.name,
-        Phone: sessionInfo.payload.phone,
-      });
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner tracking Web', {
+          'Number of vehicles with trackers': this.ridersWithTrackers.length,
+          'Id number': sessionInfo.payload.id,
+          Name: sessionInfo.payload.name,
+          Phone: sessionInfo.payload.phone,
+        });
+      }
     },
   },
 };

@@ -1379,10 +1379,14 @@ export default {
       return orderDetails;
     },
     TrackOrderConfirmation(payload) {
-      mixpanel.track(`Owner Order Confirmation Web (${process.env.NODE_ENV})`, JSON.parse(payload));
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Confirmation Web', JSON.parse(payload));
+      }
     },
     trackSendBid(payload) {
-      mixpanel.track(`Owner Order Bidding Web (${process.env.NODE_ENV})`, JSON.parse(payload));
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Bidding Web', JSON.parse(payload));
+      }
     },
   },
 };

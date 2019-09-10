@@ -648,7 +648,9 @@ export default {
     },
     TrackBankAddition(payload) {
       const data = JSON.parse(payload);
-      mixpanel.track(`Owner Bank Addition (${process.env.NODE_ENV})`, data);
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Bank Addition', data);
+      }
     },
   },
 };
