@@ -1335,10 +1335,14 @@ export default {
       }
     },
     trackCancelBid(payload) {
-      mixpanel.track(`Owner Order Cancel Bid Web (${process.env.NODE_ENV})`, JSON.parse(payload));
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Cancel Bid Web', JSON.parse(payload));
+      }
     },
     trackUpdateBid(payload) {
-      mixpanel.track(`Owner Order Update Bid Web (${process.env.NODE_ENV})`, JSON.parse(payload));
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Update Bid Web', JSON.parse(payload));
+      }
     },
   },
 };
