@@ -53,7 +53,7 @@
           <button class=" continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
         </div>
         </div>
-        <div id="payment-title" class="withdraw-modal-screen-2" v-if="payment_options">
+        <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
             <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>

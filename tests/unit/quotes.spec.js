@@ -625,29 +625,6 @@ describe('Quotes.vue', () => {
   it('Check whether the browser is mobile', () => {
     expect(wrapper.vm.isMobile()).equal(false);
   });
-  // it('Check whether the get riders function fetches the correct data', done => {
-  //   wrapper.vm.sessionInfo = sessionData;
-  //   wrapper.vm.riders = [];
-  //   wrapper.vm.getRiders();
-  //   moxios.wait(() => {
-  //     const request = moxios.requests.mostRecent();
-  //     request
-  //       .respondWith({
-  //         status: 200,
-  //         response: {
-  //           status: true,
-  //           data: rider,
-  //         },
-  //       })
-  //       .then(() => {
-  //         expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
-  //         done();
-  //       })
-  //       .catch(error => {
-  //         console.log('caught', error.message);
-  //       });
-  //   });
-  // });
   it('Check whether the get vehicles function fetches the correct data', done => {
     wrapper.vm.sessionInfo = sessionData;
     wrapper.vm.getVehicles(1);
