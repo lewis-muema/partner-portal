@@ -465,8 +465,14 @@ import moment from 'moment';
 import Mixpanel from 'mixpanel';
 import truckValidationMixin from '../mixins/truckValidationMixin';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
-
+let env = '';
+if (process.env.VUE_APP_AUTH.includes('test')) {
+  env = 'Staging';
+} else {
+  env = 'Production';
+}
 export default {
   title: 'Partner Portal - Available Orders',
   components: {
@@ -1072,10 +1078,11 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.TrackOrderConfirmation(payload);
             clearInterval(interval); // stop the interval
             this.getOrders(this.allVehicles);
           } else {
-            this.error = response.data.order_response.reason;
+            this.error = response.data.order_response;
             this.notificationName = 'message-box-up';
             this.message = 4;
             setTimeout(() => {
@@ -1176,9 +1183,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackSendBid(payload);
             clearInterval(interval); // stop the interval
             this.getOrders(this.allVehicles);
-            // this.trackSendBid(payload);  set up mixpanel first
           }
         })
         .catch(error => {
@@ -1193,15 +1200,6 @@ export default {
             }, 4000);
           }
         });
-    },
-    trackSendBid(payload) {
-      try {
-        if (window.env === 'production') {
-          window.mixpanel.track('Send Order Bid', JSON.parse(payload));
-        }
-      } catch (er) {
-        console.log(er);
-      }
     },
     driverSelector(id) {
       const q = this.count1;
@@ -1464,6 +1462,12 @@ export default {
       orderDetails.takeHome = takehome;
       orderDetails.orderNo = orderno;
       return orderDetails;
+    },
+    TrackOrderConfirmation(payload) {
+      mixpanel.track(`Owner Order Confirmation Web (${env})`, JSON.parse(payload));
+    },
+    trackSendBid(payload) {
+      mixpanel.track(`Owner Order Bidding Web (${env})`, JSON.parse(payload));
     },
   },
 };
