@@ -249,15 +249,17 @@ export default {
       }, timeout);
     },
     TrackLogin(response) {
-      mixpanel.track(`Owner Login Web (${process.env.NODE_ENV})`, {
-        Name: response.name,
-        Phone: response.phone,
-        Id_no: response.id_no,
-        email: response.email,
-        Owner_id: response.id,
-        Country: response.country_code,
-        Currency: response.default_currency,
-      });
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Login Web', {
+          Name: response.name,
+          Phone: response.phone,
+          Id_no: response.id_no,
+          email: response.email,
+          Owner_id: response.id,
+          Country: response.country_code,
+          Currency: response.default_currency,
+        });
+      }
     },
   },
 };

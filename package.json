@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "cross-env VUE_APP_AUTH=\"https://auth.sendyit.com/\" vue-cli-service build",
-    "staging": "cross-env VUE_APP_AUTH=\"https://authtest.sendyit.com/\" NODE_ENV=\"staging\" vue-cli-service build",
+    "staging": "cross-env VUE_APP_AUTH=\"https://authtest.sendyit.com/\" vue-cli-service build",
     "lint": "vue-cli-service lint",
     "test:unit": "vue-cli-service test:unit"
   },
