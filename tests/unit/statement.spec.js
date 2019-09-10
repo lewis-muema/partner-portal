@@ -1054,74 +1054,72 @@ describe('Statement.vue', () => {
         });
     });
   });
-  // it('Check whether the checkedWithDrawal function preps for withdrawal to mpesa', () => {
-  //   wrapper.vm.checkedWithDrawal(1, 0);
-  //   expect(wrapper.vm.mpesaWithdrawal).equal(true);
-  //   expect(wrapper.vm.bankWithdrawal).equal(false);
-  //   expect(wrapper.vm.checked).equal(1);
-  // });
-  // it('Check whether the checkedWithDrawal function preps for withdrawal to bank', () => {
-  //   wrapper.vm.bankAccounts = ownerBanks;
-  //   wrapper.vm.allBanks = paymentBanks;
-  //   wrapper.vm.checkedWithDrawal(2, 1);
-  //   expect(wrapper.vm.mpesaWithdrawal).equal(false);
-  //   expect(wrapper.vm.bankWithdrawal).equal(true);
-  //   expect(wrapper.vm.selectedRow).equal(1);
-  //   expect(wrapper.vm.checked).equal(1);
-  //   expect(wrapper.vm.bankId).equal(2);
-  // });
-  // it('Check whether the withdraw function intitiates withdrawal for mpesa', done => {
-  //   wrapper.vm.mpesaWithdrawal = true;
-  //   wrapper.vm.bankWithdrawal = false;
-  //   wrapper.vm.withdraw();
-  //   expect(wrapper.vm.payload).equal('{"owner_id":"1198","phone_no":"+254722511046","payment_type":1,"amount":"200"}');
-  //   moxios.wait(() => {
-  //     const request = moxios.requests.mostRecent();
-  //     request
-  //       .respondWith({
-  //         status: 200,
-  //         response: {
-  //           status_code: 1,
-  //           message: 'Request accepted for processing',
-  //           status: true,
-  //         },
-  //       })
-  //       .then(() => {
-  //         expect(wrapper.vm.notificationType).equal('success');
-  //         expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your m-pesa');
-  //         done();
-  //       })
-  //       .catch(error => {
-  //         console.log('caught', error.message);
-  //       });
-  //   });
-  // });
-  // it('Check whether the withdraw function intitiates withdrawal for bank', done => {
-  //   wrapper.vm.mpesaWithdrawal = false;
-  //   wrapper.vm.bankWithdrawal = true;
-  //   wrapper.vm.withdraw();
-  //   expect(wrapper.vm.payload).equal('{"owner_id":"1198","account_no":"00067855875","payment_type":2,"amount":"200","payment_bank_id":2}');
-  //   moxios.wait(() => {
-  //     const request = moxios.requests.mostRecent();
-  //     request
-  //       .respondWith({
-  //         status: 200,
-  //         response: {
-  //           status_code: 1,
-  //           message: 'Request accepted for processing',
-  //           status: true,
-  //         },
-  //       })
-  //       .then(() => {
-  //         expect(wrapper.vm.notificationType).equal('success');
-  //         expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your bank account');
-  //         done();
-  //       })
-  //       .catch(error => {
-  //         console.log('caught', error.message);
-  //       });
-  //   });
-  // });
+  it('Check whether the checkedWithDrawal function preps for withdrawal to mpesa', () => {
+    wrapper.vm.checkedWithDrawal(1, 0);
+    expect(wrapper.vm.mpesaWithdrawal).equal(true);
+    expect(wrapper.vm.bankWithdrawal).equal(false);
+    expect(wrapper.vm.checked).equal(1);
+  });
+  it('Check whether the checkedWithDrawal function preps for withdrawal to bank', () => {
+    wrapper.vm.bankAccounts = ownerBanks;
+    wrapper.vm.allBanks = paymentBanks;
+    wrapper.vm.checkedWithDrawal(10, 1);
+    expect(wrapper.vm.mpesaWithdrawal).equal(false);
+    expect(wrapper.vm.bankWithdrawal).equal(true);
+    expect(wrapper.vm.selectedRow).equal(1);
+    expect(wrapper.vm.checked).equal(1);
+    expect(wrapper.vm.bankId).equal(2);
+  });
+  it('Check whether the withdraw function intitiates withdrawal for mpesa', () => {
+    wrapper.vm.mpesaWithdrawal = true;
+    wrapper.vm.bankWithdrawal = false;
+    wrapper.vm.withdraw();
+    expect(wrapper.vm.payload).equal('{"owner_id":"1198","phone_no":"+254722511046","payment_type":1,"amount":"200"}');
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status_code: 1,
+            message: 'Request accepted for processing',
+            status: true,
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.notificationType).equal('success');
+          expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your m-pesa');
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
+  it('Check whether the withdraw function intitiates withdrawal for bank', () => {
+    wrapper.vm.mpesaWithdrawal = false;
+    wrapper.vm.bankWithdrawal = true;
+    wrapper.vm.withdraw();
+    expect(wrapper.vm.payload).equal('{"owner_id":"1198","account_no":"00067855875","payment_type":2,"amount":"200","payment_bank_id":2}');
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status_code: 1,
+            message: 'Request accepted for processing',
+            status: true,
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.notificationType).equal('success');
+          expect(wrapper.vm.notificationMessage).equal('The withdrawal is currently being processed. The 200 will reflect in your bank account');
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
   it('Check whether the listRiders function populates the riders array', () => {
     wrapper.vm.riders = [];
     wrapper.vm.listRiders();

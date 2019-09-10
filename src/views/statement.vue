@@ -15,41 +15,43 @@
           </span>
         </div>
         <div v-if="payable_amount" class="withdraw-modal-screen">
-          <div class="statement__row statement__add-bank-tab">
-            <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
-            <p class="small-margin color-white">{{ withdrawError }}</p>
-            <router-link to="/banks" v-if="addAccountStatus">
-              <p class="small-margin statement__bg-orange">+ Add a bank account</p>
-            </router-link>
-          </div>
-          <div class="statement__row statement__divided-row">
-            <span class="statement__column-3">
-              <i class="material-icons statement__wallet">account_balance_wallet</i>
-            </span>
-            <span class="statement__column-9">
-              <p class="no-margin large-font">Balance</p>
-              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
-            </span>
-          </div>
-          <div class="statement__row">
-            <input
-              type="text"
-              placeholder="Enter amount"
-              class="full-width input-height input-border"
-              v-model="amount"
-              @input="checkDetails()"
-              @keyup.delete="checkDetails()"
-              :maxlength="amountLength"
-            />
-          </div>
-          <div class="statement__row">
-            <button
-              class="full-width input-height withdraw-buttons statement__withdraw-button"
-              v-if="sendWithdrawStatus"
-              @click="goNext()"
-            >Next</button>
-            <button class="full-width input-height withdraw-buttons" disabled v-else>Next</button>
-          </div>
+        <div class="statement__row statement__add-bank-tab">
+          <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
+          <p class="small-margin color-white">{{ withdrawError }}</p>
+          <router-link to="/banks" v-if="addAccountStatus">
+            <p class="small-margin statement__bg-orange">+ Add a bank account</p>
+          </router-link>
+        </div>
+        <div class="statement__row statement__divided-row">
+          <span class="statement__column-3">
+            <i class="material-icons statement__wallet">account_balance_wallet</i>
+          </span>
+          <span class="statement__column-9">
+            <p class="no-margin large-font">Balance</p>
+            <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
+          </span>
+        </div>
+        <div class="statement__row">
+          <input
+            id="withdrawalAmount"
+            type="text"
+            placeholder="Enter amount"
+            class="full-width input-height input-border"
+            v-model="amount"
+            @input="checkDetails()"
+            @keyup.delete="checkDetails()"
+            :maxlength="amountLength"
+          />
+        </div>
+        <div class="statement__row">
+          <button
+            id="continue"
+            class="full-width input-height withdraw-buttons statement__withdraw-button"
+            v-if="sendWithdrawStatus"
+            @click="goNext()"
+          >Next</button>
+          <button class=" continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
+        </div>
         </div>
         <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
@@ -97,7 +99,7 @@
           <div class="statement__row">
             <button
               class="full-width input-height withdraw-buttons statement__withdraw-button"
-              v-if="sendWithdrawStatus"
+              v-if="allowWithdrawal"
               @click="withdraw()"
             >Withdraw Cash</button>
             <button class="input-height" disabled v-else>Withdraw Cash</button>
@@ -182,7 +184,7 @@
                 name="button"
                 class="btn btn_primary fil-sub fil-sub-1 active-btn"
                 @click="closePopup();"
-                v-if="activeStatus"
+                v-if="!activeStatus"
               >Withdraw cash</button>
               <button
                 type="button"
@@ -294,11 +296,6 @@ export default {
           Authorization: localStorage.token,
         },
       },
-      service_config: {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
       columns: [{ label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }, { label: 'Driver Name', field: 'rider_name' }],
       page: 1,
       rows: [
@@ -325,7 +322,6 @@ export default {
       amountLength: '',
       mpesaWithdrawal: false,
       bankWithdrawal: false,
-      chequeWithdrawal: false,
       responseCount: 0,
       selectedRow: '',
       responseNumber: 0,
@@ -357,12 +353,14 @@ export default {
     displayAccounts() {
       return this.payment_method === 10;
     },
+    allowWithdrawal() {
+      return this.payment_method !== '';
+    },
   },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.monthPeriod = moment().format('MMMM YYYY');
-      this.getPaymentOptions();
       this.fetchStatement(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -378,12 +376,12 @@ export default {
     getPaymentOptions() {
       const payload = {
         country_code: this.sessionInfo.country_code,
-        user_type: 'Owner',
+        account_type: 'Owner',
+        amount: parseFloat(this.amount),
         entry_point: 'Partner Portal',
       };
-      const proxyurl = 'https://cors-anywhere.herokuapp.com/';
       axios
-        .post(`${proxyurl}${process.env.VUE_APP_PAYMENT_SERVICE}getusertypepaymentmethods`, payload, this.service_config)
+        .post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config)
         .then(response => {
           this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
         })
@@ -541,7 +539,6 @@ export default {
       if (option === 1) {
         this.mpesaWithdrawal = true;
         this.bankWithdrawal = false;
-        this.chequeWithdrawal = false;
         this.checked = 1;
         this.checkDetails();
       } else if (option === 10) {
@@ -549,7 +546,6 @@ export default {
         this.selectedRow = value;
         this.bankWithdrawal = true;
         this.mpesaWithdrawal = false;
-        this.chequeWithdrawal = false;
         this.checked = 1;
         this.checkDetails();
         const bankName = this.bankAccounts[value].bank_name.toString();
@@ -559,15 +555,10 @@ export default {
         } else {
           this.bankId = '';
         }
-      } else if (option === 4) {
-        this.mpesaWithdrawal = false;
-        this.bankWithdrawal = false;
-        this.chequeWithdrawal = true;
-        this.checked = 1;
-        this.checkDetails();
       }
     },
     goNext() {
+      this.getPaymentOptions();
       this.payment_options = true;
       this.payable_amount = false;
     },
@@ -623,7 +614,7 @@ export default {
               this.fetchStatement();
             }, 4000);
             if (this.opened) {
-              this.closePopup();
+              // this.closePopup();
             }
           } else {
             this.sendingWithdrawRequestStatus = false;
@@ -634,7 +625,7 @@ export default {
               this.fetchStatement();
             }, 4000);
             if (this.opened) {
-              this.closePopup();
+              // this.closePopup();
             }
           }
         })
