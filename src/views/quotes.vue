@@ -396,9 +396,16 @@ import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
-
+let env = '';
+if (process.env.VUE_APP_AUTH.includes('test')) {
+  env = 'Staging';
+} else {
+  env = 'Production';
+}
 export default {
   title: 'Partner Portal - My Quotes',
   components: {
@@ -974,9 +981,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackUpdateBid(payload);
             clearInterval(interval); // stop the interval
             this.definePayload();
-            // this.trackSendBid(payload);  set up mixpanel first
           }
         })
         .catch(error => {
@@ -996,9 +1003,8 @@ export default {
       const cancelbidpayload = JSON.stringify({
         order_bid_id: this.orders[id - 1].bidId,
       });
-
       axios
-        .post(`${this.auth}v1/cancel_order_bid/`, payload, this.config)
+        .post(`${this.auth}v1/cancel_order_bid/`, cancelbidpayload, this.config)
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
@@ -1011,9 +1017,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackCancelBid(cancelbidpayload);
             clearInterval(interval); // stop the interval
             this.definePayload();
-            // this.trackSendBid(payload);  set up mixpanel first
           }
         })
         .catch(error => {
@@ -1028,16 +1034,6 @@ export default {
             }, 4000);
           }
         });
-    },
-
-    trackSendBid(payload) {
-      try {
-        if (window.env === 'production') {
-          window.mixpanel.track('Send Order Bid', JSON.parse(payload));
-        }
-      } catch (er) {
-        console.log(er);
-      }
     },
     driverSelector(id) {
       const q = this.count1;
@@ -1343,6 +1339,12 @@ export default {
         orderDetails.awardStatus = awardStatus;
         return orderDetails;
       }
+    },
+    trackCancelBid(payload) {
+      mixpanel.track(`Owner Order Cancel Bid Web (${env})`, JSON.parse(payload));
+    },
+    trackUpdateBid(payload) {
+      mixpanel.track(`Owner Order Update Bid Web (${env})`, JSON.parse(payload));
     },
   },
 };

@@ -100,16 +100,23 @@ import $ from 'jquery';
 import axios from 'axios';
 import moment from 'moment';
 import mqtt from 'mqtt';
+import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+let env = '';
+if (process.env.VUE_APP_AUTH.includes('test')) {
+  env = 'Staging';
+} else {
+  env = 'Production';
+}
 let client = '';
 
 let map = '';
 let bounds = '';
 const loopInterval = [];
 const clientIdArray = [];
-
 export default {
   title: 'Partner Portal - Tracking',
   components: {
@@ -189,6 +196,7 @@ export default {
                     }
                   }
                 });
+                this.mixpanelTrackVehicles();
                 this.setMarkers();
               }
             })
@@ -500,6 +508,15 @@ export default {
           timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
         }
       }
+    },
+    mixpanelTrackVehicles() {
+      const sessionInfo = JSON.parse(localStorage.sessionData);
+      mixpanel.track(`Owner tracking Web (${env})`, {
+        'Number of vehicles with trackers': this.ridersWithTrackers.length,
+        'Id number': sessionInfo.payload.id,
+        Name: sessionInfo.payload.name,
+        Phone: sessionInfo.payload.phone,
+      });
     },
   },
 };
