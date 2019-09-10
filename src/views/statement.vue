@@ -395,7 +395,7 @@ export default {
         entry_point: 'Partner Portal',
       };
       axios
-        .post(`${process.env.VUE_APP_PAYMENT_SERVICE}accounts/pay_methods`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config)
         .then(response => {
           this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
         })
