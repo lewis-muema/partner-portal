@@ -416,7 +416,7 @@ import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
-import truckValidationMixin from '../mixins/truckValidationMixin';
+// import truckValidationMixin from '../mixins/truckValidationMixin';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
@@ -984,26 +984,17 @@ export default {
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
-          if (response.data.order_response.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 1;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.opened = [];
-            this.orders = [];
-            this.responseNo = 0;
-            this.TrackOrderConfirmation(payload);
-            clearInterval(interval); // stop the interval
-            this.getOrders(this.allVehicles);
-          } else {
-            this.error = response.data.order_response;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          }
+          this.notificationName = 'message-box-up';
+          this.message = 1;
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+          }, 4000);
+          this.opened = [];
+          this.orders = [];
+          this.responseNo = 0;
+          this.TrackOrderConfirmation(payload);
+          clearInterval(interval); // stop the interval
+          this.getOrders(this.allVehicles);
         })
         .catch(error => {
           this.errorObj = error.response;
