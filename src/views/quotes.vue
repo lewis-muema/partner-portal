@@ -400,12 +400,6 @@ import Mixpanel from 'mixpanel';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
-let env = '';
-if (process.env.VUE_APP_AUTH.includes('test')) {
-  env = 'Staging';
-} else {
-  env = 'Production';
-}
 export default {
   title: 'Partner Portal - My Quotes',
   components: {
@@ -1341,10 +1335,10 @@ export default {
       }
     },
     trackCancelBid(payload) {
-      mixpanel.track(`Owner Order Cancel Bid Web (${env})`, JSON.parse(payload));
+      mixpanel.track(`Owner Order Cancel Bid Web (${process.env.NODE_ENV})`, JSON.parse(payload));
     },
     trackUpdateBid(payload) {
-      mixpanel.track(`Owner Order Update Bid Web (${env})`, JSON.parse(payload));
+      mixpanel.track(`Owner Order Update Bid Web (${process.env.NODE_ENV})`, JSON.parse(payload));
     },
   },
 };

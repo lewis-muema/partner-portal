@@ -105,12 +105,6 @@ import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
-let env = '';
-if (process.env.VUE_APP_AUTH.includes('test')) {
-  env = 'Staging';
-} else {
-  env = 'Production';
-}
 let client = '';
 
 let map = '';
@@ -511,7 +505,7 @@ export default {
     },
     mixpanelTrackVehicles() {
       const sessionInfo = JSON.parse(localStorage.sessionData);
-      mixpanel.track(`Owner tracking Web (${env})`, {
+      mixpanel.track(`Owner tracking Web (${process.env.NODE_ENV})`, {
         'Number of vehicles with trackers': this.ridersWithTrackers.length,
         'Id number': sessionInfo.payload.id,
         Name: sessionInfo.payload.name,
