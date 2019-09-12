@@ -320,6 +320,7 @@ export default {
       vehArray: [],
       monthPeriod: '',
       errorObj: '',
+      payload: '',
     };
   },
   created() {
@@ -539,6 +540,7 @@ export default {
         });
         notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
       }
+      this.payload = payload;
       this.sendWithdrawRequest(payload, notification, paymethod);
     },
     sendWithdrawRequest(payload, notification, paymethod) {

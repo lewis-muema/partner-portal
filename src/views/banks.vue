@@ -254,11 +254,14 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 export default {
   title: 'Partner Portal - Banks',
   components: {
@@ -326,7 +329,6 @@ export default {
       window.addEventListener('resize', this.isMobile);
       this.fetchOwnerBanks();
       this.fetchAllBanks();
-      // this.trackPage();
     }
   },
   methods: {
@@ -356,12 +358,12 @@ export default {
       }
       if (this.addAccountStatus) {
         this.addAccountStatus = false;
-        document.querySelector('.banks__new-accounts').style.display = 'none';
-        document.querySelector('.banks__existing-accounts').style.display = 'block';
+        $('.banks__new-accounts').css('display', 'none');
+        $('.banks__existing-accounts').css('display', 'block');
       } else {
         this.addAccountStatus = true;
-        document.querySelector('.banks__new-accounts').style.display = 'block';
-        document.querySelector('.banks__existing-accounts').style.display = 'none';
+        $('.banks__new-accounts').css('display', 'block');
+        $('.banks__existing-accounts').css('display', 'none');
       }
     },
     getBankName(id) {
@@ -372,24 +374,24 @@ export default {
     confirmDetails() {
       if (this.confirmAccountStatus) {
         this.confirmAccountStatus = false;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'none';
+        $('.banks__confirm-banks-blinder').css('display', 'none');
       } else {
         this.confirmAccountStatus = true;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'flex';
+        $('.banks__confirm-banks-blinder').css('display', 'flex');
       }
     },
     verifyDetails() {
       this.verifyCodeStatus = true;
       if (this.verifyDetailsStatus) {
         this.verifyDetailsStatus = false;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'flex';
-        document.querySelector('.banks__new-accounts').style.display = 'block';
-        document.querySelector('.banks__verify-code-section').style.display = 'none';
+        $('.banks__confirm-banks-blinder').css('display', 'flex');
+        $('.banks__new-accounts').css('display', 'block');
+        $('.banks__verify-code-section').css('display', 'none');
       } else {
         this.verifyDetailsStatus = true;
-        document.querySelector('.banks__confirm-banks-blinder').style.display = 'none';
-        document.querySelector('.banks__new-accounts').style.display = 'none';
-        document.querySelector('.banks__verify-code-section').style.display = 'block';
+        $('.banks__confirm-banks-blinder').css('display', 'none');
+        $('.banks__new-accounts').css('display', 'none');
+        $('.banks__verify-code-section').css('display', 'block');
       }
     },
     verifyCode() {
@@ -407,18 +409,17 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/check_verification`, payload, this.config)
         .then(response => {
-          this.handleVerificatioResponse(response);
+          this.handleVerificationResponse(response);
         })
         .catch(error => {
           this.errorObj = error.response;
           this.handleError(error, 1);
         });
     },
-    handleVerificatioResponse(response) {
+    handleVerificationResponse(response) {
       const parsedResponse = response.data;
       if (parsedResponse.status) {
         this.sendOwnerBanks();
-        //   this.trackBankAddition();
         setTimeout(() => {
           this.verifyDetails();
           this.confirmDetails();
@@ -589,6 +590,7 @@ export default {
             if (response.data.status) {
               this.notificationType = 'success';
               this.notificationMessage = response.data.message;
+              this.TrackBankAddition(payload);
             } else {
               this.notificationType = 'failed';
               this.notificationMessage = response.data.message;
@@ -644,20 +646,10 @@ export default {
         this.submitStatus = false;
       }
     },
-    trackBankAddition() {
-      const env = '<?php echo ENVIRONMENT; ?>';
-      if (env === 'production') {
-        mixpanel.track('Bank application submit (partner portal)');
-      } else {
-        mixpanel.track('Test Bank application submit (partner portal)');
-      }
-    },
-    trackPage() {
-      const env = '<?php echo ENVIRONMENT; ?>';
-      if (env === 'production') {
-        mixpanel.track('Bank page view (partner portal)');
-      } else {
-        mixpanel.track('Test Bank page view (partner portal)');
+    TrackBankAddition(payload) {
+      const data = JSON.parse(payload);
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Bank Addition', data);
       }
     },
   },

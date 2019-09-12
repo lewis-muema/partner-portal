@@ -100,16 +100,17 @@ import $ from 'jquery';
 import axios from 'axios';
 import moment from 'moment';
 import mqtt from 'mqtt';
+import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let client = '';
 
 let map = '';
 let bounds = '';
 const loopInterval = [];
 const clientIdArray = [];
-
 export default {
   title: 'Partner Portal - Tracking',
   components: {
@@ -137,6 +138,19 @@ export default {
     if (localStorage.sessionData) {
       this.loadMapScript();
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.fetchTrackers();
+    }
+  },
+  beforeDestroy() {
+    this.ridersWithTrackers.forEach((row, i) => {
+      client.unsubscribe(`partner_app_positions/${this.get_driver_city_and_tracking_no(this.ridersWithTrackers[i].sim_card_sn, this.ridersWithTrackers[i].partner_city_id)}`, {
+        qos: 0,
+      });
+    });
+    loopInterval.forEach(clearInterval);
+  },
+  methods: {
+    fetchTrackers() {
       const riders = [];
       const riderIds = [];
       const payload = {
@@ -176,6 +190,7 @@ export default {
                     }
                   }
                 });
+                this.mixpanelTrackVehicles();
                 this.setMarkers();
               }
             })
@@ -186,17 +201,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
         });
-    }
-  },
-  beforeDestroy() {
-    this.ridersWithTrackers.forEach((row, i) => {
-      client.unsubscribe(`partner_app_positions/${this.get_driver_city_and_tracking_no(this.ridersWithTrackers[i].sim_card_sn, this.ridersWithTrackers[i].partner_city_id)}`, {
-        qos: 0,
-      });
-    });
-    loopInterval.forEach(clearInterval);
-  },
-  methods: {
+    },
     loadMapScript() {
       if (window.google && window.google.maps) {
         setTimeout(() => {
@@ -496,6 +501,17 @@ export default {
         } else {
           timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
         }
+      }
+    },
+    mixpanelTrackVehicles() {
+      const sessionInfo = JSON.parse(localStorage.sessionData);
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner tracking Web', {
+          'Number of vehicles with trackers': this.ridersWithTrackers.length,
+          'Id number': sessionInfo.payload.id,
+          Name: sessionInfo.payload.name,
+          Phone: sessionInfo.payload.phone,
+        });
       }
     },
   },

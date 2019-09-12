@@ -751,6 +751,7 @@ export default {
   },
   created() {
     if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.fetchVehicles();
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -783,7 +784,6 @@ export default {
   },
   methods: {
     fetchVehicles() {
-      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const date = new Date();
       const riderIds = [];
       this.sessionInfo.riders.forEach((row, i) => {
@@ -1061,7 +1061,7 @@ export default {
       }
     },
     fetchPreviewImage(id, name, target) {
-      document.getElementById(id).name = name;
+      $(`#${id}`).attr('name', name);
       const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${name}`;
       $(`#${target}`).attr('src', src);
     },
