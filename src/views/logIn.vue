@@ -75,6 +75,7 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import axios from 'axios';
 import sha1 from 'js-sha1';
 import Mixpanel from 'mixpanel';
+import { Base64 } from 'js-base64';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 
@@ -196,7 +197,7 @@ export default {
             Authorization: response.data,
           },
         };
-        const sessionData = atob(dataToken);
+        const sessionData = Base64.decode(dataToken);
         localStorage.token = response.data;
         const parsedData = JSON.parse(sessionData);
         const expiry = new Date();
