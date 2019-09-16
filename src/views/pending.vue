@@ -574,20 +574,8 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            this.allVehicles = response.data.msg;
-            this.getOrders(response.data.msg);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+      this.fetchOwnerDrivers();
+      this.fetchOwnerVehicles();
     }
   },
   beforeDestroy() {
@@ -622,6 +610,42 @@ export default {
       } else if (id === 2) {
         return '';
       }
+    },
+    fetchOwnerDrivers() {
+      const riders = [];
+      const riderPayload = {
+        owner_id: this.sessionInfo.id,
+      };
+      let parsedData = JSON.parse(localStorage.sessionData);
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+        .then(res => {
+          res.data.riders.forEach((row, i) => {
+            riders.push(row);
+          });
+          parsedData.payload.riders = riders;
+          localStorage.sessionData = JSON.stringify(parsedData);
+        })
+        .catch(error => {
+          parsedData.payload.riders = [];
+          localStorage.sessionData = JSON.stringify(parsedData);
+        });
+    },
+    fetchOwnerVehicles() {
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+      });
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            this.allVehicles = response.data.msg;
+            this.getOrders(response.data.msg);
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     displayVehicles(id) {
       if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
@@ -1063,26 +1087,17 @@ export default {
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
-          if (response.data.order_response.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 1;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.opened = [];
-            this.orders = [];
-            this.responseNo = 0;
-            this.TrackOrderConfirmation(payload);
-            clearInterval(interval); // stop the interval
-            this.getOrders(this.allVehicles);
-          } else {
-            this.error = response.data.order_response;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          }
+          this.notificationName = 'message-box-up';
+          this.message = 1;
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+          }, 4000);
+          this.opened = [];
+          this.orders = [];
+          this.responseNo = 0;
+          this.TrackOrderConfirmation(payload);
+          clearInterval(interval); // stop the interval
+          this.getOrders(this.allVehicles);
         })
         .catch(error => {
           this.errorObj = error.response;
