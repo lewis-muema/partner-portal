@@ -21,7 +21,6 @@
               placeholder="Password"
               required
               v-model="password"
-              @input="validatePassword()"
             />
           </div>
           <div id="loggin_error" class="error">{{ loginError }}</div>
@@ -103,7 +102,7 @@ export default {
         ignoredCountries: [],
         autocomplete: 'off',
         name: 'telephone',
-        maxLen: 13,
+        maxLen: 20,
         wrapperClasses: '',
         inputClasses: '',
         dropdownOptions: {
@@ -151,9 +150,6 @@ export default {
         this.tel = this.tel.toString().replace(/[^0-9+]/g, '');
       }, 0);
     },
-    validatePassword() {
-      this.password = this.password.toString().replace(/[^0-9+]/g, '');
-    },
     postForgot() {
       // eslint-disable-next-line quotes
       this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
@@ -191,46 +187,15 @@ export default {
     handleResponse(response) {
       if (typeof response.data === 'string') {
         const dataToken = response.data.split('.')[1];
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: response.data,
-          },
-        };
         const sessionData = Base64.decode(dataToken);
         localStorage.token = response.data;
         const parsedData = JSON.parse(sessionData);
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + 3);
         localStorage.expiryDate = expiry;
-        const riders = [];
-        const payload = {
-          owner_id: parsedData.payload.id,
-        };
-        axios
-          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, payload, config)
-          .then(res => {
-            this.handleButton('LOG IN');
-            if (res.data.status) {
-              res.data.riders.forEach((row, i) => {
-                riders.push(row);
-              });
-              parsedData.payload.riders = riders;
-              localStorage.sessionData = JSON.stringify(parsedData);
-              this.TrackLogin(parsedData.payload);
-              this.$router.push({ path: '/' });
-            }
-          })
-          .catch(error => {
-            this.handleButton('LOG IN');
-            if ('message' in error.response.data && error.response.data.message === 'No Drivers available for this owner') {
-              parsedData.payload.riders = [];
-              localStorage.sessionData = JSON.stringify(parsedData);
-              this.$router.push({ path: '/' });
-            } else {
-              this.error('Something went wrong, Please try again!', 7000);
-            }
-          });
+        localStorage.sessionData = sessionData;
+        this.TrackLogin(parsedData.payload);
+        this.$router.push({ path: '/' });
       } else {
         this.handleButton('LOG IN');
         this.error('Sorry, your details did not match!', 7000);

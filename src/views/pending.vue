@@ -416,7 +416,7 @@ import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
-// import truckValidationMixin from '../mixins/truckValidationMixin';
+import truckValidationMixin from '../mixins/truckValidationMixin';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
@@ -523,20 +523,8 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            this.allVehicles = response.data.msg;
-            this.getOrders(response.data.msg);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+      this.fetchOwnerDrivers();
+      this.fetchOwnerVehicles();
     }
   },
   beforeDestroy() {
@@ -560,6 +548,42 @@ export default {
       } else if (id === 2) {
         return '';
       }
+    },
+    fetchOwnerDrivers() {
+      const riders = [];
+      const riderPayload = {
+        owner_id: this.sessionInfo.id,
+      };
+      let parsedData = JSON.parse(localStorage.sessionData);
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+        .then(res => {
+          res.data.riders.forEach((row, i) => {
+            riders.push(row);
+          });
+          parsedData.payload.riders = riders;
+          localStorage.sessionData = JSON.stringify(parsedData);
+        })
+        .catch(error => {
+          parsedData.payload.riders = [];
+          localStorage.sessionData = JSON.stringify(parsedData);
+        });
+    },
+    fetchOwnerVehicles() {
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+      });
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            this.allVehicles = response.data.msg;
+            this.getOrders(response.data.msg);
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     displayVehicles(id) {
       if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
