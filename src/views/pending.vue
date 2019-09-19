@@ -302,8 +302,10 @@
                             placeholder="Enter Truck Size in Tonnes"
                             v-model="truckSize"
                             @input="addTruckSize(order.id)"
+                            v-if="order.vendorname == 'Freight'"
                           />
                           <div
+                            v-if="order.vendorname == 'Freight'"
                             v-show="truckSizeErrorStatus === true"
                             class="form--input-wrap validation-error--message"
                           >{{ truckValidationErrorMessage }}</div>
@@ -316,16 +318,17 @@
                             @keyup="matchLoadCapacity"
                             v-mask="'##.##'"
                             @input="addLoadingCapacity(order.id)"
+                            v-if="order.vendorname == 'Freight'"
                           />
                           <div
                             v-show="loadCapacityErrorStatus === true"
                             class="validation-error--message"
                           >{{ validationErrorMessage }}</div>
-
                           <select
                             class="input orders__bid-input"
                             v-model="truckType"
                             @change="changeTruckType(order.id)"
+                            v-if="truckVendors.includes(parseInt(vendorType,10))"
                           >
                             <option class selected value="null">Select truck type</option>
 
@@ -478,6 +481,7 @@ export default {
 
   data() {
     return {
+      truckVendors: [6, 10, 13, 14, 17, 25],
       allVehicles: '',
       auth: process.env.VUE_APP_AUTH,
       opened: [],
@@ -1029,10 +1033,16 @@ export default {
         closed: '1',
         insurance_no: this.insuNo,
         carrier_type: this.truckType,
-        load_capacity: this.loadCapacity,
-        vehicle_size: this.truckSize,
         new_vehicle: this.newVehicle,
       };
+
+      if (this.vehicleSize !== '') {
+        newVehiclePayload.vehicle_size = this.truckSize;
+      }
+      if (this.loadCapacity !== '') {
+        newVehiclePayload.load_capacity = this.loadCapacity;
+      }
+
       const existingVehiclePayload = {
         new_vehicle: this.newVehicle,
         vehicle_id: this.vehicleId,
