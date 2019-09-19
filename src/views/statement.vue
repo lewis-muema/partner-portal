@@ -14,75 +14,96 @@
             <i class="material-icons statement__cancel-icon" @click="closePopup">cancel</i>
           </span>
         </div>
-        <div class="statement__row statement__add-bank-tab">
-          <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
-          <p class="small-margin color-white">{{ withdrawError }}</p>
-          <router-link to="/banks" v-if="addAccountStatus">
-            <p class="small-margin statement__bg-orange">+ Add a bank account</p>
-          </router-link>
-        </div>
-        <div class="statement__row statement__divided-row">
-          <span class="statement__column-3">
-            <i class="material-icons statement__wallet">account_balance_wallet</i>
-          </span>
-          <span class="statement__column-9">
-            <p class="no-margin large-font">Balance</p>
-            <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
-          </span>
-        </div>
-        <div class="statement__row">
-          <p class="no-margin x-large-font">How do you want to be paid?</p>
-        </div>
-        <div class="statement__row statement__scrollable-row">
-          <div class="statement__divided-row centered">
-            <input
-              type="radio"
-              class="statement__column-2 statement__radio-button-margin radio-1"
-              name="myRadio"
-              @click="checkedWithDrawal(1, 0)"
-            />
-            <span class="statement__column-10">
-              <p class="no-margin">M-Pesa</p>
-              <p class="no-margin small-font">{{ sessionInfo.phone }}</p>
+        <div v-if="payable_amount" class="withdraw-modal-screen">
+          <div class="statement__row statement__add-bank-tab">
+            <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
+            <p class="small-margin color-white">{{ withdrawError }}</p>
+            <router-link to="/banks" v-if="addAccountStatus">
+              <p class="small-margin statement__bg-orange">+ Add a bank account</p>
+            </router-link>
+          </div>
+          <div class="statement__row statement__divided-row">
+            <span class="statement__column-3">
+              <i class="material-icons statement__wallet">account_balance_wallet</i>
             </span>
+            <span class="statement__column-9">
+              <p class="no-margin large-font">Balance</p>
+              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
+            </span>
+          </div>
+          <div class="statement__row">
+            <input
+              id="withdrawalAmount"
+              type="text"
+              placeholder="Enter amount"
+              class="full-width input-height input-border"
+              v-model="amount"
+              @input="checkDetails()"
+              @keyup.delete="checkDetails()"
+              :maxlength="amountLength"
+            />
+          </div>
+          <div class="statement__row">
+            <button
+              id="continue"
+              class="full-width input-height withdraw-buttons statement__withdraw-button"
+              v-if="sendWithdrawStatus"
+              @click="goNext()"
+            >Next</button>
+            <button class="continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
+          </div>
+        </div>
+        <div class="withdraw-modal-screen-2" v-if="payment_options">
+          <div class="statement__row">
+            <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>
           <div
-            class="statement__divided-row centered bank-row"
-            v-for="bankAccount in bankAccounts"
-            :key="bankAccount.id"
+            class="statement__row statement__scrollable-row"
+            v-for="method in payment_methods"
+            :key="method.payment_method_id"
           >
-            <input
-              type="radio"
-              class="statement__column-2 statement__radio-button-margin radio-1"
-              name="myRadio"
-              @click="checkedWithDrawal(2, bankAccount.id)"
-            />
-            <span class="statement__column-10">
-              <p class="no-margin">Bank Account</p>
-              <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
-              <p class="no-margin small-font">{{ bankAccount.bank_branch }}</p>
-              <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
-            </span>
+            <div class="withdraw-payment-options">
+              <input
+                type="radio"
+                v-model="payment_method"
+                name="profileImg"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                :value="method.payment_method_id"
+                @click="checkedWithDrawal(method.payment_method_id, 0)"
+              />
+              <span class="statement__column-10">
+                <p class="no-margin">{{ method.name }}</p>
+              </span>
+            </div>
           </div>
-        </div>
-        <div class="statement__row">
-          <input
-            type="text"
-            placeholder="Enter amount"
-            class="full-width input-height"
-            v-model="amount"
-            @input="checkDetails()"
-            @keyup.delete="checkDetails()"
-            :maxlength="amountLength"
-          />
-        </div>
-        <div class="statement__row">
-          <button
-            class="full-width input-height statement__withdraw-button"
-            v-if="sendWithdrawStatus"
-            @click="withdraw()"
-          >Withdraw</button>
-          <button class="full-width input-height" disabled v-else>Withdraw</button>
+          <div v-if="displayAccounts" class="withdraw-bank-accounts-list">
+            <div
+              class="statement__divided-row centered bank-row"
+              v-for="bankAccount in bankAccounts"
+              :key="bankAccount.id"
+            >
+              <input
+                type="radio"
+                v-model="payment_account"
+                name="profileImg"
+                class="statement__column-2 statement__radio-button-margin radio-1"
+                :value="bankAccount.id"
+                @click="checkedWithDrawal(payment_method, bankAccount.id)"
+              />
+              <span class="statement__column-10">
+                <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
+                <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
+              </span>
+            </div>
+          </div>
+          <div class="statement__row">
+            <button
+              class="full-width input-height withdraw-buttons statement__withdraw-button"
+              v-if="allowWithdrawal"
+              @click="withdraw()"
+            >Withdraw Cash</button>
+            <button class="input-height" disabled v-else>Withdraw Cash</button>
+          </div>
         </div>
       </div>
     </div>
@@ -163,7 +184,7 @@
                 name="button"
                 class="btn btn_primary fil-sub fil-sub-1 active-btn"
                 @click="closePopup();"
-                v-if="activeStatus"
+                v-if="!activeStatus"
               >Withdraw cash</button>
               <button
                 type="button"
@@ -264,6 +285,11 @@ export default {
   data() {
     return {
       sessionInfo: '',
+      payment_options: false,
+      payment_methods: [],
+      payment_method: '',
+      payment_account: '',
+      payable_amount: true,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -320,7 +346,16 @@ export default {
       vehArray: [],
       monthPeriod: '',
       errorObj: '',
+      payload: '',
     };
+  },
+  computed: {
+    displayAccounts() {
+      return this.payment_method === 10;
+    },
+    allowWithdrawal() {
+      return this.payment_method !== '';
+    },
   },
   created() {
     if (localStorage.sessionData) {
@@ -338,6 +373,22 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    getPaymentOptions() {
+      const payload = {
+        country_code: this.sessionInfo.country_code,
+        account_type: 'Owner',
+        amount: parseFloat(this.amount),
+        entry_point: 'Partner Portal',
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config)
+        .then(response => {
+          this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
+    },
     getVehicles() {
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
@@ -378,7 +429,7 @@ export default {
             this.ownerRb = response.data.msg.owner_balance;
             this.showWithdrawButton();
           } else {
-            document.getElementById('filtSub').innerHTML = '<i class="fa fa-filter" aria-hidden="true"></i>';
+            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
             this.removeFetchingStatus();
           }
           if (response.data.msg.statement !== null) {
@@ -416,7 +467,7 @@ export default {
           to: lastDay,
         });
       } else {
-        document.getElementById('filtSub').innerHTML = '<div class="loading-spinner"></div> LOADING';
+        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
         firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
         lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
         payload = JSON.stringify({
@@ -454,21 +505,6 @@ export default {
       setTimeout(() => {
         if (document.getElementsByTagName('tbody').length > 0) {
           const list = document.getElementsByTagName('tbody')[0];
-          list.innerHTML = `<tr class="records-placeholder"><td colspan="9" style="text-align: center;">${message}</td></tr>`;
-        }
-      }, time);
-    },
-    removeFetchingStatus() {
-      const element = document.querySelector('.records-placeholder');
-      if (typeof element !== 'undefined' && element !== null) {
-        element.parentNode.removeChild(element);
-      }
-    },
-
-    displayFetchingStatus(message, time) {
-      setTimeout(() => {
-        if (document.getElementsByTagName('tbody').length > 0) {
-          const list = document.getElementsByTagName('tbody')[0];
           list.innerHTML = `<tr class="records-placeholder"><td colspan="6" style="text-align: center;">${message}</td></tr>`;
         }
       }, time);
@@ -481,7 +517,10 @@ export default {
     },
     closePopup() {
       this.sendWithdrawStatus = false;
+      this.payable_amount = true;
+      this.payment_options = false;
       if (this.opened) {
+        this.notificationName = 'message-box-down';
         this.opened = false;
         document.querySelector('.statements__blinder').style.display = 'none';
         document.querySelector('.statement__add-bank-tab').style.display = 'none';
@@ -494,11 +533,7 @@ export default {
     },
     checkDetails() {
       this.amount = this.amount.toString().replace(/[^0-9]/g, '');
-      if (parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101 && this.checked === 1) {
-        this.sendWithdrawStatus = true;
-      } else {
-        this.sendWithdrawStatus = false;
-      }
+      this.sendWithdrawStatus = parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101;
     },
     checkedWithDrawal(option, value) {
       if (option === 1) {
@@ -506,7 +541,8 @@ export default {
         this.bankWithdrawal = false;
         this.checked = 1;
         this.checkDetails();
-      } else if (option === 2) {
+      } else if (option === 10) {
+        // this.displayAccounts();
         this.selectedRow = value;
         this.bankWithdrawal = true;
         this.mpesaWithdrawal = false;
@@ -520,6 +556,11 @@ export default {
           this.bankId = '';
         }
       }
+    },
+    goNext() {
+      this.getPaymentOptions();
+      this.payment_options = true;
+      this.payable_amount = false;
     },
     withdraw() {
       this.sendWithdrawStatus = false;
@@ -554,6 +595,7 @@ export default {
         });
         notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
       }
+      this.payload = payload;
       this.sendWithdrawRequest(payload, notification, paymethod);
     },
     sendWithdrawRequest(payload, notification, paymethod) {
@@ -562,30 +604,27 @@ export default {
         .then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status_code) {
-            // this.trackMpesaWithdrawal();
-            // this.trackBankWithdrawal();
-            if (this.opened) {
-              this.closePopup();
-            }
+            this.trackWithdrawal(payload);
             this.sendingWithdrawRequestStatus = false;
             this.notificationType = 'success';
-            this.notificationMessage = notification;
+            this.notificationMessage = response.data.message;
             setTimeout(() => {
               this.notificationName = 'message-box-down';
               this.fetchStatement();
             }, 4000);
+            if (this.opened) {
+              // this.closePopup();
+            }
           } else {
-            document.querySelector('.statement__add-bank-tab').style.display = 'grid';
-            this.withdrawHead = 'Withdrawal unsuccessful';
-            this.withdrawError = parsedResponse.message;
-            if (paymethod === 1) {
-              if (this.bankAccounts.length === 0) {
-                this.addAccountStatus = false;
-              }
+            this.sendingWithdrawRequestStatus = false;
+            this.notificationType = 'failed';
+            this.notificationMessage = response.data.message;
+            setTimeout(() => {
               this.notificationName = 'message-box-down';
-            } else {
-              this.notificationName = 'message-box-down';
-              this.sendWithdrawStatus = true;
+              this.fetchStatement();
+            }, 4000);
+            if (this.opened) {
+              // this.closePopup();
             }
           }
         })
@@ -674,18 +713,9 @@ export default {
         this.riderNames = 'all riders';
       }
     },
-    trackBankWithdrawal() {
-      if (process.env.ENVIRONMENT === 'production') {
-        mixpanel.track('Withdraw to bank (partner portal)');
-      } else {
-        mixpanel.track('Test withdraw to bank (partner portal)');
-      }
-    },
-    trackMpesaWithdrawal() {
-      if (process.env.ENVIRONMENT === 'production') {
-        mixpanel.track('Withdraw to M-pesa (partner portal)');
-      } else {
-        mixpanel.track('Test withdraw to M-pesa (partner portal)');
+    trackWithdrawal(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Withdrawal', JSON.parse(payload));
       }
     },
   },
@@ -693,4 +723,5 @@ export default {
 </script>
 
 <style>
+@import '../assets/css/style.css';
 </style>

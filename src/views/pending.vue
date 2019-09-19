@@ -390,11 +390,8 @@
                             v-model="driverPhone"
                             v-bind="bindProps"
                             id="phone"
-                            name="phone"
                             class="input orders__bid-input"
                             @input="addPhone(order.id)"
-                            @keyup.delete="clearPhone(order.id)"
-                            maxlength="13"
                           ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
@@ -468,10 +465,11 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 import truckValidationMixin from '../mixins/truckValidationMixin';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
-
 export default {
   title: 'Partner Portal - Available Orders',
   components: {
@@ -561,8 +559,8 @@ export default {
         onlyCountries: [],
         ignoredCountries: [],
         autocomplete: 'off',
-        name: 'telephone',
-        maxLen: 25,
+        name: 'phone',
+        maxLen: 13,
         wrapperClasses: '',
         inputClasses: '',
         dropdownOptions: {
@@ -580,20 +578,8 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            this.allVehicles = response.data.msg;
-            this.getOrders(response.data.msg);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+      this.fetchOwnerDrivers();
+      this.fetchOwnerVehicles();
     }
   },
   beforeDestroy() {
@@ -628,6 +614,42 @@ export default {
       } else if (id === 2) {
         return '';
       }
+    },
+    fetchOwnerDrivers() {
+      const riders = [];
+      const riderPayload = {
+        owner_id: this.sessionInfo.id,
+      };
+      let parsedData = JSON.parse(localStorage.sessionData);
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+        .then(res => {
+          res.data.riders.forEach((row, i) => {
+            riders.push(row);
+          });
+          parsedData.payload.riders = riders;
+          localStorage.sessionData = JSON.stringify(parsedData);
+        })
+        .catch(error => {
+          parsedData.payload.riders = [];
+          localStorage.sessionData = JSON.stringify(parsedData);
+        });
+    },
+    fetchOwnerVehicles() {
+      const payload = JSON.stringify({
+        owner_id: this.sessionInfo.id,
+      });
+      axios
+        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+        .then(response => {
+          if (response.status === 200) {
+            this.allVehicles = response.data.msg;
+            this.getOrders(response.data.msg);
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+        });
     },
     displayVehicles(id) {
       if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
@@ -696,23 +718,9 @@ export default {
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
       }
-      // .replace(/^(?!00[^0])0(\d{3})(\d{3})(\d{3})/, '+254$1$2$3');
       setTimeout(() => {
         this.confirm(id);
       }, 200);
-    },
-    verifyTelInput() {
-      const iti = window.intlTelInput(document.querySelector('#phone'), {
-        initialCountry: 'ke',
-        preferredCountries: ['ke', 'ug', 'tz'],
-      });
-    },
-    clearPhone(id) {
-      if (this.driverPhone.toString().startsWith('+')) {
-        const formattedPhone = this.driverPhone.slice(4, 100);
-        this.driverPhone = `0${formattedPhone}`;
-      }
-      this.confirm(id);
     },
     showFromTooltip(id) {
       const tooltiprow = document.querySelector(`.sp${id}`);
@@ -1089,25 +1097,17 @@ export default {
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
-          if (response.data.order_response.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 1;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.opened = [];
-            this.orders = [];
-            this.responseNo = 0;
-            clearInterval(interval); // stop the interval
-            this.getOrders(this.allVehicles);
-          } else {
-            this.error = response.data.order_response.reason;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-          }
+          this.notificationName = 'message-box-up';
+          this.message = 1;
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+          }, 4000);
+          this.opened = [];
+          this.orders = [];
+          this.responseNo = 0;
+          this.TrackOrderConfirmation(payload);
+          clearInterval(interval); // stop the interval
+          this.getOrders(this.allVehicles);
         })
         .catch(error => {
           this.errorObj = error.response;
@@ -1202,9 +1202,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackSendBid(payload);
             clearInterval(interval); // stop the interval
             this.getOrders(this.allVehicles);
-            // this.trackSendBid(payload);  set up mixpanel first
           }
         })
         .catch(error => {
@@ -1219,15 +1219,6 @@ export default {
             }, 4000);
           }
         });
-    },
-    trackSendBid(payload) {
-      try {
-        if (window.env === 'production') {
-          window.mixpanel.track('Send Order Bid', JSON.parse(payload));
-        }
-      } catch (er) {
-        console.log(er);
-      }
     },
     driverSelector(id) {
       const q = this.count1;
@@ -1441,7 +1432,9 @@ export default {
             }
             this.loadingStatus = false;
           });
-          this.refreshOrders();
+          if (this.$route.path === '/') {
+            this.refreshOrders();
+          }
         })
         .catch(error => {
           this.errorObj = error.response;
@@ -1488,6 +1481,16 @@ export default {
       orderDetails.takeHome = takehome;
       orderDetails.orderNo = orderno;
       return orderDetails;
+    },
+    TrackOrderConfirmation(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Confirmation Web', JSON.parse(payload));
+      }
+    },
+    trackSendBid(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Bidding Web', JSON.parse(payload));
+      }
     },
   },
 };

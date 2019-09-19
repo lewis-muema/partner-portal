@@ -37,6 +37,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import axios from 'axios';
 
 export default {
@@ -58,33 +59,36 @@ export default {
     };
   },
   created() {
-    if (this.$route.params.token !== undefined) {
-      const payload = JSON.stringify({
-        token: this.$route.params.token,
-      });
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/allocation_details`, payload, this.config).then(response => {
-        if (response.data.status) {
-          this.responseStatus = true;
-          this.allocationType = response.data.msg.allocation_details.allocation_type;
-          this.token = response.data.msg.allocation_details.token;
-          let vehicleModel = '';
-          let vehicleRegistration = '';
-          if (response.data.msg.vehicle_details.model) {
-            vehicleModel = response.data.msg.vehicle_details.model;
-          }
-          if (response.data.msg.vehicle_details.registration_no) {
-            vehicleRegistration = response.data.msg.vehicle_details.registration_no;
-          }
-          this.message = `${response.data.msg.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
-        } else {
-          this.message = response.data.msg;
-        }
-      });
-    } else {
-      this.message = 'The link is invalid, Please ask the owner to re-invite you';
-    }
+    this.fetchDriverRequest();
   },
   methods: {
+    fetchDriverRequest() {
+      if (this.$route.params.token !== undefined) {
+        const payload = JSON.stringify({
+          token: this.$route.params.token,
+        });
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/allocation_details`, payload, this.config).then(response => {
+          if (response.data.status) {
+            this.responseStatus = true;
+            this.allocationType = response.data.msg.allocation_details.allocation_type;
+            this.token = response.data.msg.allocation_details.token;
+            let vehicleModel = '';
+            let vehicleRegistration = '';
+            if (response.data.msg.vehicle_details.model) {
+              vehicleModel = response.data.msg.vehicle_details.model;
+            }
+            if (response.data.msg.vehicle_details.registration_no) {
+              vehicleRegistration = response.data.msg.vehicle_details.registration_no;
+            }
+            this.message = `${response.data.msg.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
+          } else {
+            this.message = response.data.msg;
+          }
+        });
+      } else {
+        this.message = 'The link is invalid, Please ask the owner to re-invite you';
+      }
+    },
     submitResponse() {
       const stat = this.statValue;
       const payload = JSON.stringify({

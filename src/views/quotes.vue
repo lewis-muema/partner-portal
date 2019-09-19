@@ -41,7 +41,26 @@
               <option value="28T Truck">28 Tonne Truck</option>
             </select>
           </span>
+          <span class="container__search-select" v-if="ordercount.length > 0">
+            <select
+              name
+              class="container__search-element select-font"
+              @change="definePayload()"
+              v-model="orderRange"
+            >
+              <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
+            </select>
+          </span>
         </div>
+        <select
+          name
+          class="order-range"
+          @change="definePayload()"
+          v-model="orderRange"
+          v-if="ordercount.length > 0"
+        >
+          <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
+        </select>
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
@@ -309,17 +328,13 @@
                             @input="addId(order.id)"
                             maxlength="8"
                           />
-                          <input
-                            class="input orders__bid-input"
-                            type="text"
-                            name="phone"
-                            id="phone"
-                            placeholder="Driver's phone number"
+                          <vue-tel-input
                             v-model="driverPhone"
+                            v-bind="bindProps"
+                            class="input orders__bid-input"
+                            id="phone"
                             @input="addPhone(order.id)"
-                            @keyup.delete="clearPhone(order.id)"
-                            maxlength="13"
-                          />
+                          ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
                           <button
@@ -375,18 +390,22 @@
 </template>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
 <script>
+import VueTelInput from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
-
 export default {
   title: 'Partner Portal - My Quotes',
   components: {
     verifier,
     errorHandler,
+    VueTelInput,
   },
   data() {
     return {
@@ -452,14 +471,40 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      bindProps: {
+        defaultCountry: 'KE',
+        disabledFetchingCountry: false,
+        disabled: false,
+        disabledFormatting: false,
+        placeholder: 'Drivers phone number',
+        required: false,
+        enabledCountryCode: false,
+        enabledFlags: true,
+        preferredCountries: ['KE', 'UG', 'TZ'],
+        onlyCountries: [],
+        ignoredCountries: [],
+        autocomplete: 'off',
+        name: 'phone',
+        maxLen: 13,
+        wrapperClasses: '',
+        inputClasses: '',
+        dropdownOptions: {
+          disabledDialCode: false,
+        },
+        inputOptions: {
+          showDialCode: false,
+        },
+      },
       errorObj: '',
+      ordercount: [],
+      orderRange: '0 - 100',
     };
   },
   computed: {},
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.getOrders();
+      this.definePayload();
     }
   },
   beforeDestroy() {
@@ -518,26 +563,14 @@ export default {
       this.confirm(id);
     },
     addPhone(id) {
-      this.driverPhone = this.driverPhone
-        .toString()
-        .replace(/[^0-9+]/g, '')
-        .replace(/^(?!00[^0])0(\d{3})(\d{3})(\d{3})/, '+254$1$2$3');
-      setTimeout(() => {
-        this.confirm(id);
-      }, 200);
-    },
-    verifyTelInput() {
-      const iti = window.intlTelInput(document.querySelector('#phone'), {
-        initialCountry: 'ke',
-        preferredCountries: ['ke', 'ug', 'tz'],
-      });
-    },
-    clearPhone(id) {
-      if (this.driverPhone.toString().startsWith('+')) {
+      this.driverPhone = this.driverPhone.toString().replace(/[^0-9+]/g, '');
+      if (this.driverPhone.toString().startsWith('+') && this.driverPhone.length < 13) {
         const formattedPhone = this.driverPhone.slice(4, 100);
         this.driverPhone = `0${formattedPhone}`;
       }
-      this.confirm(id);
+      setTimeout(() => {
+        this.confirm(id);
+      }, 200);
     },
     showFromTooltip(id) {
       const tooltiprow = document.querySelector(`.sp${id}`);
@@ -769,9 +802,6 @@ export default {
       if (!this.addDriverStatus) {
         this.addDriverStatus = true;
         this.newRider = true;
-        setTimeout(() => {
-          this.verifyTelInput();
-        }, 200);
       } else {
         this.addDriverStatus = false;
         this.newRider = false;
@@ -945,9 +975,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackUpdateBid(payload);
             clearInterval(interval); // stop the interval
-            this.getOrders();
-            // this.trackSendBid(payload);  set up mixpanel first
+            this.definePayload();
           }
         })
         .catch(error => {
@@ -967,9 +997,8 @@ export default {
       const cancelbidpayload = JSON.stringify({
         order_bid_id: this.orders[id - 1].bidId,
       });
-
       axios
-        .post(`${this.auth}v1/cancel_order_bid/`, payload, this.config)
+        .post(`${this.auth}v1/cancel_order_bid/`, cancelbidpayload, this.config)
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
@@ -982,9 +1011,9 @@ export default {
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
+            this.trackCancelBid(cancelbidpayload);
             clearInterval(interval); // stop the interval
-            this.getOrders();
-            // this.trackSendBid(payload);  set up mixpanel first
+            this.definePayload();
           }
         })
         .catch(error => {
@@ -999,16 +1028,6 @@ export default {
             }, 4000);
           }
         });
-    },
-
-    trackSendBid(payload) {
-      try {
-        if (window.env === 'production') {
-          window.mixpanel.track('Send Order Bid', JSON.parse(payload));
-        }
-      } catch (er) {
-        console.log(er);
-      }
     },
     driverSelector(id) {
       const q = this.count1;
@@ -1193,7 +1212,6 @@ export default {
             let allDetails = '';
             if (unescaped.status) {
               this.orders = [];
-              const loop = unescaped.data.length;
               unescaped.data.forEach((row, i) => {
                 allDetails = this.populateOrders(row, i);
                 if (allDetails) {
@@ -1212,7 +1230,22 @@ export default {
           });
       }, 60000);
     },
-    getOrders() {
+    definePayload() {
+      clearInterval(interval);
+      this.orders = [];
+      const payload = {
+        owner_id: this.sessionInfo.id,
+        to_date: moment().format('YYYY-MM-DD'),
+        from_date: '2014-02-09',
+        limit: `${this.orderRange.split(' ')[0]}, ${100}`,
+      };
+      let vendfilter = document.getElementById('vend');
+      if (vendfilter) {
+        vendfilter.value = '';
+      }
+      this.getOrders(payload);
+    },
+    getOrders(ordpaylaod) {
       this.loadingStatus = true;
       this.ownerPhone = this.sessionInfo.phone;
       const payload = JSON.stringify({
@@ -1224,15 +1257,23 @@ export default {
         .post(`${this.auth}v1/list_owner_bids/`, payload, this.config)
         .then(response => {
           const unescaped = response.data;
+          if (this.ordercount.length === 0) {
+            const multiplier = response.data.count / 100;
+            for (let i = 0; i < Math.floor(multiplier); i++) {
+              this.ordercount.push(`${i * 100} - ${(i + 1) * 100}`);
+            }
+            this.ordercount.push(`${Math.floor(multiplier) * 100} - ${response.data.count}`);
+            this.orderRange = this.ordercount[0];
+          }
           if (unescaped.status) {
-            const loop = unescaped.data.length;
             unescaped.data.forEach((row, i) => {
-              // this.populateOrders(row, i);
               this.orders.push(this.populateOrders(row, i));
               this.loadingStatus = false;
               this.responseNo = 1;
             });
-            this.refreshOrders();
+            if (this.$route.path === '/quotes') {
+              this.refreshOrders();
+            }
           } else {
             this.loadingStatus = false;
           }
@@ -1291,6 +1332,16 @@ export default {
         orderDetails.confirmStatus = confirmStatus;
         orderDetails.awardStatus = awardStatus;
         return orderDetails;
+      }
+    },
+    trackCancelBid(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Cancel Bid Web', JSON.parse(payload));
+      }
+    },
+    trackUpdateBid(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Order Update Bid Web', JSON.parse(payload));
       }
     },
   },
