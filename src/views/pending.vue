@@ -1024,7 +1024,6 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            console.log(error.response);
             if (error.response.data.order_response.status) {
               this.notificationName = 'message-box-up';
               this.message = 1;
