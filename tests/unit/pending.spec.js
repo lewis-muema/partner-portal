@@ -479,6 +479,50 @@ describe('Pending.vue', () => {
   afterEach(() => {
     moxios.uninstall();
   });
+  wrapper.vm.sessionInfo = sessionData;
+  it('Check whether the fetchOwnerDrivers function fetches owner drivers', done => {
+    wrapper.vm.fetchOwnerDrivers();
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+            status: true,
+            riders: [
+              {
+                vendor_disp_name: '5T Truck',
+                registration_no: 'KAP 2800L',
+                vendor_type: 10,
+                rider_id: 678,
+                tracker: 0,
+                default_currency: 'KES',
+                f_name: 'Samuel ',
+                s_name: 'Geno',
+              },
+              {
+                vendor_disp_name: 'Freight',
+                registration_no: 'KCS 8223F',
+                vendor_type: 25,
+                rider_id: 749,
+                tracker: 11,
+                default_currency: 'KES',
+                f_name: 'Evans',
+                s_name: 'Meshack',
+              },
+            ],
+          },
+        })
+        .then(() => {
+          const parseData = JSON.parse(localStorage.sessionData);
+          expect(parseData.payload.riders[0].registration_no).equal('KAP 2800L');
+          done();
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
+    });
+  });
   // it('Check vendor format function formats the name based on the tonnage of the truck', () => {
   //   expect(wrapper.vm.formatVendorName(order[0])).equal('Freight  (12 T)');
   // });
@@ -637,7 +681,6 @@ describe('Pending.vue', () => {
     expect(wrapper.vm.isMobile()).equal(false);
   });
   it('Check whether the get riders function fetches the correct data', done => {
-    wrapper.vm.sessionInfo = sessionData;
     wrapper.vm.riders = [];
     wrapper.vm.getRiders();
     moxios.wait(() => {
@@ -651,10 +694,13 @@ describe('Pending.vue', () => {
           },
         })
         .then(() => {
-          expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
-          expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
-          expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
-          done();
+          setTimeout(() => {
+            const riderdata = wrapper.vm.riders;
+            expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
+            expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
+            expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
+            done();
+          }, 100);
         })
         .catch(error => {
           console.log('caught', error.message);
