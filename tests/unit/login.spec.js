@@ -17,6 +17,7 @@ describe('Login.vue', () => {
   const localVue = createLocalVue();
   localVue.use(VueRouter);
   const router = new VueRouter({
+    mode: 'history',
     routes: [
       {
         path: '/',
@@ -91,11 +92,6 @@ describe('Login.vue', () => {
     }, 1000);
     done();
   });
-  it('Check whether the validate password removes spaces and other characters other than numbers', () => {
-    wrapper.vm.password = '11r6 5d 7';
-    wrapper.vm.validatePassword();
-    expect(wrapper.vm.password).equal('11657');
-  });
   it('Check whether the postForgot function responds to the user when the password has been changed', done => {
     wrapper.vm.tel = '+254 795 510441';
     wrapper.vm.postForgot();
@@ -155,51 +151,4 @@ describe('Login.vue', () => {
         });
     });
   });
-  // it('Check whether the handleResponse function fetches owner drivers', done => {
-  //   const response = {
-  //     status: 200,
-  //     data: loginResponse,
-  //   };
-  //   wrapper.vm.handleResponse(response);
-  //   moxios.wait(() => {
-  //     const request = moxios.requests.mostRecent();
-  //     request
-  //       .respondWith({
-  //         status: 200,
-  //         response: {
-  //           status: true,
-  //           riders: [
-  //             {
-  //               vendor_disp_name: '5T Truck',
-  //               registration_no: 'KAP 2800L',
-  //               vendor_type: 10,
-  //               rider_id: 678,
-  //               tracker: 0,
-  //               default_currency: 'KES',
-  //               f_name: 'Samuel ',
-  //               s_name: 'Geno',
-  //             },
-  //             {
-  //               vendor_disp_name: 'Freight',
-  //               registration_no: 'KCS 8223F',
-  //               vendor_type: 25,
-  //               rider_id: 749,
-  //               tracker: 11,
-  //               default_currency: 'KES',
-  //               f_name: 'Evans',
-  //               s_name: 'Meshack',
-  //             },
-  //           ],
-  //         },
-  //       })
-  //       .then(() => {
-  //         const parseData = JSON.parse(localStorage.sessionData);
-  //         expect(parseData.payload.riders[0].registration_no).equal('KAP 2800L');
-  //         done();
-  //       })
-  //       .catch(error => {
-  //         console.log('caught', error.message);
-  //       });
-  //   });
-  // });
 });
