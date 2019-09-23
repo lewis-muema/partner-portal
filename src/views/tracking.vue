@@ -106,7 +106,6 @@ import errorHandler from '../components/errorHandler';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let client = '';
-
 let map = '';
 let bounds = '';
 const loopInterval = [];
