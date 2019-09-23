@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <loginHeader
-      v-if="this.$route.name === 'logIn' || this.$route.name === 'driverRequest' || this.$route.name === 'driverRequestBlank'"
+      v-if="this.$route.name === 'logIn' || this.$route.name === 'driverRequest' || this.$route.name === 'driverRequestBlank' || this.$route.name === 'externalTrackingAll'|| this.$route.name === 'externalTrackingId'|| this.$route.name === 'externalTrackingFrom'|| this.$route.name === 'externalTrackingBlank'"
     />
     <appHeader v-else />
     <router-view />

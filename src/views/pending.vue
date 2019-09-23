@@ -1098,7 +1098,8 @@ export default {
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
           this.notificationName = 'message-box-up';
-          this.message = 1;
+          this.message = 7;
+          this.error = `${response.data.order_response.reason}, The order has also been picked`;
           setTimeout(() => {
             this.notificationName = 'message-box-down';
           }, 4000);
@@ -1112,17 +1113,31 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.confirmButtonState = 'confirm order';
-            if (!error.response.data.order_response) {
-              this.error = `${error.response.data.message} - ${error.response.data.response.msg}`;
+            if (error.response.data.order_response.status) {
+              this.notificationName = 'message-box-up';
+              this.message = 1;
+              setTimeout(() => {
+                this.notificationName = 'message-box-down';
+              }, 4000);
+              this.opened = [];
+              this.orders = [];
+              this.responseNo = 0;
+              this.TrackOrderConfirmation(payload);
+              clearInterval(interval); // stop the interval
+              this.getOrders(this.allVehicles);
             } else {
-              this.error = `${error.response.data.order_response.reason}`;
+              this.confirmButtonState = 'confirm order';
+              if (!error.response.data.order_response) {
+                this.error = `${error.response.data.message} - ${error.response.data.response.msg}`;
+              } else {
+                this.error = `${error.response.data.order_response.reason}`;
+              }
+              this.notificationName = 'message-box-up';
+              this.message = 4;
+              setTimeout(() => {
+                this.notificationName = 'message-box-down';
+              }, 4000);
             }
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
           }
         });
     },

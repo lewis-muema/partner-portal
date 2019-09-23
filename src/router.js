@@ -12,6 +12,7 @@ import Statement from './views/statement.vue';
 import Vehicles from './views/vehicles.vue';
 import Tracking from './views/tracking.vue';
 import DriverRequest from './views/driverRequest.vue';
+import ExternalTracking from './views/externalTracking.vue';
 
 Vue.use(Router);
 
@@ -83,6 +84,26 @@ export default new Router({
       path: '/driveRequest',
       name: 'driverRequestBlank',
       component: DriverRequest,
+    },
+    {
+      path: '/external-tracking/:id/:fromdate/:todate',
+      name: 'externalTrackingAll',
+      component: ExternalTracking,
+    },
+    {
+      path: '/external-tracking/:id/:fromdate/',
+      name: 'externalTrackingFrom',
+      component: ExternalTracking,
+    },
+    {
+      path: '/external-tracking/:id/',
+      name: 'externalTrackingId',
+      component: ExternalTracking,
+    },
+    {
+      path: '/external-tracking/',
+      name: 'externalTrackingBlank',
+      component: ExternalTracking,
     },
   ],
 });
