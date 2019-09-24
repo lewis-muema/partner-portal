@@ -84,6 +84,7 @@ export default {
           this.count = this.positions.length;
           this.name = this.positions[0].name;
           this.phone = this.positions[0].phone_no;
+          this.time = this.positions[0].time;
           this.loadMapScript();
         } else {
           this.loadingStatus = false;
@@ -226,18 +227,15 @@ export default {
       }, 500);
     },
     checkTime() {
-      // EventType = 'play';
       this.marker.event.onEvent((event, data) => {
         this.time = this.positions[data.index].time;
       });
-      // this.loadingStatus = false;
     },
     getTime() {
       const time = moment(this.time).format('h:mm:ss a');
       return time;
     },
     getDate() {
-      // const date = new Date(this.time.split(' ')[1]);
       const date = moment(this.time).format('MMMM Do YYYY');
       return date;
     },
