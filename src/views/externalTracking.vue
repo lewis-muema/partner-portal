@@ -6,35 +6,55 @@
       <div class="loading" v-if="loadingStatus" style="margin: 0;"></div>
     </div>
     <div class="controls">
+      <span class="tooltipcontrol Decrease">Decrease speed</span>
+      <span class="tooltipcontrol Rewind">Rewind</span>
+      <span class="tooltipcontrol Play">Play</span>
+      <span class="tooltipcontrol Pause">Pause</span>
+      <span class="tooltipcontrol Fast">Fast forward</span>
+      <span class="tooltipcontrol Increase">Increase speed</span>
+    </div>
+    <div class="controls">
       <img
         src="https://images.sendyit.com/partner_portal/images/rewind.png"
         class="decrease-speed tracker-icon"
         @click="markerSlow()"
+        @mouseover="ToolTip('Decrease', 1)"
+        @mouseout="ToolTip('Decrease', 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/back.png"
         class="previous tracker-icon"
         @click="markerPrevious()"
+        @mouseover="ToolTip('Rewind', 1)"
+        @mouseout="ToolTip('Rewind', 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/play-button.png"
         class="play tracker-icon"
         @click="markerPlay()"
+        @mouseover="ToolTip('Play', 1)"
+        @mouseout="ToolTip('Play', 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/pause.png"
         class="pause tracker-icon"
         @click="markerPause()"
+        @mouseover="ToolTip('Pause', 1)"
+        @mouseout="ToolTip('Pause', 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/next.png"
         class="next tracker-icon"
         @click="markerNext()"
+        @mouseover="ToolTip('Fast', 1)"
+        @mouseout="ToolTip('Fast', 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/fast-forward.png"
-        class="decrease-speed tracker-icon"
+        class="increase-speed tracker-icon"
         @click="markerFast()"
+        @mouseover="ToolTip('Increase', 1)"
+        @mouseout="ToolTip('Increase', 0)"
       />
     </div>
     <div class="labels name">{{ name }}</div>
@@ -49,6 +69,7 @@
 import { TravelMarker, TravelMarkerOptions, TravelData, TravelEvents, EventType } from 'travel-marker';
 import axios from 'axios';
 import moment from 'moment';
+import $ from 'jquery';
 // let client = '';
 let map = '';
 let bounds = '';
@@ -167,6 +188,7 @@ export default {
       clearInterval(fastForwardInterval);
       rewindInterval = '';
       fastForwardInterval = '';
+      this.marker.pause();
       setTimeout(() => {
         this.marker.play();
       }, 200);
@@ -238,6 +260,9 @@ export default {
     getDate() {
       const date = moment(this.time).format('MMMM Do YYYY');
       return date;
+    },
+    ToolTip(classname, action) {
+      $(`.${classname}`).css('opacity', action);
     },
   },
 };

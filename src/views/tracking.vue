@@ -2,6 +2,35 @@
   <div>
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
+    <div class="datescenter">
+      <div
+        :class="`datespicker${ridersWithTracker.indexer} alldates`"
+        v-for="ridersWithTracker in ridersWithTrackers"
+        :key="ridersWithTracker.rider_id"
+      >
+        <p class="track-label">Start Date</p>
+        <span class="fromdate">
+          <datetime
+            v-model="dateRange[ridersWithTracker.indexer].from"
+            format="YYYY-MM-DD H:i:s"
+            class="picker"
+            placeholder="From"
+          ></datetime>
+        </span>
+        <p class="track-label">End Date</p>
+        <span class="todate">
+          <datetime
+            v-model="dateRange[ridersWithTracker.indexer].to"
+            format="YYYY-MM-DD H:i:s"
+            class="picker"
+            placeholder="To"
+          ></datetime>
+        </span>
+        <span class="track">
+          <button class="track-button" @click="redirect(ridersWithTracker.indexer)">Track History</button>
+        </span>
+      </div>
+    </div>
     <div class="map-div" id="map_area"></div>
     <div
       class="vehicles-tracking-dashboard__controls vehicles-tracking-dashboard__controls--left-control"
@@ -101,6 +130,7 @@ import axios from 'axios';
 import moment from 'moment';
 import mqtt from 'mqtt';
 import Mixpanel from 'mixpanel';
+import datetime from 'vuejs-datetimepicker';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -108,6 +138,7 @@ const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let client = '';
 let map = '';
 let bounds = '';
+let marker = '';
 const loopInterval = [];
 const clientIdArray = [];
 export default {
@@ -115,6 +146,8 @@ export default {
   components: {
     verifier,
     errorHandler,
+    // eslint-disable-next-line vue/no-unused-components
+    datetime,
   },
   data() {
     return {
@@ -131,6 +164,10 @@ export default {
         },
       },
       errorObj: '',
+      dateRange: [],
+      from: '',
+      to: '',
+      latlng: [],
     };
   },
   created() {
@@ -178,6 +215,7 @@ export default {
                   const filterObject = riders.filter(e => e.rider_id === row.rider_id);
                   if (filterObject.length > 0) {
                     row.rider_details = filterObject[0];
+                    row.indexer = i;
                     this.ridersWithTrackers.push(row);
                     const vendorDetails = {
                       vendor_type: row.rider_details.vendor_type,
@@ -187,6 +225,7 @@ export default {
                       vendorArray.push(row.rider_details.vendor_type);
                       this.availableVendors.push(vendorDetails);
                     }
+                    this.dateRange.push({ from: '', to: '' });
                   }
                 });
                 this.mixpanelTrackVehicles();
@@ -254,22 +293,21 @@ export default {
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(0, 0),
         };
-        const marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
           position: { lat: this.ridersWithTrackers[i].lat, lng: this.ridersWithTrackers[i].lng },
           map,
           icon,
         });
+        this.latlng.push(new google.maps.LatLng(this.ridersWithTrackers[i].lat, this.ridersWithTrackers[i].lng));
         map.initialZoom = true;
         bounds.extend({ lat: this.ridersWithTrackers[i].lat, lng: this.ridersWithTrackers[i].lng });
         map.fitBounds(bounds);
         const date = new Date(this.ridersWithTrackers[i].time);
-        const contentString = `${'<div class="vendor--infowindow-content"><div class="">'}${this.ridersWithTrackers[i].rider_details.registration_no}</div></div>`;
-
+        const contentString = `<div class="vendor--infowindow-content window${i}"><div class="">${this.ridersWithTrackers[i].rider_details.registration_no}</div></div>`;
         marker['infowindow'] = new google.maps.InfoWindow({
           content: contentString,
         });
-        this.ridersWithTrackers[i].indexer = i;
-
+        this.ridersWithTrackers[i].marker = marker;
         // eslint-disable-next-line no-loop-func
         google.maps.event.addListener(map, 'zoom_changed', () => {
           const zoomChangeBoundsListener = google.maps.event.addListener(map, 'bounds_changed', event => {
@@ -280,25 +318,29 @@ export default {
             }
             google.maps.event.removeListener(zoomChangeBoundsListener);
           });
+          this.getPx(this.latlng[i], map, i);
         });
         this.ridersWithTrackers[i].infowindow = false;
         // eslint-disable-next-line no-loop-func
         google.maps.event.addListener(marker, 'click', () => {
-          const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
-          document.querySelector(`.vehicle-index${i}`).innerHTML = false;
-          parent.style.borderLeftStyle = 'solid';
-          parent.style.borderLeftColor = '#0082cc';
-          parent.style.borderLeftWidth = '10px';
-          marker['infowindow'].open(map, marker);
-          this.ridersWithTrackers[i].infowindow = true;
+          this.ridersWithTrackers[i].marker.infowindow.open(map, this.ridersWithTrackers[i].marker);
+          this.openInfoWindow(i);
         });
+        // eslint-disable-next-line no-loop-func
         google.maps.event.addListener(marker['infowindow'], 'closeclick', () => {
-          const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
-          document.querySelector(`.vehicle-index${i}`).innerHTML = true;
-          parent.style.borderLeftStyle = 'none';
-          this.ridersWithTrackers[i].infowindow = false;
+          this.ridersWithTrackers[i].marker.infowindow.close();
+          this.closeInfoWindow(i);
         });
-        this.ridersWithTrackers[i].marker = marker;
+        // eslint-disable-next-line no-loop-func
+        google.maps.event.addListener(map, 'drag', () => {
+          this.getPx(this.latlng[i], map, i);
+        });
+        // eslint-disable-next-line no-loop-func
+        google.maps.event.addListener(map, 'center_changed', () => {
+          setTimeout(() => {
+            this.getPx(this.latlng[i], map, i);
+          }, 200);
+        });
         this.ridersWithTrackers[i].checked = true;
         this.ridersWithTrackers[i].lastSeen = this.ridersWithTrackers[i].time;
         const singleInterval = setInterval(this.loopTimer, 60000, i);
@@ -306,7 +348,24 @@ export default {
         this.connect_mqtt(i);
       }
     },
+    openInfoWindow(i) {
+      const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
+      document.querySelector(`.vehicle-index${i}`).innerHTML = false;
+      parent.style.borderLeftStyle = 'solid';
+      parent.style.borderLeftColor = '#0082cc';
+      parent.style.borderLeftWidth = '10px';
+      this.ridersWithTrackers[i].infowindow = true;
+      $(`.datespicker${i}`).css({ display: 'block' });
+    },
+    closeInfoWindow(i) {
+      const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
+      document.querySelector(`.vehicle-index${i}`).innerHTML = true;
+      parent.style.borderLeftStyle = 'none';
+      this.ridersWithTrackers[i].infowindow = false;
+      $(`.datespicker${i}`).css({ display: 'none' });
+    },
     senseClick(i) {
+      this.getPx(this.latlng[i], map, i);
       const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
       const driverState = JSON.parse(document.querySelector(`.vehicle-index${i}`).innerHTML);
       const selected = i;
@@ -315,6 +374,7 @@ export default {
         this.ridersWithTrackers[i].marker.infowindow.close();
         this.ridersWithTrackers[i].infowindow = false;
         document.querySelector(`.vehicle-index${i}`).innerHTML = true;
+        $(`.datespicker${i}`).css({ display: 'none' });
       } else {
         parent.style.borderLeftStyle = 'solid';
         parent.style.borderLeftColor = '#0082cc';
@@ -322,7 +382,17 @@ export default {
         this.ridersWithTrackers[i].marker.infowindow.open(map, this.ridersWithTrackers[i].marker);
         this.ridersWithTrackers[i].infowindow = true;
         document.querySelector(`.vehicle-index${i}`).innerHTML = false;
+        $(`.datespicker${i}`).css({ display: 'block' });
       }
+    },
+    getPx(latLng, map1, i) {
+      const topRight = map1.getProjection().fromLatLngToPoint(map1.getBounds().getNorthEast());
+      const bottomLeft = map1.getProjection().fromLatLngToPoint(map1.getBounds().getSouthWest());
+      // eslint-disable-next-line no-restricted-properties
+      const scale = Math.pow(2, map1.getZoom());
+      const worldPoint = map1.getProjection().fromLatLngToPoint(latLng);
+      const pixelCoordinate = new google.maps.Point((worldPoint.x - bottomLeft.x) * scale, (worldPoint.y - topRight.y) * scale);
+      $(`.datespicker${i}`).css({ top: pixelCoordinate.y, left: pixelCoordinate.x });
     },
     senseChecked(data, event) {
       if (event.target.checked) {
@@ -332,6 +402,7 @@ export default {
             this.ridersWithTrackers[x].checked = true;
             if (this.ridersWithTrackers[x].infowindow) {
               this.ridersWithTrackers[x].marker.infowindow.open(map, this.ridersWithTrackers[x].marker);
+              $(`.datespicker${x}`).css({ display: 'block' });
             } else {
               this.ridersWithTrackers[x].marker.infowindow.close();
             }
@@ -342,6 +413,7 @@ export default {
           if (this.ridersWithTrackers[x].rider_details.vendor_type === data) {
             this.ridersWithTrackers[x].marker.setMap(null);
             this.ridersWithTrackers[x].checked = false;
+            $(`.datespicker${x}`).css({ display: 'none' });
           }
         }
       }
@@ -401,76 +473,23 @@ export default {
       });
       clientIdArray.push(`partner_app_positions/${this.get_driver_city_and_tracking_no(this.ridersWithTrackers[i].sim_card_sn, this.ridersWithTrackers[i].partner_city_id)}`);
     },
-    get_driver_city_and_tracking_no(tracking_no, city_id) {
-      let city_code = '';
-      if (city_id === 1) {
-        city_code = 'ke-nairobi';
-      } else if (city_id === 2) {
-        city_code = 'ke-mombasa';
-      } else if (city_id === 3) {
-        city_code = 'ke-thika';
-      } else if (city_id === 4) {
-        city_code = 'ke-nakuru';
-      } else if (city_id === 5) {
-        city_code = 'ke-kisumu';
-      } else {
-        city_code = 'ke-nairobi';
-      }
-      return `${city_code}/${tracking_no}`;
-    },
-    hideTrackingVendors() {
-      $('#vehicles-tracking-dashboard').hide();
-      $('#vehicles-tracking-dashboard--right-control').hide();
-      $('#vehicles-tracking-dashboard--left-control').show();
-    },
-    showTrackingVendors() {
-      $('#vehicles-tracking-dashboard').show();
-      $('#vehicles-tracking-dashboard--right-control').show();
-      $('#vehicles-tracking-dashboard--left-control').hide();
-    },
     setRealTimeTracker(i, data) {
-      const icon = {
-        url: `https://images.sendyit.com/web_platform/vendor_type/top/${this.ridersWithTrackers[i].rider_details.vendor_type}.png`,
-        scaledSize: new google.maps.Size(50, 50),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(0, 0),
-      };
-      const marker = new google.maps.Marker({
-        position: { lat: data.lat, lng: data.lng },
-        map,
-        icon,
-      });
-      const contentString = `${'<div class="vendor--infowindow-content"><div class="">'}${this.ridersWithTrackers[i].rider_details.registration_no}</div></div>`;
-
-      marker['infowindow'] = new google.maps.InfoWindow({
-        content: contentString,
-      });
+      this.latlng[i] = new google.maps.LatLng(data.lat, data.lng);
+      this.ridersWithTrackers[i].marker.setPosition(new google.maps.LatLng(data.lat, data.lng));
+      this.getPx(this.latlng[i], map, i);
       if (this.ridersWithTrackers[i].infowindow && this.ridersWithTrackers[i].checked) {
-        marker['infowindow'].open(map, marker);
+        this.ridersWithTrackers[i].marker.infowindow.open(map, this.ridersWithTrackers[i].marker);
+        $(`.datespicker${i}`).css({ display: 'block' });
       }
-      google.maps.event.addListener(marker, 'click', () => {
-        const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
-        document.querySelector(`.vehicle-index${i}`).innerHTML = false;
-        parent.style.borderLeftStyle = 'solid';
-        parent.style.borderLeftColor = '#0082cc';
-        parent.style.borderLeftWidth = '10px';
-        marker['infowindow'].open(map, marker);
-        this.ridersWithTrackers[i].infowindow = true;
-      });
-      google.maps.event.addListener(marker['infowindow'], 'closeclick', () => {
-        const parent = document.querySelector(`.vehicle-index${i}`).parentNode;
-        document.querySelector(`.vehicle-index${i}`).innerHTML = true;
-        parent.style.borderLeftStyle = 'none';
-        this.ridersWithTrackers[i].infowindow = false;
-      });
       if (this.ridersWithTrackers[i].checked) {
         this.ridersWithTrackers[i].marker.setMap(null);
-        this.ridersWithTrackers[i].marker = marker;
         this.ridersWithTrackers[i].marker.setMap(map);
       } else {
-        this.ridersWithTrackers[i].marker = marker;
         this.ridersWithTrackers[i].marker.setMap(null);
       }
+    },
+    redirect(i) {
+      window.open(`${window.location.href.split('/')[0]}//${window.location.href.replace(/(^\w+:|^)\/\//, '').split('/')[0]}/external-tracking/${this.ridersWithTrackers[i].rider_details.rider_id}/${this.dateRange[i].from}/${this.dateRange[i].to}`, '_blank');
     },
     setWindowVar(i, data) {
       const speedEl = document.querySelector(`.speed${i}`);
@@ -501,6 +520,33 @@ export default {
           timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
         }
       }
+    },
+    get_driver_city_and_tracking_no(tracking_no, city_id) {
+      let city_code = '';
+      if (city_id === 1) {
+        city_code = 'ke-nairobi';
+      } else if (city_id === 2) {
+        city_code = 'ke-mombasa';
+      } else if (city_id === 3) {
+        city_code = 'ke-thika';
+      } else if (city_id === 4) {
+        city_code = 'ke-nakuru';
+      } else if (city_id === 5) {
+        city_code = 'ke-kisumu';
+      } else {
+        city_code = 'ke-nairobi';
+      }
+      return `${city_code}/${tracking_no}`;
+    },
+    hideTrackingVendors() {
+      $('#vehicles-tracking-dashboard').hide();
+      $('#vehicles-tracking-dashboard--right-control').hide();
+      $('#vehicles-tracking-dashboard--left-control').show();
+    },
+    showTrackingVendors() {
+      $('#vehicles-tracking-dashboard').show();
+      $('#vehicles-tracking-dashboard--right-control').show();
+      $('#vehicles-tracking-dashboard--left-control').hide();
     },
     mixpanelTrackVehicles() {
       const sessionInfo = JSON.parse(localStorage.sessionData);
