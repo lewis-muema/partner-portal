@@ -21,6 +21,63 @@
   margin-right: 0.8%;
   cursor: pointer;
 }
+.tooltipcontrol {
+  opacity: 0;
+  bottom: 70px;
+  width: 15%;
+  height: 45px;
+  background-color: #847c74a8;
+  color: white;
+  font-weight: 900;
+  border-radius: 10px;
+  margin-left: 0.8%;
+  margin-right: 0.8%;
+  float: left;
+  position: relative;
+  text-align: center;
+}
+.Play,
+.Pause,
+.Rewind {
+  padding-top: 10px;
+}
+.datescenter {
+  height: 100vh;
+  position: absolute;
+  width: 100vw;
+  overflow: hidden;
+  top: 0;
+}
+.alldates {
+  position: absolute;
+  display: none;
+  z-index: 1;
+  margin-left: 85px;
+  margin-top: 40px;
+}
+.track-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  color: white;
+  background-color: #f57f20;
+  font-weight: 600;
+  padding: 7px;
+  border-radius: 5px;
+}
+.track-label {
+  background-color: white;
+  display: block;
+  padding: 3px;
+  font-weight: 700;
+  width: 70px;
+  text-align: center;
+  margin-bottom: 0;
+  margin-left: 7px;
+}
+.picker {
+  margin: 5px;
+}
 .time {
   bottom: 65px;
 }
@@ -74,6 +131,7 @@
   top: 135px;
   color: #333;
   background-color: #fff;
+  z-index: 200;
 }
 .selector--title {
   border-bottom: 5px solid #d5dbe5;
@@ -213,6 +271,9 @@
     margin-left: 15%;
     margin-right: 15%;
     width: 70%;
+  }
+  .tooltipcontrol {
+    bottom: 35px;
   }
   .labels {
     margin-bottom: 20%;
