@@ -146,7 +146,6 @@ export default {
   components: {
     verifier,
     errorHandler,
-    // eslint-disable-next-line vue/no-unused-components
     datetime,
   },
   data() {
