@@ -121,6 +121,9 @@ export default {
       this.text = 'Please provide all the parameters';
     }
   },
+  mounted() {
+    $('.login__logo').css('margin-left', '5%');
+  },
   methods: {
     loadMapScript() {
       if (window.google && window.google.maps) {
