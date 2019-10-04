@@ -324,6 +324,7 @@ export default {
         google.maps.event.addListener(marker, 'click', () => {
           this.ridersWithTrackers[i].marker.infowindow.open(map, this.ridersWithTrackers[i].marker);
           this.openInfoWindow(i);
+          map.setCenter(this.latlng[i]);
         });
         // eslint-disable-next-line no-loop-func
         google.maps.event.addListener(marker['infowindow'], 'closeclick', () => {
@@ -375,6 +376,7 @@ export default {
         document.querySelector(`.vehicle-index${i}`).innerHTML = true;
         $(`.datespicker${i}`).css({ display: 'none' });
       } else {
+        map.setCenter(this.latlng[i]);
         parent.style.borderLeftStyle = 'solid';
         parent.style.borderLeftColor = '#0082cc';
         parent.style.borderLeftWidth = '10px';
