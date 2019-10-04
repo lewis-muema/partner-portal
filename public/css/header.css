@@ -1,7 +1,9 @@
 body {
   min-width: 1150px;
 }
-
+.header {
+  display: grid;
+}
 .header-primary {
   z-index: 10;
   width: 100%;
@@ -19,8 +21,8 @@ body {
   display: flex;
   justify-content: flex-start;
   min-width: 1150px;
+  z-index: 5;
 }
-
 .secondary-inner {
   min-width: 1150px;
   align-items: center;

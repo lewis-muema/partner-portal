@@ -219,6 +219,21 @@
             <i class="fa fa-filter" aria-hidden="true"></i>
           </button>
         </div>
+        <button
+          type="button"
+          id="filtSub"
+          name="button"
+          class="btn btn_primary fil-sub fil-sub-1 active-btn"
+          @click="closePopup();"
+          v-if="activeStatus"
+        >Withdraw cash</button>
+        <button
+          type="button"
+          id="filtSub"
+          name="button"
+          class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn"
+          v-else
+        >You cannot withdraw today</button>
         <div class="search-error" id="err">{{ error }}</div>
         <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.id">
