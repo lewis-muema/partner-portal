@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="header">
     <div class="header-primary">
       <div class="primary-inner">
         <div class="inner-left">
