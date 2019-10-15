@@ -71,7 +71,7 @@
               @click="checkedWithDrawal(method.payment_method_id, 0)"
             >
             <span class="statement__column-10">
-              <p class="no-margin">{{method.name}}</p>
+              <p class="no-margin">{{ method.name }}</p>
             </span>
             </div>
           </div>
