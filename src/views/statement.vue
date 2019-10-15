@@ -628,7 +628,7 @@ export default {
               this.fetchStatement();
             }, 4000);
             if (this.opened) {
-              // this.closePopup();
+              this.closePopup();
             }
           } else {
             this.sendingWithdrawRequestStatus = false;
