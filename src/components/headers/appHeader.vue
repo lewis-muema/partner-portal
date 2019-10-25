@@ -40,6 +40,9 @@
                 <router-link to="/savings" class="dropdown-link">
                   <p class="dropdown-item">Savings</p>
                 </router-link>
+                <router-link to="/performance" class="dropdown-link">
+                  <p class="dropdown-item">Performance</p>
+                </router-link>
 
                 <div @click="trainingRedirect()" class="dropdown-link">
                   <p class="dropdown-item">Support</p>
@@ -68,15 +71,26 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
       dropdown: false,
       timeout: 0,
+      config: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.token,
+        },
+      },
+      performance_status: false,
     };
   },
   computed: {},
-  created() {},
+  created() {
+    this.fetchBikeDrivers();
+  },
   methods: {
     toggleDropUp() {
       setTimeout(() => {
@@ -115,6 +129,25 @@ export default {
     },
     trainingRedirect() {
       window.open('http://support.sendyit.com/collection/1-sendy-partner-training-manual', '_blank');
+    },
+    fetchBikeDrivers() {
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const riderPayload = {
+        owner_id: sessionInfo.id,
+        vendor_type: 1,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+        .then(res => {
+          this.$store.commit('setBikeAvailability', true);
+          this.$store.commit('setBikeRiders', res.data.riders);
+          this.performance_status = true;
+        })
+        .catch(error => {
+         this.$store.commit('setBikeAvailability', false);
+         this.$store.commit('setBikeRiders', []);
+         this.performance_status = false;
+        });
     },
   },
 };
