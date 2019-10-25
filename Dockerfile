@@ -10,7 +10,6 @@ RUN sudo apt-get -y install build-essential
 RUN sudo apt-get -y install nodejs
 
 RUN sudo apt-get clean
-
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
         ln -sf /dev/stderr /var/log/nginx/error.log
