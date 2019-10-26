@@ -6,6 +6,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
  faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
+import VueMask from 'v-mask';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VuePageTitle from 'vue-page-title';
 import lang from 'element-ui/lib/locale/lang/en';
