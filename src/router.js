@@ -13,6 +13,7 @@ import Vehicles from './views/vehicles.vue';
 import Tracking from './views/tracking.vue';
 import DriverRequest from './views/driverRequest.vue';
 import ExternalTracking from './views/externalTracking.vue';
+import Performance from './views/performance.vue';
 
 Vue.use(Router);
 
@@ -104,6 +105,11 @@ export default new Router({
       path: '/external-tracking/',
       name: 'externalTrackingBlank',
       component: ExternalTracking,
+    },
+    {
+      path: '/performance',
+      name: 'performance',
+      component: Performance,
     },
   ],
 });

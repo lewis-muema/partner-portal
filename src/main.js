@@ -9,11 +9,27 @@ import {
 import VueMask from 'v-mask';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VuePageTitle from 'vue-page-title';
+import lang from 'element-ui/lib/locale/lang/en';
+import locale from 'element-ui/lib/locale';
+import 'element-ui/lib/theme-chalk/index.css';
+import {
+ Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress,
+} from 'element-ui';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
-Vue.use(VueMask);
+// configure language
+locale.use(lang);
+
+Vue.use(Rate);
+Vue.use(Dropdown);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(Menu);
+Vue.use(Submenu);
+Vue.use(MenuItem);
+Vue.use(Progress);
 
 Vue.use(VuePageTitle);
 
