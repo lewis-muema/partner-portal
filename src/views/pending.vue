@@ -466,7 +466,7 @@ import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
-// import truckValidationMixin from '../mixins/truckValidationMixin';
+import truckValidationMixin from '../mixins/truckValidationMixin';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
