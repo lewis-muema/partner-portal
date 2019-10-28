@@ -72,9 +72,12 @@
             <el-progress type="line" :percentage="onlineRate()" :stroke-width="10" :color="colors" :show-text="false"></el-progress>
           </div>
           <div class="riderstats__box-extra online--time--extra">
-            <span class="dashboard__box-text">
-              <a style="color: #1B7FC3;">{{ onlineTarget() }}</a> to go to reach your daily target
-            </span>
+            <div v-if="!online_target_reached">
+              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i><a class="active-target-hours"> {{ onlineTarget() }} </a>to go to reach your daily target</span>
+            </div>
+            <div v-else>
+              <span class="dashboard__box-text"><i class="fas fa-check-circle checked-daily-target"></i> Daily target of <a>{{ this.rider_stats.online_target/3600 }} hours</a> achieved</span>
+            </div>
           </div>
         </div>
       </div>
@@ -125,6 +128,7 @@ export default {
       rider_stats: {},
       old_rider_id: '',
       target_reached: false,
+      online_target_reached: true,
     };
   },
   created() {
@@ -155,6 +159,7 @@ export default {
           this.rider_stats = res.data.rider_stats;
           this.show_loading = false;
           this.targetReached();
+          this.onlineTargetReached();
         })
         .catch(error => {
           // ...
@@ -210,6 +215,19 @@ export default {
         this.target_reached = true;
       } else {
         this.target_reached = false;
+      }
+    },
+    onlineTargetReached() {
+      let onlineTime = parseInt(this.rider_stats.online_time, 10);
+      onlineTime = Math.floor(moment.duration(onlineTime, 'seconds').asHours());
+
+      let onlineTarget = parseInt(this.rider_stats.online_target, 10);
+      onlineTarget = Math.floor(moment.duration(onlineTarget, 'seconds').asHours());
+
+      if (onlineTime >= onlineTarget) {
+        this.online_target_reached = true;
+      } else {
+        this.online_target_reached = false;
       }
     },
   },
