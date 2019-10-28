@@ -40,10 +40,9 @@
                 <router-link to="/savings" class="dropdown-link">
                   <p class="dropdown-item">Savings</p>
                 </router-link>
-                <router-link to="/performance" class="dropdown-link">
+                <router-link v-if="performance_status" to="/performance" class="dropdown-link">
                   <p class="dropdown-item">Performance</p>
                 </router-link>
-
                 <div @click="trainingRedirect()" class="dropdown-link">
                   <p class="dropdown-item">Support</p>
                 </div>
