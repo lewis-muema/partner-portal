@@ -193,13 +193,19 @@ export default {
       return `${Math.floor(moment.duration(time, 'seconds').asHours())} Hours ${moment.duration(time, 'seconds').minutes()} Minutes`;
     },
     onlineTarget() {
-      let onlineTime = parseInt(this.rider_stats.online_time, 10);
-      onlineTime = Math.floor(moment.duration(onlineTime, 'seconds').asHours());
+      const onlineTime = parseInt(this.rider_stats.online_time, 10);
 
-      let onlineTarget = parseInt(this.rider_stats.online_target, 10);
-      onlineTarget = Math.floor(moment.duration(onlineTarget, 'seconds').asHours());
+      const onlineTarget = parseInt(this.rider_stats.online_target, 10);
 
-      return `${onlineTarget - onlineTime} Hrs`;
+      const timeDifferenceSec = onlineTarget - onlineTime;
+
+      const timeDifference = Math.floor(moment.duration(timeDifferenceSec, 'seconds').asHours());
+
+        if (timeDifference > 0) {
+           return `${timeDifference} Hrs`;
+        } else {
+          return `${Math.floor(moment.duration(timeDifferenceSec, 'seconds').asMinutes())} Minutes`;
+        }
     },
     orderTarget() {
       const completed = parseInt(this.rider_stats.dispatch_info.completed, 10);
