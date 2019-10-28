@@ -124,7 +124,7 @@
     transform: rotate(360deg);
   }
 }
-.activeTargetHours{
+.active-target-hours{
   color: #1B7FC3;
 }
 .checked-daily-target{

@@ -73,7 +73,7 @@
           </div>
           <div class="riderstats__box-extra online--time--extra">
             <div v-if="!online_target_reached">
-              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i><a class="activeTargetHours"> {{ onlineTarget() }} </a>to go to reach your daily target</span>
+              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i><a class="active-target-hours"> {{ onlineTarget() }} </a>to go to reach your daily target</span>
             </div>
             <div v-else>
               <span class="dashboard__box-text"><i class="fas fa-check-circle checked-daily-target"></i> Daily target of <a>{{ this.rider_stats.online_target/3600 }} hours</a> achieved</span>
