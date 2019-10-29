@@ -124,3 +124,9 @@
     transform: rotate(360deg);
   }
 }
+.active-target-hours{
+  color: #1B7FC3;
+}
+.checked-daily-target{
+  color:#00b800 ;
+}
