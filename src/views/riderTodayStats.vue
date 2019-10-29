@@ -85,7 +85,7 @@
         <div class="dashboard__dash-box stats--dashboard">
           <span class="dashboard__box-number dashboard-header">Delays in pickup </span>
           <div class="riderstats__box-content delay-inner">
-            <span class="dashboard__box-number">{{ this.rider_stats.delay_info.pickup }} Delays</span>
+            <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.delay_info.pickup }} Delays</span>
           </div>
           <div class="riderstats__box-extra delay--extra">
             <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are picked in {{ this.rider_stats.avg_pickup_time }} minutes</span>
@@ -96,7 +96,7 @@
         <div class="dashboard__dash-box stats--dashboard">
           <span class="dashboard__box-number dashboard-header">Delays in delivery</span>
           <div class="riderstats__box-content delay-inner">
-            <span class="dashboard__box-number">{{ this.rider_stats.delay_info.delivery }} Delays</span>
+            <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.delay_info.delivery }} Delays</span>
           </div>
           <div class="riderstats__box-extra delay--extra">
             <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are delivered n {{ this.rider_stats.avg_delivery_time }} minutes</span>
@@ -199,13 +199,7 @@ export default {
 
       const timeDifferenceSec = onlineTarget - onlineTime;
 
-      const timeDifference = Math.floor(moment.duration(timeDifferenceSec, 'seconds').asHours());
-
-        if (timeDifference > 0) {
-           return `${timeDifference} Hrs`;
-        } else {
-          return `${Math.floor(moment.duration(timeDifferenceSec, 'seconds').asMinutes())} Minutes`;
-        }
+      return `${Math.floor(moment.duration(timeDifferenceSec, 'seconds').asHours())} Hrs ${moment.duration(timeDifferenceSec, 'seconds').minutes()} Min`;
     },
     orderTarget() {
       const completed = parseInt(this.rider_stats.dispatch_info.completed, 10);

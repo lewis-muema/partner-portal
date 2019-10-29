@@ -57,6 +57,7 @@
 }
 .completed--order-inner{
  padding-bottom: 8px;
+ font-weight: 600;
 }
 .completed--order--extra{
  padding-top: 13%;
@@ -67,9 +68,13 @@
 }
 .online--time-inner{
   padding-bottom: 8px;
+  font-weight: 600;
+}
+.delay--inner-text{
+  font-weight: 600;
 }
 .online--time--extra{
-  padding-top: 8%;
+  padding-top: 5%;
 }
 .delay-inner{
   padding-top: 10%;
