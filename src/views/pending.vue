@@ -1352,7 +1352,6 @@ export default {
       const riderload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-
       axios
         .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
         .then(response => {

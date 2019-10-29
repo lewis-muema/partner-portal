@@ -681,7 +681,6 @@ describe('Pending.vue', () => {
     expect(wrapper.vm.isMobile()).equal(false);
   });
   it('Check whether the get riders function fetches the correct data', done => {
-    wrapper.vm.riders = [];
     wrapper.vm.getRiders();
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
@@ -694,14 +693,10 @@ describe('Pending.vue', () => {
           },
         })
         .then(() => {
-           setTimeout(() => {
-            /*  TODO this is being worked on separately
-            expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
-            expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
-            expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
-            */
-            done();
-          }, 100);
+          expect(wrapper.vm.riders[0].rider_id).equal(rider[0].rider_id);
+          expect(wrapper.vm.riders[1].rider_id).equal(rider[1].rider_id);
+          expect(wrapper.vm.riders[2].rider_id).equal(rider[2].rider_id);
+          done();
         })
         .catch(error => {
           console.log('caught', error.message);
