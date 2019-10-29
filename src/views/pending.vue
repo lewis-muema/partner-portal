@@ -1352,13 +1352,11 @@ export default {
       const riderload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-
       axios
         .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
         .then(response => {
           if (response.status === 200) {
             const unescaped = response.data;
-            console.log("$$$$$ ", response.data);
             unescaped.data.forEach((row, v) => {
               row.count = v;
               this.riders.push(row);
