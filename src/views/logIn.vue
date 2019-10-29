@@ -185,10 +185,13 @@ export default {
       });
     },
     handleResponse(response) {
-      if (typeof response.data === 'string') {
-        const dataToken = response.data.split('.')[1];
+      const refreshToken = response.data.refresh_token;
+      const accessToken = response.data.access_token;
+      if (accessToken !== undefined && refreshToken !== undefined) {
+        const dataToken = accessToken.split('.')[1];
         const sessionData = Base64.decode(dataToken);
-        localStorage.token = response.data;
+        localStorage.token = accessToken;
+        localStorage.refreshToken = refreshToken;
         const parsedData = JSON.parse(sessionData);
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + 3);
