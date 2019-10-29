@@ -467,6 +467,7 @@ import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
 import truckValidationMixin from '../mixins/truckValidationMixin';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 let interval = '';
@@ -580,12 +581,22 @@ export default {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.fetchOwnerDrivers();
       this.fetchOwnerVehicles();
+      this.requestAxios({
+        url: `${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`,
+        payload: '{"owner_id":"532"}',
+      }).then(response => {
+        console.log(response);
+      });
     }
   },
   beforeDestroy() {
     clearInterval(interval); // stop the interval
   },
   methods: {
+    ...mapActions({
+      requestPriceQuote: 'requestPriceQuote',
+      requestAxios: 'requestAxios',
+    }),
     formatVendorName(order) {
       if (order.vendorname === 'Freight') {
         // add load weight
@@ -1435,7 +1446,13 @@ export default {
       const orderPayload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-
+      const allPayload = {
+        url: `${this.auth}v1/pending_truck_orders/`,
+        payload: orderPayload,
+      }
+      this.requestAxios(allPayload).then(response => {
+        console.log(response);
+      });
       axios
         .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
         .then(response => {
