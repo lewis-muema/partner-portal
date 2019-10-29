@@ -185,9 +185,9 @@ export default {
       });
     },
     handleResponse(response) {
-      if (response) {
-        const refreshToken = response.data.refresh_token;
-        const accessToken = response.data.access_token;
+      const refreshToken = response.data.refresh_token;
+      const accessToken = response.data.access_token;
+      if (accessToken !== undefined && refreshToken !== undefined) {
         const dataToken = accessToken.split('.')[1];
         const sessionData = Base64.decode(dataToken);
         localStorage.token = accessToken;

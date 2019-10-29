@@ -1358,6 +1358,7 @@ export default {
         .then(response => {
           if (response.status === 200) {
             const unescaped = response.data;
+            console.log("$$$$$ ", response.data);
             unescaped.data.forEach((row, v) => {
               row.count = v;
               this.riders.push(row);
