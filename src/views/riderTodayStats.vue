@@ -99,7 +99,7 @@
             <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.delay_info.delivery }} Delays</span>
           </div>
           <div class="riderstats__box-extra delay--extra">
-            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are delivered n {{ this.rider_stats.avg_delivery_time }} minutes</span>
+            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are delivered in {{ this.rider_stats.avg_delivery_time }} minutes</span>
           </div>
         </div>
       </div>
@@ -218,11 +218,8 @@ export default {
       }
     },
     onlineTargetReached() {
-      let onlineTime = parseInt(this.rider_stats.online_time, 10);
-      onlineTime = Math.floor(moment.duration(onlineTime, 'seconds').asHours());
-
-      let onlineTarget = parseInt(this.rider_stats.online_target, 10);
-      onlineTarget = Math.floor(moment.duration(onlineTarget, 'seconds').asHours());
+      const onlineTime = parseInt(this.rider_stats.online_time, 10);
+      const onlineTarget = parseInt(this.rider_stats.online_target, 10);
 
       if (onlineTime >= onlineTarget) {
         this.online_target_reached = true;
