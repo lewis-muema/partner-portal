@@ -179,13 +179,13 @@ export default {
       const completed = this.rider_stats.dispatch_info.completed;
       const target = this.rider_stats.completion_target;
 
-      return (completed / target) * 100;
+      return Math.ceil((completed / target) * 100);
     },
     onlineRate() {
       const online = this.rider_stats.online_time;
       const target = this.rider_stats.online_target;
 
-      return (online / target) * 100;
+      return Math.ceil((online / target) * 100);
     },
     onlineTime() {
       let time = this.rider_stats.online_time;
