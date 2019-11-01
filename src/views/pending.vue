@@ -378,25 +378,25 @@
                 </div>
               </template>
             </div>
-            <div :class="`${notificationName} confirmed`" v-if="message === 1">
+            <div :class="`${notificationName} notifier confirmed`" v-if="message === 1">
               <p class="message">Order confirmed</p>
             </div>
-            <div :class="`${notificationName} failed`" v-if="message === 2">
+            <div :class="`${notificationName} notifier failed`" v-if="message === 2">
               <p class="message">{{ error }}</p>
             </div>
-            <div :class="`${notificationName} no-selection`" v-if="message === 3">
+            <div :class="`${notificationName} notifier no-selection`" v-if="message === 3">
               <p class="message">Please select a driver or vehicle</p>
             </div>
-            <div :class="`${notificationName} failed`" v-if="message === 4">
+            <div :class="`${notificationName} notifier failed`" v-if="message === 4">
               <p class="message">{{ error }}</p>
             </div>
-            <div :class="`${notificationName} no-selection`" v-if="message === 5">
+            <div :class="`${notificationName} notifier no-selection`" v-if="message === 5">
               <p class="message">Please enter all details and bid within the range</p>
             </div>
-            <div :class="`${notificationName} no-selection`" v-if="message === 6">
+            <div :class="`${notificationName} notifier no-selection`" v-if="message === 6">
               <p class="message">Please bid within the price range</p>
             </div>
-            <div :class="`${notificationName} bid_placed`" v-if="message === 7">
+            <div :class="`${notificationName} notifier bid_placed`" v-if="message === 7">
               <p class="message">{{ error }}</p>
             </div>
           </div>
@@ -481,7 +481,7 @@ export default {
       quoteAmount: null,
       buttonDisabledStatus: 0,
       responseCount: 0,
-      notificationName: 'message-box-up',
+      notificationName: '',
       loadingStatus: true,
       bikesOnly: true,
       fetchOrderStatus: false,
@@ -529,6 +529,11 @@ export default {
   },
   beforeDestroy() {
     clearInterval(interval); // stop the interval
+  },
+  destroyed() {
+    if (localStorage.token && !['orders', 'pending', 'quotes'].includes(this.$route.name) && this.sessionInfo.super_user) {
+      this.$router.push('/');
+    }
   },
   methods: {
     setDriverStatus() {
@@ -1263,7 +1268,6 @@ export default {
       const riderload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
-
       axios
         .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
         .then(response => {
