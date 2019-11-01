@@ -89,6 +89,7 @@ import Mixpanel from 'mixpanel';
 import { Base64 } from 'js-base64';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
+import moment from 'moment';
 
 const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 
@@ -106,6 +107,7 @@ export default {
       code: '',
       requestId: '',
       env: '',
+      userPhone: '',
       phoneValidity: false,
       bindProps: {
         defaultCountry: 'KE',
@@ -218,6 +220,7 @@ export default {
         if (phone.substr(0, 3) === '254' || phone.substr(0, 3) === '256') {
           phone = `+${phone}`;
         }
+        this.userPhone = phone;
         if (localStorage.externalRequestId) {
           this.verifyCode();
           this.error('Please verify the code you recieved previously', 3000);
@@ -231,7 +234,6 @@ export default {
         expiry.setDate(expiry.getDate() + 3);
         localStorage.expiryDate = expiry;
         localStorage.sessionData = sessionData;
-        this.TrackLogin(parsedData.payload);
       } else {
         this.handleButton('SUBMIT');
         this.error(response.data.message, 7000);
@@ -275,6 +277,12 @@ export default {
             this.handleButton('SIGN IN');
             if (response.data.status) {
               localStorage.removeItem('externalRequestId');
+              this.TrackLogin('Track By-Pass Login', {
+                'Super user email': this.user,
+                'Super user phone': this.userPhone,
+                'Owner account': this.ownerPhone,
+                Time: moment().format('YYYY-MM-DD HH:mm:ss a'),
+              });
               this.$router.push({ path: '/' });
             } else {
               this.error(response.data.message, 5000);
@@ -308,18 +316,10 @@ export default {
         this.loginError = '';
       }, timeout);
     },
-    TrackLogin(response) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
-        mixpanel.track('Owner Login Web', {
-          Name: response.name,
-          Phone: response.phone,
-          Id_no: response.id_no,
-          email: response.email,
-          Owner_id: response.id,
-          Country: response.country_code,
-          Currency: response.default_currency,
-        });
-      }
+    TrackLogin(name, body) {
+        if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+          mixpanel.track(name, body);
+        }
     },
   },
 };
