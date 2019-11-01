@@ -45,7 +45,10 @@
                   <p class="dropdown-item">Support</p>
                 </div>
                 <hr />
-                <router-link to="/login" class="dropdown-link">
+                <router-link to="/external_login" class="dropdown-link" v-if="super_user">
+                  <p class="dropdown-item">Sign Out</p>
+                </router-link>
+                <router-link to="/login" class="dropdown-link" v-else>
                   <p class="dropdown-item">Sign Out</p>
                 </router-link>
               </div>
@@ -73,10 +76,15 @@ export default {
     return {
       dropdown: false,
       timeout: 0,
+      super_user: false,
     };
   },
   computed: {},
-  created() {},
+  created() {
+    if (localStorage.sessionData) {
+      this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
+    }
+  },
   methods: {
     toggleDropUp() {
       setTimeout(() => {

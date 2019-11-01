@@ -180,6 +180,37 @@ button {
   display: grid;
   margin-bottom: 15px;
 }
+.complete--order__button {
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  background: #1a7fc3;
+  border-color: #1a7fc3;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.notifier {
+  font-style: inherit;
+  font-size: 14px;
+  width: 200px;
+  margin-top: 10px;
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 600;
+  border-radius: 4px;
+  position: fixed;
+  right: 100px;
+  text-align: center;
+  z-index: 200;
+}
+.spinner-position {
+  position: relative;
+  top: 6px;
+  left: 115px;
+}
 .order__price-estimate {
   grid-column: span 8;
 }
@@ -403,22 +434,6 @@ button {
   text-transform: uppercase;
   margin-top: 10px;
   cursor: pointer;
-}
-.message-box-up,
-.message-box-down {
-  font-style: inherit;
-  font-size: 14px;
-  width: 200px;
-  margin-top: 10px;
-  min-height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  font-weight: 600;
-  border-radius: 4px;
-  position: fixed;
-  right: 100px;
 }
 .message-box-down {
   animation: dropdown 1s;
