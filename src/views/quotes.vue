@@ -510,6 +510,11 @@ export default {
   beforeDestroy() {
     clearInterval(interval); // stop the interval
   },
+  destroyed() {
+    if (localStorage.token && !['orders', 'pending', 'quotes'].includes(this.$route.name) && this.sessionInfo.super_user) {
+      this.$router.push('/quotes');
+    }
+  },
   methods: {
     setDriverStatus() {
       this.addDriverStatus = false;

@@ -47,7 +47,10 @@
                   <p class="dropdown-item">Support</p>
                 </div>
                 <hr />
-                <router-link to="/login" class="dropdown-link">
+                <router-link to="/external_login" class="dropdown-link" v-if="super_user">
+                  <p class="dropdown-item">Sign Out</p>
+                </router-link>
+                <router-link to="/login" class="dropdown-link" v-else>
                   <p class="dropdown-item">Sign Out</p>
                 </router-link>
               </div>
@@ -84,11 +87,15 @@ export default {
         },
       },
       performance_status: false,
+      super_user: false,
     };
   },
   computed: {},
   created() {
     this.fetchBikeDrivers();
+    if (localStorage.sessionData) {
+      this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
+    }
   },
   methods: {
     toggleDropUp() {
@@ -143,9 +150,9 @@ export default {
           this.performance_status = true;
         })
         .catch(error => {
-         this.$store.commit('setBikeAvailability', false);
-         this.$store.commit('setBikeRiders', []);
-         this.performance_status = false;
+          this.$store.commit('setBikeAvailability', false);
+          this.$store.commit('setBikeRiders', []);
+          this.performance_status = false;
         });
     },
   },
