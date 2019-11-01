@@ -82,7 +82,7 @@
             <div class="no-records" v-if="!loadingStatus && orders.length === 0">
               <p class="no-records-par">There are no orders</p>
             </div>
-            <template v-for="order in orders.slice().reverse()">
+            <template v-for="order in orders">
               <div
                 class="orders__list-row"
                 @click="toggle(order.id)"
@@ -233,12 +233,25 @@
                         <p class="order__amount heading uppercase">delivery status</p>
                         <p class="order__amount par">D Notes NOT delivered</p>
                       </div>
+                      <div
+                        class="assigned"
+                        v-if="orderStatuses(order) === 'confirmedbutton' || orderStatuses(order) === 'in-transitButton'"
+                      >
+                        <button
+                          class="complete--order__button"
+                          @click="completeOrder(order)"
+                          v-if="sessionInfo.super_user"
+                        >Complete order</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </template>
           </div>
+        </div>
+        <div :class="`${notificationName} notifier ${responseStatus}`">
+          <p class="message">{{ notificationMessage }}</p>
         </div>
       </div>
     </div>
@@ -321,6 +334,9 @@ export default {
       errorObj: '',
       ordercount: [],
       orderRange: '0 - 100',
+      notificationName: '',
+      notificationMessage: '',
+      responseStatus: '',
     };
   },
   created() {
@@ -331,6 +347,11 @@ export default {
   },
   beforeDestroy() {
     clearInterval(interval); // stop the interval
+  },
+  destroyed() {
+    if (localStorage.token && !['orders', 'pending', 'quotes'].includes(this.$route.name) && this.sessionInfo.super_user) {
+      this.$router.push('/orders');
+    }
   },
   computed: {},
   methods: {
@@ -592,6 +613,36 @@ export default {
         }
       });
     },
+    completeOrder(order) {
+      const payload = JSON.stringify({
+        sim_card_sn: order.driverSerial,
+        rider_phone: order.driverPhone,
+        order_no: order.orderNo,
+        destination: { lat: -1.23, lng: 38.45 },
+        distance: 9,
+        polyline: 'encoded_string',
+        version_code: 1000,
+      });
+      axios
+        .post(`${process.env.VUE_APP_AUTH}orders/rider_app_deliver`, payload, this.config)
+        .then(response => {
+          this.responseStatus = 'bid_placed';
+          this.notificationMessage = 'Order completed';
+          this.notificationName = 'message-box-up';
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+          }, 4000);
+          this.definePayload();
+        })
+        .catch(error => {
+          this.responseStatus = 'failed';
+          this.notificationMessage = error.response.data;
+          this.notificationName = 'message-box-up';
+          setTimeout(() => {
+            this.notificationName = 'message-box-down';
+          }, 7000);
+        });
+    },
     refreshOrders(ordpayload) {
       interval = setInterval(() => {
         let order = '';
@@ -707,6 +758,8 @@ export default {
       orderDetails.vendorname = vendorname;
       orderDetails.orderTime = time;
       orderDetails.confirmedDriver = driver;
+      orderDetails.driverPhone = row.rider_phone_no;
+      orderDetails.driverSerial = row.rider_serial_number;
       orderDetails.confirmedVehicle = vehicle;
       orderDetails.orderStatus = orderStatus;
       orderDetails.confirmStatus = confirmStatus;

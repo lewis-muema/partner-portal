@@ -9,7 +9,7 @@
               v-model="tel"
               v-bind="bindProps"
               class="login__phone-input"
-              @input="validatePhone()"
+              @validate="Valid"
             ></vue-tel-input>
           </div>
           <div class="login__element">
@@ -88,6 +88,7 @@ export default {
       state: 'login',
       tel: '',
       password: '',
+      phoneValidity: false,
       bindProps: {
         defaultCountry: 'KE',
         disabledFetchingCountry: false,
@@ -129,6 +130,18 @@ export default {
     }
   },
   methods: {
+    /* eslint-disable */
+    Valid: function({ number, isValid, country }) {
+      this.phoneValidity = isValid;
+      if (this.tel) {
+        if (isValid) {
+          $('.login__phone-input').css({ 'border-color': 'rgb(34, 255, 112)', 'box-shadow': '0px 1px 5px 1px #00ff5a' });
+        } else {
+          $('.login__phone-input').css({ 'border-color': 'rgb(255, 160, 160)', 'box-shadow': 'rgba(255, 0, 0, 0.58) 0px 1px 5px 1px' });
+        }
+      }
+    },
+    /* eslint-enable */
     forgotPwd() {
       if (this.state === 'login') {
         this.state = 'reset';
@@ -145,11 +158,7 @@ export default {
         window.location.href = 'https://partner.sendyit.com/onboarding_portal/#/';
       }
     },
-    validatePhone() {
-      setTimeout(() => {
-        this.tel = this.tel.toString().replace(/[^0-9+]/g, '');
-      }, 0);
-    },
+
     postForgot() {
       // eslint-disable-next-line quotes
       this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
@@ -185,11 +194,16 @@ export default {
       });
     },
     handleResponse(response) {
-      if (typeof response.data === 'string') {
-        const dataToken = response.data.split('.')[1];
-        const sessionData = Base64.decode(dataToken);
-        localStorage.token = response.data;
+      const refreshToken = response.data.refresh_token;
+      const accessToken = response.data.access_token;
+      if (accessToken !== undefined && refreshToken !== undefined) {
+        const dataToken = accessToken.split('.')[1];
+        let sessionData = Base64.decode(dataToken);
+        localStorage.token = accessToken;
+        localStorage.refreshToken = refreshToken;
         const parsedData = JSON.parse(sessionData);
+        parsedData.payload.super_user = false;
+        sessionData = JSON.stringify(parsedData);
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + 3);
         localStorage.expiryDate = expiry;
