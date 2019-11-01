@@ -14,6 +14,7 @@ import Tracking from './views/tracking.vue';
 import DriverRequest from './views/driverRequest.vue';
 import ExternalTracking from './views/externalTracking.vue';
 import Performance from './views/performance.vue';
+import ExternalLogin from './views/externalLogin.vue';
 
 Vue.use(Router);
 
@@ -75,6 +76,11 @@ export default new Router({
       path: '/tracking',
       name: 'tracking',
       component: Tracking,
+    },
+    {
+      path: '/external_login',
+      name: 'externallogin',
+      component: ExternalLogin,
     },
     {
       path: '/driveRequest/:token',

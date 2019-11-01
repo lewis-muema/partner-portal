@@ -137,3 +137,7 @@ input {
   max-width: 378px;
   border-radius: 5px;
 }
+
+.external-login__back-button {
+  cursor: pointer;
+}
