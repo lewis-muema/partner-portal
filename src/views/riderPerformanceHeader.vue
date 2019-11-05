@@ -48,6 +48,9 @@
 
 <script>
 import axios from 'axios';
+import Mixpanel from 'mixpanel';
+
+const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
 
 export default {
   name: 'riderPerformanceHeader',
@@ -67,8 +70,20 @@ export default {
   created() {
     this.fetchBikeDrivers();
     this.fetchRiderList();
+
+    const mixPanelPayload = {
+      owner_id: sessionInfo.id,
+    };
+    // this tracks all performance page loads
+    this.trackRiderPerformanceLoad(mixPanelPayload);
   },
   methods: {
+    trackRiderPerformanceLoad(payload) {
+      const data = JSON.parse(payload);
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Rider Performance Loaded', data);
+      }
+    },
     fetchBikeDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
