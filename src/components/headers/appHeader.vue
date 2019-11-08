@@ -92,7 +92,6 @@ export default {
   },
   computed: {},
   created() {
-    this.getPerformanceStatus();
     this.fetchBikeDrivers();
     if (localStorage.sessionData) {
       this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
@@ -138,25 +137,6 @@ export default {
       window.open('http://support.sendyit.com/collection/1-sendy-partner-training-manual', '_blank');
     },
 
-    getPerformanceStatus() {
-      // using performance status enables us to control which clients to show this feature to without affecting other functionality
-      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      const riderPayload = {
-        owner_id: sessionInfo.id,
-      };
-      axios
-        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/performance_status`, riderPayload, this.config)
-        .then(res => {
-          if (res.data.performance_status) {
-            this.performance_status = true;
-          }
-          this.performance_status = false;
-        })
-        .catch(error => {
-          this.performance_status = false;
-        });
-    },
-
     fetchBikeDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
@@ -166,12 +146,14 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
         .then(res => {
+          this.performance_status = true;
           this.$store.commit('setBikeAvailability', true);
           this.$store.commit('setBikeRiders', res.data.riders);
         })
         .catch(error => {
           this.$store.commit('setBikeAvailability', false);
           this.$store.commit('setBikeRiders', []);
+          this.performance_status = false;
         });
     },
   },
