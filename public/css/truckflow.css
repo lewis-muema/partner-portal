@@ -180,14 +180,30 @@ button {
   display: grid;
   margin-bottom: 15px;
 }
-.complete--order__button {
+.order__button {
   padding: 10px;
   border-radius: 5px;
   color: white;
-  background: #1a7fc3;
-  border-color: #1a7fc3;
   text-transform: uppercase;
   font-weight: 700;
+}
+.intransit--order__button {
+  background-color: #51a65b;
+  border-color: #51a65b;
+}
+.complete--order__button {
+  background: #1a7fc3;
+  border-color: #1a7fc3;
+}
+.complete--order__spinner {
+  border-top-color: #1a7fc3;
+  float: right;
+  margin: 5px;
+}
+.intransit--order__spinner {
+  border-top-color: #51a65b;
+  float: right;
+  margin: 5px;
 }
 .notifier {
   font-style: inherit;
