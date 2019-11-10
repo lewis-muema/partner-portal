@@ -233,15 +233,31 @@
                         <p class="order__amount heading uppercase">delivery status</p>
                         <p class="order__amount par">D Notes NOT delivered</p>
                       </div>
-                      <div
-                        class="assigned"
-                        v-if="orderStatuses(order) === 'confirmedbutton' || orderStatuses(order) === 'in-transitButton'"
-                      >
+                      <div class="assigned" v-if="orderStatuses(order) === 'confirmedbutton'">
                         <button
-                          class="complete--order__button"
-                          @click="completeOrder(order)"
+                          class="intransit--order__button order__button"
+                          @click="completeOrder(order, 'rider_app_pick_up')"
                           v-if="sessionInfo.super_user"
-                        >Complete order</button>
+                        >
+                          Pick up the order
+                          <div
+                            class="loading-spinner intransit--order__spinner"
+                            v-if="orderLoadingStatus"
+                          ></div>
+                        </button>
+                      </div>
+                      <div class="assigned" v-if="orderStatuses(order) === 'in-transitButton'">
+                        <button
+                          class="complete--order__button order__button"
+                          @click="completeOrder(order, 'rider_app_deliver')"
+                          v-if="sessionInfo.super_user"
+                        >
+                          Complete order
+                          <div
+                            class="loading-spinner complete--order__spinner"
+                            v-if="orderLoadingStatus"
+                          ></div>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -323,6 +339,7 @@ export default {
       confirmedDriver: null,
       confirmedVehicle: null,
       loadingStatus: true,
+      orderLoadingStatus: false,
       fetchOrderStatus: false,
       sessionInfo: '',
       config: {
@@ -613,7 +630,7 @@ export default {
         }
       });
     },
-    completeOrder(order) {
+    completeOrder(order, url) {
       const payload = JSON.stringify({
         sim_card_sn: order.driverSerial,
         rider_phone: order.driverPhone,
@@ -623,11 +640,13 @@ export default {
         polyline: 'encoded_string',
         version_code: 1000,
       });
+      this.orderLoadingStatus = true;
       axios
-        .post(`${process.env.VUE_APP_AUTH}orders/rider_app_deliver`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}orders/${url}`, payload, this.config)
         .then(response => {
+          this.orderLoadingStatus = false;
           this.responseStatus = 'bid_placed';
-          this.notificationMessage = 'Order completed';
+          this.notificationMessage = response.data.reason;
           this.notificationName = 'message-box-up';
           setTimeout(() => {
             this.notificationName = 'message-box-down';
@@ -635,6 +654,7 @@ export default {
           this.definePayload();
         })
         .catch(error => {
+          this.orderLoadingStatus = false;
           this.responseStatus = 'failed';
           this.notificationMessage = error.response.data;
           this.notificationName = 'message-box-up';
