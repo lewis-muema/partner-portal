@@ -1,0 +1,137 @@
+.stats--dashboard{
+  box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1) !important;
+  height: 203px !important;
+}
+.stats-container{
+  width: 30% !important;
+}
+.dashboard-header{
+  padding: 5px 10px;
+  margin-left: 5px;
+  font-size: 16px;
+  padding-bottom: 10px;
+}
+.riderstats__box-content{
+  padding: 8px 9px;
+  margin-left: 11px;
+}
+.riderstats__box-extra{
+  padding: 8px 9px;
+  margin-left: 11px;
+  font-weight: 500;
+  font-size: 13px;
+}
+.completed--checker{
+  width: 10px;
+  height: 10px;
+  background: #F57E20;
+  margin: 3%;
+}
+.uncompleted--checker{
+  width: 10px;
+  height: 10px;
+  background: #E9E9E9;
+  margin: 3%;
+}
+.rider--stats-extra{
+  margin-left: 4%;
+  padding-top: 4px;
+}
+.row--extra-align{
+  width: 70%;
+  margin-left: 4%;
+  padding-top: 9%;
+}
+.dashboard--progress{
+  width: 61%;
+  margin-left: 3%;
+  padding-top: 2%;
+}
+.stats-dash{
+  padding: 30px 50px 30px 50px;
+}
+.completed--order--stats{
+ margin-left: 4%;
+ padding-top: 37px;
+ width:86% !important;
+}
+.completed--order-inner{
+ padding-bottom: 8px;
+ font-weight: 600;
+}
+.completed--order--extra{
+ padding-top: 13%;
+}
+.order--acceptance-inner{
+  margin-left: 4%;
+  padding-top: 4px;
+}
+.online--time-inner{
+  padding-bottom: 8px;
+  font-weight: 600;
+}
+.delay--inner-text{
+  font-weight: 600;
+}
+.online--time--extra{
+  padding-top: 5%;
+}
+.delay-inner{
+  padding-top: 10%;
+}
+.delay--extra{
+  padding-top: 8%;
+}
+.daily--stats--loading-title {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+  line-height: 34px;
+}
+.daily--stats-loader,
+.daily--stats-loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.daily--stats-loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid #F57E20;
+  border-right: 1.1em solid #f3f3f3;
+  border-bottom: 1.1em solid #f3f3f3;
+  border-left: 1.1em solid #f3f3f3;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.active-target-hours{
+  color: #1B7FC3;
+}
+.checked-daily-target{
+  color:#00b800 ;
+}
