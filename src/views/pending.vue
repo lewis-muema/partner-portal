@@ -468,7 +468,7 @@ import moment from 'moment';
 import Mixpanel from 'mixpanel';
 import truckValidationMixin from '../mixins/truckValidationMixin';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let interval = '';
 export default {
   title: 'Partner Portal - Available Orders',
@@ -1484,12 +1484,12 @@ export default {
       return orderDetails;
     },
     TrackOrderConfirmation(payload) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner Order Confirmation Web', JSON.parse(payload));
       }
     },
     trackSendBid(payload) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner Order Bidding Web', JSON.parse(payload));
       }
     },

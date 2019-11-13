@@ -134,7 +134,7 @@ import datetime from 'vuejs-datetimepicker';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let client = '';
 let map = '';
 let bounds = '';
@@ -551,7 +551,7 @@ export default {
     },
     mixpanelTrackVehicles() {
       const sessionInfo = JSON.parse(localStorage.sessionData);
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner tracking Web', {
           'Number of vehicles with trackers': this.ridersWithTrackers.length,
           'Id number': sessionInfo.payload.id,

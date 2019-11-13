@@ -271,8 +271,11 @@ import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
+
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   title: 'Partner Portal - Statement',

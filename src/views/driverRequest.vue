@@ -100,11 +100,7 @@ export default {
         this.responseStatus = false;
         if (this.allocationType === 3) {
           setTimeout(() => {
-            if (process.env.VUE_APP_AUTH.includes('test')) {
-              window.location.href = 'https://partnertest.sendyit.com/onboarding_portal/#/';
-            } else {
-              window.location.href = 'https://partner.sendyit.com/onboarding_portal/#/';
-            }
+            window.location.href = process.env.ONBOARDING_PORTAL;
           }, 3000);
         }
       });
