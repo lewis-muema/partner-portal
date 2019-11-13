@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "cross-env VUE_APP_AUTH=\"https://auth.sendyit.com/\" vue-cli-service build",
-    "staging": "cross-env VUE_APP_AUTH=\"https://authtest.sendyit.com/\" vue-cli-service build",
+    "serve": "cross-env DOCKER_ENV=\"development\" vue-cli-service serve",
+    "build": "cross-env DOCKER_ENV=\"production\" vue-cli-service build",
+    "staging": "cross-env DOCKER_ENV=\"staging\"  vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "cross-env DOCKER_ENV=\"development\" vue-cli-service test:unit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.19",

@@ -76,7 +76,7 @@ import sha1 from 'js-sha1';
 import Mixpanel from 'mixpanel';
 import { Base64 } from 'js-base64';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   title: 'Partner Portal - Log In',
@@ -152,11 +152,7 @@ export default {
       }
     },
     redirect() {
-      if (process.env.VUE_APP_AUTH.includes('test')) {
-        window.location.href = 'https://partnertest.sendyit.com/onboarding_portal/#/';
-      } else {
-        window.location.href = 'https://partner.sendyit.com/onboarding_portal/#/';
-      }
+      window.location.href = process.env.ONBOARDING_PORTAL;
     },
 
     postForgot() {
@@ -229,7 +225,7 @@ export default {
       }, timeout);
     },
     TrackLogin(response) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner Login Web', {
           Name: response.name,
           Phone: response.phone,
