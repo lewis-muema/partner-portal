@@ -50,7 +50,7 @@
 import axios from 'axios';
 import Mixpanel from 'mixpanel';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   name: 'riderPerformanceHeader',
@@ -80,7 +80,7 @@ export default {
   methods: {
     trackRiderPerformanceLoad(payload) {
       const data = JSON.parse(payload);
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Rider Performance Loaded', data);
       }
     },
