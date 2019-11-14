@@ -91,7 +91,7 @@ import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import moment from 'moment';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   components: {
@@ -106,7 +106,6 @@ export default {
       ownerPhone: '',
       code: '',
       requestId: '',
-      env: '',
       userPhone: '',
       phoneValidity: false,
       bindProps: {
@@ -143,11 +142,6 @@ export default {
     },
   },
   created() {
-    if (process.env.VUE_APP_AUTH.includes('test')) {
-      this.env = 'test';
-    } else {
-      this.env = '';
-    }
     if (localStorage.externalRequestId) {
       this.requestId = localStorage.externalRequestId;
       this.verifyCode();
@@ -244,7 +238,7 @@ export default {
         phone_no: phone,
       });
       axios
-        .post(`https://api${this.env}.sendyit.com/parcel/index.php/api/v10/verify_phone`, payload)
+        .post(process.env.VERIFY_PHONE, payload)
         .then(response => {
           this.handleButton('SUBMIT');
           if (response.data.status) {
@@ -272,7 +266,7 @@ export default {
         });
         this.handleButton("<div class='loading-spinner spinner-position'></div> Signing in");
         axios
-          .post(`https://api${this.env}.sendyit.com/parcel/index.php/api/v10/check_verification/`, payload)
+          .post(process.env.CHECK_VERIFICATION, payload)
           .then(response => {
             this.handleButton('SIGN IN');
             if (response.data.status) {
@@ -317,9 +311,9 @@ export default {
       }, timeout);
     },
     TrackLogin(name, body) {
-        if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
-          mixpanel.track(name, body);
-        }
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track(name, body);
+      }
     },
   },
 };

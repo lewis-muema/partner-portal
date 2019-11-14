@@ -5,7 +5,10 @@
         <div class="driverRequest__request-text">
           <span class="driverRequest__toCap">{{ message }}</span>
         </div>
-        <div class="driverRequest__request-options" v-if="responseStatus">
+        <div
+          class="driverRequest__request-options"
+          v-if="responseStatus && allocationStatus === '1'"
+        >
           <div class="driverRequest__request-radio">
             <input type="radio" name="choice" value="1" id="req-accept" />
             <span>Accept</span>
@@ -15,7 +18,10 @@
             <span>Reject</span>
           </div>
         </div>
-        <div class="driverRequest__request-submit" v-if="responseStatus">
+        <div
+          class="driverRequest__request-submit"
+          v-if="responseStatus && allocationStatus === '1'"
+        >
           <button
             type="button"
             name="button"
@@ -47,6 +53,7 @@ export default {
       token: '',
       message: '',
       allocationType: '',
+      allocationStatus: '',
       responseStatus: false,
       detailsStatus: '',
       config: {
@@ -70,16 +77,23 @@ export default {
           if (response.data.status) {
             this.responseStatus = true;
             this.allocationType = response.data.msg.allocation_details.allocation_type;
+            this.allocationStatus = response.data.msg.allocation_details.allocation_status;
             this.token = response.data.msg.allocation_details.token;
-            let vehicleModel = '';
-            let vehicleRegistration = '';
-            if (response.data.msg.vehicle_details.model) {
-              vehicleModel = response.data.msg.vehicle_details.model;
+            if (this.allocationStatus === '1') {
+              let vehicleModel = '';
+              let vehicleRegistration = '';
+              if (response.data.msg.vehicle_details.model) {
+                vehicleModel = response.data.msg.vehicle_details.model;
+              }
+              if (response.data.msg.vehicle_details.registration_no) {
+                vehicleRegistration = response.data.msg.vehicle_details.registration_no;
+              }
+              this.message = `${response.data.msg.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
+            } else if (this.allocationStatus === '2') {
+              this.message = 'Rider invite accepted';
+            } else if (this.allocationStatus === '3') {
+              this.message = 'Rider invite rejected';
             }
-            if (response.data.msg.vehicle_details.registration_no) {
-              vehicleRegistration = response.data.msg.vehicle_details.registration_no;
-            }
-            this.message = `${response.data.msg.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
           } else {
             this.message = response.data.msg;
           }
@@ -99,11 +113,7 @@ export default {
         this.responseStatus = false;
         if (this.allocationType === 3) {
           setTimeout(() => {
-            if (process.env.VUE_APP_AUTH.includes('test')) {
-              window.location.href = 'https://partnertest.sendyit.com/onboarding_portal/#/';
-            } else {
-              window.location.href = 'https://partner.sendyit.com/onboarding_portal/#/';
-            }
+            window.location.href = process.env.ONBOARDING_PORTAL;
           }, 3000);
         }
       });
