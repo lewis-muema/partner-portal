@@ -28,6 +28,8 @@ ENV DOCKER_ENV=$DOCKER_ENV
 RUN echo ${DOCKER_ENV}
 RUN if [ "$DOCKER_ENV" = "testing" ]; \
         then npm install && npm run staging; \
+        elif [ "$DOCKER_ENV" = "beta" ]; \
+        then npm install && npm run beta; \
         else npm install && npm run build; \
         fi
 
