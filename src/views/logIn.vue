@@ -1,82 +1,36 @@
 <template>
   <div>
-    <div class="login__log-cont" v-if="state === 'login'">
-      <div class="login__log-panel">
-        <p class="login__header-text">Log in to Sendy</p>
-        <div class="control-group">
-          <div class="login__element">
-            <vue-tel-input
-              v-model="tel"
-              v-bind="bindProps"
-              class="login__phone-input"
-              @validate="Valid"
-            ></vue-tel-input>
-          </div>
-          <div class="login__element">
-            <input
-              class="login__password-input"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Password"
-              required
-              v-model="password"
-            />
-          </div>
-          <div id="loggin_error" class="error">{{ loginError }}</div>
-          <div class="login__element">
-            <button
-              class="form-control login__btn"
-              type="submit"
-              value="Log in"
-              id="login"
-              @click="postLogin"
-            >Log In</button>
-          </div>
-          <div class="login__inst">
-            <a href="#" @click="forgotPwd();" class="login__forgotPass">Forgot Password?</a>
-          </div>
-          <div class="login__inst">
-            Don't have an account?
-            <a href="#" @click="redirect()" class="login__sign-up">Sign Up</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="login__log-cont" v-if="state === 'reset'">
-      <div class="login__log-panel">
-        <p class="login__header-text">Set Password</p>
-        <div id="reset_error" class="error">{{ loginError }}</div>
-        <div class="control-group">
-          <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps"></vue-tel-input>
-          </div>
-          <div class="login__element">
-            <button
-              class="form-control reset__btn"
-              type="submit"
-              value="Reset Password"
-              id="reset"
-              @click="postForgot"
-            >Set Password</button>
-          </div>
-          <a href="#" @click="forgotPwd();" class="login__forgotPass">Sign In</a>
-        </div>
-      </div>
+    <sendy-auth-basic
+      @authenticated="signIn"
+      @error="signInError"
+      :form-header="`Login to sendy`"
+      username-placeholder="Enter Phone Number"
+      :password-placeholder="`Password`"
+      :button-text="`SUBMIT`"
+      :username="`phone`"
+      :encrypt="true"
+      :theme="`orange`"
+      :reset-link="`${baseURL}forgotpassword#`"
+      :register-link="onboardingPortal"
+    >
+      <template v-slot="{ props }">
+        <vue-tel-input
+          v-bind="bindProps"
+          class="tel-input"
+          v-model="props.username"
+          @validate="Valid"
+        ></vue-tel-input>
+      </template>
+    </sendy-auth-basic>
+    <div :class="`${notificationName} notifier ${notificationType}`">
+      <p class="message">{{ error }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import $ from 'jquery';
 import VueTelInput from 'vue-tel-input';
-import 'vue-tel-input/dist/vue-tel-input.css';
-import axios from 'axios';
-import sha1 from 'js-sha1';
-import Mixpanel from 'mixpanel';
-import { Base64 } from 'js-base64';
-
-const mixpanel = Mixpanel.init(process.env.MIXPANEL);
+import $ from 'jquery';
 
 export default {
   title: 'Partner Portal - Log In',
@@ -85,10 +39,6 @@ export default {
   },
   data() {
     return {
-      state: 'login',
-      tel: '',
-      password: '',
-      phoneValidity: false,
       bindProps: {
         defaultCountry: 'KE',
         disabledFetchingCountry: false,
@@ -114,140 +64,63 @@ export default {
         },
         validCharactersOnly: true,
       },
-      loginError: '',
+      phoneValidity: false,
+      baseURL: '',
+      onboardingPortal: '',
+      notificationName: '',
+      notificationType: '',
+      error: '',
     };
   },
-  computed: {
-    displayNo() {
-      return this.tel;
-    },
-  },
-  created() {
-    if (localStorage.expiryDate) {
-      localStorage.removeItem('expiryDate');
-      localStorage.removeItem('sessionData');
-      localStorage.removeItem('token');
-    }
+  mounted() {
+    this.baseURL = process.env.BASE;
+    this.onboardingPortal = process.env.ONBOARDING_PORTAL;
+    $('p').css({ 'font-size': '13px' });
   },
   methods: {
     /* eslint-disable */
     Valid: function({ number, isValid, country }) {
       this.phoneValidity = isValid;
-      if (this.tel) {
+      if (number) {
         if (isValid) {
-          $('.login__phone-input').css({ 'border-color': 'rgb(34, 255, 112)', 'box-shadow': '0px 1px 5px 1px #00ff5a' });
+          $('.tel-input').css({ 'border-color': 'rgb(34, 255, 112)', 'box-shadow': '0px 1px 5px 1px #00ff5a' });
         } else {
-          $('.login__phone-input').css({ 'border-color': 'rgb(255, 160, 160)', 'box-shadow': 'rgba(255, 0, 0, 0.58) 0px 1px 5px 1px' });
+          $('.tel-input').css({ 'border-color': 'rgb(255, 160, 160)', 'box-shadow': 'rgba(255, 0, 0, 0.58) 0px 1px 5px 1px' });
         }
       }
     },
     /* eslint-enable */
-    forgotPwd() {
-      if (this.state === 'login') {
-        this.state = 'reset';
-        this.loginError = '';
+    signIn(data) {
+      const refreshToken = data.token.refresh_token;
+      const accessToken = data.token.access_token;
+      const dataToken = accessToken.split('.')[1];
+      let sessionData = Base64.decode(dataToken);
+      localStorage.token = accessToken;
+      localStorage.refreshToken = refreshToken;
+      const parsedData = JSON.parse(sessionData);
+      parsedData.payload.super_user = false;
+      sessionData = JSON.stringify(parsedData);
+      const expiry = new Date();
+      expiry.setDate(expiry.getDate() + 3);
+      localStorage.expiryDate = expiry;
+      localStorage.sessionData = sessionData;
+      this.$router.push({ path: '/' });
+    },
+    signInError(error) {
+      this.notificationName = 'message-box-up';
+      this.notificationType = 'failed';
+      if (error.status) {
+        this.error = 'Please try again';
       } else {
-        this.state = 'login';
-        this.loginError = '';
+        this.error = 'Sorry, your details did not match!';
       }
-    },
-    redirect() {
-      window.location.href = process.env.ONBOARDING_PORTAL;
-    },
-
-    postForgot() {
-      // eslint-disable-next-line quotes
-      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
-      this.tel = this.tel.replace(/ /g, '');
-      const payload = JSON.stringify({
-        phone: this.tel,
-      });
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/account`, payload).then(response => {
-        if (response.status === 200) {
-          this.handleButton('SET PASSWORD');
-          this.error(response.data.msg, 7000);
-        } else {
-          this.handleButton('SET PASSWORD');
-          this.error('Please try again', 7000);
-        }
-      });
-    },
-    postLogin() {
-      // eslint-disable-next-line quotes
-      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
-      this.tel = this.tel.replace(/ /g, '');
-      const payload = JSON.stringify({
-        phone: this.tel,
-        password: sha1(this.password),
-      });
-      axios.post(`${process.env.VUE_APP_AUTH}rideradmin/login`, payload).then(response => {
-        if (response.status === 200) {
-          this.handleResponse(response);
-        } else {
-          this.handleButton('LOG IN');
-          this.error('Please try again', 7000);
-        }
-      });
-    },
-    handleResponse(response) {
-      const refreshToken = response.data.refresh_token;
-      const accessToken = response.data.access_token;
-      if (accessToken !== undefined && refreshToken !== undefined) {
-        const dataToken = accessToken.split('.')[1];
-        let sessionData = Base64.decode(dataToken);
-        localStorage.token = accessToken;
-        localStorage.refreshToken = refreshToken;
-        const parsedData = JSON.parse(sessionData);
-        parsedData.payload.super_user = false;
-        sessionData = JSON.stringify(parsedData);
-        const expiry = new Date();
-        expiry.setDate(expiry.getDate() + 3);
-        localStorage.expiryDate = expiry;
-        localStorage.sessionData = sessionData;
-        this.TrackLogin(parsedData.payload);
-        this.$router.push({ path: '/' });
-      } else {
-        this.handleButton('LOG IN');
-        this.error('Sorry, your details did not match!', 7000);
-      }
-    },
-    handleButton(data) {
-      if (this.state === 'login') {
-        $('.login__btn').html(data);
-      } else {
-        $('.reset__btn').html(data);
-      }
-    },
-    error(errorStatement, timeout) {
-      this.loginError = errorStatement;
       setTimeout(() => {
-        this.loginError = '';
-      }, timeout);
-    },
-    TrackLogin(response) {
-      if (process.env.DOCKER_ENV === 'production') {
-        mixpanel.track('Owner Login Web', {
-          Name: response.name,
-          Phone: response.phone,
-          Id_no: response.id_no,
-          email: response.email,
-          Owner_id: response.id,
-          Country: response.country_code,
-          Currency: response.default_currency,
-        });
-      }
+        this.notificationName = 'message-box-down';
+      }, 3000);
     },
   },
 };
 </script>
 
 <style>
-p {
-  font-size: 24px;
-  color: #666;
-}
-a,
-a:hover {
-  color: #f57f20;
-}
 </style>

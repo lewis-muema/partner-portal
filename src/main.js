@@ -15,6 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import {
  Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress,
 } from 'element-ui';
+import SendyAuth from '@sendyit/auth';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -22,6 +23,22 @@ import store from './store';
 // configure language
 locale.use(lang);
 
+Vue.use(SendyAuth, {
+  // social authentication driver: 'google'
+  // default: google
+  driver: 'basic',
+
+  // internal authentication url
+  authUrl: 'https://authtest.sendyit.com/rideradmin/login',
+
+  // custom configurations for social drivers
+  configs: {
+    google: {
+      // google's client key & identification for gapi
+      clientId: '',
+    },
+  },
+});
 Vue.use(Rate);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
