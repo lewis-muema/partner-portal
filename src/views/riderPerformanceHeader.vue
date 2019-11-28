@@ -70,7 +70,6 @@ export default {
   created() {
     this.fetchBikeDrivers();
     this.fetchRiderList();
-
     const mixPanelPayload = {
       owner_id: sessionInfo.id,
     };
