@@ -764,7 +764,7 @@ export default {
       } else {
         orderDetails.currency = 'KES';
       }
-      if (row.order_notes) {
+      if (row.order_notes.length > 0) {
         orderDetails.orderNotes = row.order_notes[0].msg;
       }
       if (row.customer_min_amount) {
