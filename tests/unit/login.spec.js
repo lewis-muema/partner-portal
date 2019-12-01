@@ -3,7 +3,7 @@ import moxios from 'moxios';
 import VueRouter from 'vue-router';
 import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Login from '@/views/logIn.vue';
+import Login from '@/views/authLogin.vue';
 import './localStorage';
 
 describe('Login.vue', () => {

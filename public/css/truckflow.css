@@ -300,6 +300,7 @@ button {
   margin-right: auto;
   min-width: 70%;
   text-transform: uppercase;
+  width: auto;
 }
 .confirmed-for-others-button-menu {
   background-color: grey;
