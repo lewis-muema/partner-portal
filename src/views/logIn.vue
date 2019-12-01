@@ -10,7 +10,7 @@
       :username="`phone`"
       :encrypt="true"
       :theme="`orange`"
-      :reset-link="`${baseURL}forgotpassword#`"
+      :reset-link="`${baseURL}/forgotpassword#`"
       :register-link="onboardingPortal"
     >
       <template v-slot="{ props }">
@@ -73,7 +73,7 @@ export default {
     };
   },
   mounted() {
-    this.baseURL = process.env.BASE;
+    this.baseURL = window.location.origin;
     this.onboardingPortal = process.env.ONBOARDING_PORTAL;
     $('p').css({ 'font-size': '13px' });
   },

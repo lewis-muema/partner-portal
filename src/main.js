@@ -29,7 +29,7 @@ Vue.use(SendyAuth, {
   driver: 'basic',
 
   // internal authentication url
-  authUrl: 'https://authtest.sendyit.com/rideradmin/login',
+  authUrl: `${process.env.VUE_APP_AUTH}rideradmin/login`,
 
   // custom configurations for social drivers
   configs: {

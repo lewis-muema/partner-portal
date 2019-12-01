@@ -243,7 +243,6 @@ export default {
 
 <style>
 p {
-  font-size: 24px;
   color: #666;
 }
 a,
