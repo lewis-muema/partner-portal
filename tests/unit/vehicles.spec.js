@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import moxios from 'moxios';
-import moment from 'moment';
+import VueMask from 'v-mask';
 import VModal from 'vue-js-modal';
 import VueRouter from 'vue-router';
 import { expect } from 'chai';
@@ -10,6 +10,7 @@ import Vehicles from '@/views/vehicles.vue';
 import './localStorage';
 
 Vue.use(VModal);
+Vue.use(VueMask);
 
 describe('Vehicles.vue', () => {
   beforeEach(() => {
@@ -256,24 +257,6 @@ describe('Vehicles.vue', () => {
     ],
   };
   wrapper.vm.sessionInfo = sessionData;
-  it('Check whether the fetchVehicles function fetches the vehicles and riders object and separates it into separate arrays', done => {
-    wrapper.vm.fetchVehicles();
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request
-        .respondWith({
-          status: 200,
-          response: allVehicles,
-        })
-        .then(() => {
-          expect(wrapper.vm.rows[0].make).equal('Boxer');
-          done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
-    });
-  });
   it('Check whether the populateTable function creates the correct object to populate the table', () => {
     const response = {
       data: allVehicles,

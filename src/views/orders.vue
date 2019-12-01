@@ -205,7 +205,7 @@
                     </div>
                   </div>
                   <div class="order__column">
-                    <p class="order__weight heading uppercase">approximate weight of the order</p>
+                    <p class="order__weight heading uppercase">weight of the order</p>
                     <p class="order__weight par" v-if="!weight">Not applicable</p>
                     <p class="order__weight par" v-else>{{ weight }}</p>
                     <p class="order__loader heading uppercase">loader(s) needed</p>
@@ -764,7 +764,7 @@ export default {
       } else {
         orderDetails.currency = 'KES';
       }
-      if (row.order_notes) {
+      if (row.order_notes.length > 0) {
         orderDetails.orderNotes = row.order_notes[0].msg;
       }
       if (row.customer_min_amount) {

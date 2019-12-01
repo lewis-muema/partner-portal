@@ -53,7 +53,7 @@
             <button class="continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
           </div>
         </div>
-        <div id="payment-title" class="withdraw-modal-screen-2" v-if="payment_options">
+        <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
             <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>
@@ -240,21 +240,6 @@
             <i class="fa fa-filter" aria-hidden="true"></i>
           </button>
         </div>
-        <button
-          type="button"
-          id="filtSub"
-          name="button"
-          class="btn btn_primary fil-sub fil-sub-1 active-btn"
-          @click="closePopup();"
-          v-if="activeStatus"
-        >Withdraw cash</button>
-        <button
-          type="button"
-          id="filtSub"
-          name="button"
-          class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn"
-          v-else
-        >You cannot withdraw today</button>
         <div class="search-error" id="err">{{ error }}</div>
         <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.id">
@@ -622,8 +607,7 @@ export default {
         .then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status_code) {
-            // this.trackMpesaWithdrawal();
-            // this.trackBankWithdrawal();
+            this.trackWithdrawal(payload);
             this.sendingWithdrawRequestStatus = false;
             this.notificationType = 'success';
             this.notificationMessage = response.data.message;
@@ -632,7 +616,7 @@ export default {
               this.fetchStatement();
             }, 4000);
             if (this.opened) {
-              this.closePopup();
+              // this.closePopup();
             }
           } else {
             this.sendingWithdrawRequestStatus = false;
@@ -732,18 +716,9 @@ export default {
         this.riderNames = 'all riders';
       }
     },
-    trackBankWithdrawal() {
-      if (process.env.ENVIRONMENT === 'production') {
-        mixpanel.track('Withdraw to bank (partner portal)');
-      } else {
-        mixpanel.track('Test withdraw to bank (partner portal)');
-      }
-    },
-    trackMpesaWithdrawal() {
-      if (process.env.ENVIRONMENT === 'production') {
-        mixpanel.track('Withdraw to M-pesa (partner portal)');
-      } else {
-        mixpanel.track('Test withdraw to M-pesa (partner portal)');
+    trackWithdrawal(payload) {
+      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+        mixpanel.track('Owner Withdrawal', JSON.parse(payload));
       }
     },
   },
