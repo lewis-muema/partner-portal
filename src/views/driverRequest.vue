@@ -10,11 +10,11 @@
           v-if="responseStatus && allocationStatus === '1'"
         >
           <div class="driverRequest__request-radio">
-            <input type="radio" name="choice" value="1" id="req-accept" />
+            <input type="radio" name="choice" value="1" v-model="statValue" id="req-accept" />
             <span>Accept</span>
           </div>
           <div class="driverRequest__request-radio">
-            <input type="radio" name="choice" value="2" id="req-reject" />
+            <input type="radio" name="choice" value="2" v-model="statValue" id="req-reject" />
             <span>Reject</span>
           </div>
         </div>
@@ -56,6 +56,7 @@ export default {
       allocationStatus: '',
       responseStatus: false,
       detailsStatus: '',
+      statValue: false,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -103,7 +104,7 @@ export default {
       }
     },
     submitResponse() {
-      const stat = $('input[name=choice]:checked').val();
+      const stat = this.statValue;
       const payload = JSON.stringify({
         token: this.token,
         status: stat,

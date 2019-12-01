@@ -114,9 +114,7 @@ import statsLoading from './statsLoadingComponent.vue';
 
 export default {
   name: 'RiderTodayStats',
-  components: {
-    statsLoading,
-  },
+  components: { statsLoading },
   data() {
     return {
       show_loading: true,

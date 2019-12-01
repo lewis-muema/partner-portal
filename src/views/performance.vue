@@ -1,18 +1,18 @@
 <template>
-<div>
-  <riderPerformanceHeader />
-  <div class="stats--component">
-    <div class="rider--stats-menu">
-      <div class="secondary-inner">
-        <div class="secnav-container rider--stats-section">
-          <router-link to="/performance" class="secnav-page" :class="showActiveDashboard()">Today</router-link>
+  <div>
+    <riderPerformanceHeader />
+    <div class="stats--component">
+      <div class="rider--stats-menu">
+        <div class="secondary-inner">
+          <div class="secnav-container rider--stats-section">
+            <router-link to="/performance" class="secnav-page" :class="showActiveDashboard()">Today</router-link>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <riderTodayStats />
-</div>
+    <riderTodayStats />
+  </div>
 </template>
 
 <script>
@@ -21,10 +21,7 @@ import riderPerformanceHeader from './riderPerformanceHeader.vue';
 
 export default {
   name: 'Performance',
-  components: {
-    riderPerformanceHeader,
-    riderTodayStats,
-  },
+  components: { riderPerformanceHeader, riderTodayStats },
   data() {
     return {};
   },

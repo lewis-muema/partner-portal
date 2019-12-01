@@ -571,7 +571,7 @@ button {
   grid-column: span 3;
 }
 .destination {
-  grid-column: span 3;
+  grid-column: span 2;
 }
 .distance {
   grid-column: span 1;
@@ -584,7 +584,7 @@ button {
   grid-column: span 2;
 }
 .truck {
-  grid-column: span 1;
+  grid-column: span 2;
 }
 .orderNo {
   grid-column: span 2;

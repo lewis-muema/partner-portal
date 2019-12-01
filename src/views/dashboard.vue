@@ -103,7 +103,7 @@
                   </div>
                   <div class="dashboard__rate-group">
                     <span class="dashboard__rate-text">Hours online this month</span>
-                    <span class="dashboard__rate-number">{{ hoursOnlineThisWeek() }} / 5</span>
+                    <span class="dashboard__rate-number">{{ hoursOnlineThisWeek() }}</span>
                     <div class="dashboard__rate-sm">
                       <div
                         class="dashboard__rate-bar dashboard__rate-bar-orange"
@@ -113,7 +113,7 @@
                   </div>
                   <div class="dashboard__rate-group">
                     <span class="dashboard__rate-text">Hours online this week</span>
-                    <span class="dashboard__rate-number">{{ hoursOnlineThisMonth() }} / 5</span>
+                    <span class="dashboard__rate-number">{{ hoursOnlineThisMonth() }}</span>
                     <div class="dashboard__rate-sm">
                       <div
                         class="dashboard__rate-bar dashboard__rate-bar-grey"
