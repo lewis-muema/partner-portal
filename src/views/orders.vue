@@ -277,6 +277,7 @@ import moment from 'moment';
 import notify from '../components/notification';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
+import timezone from '../mixins/timezone';
 
 let interval = '';
 
@@ -287,6 +288,7 @@ export default {
     errorHandler,
     notify,
   },
+  mixins: [timezone],
   data() {
     return {
       allVehicles: '',
@@ -412,8 +414,8 @@ export default {
       tooltiprow.style.display = 'none';
     },
     timeFormat(id) {
-      const timer = moment(this.orders[id - 1].orderTime).format('ddd, Do MMM');
-      return timer;
+      const orderTime = this.orders[id - 1].orderTime;
+      return this.formatedTime(orderTime);
     },
     confirmedStatus(order) {
       if (this.orderStatuses(order) === 'confirmedbutton') {
