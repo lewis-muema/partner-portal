@@ -105,6 +105,7 @@ import axios from 'axios';
 import moment from 'moment';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
+import timezone from '../mixins/timezone';
 
 export default {
   title: 'Partner Portal - Savings',
@@ -114,6 +115,7 @@ export default {
     datatable: DataTable,
     errorHandler,
   },
+  mixins: [timezone],
   data() {
     return {
       sessionInfo: '',
@@ -137,7 +139,7 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.monthPeriod = moment().format('MMMM YYYY');
+      this.monthPeriod = moment().utc().local().format('MMMM YYYY');
       this.fetchSavings(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -218,6 +220,11 @@ export default {
       });
       return payload;
     },
+     dateFormat(date) {
+        const UTCDate = this.convertToUTC(date);
+        const local = this.convertToLocalTime(UTCDate);
+        return local;
+    },
     handleResponse(response) {
       const record = [];
       let currency = '';
@@ -230,7 +237,7 @@ export default {
         record.push({
           rider_id: row.rider_id,
           txn: row.txn,
-          pay_time: row.pay_time,
+          pay_time: this.dateFormat(row.pay_time),
           amount: `${currency} ${row.amount}`,
           running_balance: `${currency} ${row.running_balance}`,
           pay_narrative: row.pay_narrative,
