@@ -201,7 +201,6 @@
         </div>
         <div class="search-error" id="err">{{ error }}</div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
-          sdvcysdvchsdhcgeyg
           <div class="divider-top"></div>
           <datatable
             :columns="columns"
@@ -219,7 +218,6 @@
       </div>
       <div class="printContain hidden-md-up" v-else>
         <div class="col-12 padding margin-bottom">
-          dfbdhgf
           <datepicker
             v-model="from"
             input-class="filtIn"
