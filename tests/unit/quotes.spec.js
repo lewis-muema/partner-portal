@@ -496,6 +496,9 @@ describe('Quotes.vue', () => {
   it('Check if the time format function returns the order time in the correct format', () => {
     expect(wrapper.vm.timeFormat(1)).equal('Thu, 15th Aug');
   });
+  it('Check if the timer function returns the timer in the correct format', () => {
+    expect(wrapper.vm.timer(1)).equal('4 months ago');
+  });
   it('Check if the currency format function returns the take home amount with the thousands separator', () => {
     expect(wrapper.vm.currencyFormat(1)).equal('3,920');
   });
