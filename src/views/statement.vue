@@ -289,7 +289,6 @@ import moment from 'moment';
 import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-import timezone from '../mixins/timezone';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
@@ -301,7 +300,6 @@ export default {
     datatable: DataTable,
     errorHandler,
   },
-  mixins: [timezone],
   data() {
     return {
       sessionInfo: '',
@@ -380,7 +378,7 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.monthPeriod = moment().utc().local().format('MMMM YYYY');
+      this.monthPeriod = moment().format('MMMM YYYY');
       this.fetchStatement(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -500,11 +498,6 @@ export default {
       }
       return payload;
     },
-    dateFormat(date) {
-        const UTCDate = this.convertToUTC(date);
-        const local = this.convertToLocalTime(UTCDate);
-        return local;
-    },
     handleResponse(response) {
       const record = [];
       this.ownerRb = response.data.msg.owner_balance;
@@ -515,7 +508,7 @@ export default {
         const currencyAmount = row.amount.split(' ')[0];
         record.push({
           txn: row.txn,
-          pay_time: this.dateFormat(row.pay_time),
+          pay_time: row.pay_time,
           amount: `${currencyAmount} ${rbAmount}`,
           running_balance: `${currencyRb} ${rbRb}`,
           pay_narrative: row.pay_narrative,
