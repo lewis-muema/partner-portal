@@ -397,7 +397,6 @@ import errorHandler from '../components/errorHandler';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
-import timezone from '../mixins/timezone';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let interval = '';
@@ -408,7 +407,6 @@ export default {
     errorHandler,
     VueTelInput,
   },
-  mixins: [timezone],
   data() {
     return {
       allVehicles: '',
@@ -602,12 +600,11 @@ export default {
         return 'No notes';
       }
     },
-      timer(id) {
-      const orderTime = this.orders[id - 1].orderTime;
-      return this.formatedTimer(orderTime);
-    },
     timebar(id) {
-      const timer1 = this.timer(id);
+      const timer = moment(this.orders[id - 1].orderTime)
+        .add(0, 'h')
+        .toDate();
+      const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
       if (timer1.includes('ago')) {
         return '';
       } else {
@@ -621,7 +618,10 @@ export default {
       }
     },
     timebarPrefix(id) {
-      const timer1 = this.timer(id);
+      const timer = moment(this.orders[id - 1].orderTime)
+        .add(0, 'h')
+        .toDate();
+      const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
       if (timer1.includes('ago')) {
         return '';
       } else {
@@ -630,7 +630,10 @@ export default {
       }
     },
     timebarSuffix(id) {
-      const timer1 = this.timer(id);
+      const timer = moment(this.orders[id - 1].orderTime)
+        .add(0, 'h')
+        .toDate();
+      const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
       if (timer1.includes('ago')) {
         return '';
       } else {
@@ -645,8 +648,8 @@ export default {
       return id.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
     },
     timeFormat(id) {
-      const orderTime = this.orders[id - 1].orderTime;
-      return this.formatedTime(orderTime);
+      const timer = moment(this.orders[id - 1].orderTime).format('ddd, Do MMM');
+      return timer;
     },
     currencyFormat(id) {
       const amount = this.orders[id - 1].bidAmount;
