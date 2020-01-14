@@ -1,5 +1,6 @@
 import axios from 'axios';
 import moxios from 'moxios';
+import moment from 'moment';
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Pending from '@/views/pending.vue';
@@ -54,6 +55,7 @@ describe('Pending.vue', () => {
       },
     ],
   };
+  const d = new Date();
   const order = [
     {
       duration_read: 12,
@@ -411,7 +413,7 @@ describe('Pending.vue', () => {
       toCity: 'Nairobi',
       bidPlaced: 0,
       confirmed: 0,
-      orderTime: '2019-08-15T11:20:14.000Z',
+      orderTime: d.setMonth(d.getMonth() - 4),
       takeHome: 3920,
       orderNo: 'AC44AC153-X41',
       min_amount: 3500,
@@ -546,7 +548,7 @@ describe('Pending.vue', () => {
     expect(wrapper.vm.orderNotes(1)).equal('Notes for this order');
   });
   it('Check if the time format function returns the order time in the correct format', () => {
-    expect(wrapper.vm.timeFormat(1)).equal('Thu, 15th Aug');
+    expect(wrapper.vm.timeFormat(1)).equal(moment(d).format('ddd, Do MMM'));
   });
   it('Check if the timer function returns the timer in the correct format', () => {
     expect(wrapper.vm.timer(1)).equal('4 months ago');
