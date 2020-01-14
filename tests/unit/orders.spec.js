@@ -4,6 +4,7 @@ import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Orders from '@/views/orders.vue';
 import './localStorage';
+import moment from 'moment';
 
 describe('Orders.vue', () => {
   beforeEach(() => {
@@ -61,6 +62,7 @@ describe('Orders.vue', () => {
       },
     ],
   };
+  const d = new Date();
   const order = [
     {
       duration_read: 12,
@@ -78,8 +80,7 @@ describe('Orders.vue', () => {
               discountAmount: 0,
               vendor_name: 'Standard',
               standard_bike_order: 'AC4476153-6GE',
-              tier_description:
-                '<p>A perfect solution for your day-to-day deliveries. Flat fee anywhere in Nairobi!</p><ul><li>Base fee: KES 250</li><li>Delivery time: Within 4 hrs</li><li>Additional waiting time fee may apply if a Rider has waited 15mins: KES 100/30min</li></ul><p>? Max. size and weight: 50x30x30cm, 10kg<br />? Insurance cover up to KES 50,000 included</p>',
+              tier_description: '<p>A perfect solution for your day-to-day deliveries. Flat fee anywhere in Nairobi!</p><ul><li>Base fee: KES 250</li><li>Delivery time: Within 4 hrs</li><li>Additional waiting time fee may apply if a Rider has waited 15mins: KES 100/30min</li></ul><p>? Max. size and weight: 50x30x30cm, 10kg<br />? Insurance cover up to KES 50,000 included</p>',
               vendor_description: '',
               eta: 5400,
               price_variance: 10,
@@ -100,8 +101,7 @@ describe('Orders.vue', () => {
               cost: 340,
               discountAmount: 0,
               vendor_name: 'Express',
-              tier_description:
-                '<p>Your designated Bike Rider for urgent deliveries.</p><ul><li>Base fee (first 5km): KES 340</li><li>Extra distance: KES 20/km - after 5 km</li><li>Additional location: KES 100</li><li>Additional waiting time fee may apply if a Rider has waited 30mins: KES 100/30min</li></ul><p>? Insurance cover up to KES 50,000 included</p>',
+              tier_description: '<p>Your designated Bike Rider for urgent deliveries.</p><ul><li>Base fee (first 5km): KES 340</li><li>Extra distance: KES 20/km - after 5 km</li><li>Additional location: KES 100</li><li>Additional waiting time fee may apply if a Rider has waited 30mins: KES 100/30min</li></ul><p>? Insurance cover up to KES 50,000 included</p>',
               vendor_description: '',
               eta: 2700,
               price_variance: 10,
@@ -126,8 +126,7 @@ describe('Orders.vue', () => {
               cost: 1550,
               discountAmount: 0,
               vendor_name: 'Pickup',
-              tier_description:
-                '<p>Your designated vehicle for medium loads.</p><ul><li>Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1 hour per destination: KES 150/30min</li></ul><p>? Insurance cover up to KES 5,000,000 included</p>',
+              tier_description: '<p>Your designated vehicle for medium loads.</p><ul><li>Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1 hour per destination: KES 150/30min</li></ul><p>? Insurance cover up to KES 5,000,000 included</p>',
               vendor_description: '',
               eta: 2700,
               price_variance: 10,
@@ -147,8 +146,7 @@ describe('Orders.vue', () => {
               cost: 1550,
               discountAmount: 0,
               vendor_name: 'Van',
-              tier_description:
-                '<p>Your designated vehicle for medium loads.</p><ul><li>Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1 hour per destination: KES 150/30min</li></ul><p>? Insurance cover up to KES 5,000,000 included</p>',
+              tier_description: '<p>Your designated vehicle for medium loads.</p><ul><li>Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1 hour per destination: KES 150/30min</li></ul><p>? Insurance cover up to KES 5,000,000 included</p>',
               vendor_description: '',
               eta: 2700,
               price_variance: 10,
@@ -168,8 +166,7 @@ describe('Orders.vue', () => {
               cost: 5900,
               discountAmount: 0,
               vendor_name: '3 Ton Truck',
-              tier_description:
-                '<p>Your designated vehicle for big loads.</p><ul><li>Additional Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1.5hrs per destination: KES 150/30min</li></ul><p>? First Loader included<br />? Insurance cover up to KES 5,000,000 included</p>',
+              tier_description: '<p>Your designated vehicle for big loads.</p><ul><li>Additional Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1.5hrs per destination: KES 150/30min</li></ul><p>? First Loader included<br />? Insurance cover up to KES 5,000,000 included</p>',
               vendor_description: 'NPR',
               eta: 2700,
               price_variance: 10,
@@ -194,8 +191,7 @@ describe('Orders.vue', () => {
               cost: 6500,
               discountAmount: 0,
               vendor_name: '5 Ton Truck',
-              tier_description:
-                '<p>Your designated vehicle for big loads.</p><ul><li>Additional Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1.5hrs per destination: KES 150/30min</li></ul><p>? First Loader included<br />? Insurance cover up to KES 5,000,000 included</p>',
+              tier_description: '<p>Your designated vehicle for big loads.</p><ul><li>Additional Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 1.5hrs per destination: KES 150/30min</li></ul><p>? First Loader included<br />? Insurance cover up to KES 5,000,000 included</p>',
               vendor_description: 'NKR',
               eta: 2700,
               price_variance: 10,
@@ -215,8 +211,7 @@ describe('Orders.vue', () => {
               cost: 7400,
               discountAmount: 0,
               vendor_name: '10 Ton Truck',
-              tier_description:
-                '<p>Your designated vehicle for big loads.</p><ul><li>Additional Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 2hrs per destination: KES 150/30min</li></ul><p>? First Loader included<br />? Insurance cover up to KES 5,000,000 included</p>',
+              tier_description: '<p>Your designated vehicle for big loads.</p><ul><li>Additional Loader: KES 500 (please request in order Notes)</li><li>Additional waiting time fee may apply if a Driver has waited 2hrs per destination: KES 150/30min</li></ul><p>? First Loader included<br />? Insurance cover up to KES 5,000,000 included</p>',
               vendor_description: 'FRR/FH',
               eta: 2700,
               price_variance: 10,
@@ -356,9 +351,7 @@ describe('Orders.vue', () => {
       present: true,
       parent_order_no: 'AC44AC153-X41',
       verify_delivery_location: false,
-      polyline: [
-        'hs|Fcik_FASIIoAWgAMMAB[Jw@\\qCfBmN~@iIJoBD_CEoCImFOcKAy@IKKKYOyBCwB?u@?kAEqCGkBEeMMu@CEaBCgAEsD_@aWc@sSSkJCqBCoCEiA@w@Di@\\mBPuAZEb@GLDFp@JT',
-      ],
+      polyline: ['hs|Fcik_FASIIoAWgAMMAB[Jw@\\qCfBmN~@iIJoBD_CEoCImFOcKAy@IKKKYOyBCwB?u@?kAEqCGkBEeMMu@CEaBCgAEsD_@aWc@sSSkJCqBCoCEiA@w@Di@\\mBPuAZEb@GLDFp@JT'],
       city_id: 1,
       statusCode: 200,
       order_no: 'AC44AC153-X41',
@@ -439,7 +432,7 @@ describe('Orders.vue', () => {
       toCity: 'Nairobi',
       bidPlaced: 0,
       confirmed: 0,
-      orderTime: '2019-09-15T11:20:14.000Z',
+      orderTime: d.setMonth(d.getMonth() - 4),
       takeHome: 3920,
       bidAmount: 3920,
       amount: 3920,
@@ -507,7 +500,7 @@ describe('Orders.vue', () => {
     expect(wrapper.vm.orderNotes(1)).equal('Notes for this order');
   });
   it('Check if the time format function returns the order time in the correct format', () => {
-    expect(wrapper.vm.timeFormat(1)).equal('Thu, 15th Aug');
+    expect(wrapper.vm.timeFormat(1)).equal(moment(d).format('ddd, Do MMM'));
   });
   it('Check if the currency format function returns the take home amount with the thousands separator', () => {
     expect(wrapper.vm.currencyFormat(1)).equal('3,920');
