@@ -1,10 +1,10 @@
 import axios from 'axios';
 import moxios from 'moxios';
+import moment from 'moment';
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Orders from '@/views/orders.vue';
 import './localStorage';
-import moment from 'moment';
 
 describe('Orders.vue', () => {
   beforeEach(() => {
