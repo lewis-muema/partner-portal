@@ -568,7 +568,7 @@ button {
   zoom: 16;
 }
 .pickup {
-  grid-column: span 3;
+  grid-column: span 2;
 }
 .destination {
   grid-column: span 2;
