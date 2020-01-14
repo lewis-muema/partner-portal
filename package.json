@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "cross-env DOCKER_ENV=\"development\" vue-cli-service serve",
+    "serve": "cross-env DOCKER_ENV=\"development\" vue-cli-service serve --fix",
     "build": "cross-env DOCKER_ENV=\"production\" vue-cli-service build",
     "beta": "cross-env DOCKER_ENV=\"beta\" vue-cli-service build",
     "staging": "cross-env DOCKER_ENV=\"staging\"  vue-cli-service build",
-    "lint": "cross-env DOCKER_ENV=\"development\" vue-cli-service lint",
+    "lint": "cross-env DOCKER_ENV=\"development\" vue-cli-service lint --fix",
     "test:unit": "cross-env DOCKER_ENV=\"development\" vue-cli-service test:unit"
   },
   "dependencies": {
