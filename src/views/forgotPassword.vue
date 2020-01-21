@@ -1,25 +1,14 @@
 <template>
   <div class="login__log-cont">
     <div class="login__log-panel">
-      <p class="login__header-text">Set Password</p>
+      <p class="login__header-text">Reset Password</p>
       <div id="reset_error" class="error">{{ loginError }}</div>
       <div class="control-group">
         <div class="login__element">
-          <vue-tel-input
-            v-model="tel"
-            v-bind="bindProps"
-            class="forgot--password-input"
-            @validate="Valid"
-          ></vue-tel-input>
+          <vue-tel-input v-model="tel" v-bind="bindProps" class="forgot--password-input" @validate="Valid"></vue-tel-input>
         </div>
         <div class="login__element">
-          <button
-            class="form-control reset__btn"
-            type="submit"
-            value="Reset Password"
-            id="reset"
-            @click="postForgot"
-          >Set Password</button>
+          <button class="reset__btn form-control" type="submit" value="Reset Password" id="reset" @click="postForgot">Reset Password</button>
         </div>
         <a href="#" @click="$router.push('/login')" class="login__forgotPass">Sign In</a>
       </div>
@@ -28,6 +17,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import VueTelInput from 'vue-tel-input';
 import $ from 'jquery';
 
@@ -83,24 +73,32 @@ export default {
     /* eslint-enable */
     postForgot() {
       // eslint-disable-next-line quotes
-      $('.reset__btn').html(`<div class='loading-spinner'></div> Please Wait`);
+      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
       this.tel = this.tel.replace(/ /g, '');
       const payload = JSON.stringify({
         phone: this.tel,
       });
       axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/account`, payload).then(response => {
         if (response.status === 200) {
-          this.handleButton('SET PASSWORD');
+          this.handleButton('Reset Password');
           this.error(response.data.msg, 7000);
         } else {
-          this.handleButton('SET PASSWORD');
+          this.handleButton('Reset Password');
           this.error('Please try again', 7000);
         }
       });
+    },
+    handleButton(data) {
+      $('.reset__btn').html(data);
+    },
+    error(errorStatement, timeout) {
+      this.loginError = errorStatement;
+      setTimeout(() => {
+        this.loginError = '';
+      }, timeout);
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>
