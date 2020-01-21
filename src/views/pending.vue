@@ -596,6 +596,9 @@ export default {
             return this.formatedTime(orderTime);
         },
         vatCurrencyFormat(id) {
+            console.log("order", this.orders[id - 1]);
+            console.log("vat_amount", this.orders[id - 1].vat_amount);
+
             if (this.orders[id - 1].vat_amount) {
                 const amount = this.orders[id - 1].vat_amount;
                 return amount
@@ -1223,7 +1226,7 @@ export default {
                     .catch(error => {
                         this.errorObj = error.response;
                     });
-            }, 60000);
+            }, 180000);
         },
         getOrders(vehicleCount) {
             this.loadingStatus = true;
@@ -1295,6 +1298,7 @@ export default {
             orderDetails.orderTime = time;
             orderDetails.takeHome = takehome;
             orderDetails.orderNo = orderno;
+            orderDetails.vat_amount = row.vat_amount;
             return orderDetails;
         },
         TrackOrderConfirmation(payload) {
