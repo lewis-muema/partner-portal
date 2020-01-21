@@ -717,6 +717,7 @@ export default {
             orderDetails.orderStatus = orderStatus;
             orderDetails.confirmStatus = confirmStatus;
             orderDetails.delivery_status = row.delivery_status;
+            orderDetails.vat_amount = row.vat_amount;
             return orderDetails;
         },
     },

@@ -1223,7 +1223,7 @@ export default {
                     .catch(error => {
                         this.errorObj = error.response;
                     });
-            }, 60000);
+            }, 180000);
         },
         getOrders(vehicleCount) {
             this.loadingStatus = true;
@@ -1295,6 +1295,7 @@ export default {
             orderDetails.orderTime = time;
             orderDetails.takeHome = takehome;
             orderDetails.orderNo = orderno;
+            orderDetails.vat_amount = row.vat_amount;
             return orderDetails;
         },
         TrackOrderConfirmation(payload) {
