@@ -40,7 +40,7 @@
 
 .reset__btn,
 .login__btn {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }

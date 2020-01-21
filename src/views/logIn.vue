@@ -1,25 +1,8 @@
 <template>
   <div>
-    <sendy-auth-basic
-      @authenticated="signIn"
-      @error="signInError"
-      :form-header="`Login to sendy`"
-      username-placeholder="Enter Phone Number"
-      :password-placeholder="`Password`"
-      :button-text="`SUBMIT`"
-      :username="`phone`"
-      :encrypt="true"
-      :theme="`orange`"
-      :reset-link="`${baseURL}/forgotpassword#`"
-      :register-link="onboardingPortal"
-    >
+    <sendy-auth-basic @authenticated="signIn" @error="signInError" :form-header="`Login to sendy`" username-placeholder="Enter Phone Number" :password-placeholder="`Password`" :button-text="`SUBMIT`" :username="`phone`" :encrypt="true" :theme="`orange`" :reset-link="`${baseURL}/forgotpassword#`" :register-link="onboardingPortal">
       <template v-slot="{ props }">
-        <vue-tel-input
-          v-bind="bindProps"
-          class="tel-input"
-          v-model="props.username"
-          @validate="Valid"
-        ></vue-tel-input>
+        <vue-tel-input v-bind="bindProps" class="tel-input" v-model="props.username" @validate="Valid"></vue-tel-input>
       </template>
     </sendy-auth-basic>
     <div :class="`${notificationName} notifier ${notificationType}`">
@@ -76,6 +59,7 @@ export default {
     this.baseURL = window.location.origin;
     this.onboardingPortal = process.env.ONBOARDING_PORTAL;
     $('p').css({ 'font-size': '13px' });
+    $('input').css({ width: '293px' });
   },
   methods: {
     /* eslint-disable */
@@ -123,4 +107,7 @@ export default {
 </script>
 
 <style>
+.tel-input {
+  width: 293px;
+}
 </style>
