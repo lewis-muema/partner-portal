@@ -12,6 +12,8 @@ const state = {
   bike_availability: false,
   bike_riders: [],
   rider_id: '',
+  owner_id: '',
+  sessionInfo: '',
 };
 
 export default {
