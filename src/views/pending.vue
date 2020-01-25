@@ -258,12 +258,7 @@
     </div>
   </div>
 </template>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
-
 <script>
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
@@ -271,6 +266,9 @@ import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
 import timezone from '../mixins/timezone';
+import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier';
+// import truckValidationMixin from '../mixins/truckValidationMixin';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let interval = '';
@@ -381,8 +379,9 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.fetchOwnerDrivers();
-      this.fetchOwnerVehicles();
+      this.fetchOwnerDrivers().then((res1) => {
+        this.fetchOwnerVehicles().then((res2) => {});
+      });
     }
   },
   beforeDestroy() {
@@ -397,7 +396,7 @@ export default {
     formatVendorName(order) {
       if (order.vendorname === 'Freight') {
         // add load weight
-        let packageDetails = order.package_details;
+        const packageDetails = order.package_details;
 
         if ('load_weight' in packageDetails && packageDetails.load_weight > 0) {
           return `${order.vendorname}  (${packageDetails.load_weight} T)`;
@@ -424,39 +423,47 @@ export default {
       }
     },
     fetchOwnerDrivers() {
-      const riders = [];
-      const riderPayload = {
-        owner_id: this.sessionInfo.id,
-      };
-      let parsedData = JSON.parse(localStorage.sessionData);
-      axios
-        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
-        .then(res => {
-          res.data.riders.forEach((row, i) => {
-            riders.push(row);
-          });
-          parsedData.payload.riders = riders;
-          localStorage.sessionData = JSON.stringify(parsedData);
-        })
-        .catch(error => {
-          parsedData.payload.riders = [];
-          localStorage.sessionData = JSON.stringify(parsedData);
+        return new Promise((resolve, reject) => {
+        const riders = [];
+        const riderPayload = {
+            owner_id: this.sessionInfo.id,
+        };
+        const parsedData = JSON.parse(localStorage.sessionData);
+        axios
+            .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+            .then(res => {
+                res.data.riders.forEach((row, i) => {
+                    riders.push(row);
+                });
+                parsedData.payload.riders = riders;
+                localStorage.sessionData = JSON.stringify(parsedData);
+                resolve(res);
+            })
+            .catch(error => {
+                parsedData.payload.riders = [];
+                localStorage.sessionData = JSON.stringify(parsedData);
+                resolve(error);
+            });
         });
     },
     fetchOwnerVehicles() {
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            this.allVehicles = response.data.msg;
-            this.getOrders(response.data.msg);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
+        return new Promise((resolve, reject) => {
+        const payload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
+        });
+        axios
+            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+            .then(response => {
+            if (response.status === 200) {
+                this.allVehicles = response.data.msg;
+                this.getOrders(response.data.msg);
+            }
+            resolve(response);
+            })
+            .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+            });
         });
     },
     displayVehicles(id) {
@@ -469,7 +476,7 @@ export default {
       }
     },
     createStaticMapUrl(path) {
-      const google_key = 'AIzaSyDJ_S9JgQJSaHa88SXcPbh9JijQOl8RXpc';
+      const google_key = process.env.GOOGLE_API_KEY;
       const from_cordinates = path.from;
       const to_cordinates = path.to;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=500x200&markers=color:0xF17F3A%7Clabel:P%7C
@@ -586,7 +593,7 @@ export default {
         return '';
       } else {
         const timer2 = timer1.slice(3, 20);
-        return timer2.split(' ')[1];
+        return `${timer2.split(' ')[1]} left`;
       }
     },
     timeFormat(id) {
@@ -665,10 +672,11 @@ export default {
     toggle(id) {
       this.getRiderz = 0;
       this.riders = [];
-      this.getRiders();
+      this.getVehicles().then((res1) => {
+        this.getRiders(id);
+      });
       this.getVehiclez = 0;
       this.vehicles = [];
-      this.getVehicles(id);
       const index = this.opened.indexOf(id);
       if (index > -1) {
         this.opened.splice(index, 1);
@@ -1148,45 +1156,53 @@ export default {
       });
     },
     getRiders() {
-      const riderload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            const unescaped = response.data;
-            unescaped.data.forEach((row, v) => {
-              row.count = v;
-              this.riders.push(row);
+        return new Promise((resolve, reject) => {
+        const riderload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
+        });
+        axios
+            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+            .then(response => {
+            if (response.status === 200) {
+                const unescaped = response.data;
+                unescaped.data.forEach((row, v) => {
+                row.count = v;
+                this.riders.push(row);
+                });
+            }
+            resolve(response);
+            })
+            .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
             });
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
         });
     },
     getVehicles(id) {
-      const vehicleload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            const unescaped = response.data;
-            let counter = -1;
-            unescaped.data.forEach((row, v) => {
-              if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-                counter += 1;
-                row.count = counter;
-                this.vehicles.push(row);
-              }
+        return new Promise((resolve, reject) => {
+        const vehicleload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
+        });
+        axios
+            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+            .then(response => {
+            if (response.status === 200) {
+                const unescaped = response.data;
+                let counter = -1;
+                unescaped.data.forEach((row, v) => {
+                if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                    counter += 1;
+                    row.count = counter;
+                    this.vehicles.push(row);
+                }
+                });
+            }
+            resolve(response);
+            })
+            .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
             });
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
         });
     },
     refreshOrders() {

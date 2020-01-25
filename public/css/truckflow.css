@@ -86,6 +86,7 @@ a {
   border-radius: 5px;
   height: 46px;
   background-color: #fff;
+  margin-right: 10px;
 }
 .container__search-element2 {
   height: 100%;
@@ -167,7 +168,7 @@ button {
 .orders__list-toprow,
 .orders__list-row {
   display: grid;
-  grid-template-columns: repeat(16, 1fr);
+  grid-template-columns: repeat(17, 1fr);
   border-top: 1px solid #8a8a8a;
   padding: 5px;
 }
@@ -563,15 +564,16 @@ button {
   text-align: center;
   margin-bottom: -10px;
   margin-top: -15px;
+  width: max-content;
 }
 .mini {
   zoom: 16;
 }
 .pickup {
-  grid-column: span 2;
+  grid-column: span 3;
 }
 .destination {
-  grid-column: span 2;
+  grid-column: span 3;
 }
 .distance {
   grid-column: span 1;
@@ -584,7 +586,7 @@ button {
   grid-column: span 2;
 }
 .truck {
-  grid-column: span 2;
+  grid-column: span 1;
 }
 .orderNo {
   grid-column: span 2;
@@ -596,8 +598,9 @@ button {
   grid-column: span 1;
   text-align: center;
   display: grid;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
+  padding-bottom: 20px;
 }
 .center-action {
   grid-column: span 2;

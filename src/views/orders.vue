@@ -189,15 +189,12 @@
     </div>
   </div>
 </template>
-
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
-
 <script>
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
 import axios from 'axios';
 import moment from 'moment';
 import timezone from '../mixins/timezone';
+import verifier from '../components/verifier';
+import errorHandler from '../components/errorHandler';
 
 let interval = '';
 
@@ -275,6 +272,7 @@ export default {
       responseStatus: '',
     };
   },
+  computed: {},
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
@@ -289,13 +287,12 @@ export default {
       this.$router.push('/orders');
     }
   },
-  computed: {},
   methods: {
     regcounter(id) {
       this.regOk = id;
     },
     createStaticMapUrl(path) {
-      const google_key = 'AIzaSyDJ_S9JgQJSaHa88SXcPbh9JijQOl8RXpc';
+      const google_key = process.env.GOOGLE_API_KEY;
       const from_cordinates = path.from;
       const to_cordinates = path.to;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=500x200&markers=color:0xF17F3A%7Clabel:P%7C
@@ -367,8 +364,8 @@ export default {
       } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 2) {
         return 'in-transitButton';
       } else if (order.confirmStatus === 1 && order.orderStatus === 1 && order.delivery_status === 3) {
-        if (order.delivery_verification.hasOwnProperty('physical_delivery_note_status') && order.delivery_verification.physical_delivery_note_status) {
-          if (order.delivery_notes && order.delivery_notes[0].hasOwnProperty('physical_delivery_note_status') && order.delivery_notes[0].physical_delivery_note_status === 2) {
+        if (Object.prototype.hasOwnProperty.call(order.delivery_verification, 'physical_delivery_note_status') && order.delivery_verification.physical_delivery_note_status) {
+          if (order.delivery_notes && Object.prototype.hasOwnProperty.call(order.delivery_notes[0], 'physical_delivery_note_status') && order.delivery_notes[0].physical_delivery_note_status === 2) {
             return 'deliveredButton';
           } else {
             return 'pendingDnotes';
@@ -640,7 +637,7 @@ export default {
         from_date: '2014-02-09',
         limit: `${this.orderRange.split(' ')[0]}, ${100}`,
       };
-      let vendfilter = document.getElementById('vend');
+      const vendfilter = document.getElementById('vend');
       if (vendfilter) {
         vendfilter.value = '';
       }

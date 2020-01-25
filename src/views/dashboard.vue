@@ -201,36 +201,37 @@ export default {
           this.count = response.data.pendingDeliveryNotesData[0].count;
           this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
         }
-      });
-      axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
-        .then(response => {
-          this.dataStatus = true;
-          this.dataResponse = response.data;
-          let amount = '';
-          const earnings = [];
-          const months = [];
-          const amountArray = [];
-          this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
-            amount = parseInt(row.amount, 10);
-            months.push(row.month);
-            amountArray.push(amount);
+      }).then(() => {
+        axios
+          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
+          .then(response => {
+            this.dataStatus = true;
+            this.dataResponse = response.data;
+            let amount = '';
+            const earnings = [];
+            const months = [];
+            const amountArray = [];
+            this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
+              amount = parseInt(row.amount, 10);
+              months.push(row.month);
+              amountArray.push(amount);
+            });
+            this.dataPoints = {
+              labels: months,
+              datasets: [
+                {
+                  label: 'Amount',
+                  backgroundColor: 'rgba(23,130,197,.8)',
+                  data: amountArray,
+                },
+              ],
+            };
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            this.dataStatus = true;
           });
-          this.dataPoints = {
-            labels: months,
-            datasets: [
-              {
-                label: 'Amount',
-                backgroundColor: 'rgba(23,130,197,.8)',
-                data: amountArray,
-              },
-            ],
-          };
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-          this.dataStatus = true;
-        });
+      });
     }
   },
   methods: {
