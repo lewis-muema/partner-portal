@@ -269,8 +269,8 @@
 import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
-import axios from 'axios';
 import moment from 'moment';
+import axios from 'axios';
 import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
@@ -366,12 +366,16 @@ export default {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.monthPeriod = moment().utc().local().format('MMMM YYYY');
-      this.fetchStatement(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
-      this.getVehicles();
-      this.fetchAllBanks();
-      this.fetchOwnerBanks();
+      this.displayFetchingStatus('Fetching statement', 0);
+      this.getVehicles().then((res1) => {
+        this.fetchStatement(1).then((res2) => {
+          this.fetchAllBanks().then((res3) => {
+            this.fetchOwnerBanks();
+          });
+        });
+      });
     }
   },
   destroyed() {
@@ -385,9 +389,7 @@ export default {
         amount: parseFloat(this.amount),
         entry_point: 'Partner Portal',
       };
-      axios
-        .post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config)
-        .then(response => {
+      axios.post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config).then(response => {
           this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
         })
         .catch(error => {
@@ -395,19 +397,21 @@ export default {
         });
     },
     getVehicles() {
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-        .then(response => {
+      return new Promise((resolve, reject) => {
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+        });
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then((response) => {
           this.vehArray = response.data.msg;
           this.listVehicles();
           this.listRiders();
+          resolve(response);
         })
         .catch(error => {
           this.errorObj = error.response;
+          resolve(error);
         });
+      });
     },
     handleResize() {
       this.windowWidth = window.innerWidth;
@@ -425,34 +429,36 @@ export default {
     },
 
     fetchStatement(requestType) {
-      const payload = this.definePayload(requestType);
-      this.displayFetchingStatus('Fetching statement', 0);
-      axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config)
-        .then(response => {
-          if (requestType === 1) {
-            this.ownerRb = response.data.msg.owner_balance;
-            this.showWithdrawButton();
-          } else {
-            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
-            this.removeFetchingStatus();
-          }
-          if (response.data.msg.statement !== null) {
-            this.handleResponse(response);
-          } else {
-            if (requestType === 2) {
-              this.error = 'No statement found for this period';
-              setTimeout(() => {
-                this.error = '';
-              }, 4000);
+      return new Promise((resolve, reject) => {
+        const payload = this.definePayload(requestType);
+        this.displayFetchingStatus('Fetching statement', 0);
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
+            if (requestType === 1) {
+              this.ownerRb = response.data.msg.owner_balance;
+              this.showWithdrawButton();
+            } else {
+              $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
+              this.removeFetchingStatus();
             }
-            this.rows = [];
-            this.displayFetchingStatus('No statement found for this period', 0);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+            if (response.data.msg.statement !== null) {
+              this.handleResponse(response);
+            } else {
+              if (requestType === 2) {
+                this.error = 'No statement found for this period';
+                setTimeout(() => {
+                  this.error = '';
+                }, 4000);
+              }
+              this.rows = [];
+              this.displayFetchingStatus('No statement found for this period', 0);
+            }
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
     definePayload(requestType) {
       let firstDay = '';
@@ -533,7 +539,6 @@ export default {
         this.notificationName = 'message-box-down';
         this.opened = false;
         document.querySelector('.statements__blinder').style.display = 'none';
-        document.querySelector('.statement__add-bank-tab').style.display = 'none';
         this.addAccountStatus = false;
       } else {
         this.opened = true;
@@ -609,29 +614,33 @@ export default {
       this.sendWithdrawRequest(payload, notification, paymethod);
     },
     sendWithdrawRequest(payload, notification, paymethod) {
-      axios
-        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config)
-        .then(response => {
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status_code) {
             this.trackWithdrawal(payload);
             this.sendingWithdrawRequestStatus = false;
             this.notificationType = 'success';
             this.notificationMessage = response.data.message;
+            this.from = '';
+            this.to = '';
             setTimeout(() => {
               this.notificationName = 'message-box-down';
-              this.fetchStatement();
+              this.fetchStatement(1);
             }, 4000);
             if (this.opened) {
               // this.closePopup();
             }
           } else {
+            if (Object.prototype.hasOwnProperty.call(response.data, 'status_code')) {
+              this.notificationMessage = response.data.message;
+            } else {
+              this.notificationMessage = response.data.reason;
+            }
             this.sendingWithdrawRequestStatus = false;
             this.notificationType = 'failed';
-            this.notificationMessage = response.data.message;
             setTimeout(() => {
               this.notificationName = 'message-box-down';
-              this.fetchStatement();
+              this.fetchStatement(1);
             }, 4000);
             if (this.opened) {
               // this.closePopup();
@@ -643,41 +652,44 @@ export default {
         });
     },
     fetchOwnerBanks() {
-      this.responseCount = 0;
-      this.bankAccounts = [];
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      let counter = -1;
-
-      axios
-        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config)
-        .then(response => {
-          const parsedResponse = response.data;
-          parsedResponse.data.forEach((row, i) => {
-            if (row.admin_approval === 1) {
-              counter += 1;
-              row.id = counter;
-              this.bankAccounts.push(row);
-            }
-          });
-        })
-        .catch(error => {
-          this.errorObj = error.response;
+      return new Promise((resolve, reject) => {
+        this.responseCount = 0;
+        this.bankAccounts = [];
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
         });
+        let counter = -1;
+        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config).then(response => {
+            const parsedResponse = response.data;
+            parsedResponse.data.forEach((row, i) => {
+              if (row.admin_approval === 1) {
+                counter += 1;
+                row.id = counter;
+                this.bankAccounts.push(row);
+              }
+            });
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
     fetchAllBanks() {
-      axios
-        .get(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`, this.config)
-        .then(response => {
-          const parsedResponse = response.data;
-          parsedResponse.data.forEach((row, i) => {
-            this.allBanks.push(row);
+      return new Promise((resolve, reject) => {
+        axios.get(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`, this.config).then(response => {
+            const parsedResponse = response.data;
+            parsedResponse.data.forEach((row, i) => {
+              this.allBanks.push(row);
+            });
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
           });
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+      });
     },
     showErr(val) {
       if (val) {
