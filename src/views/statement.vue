@@ -270,6 +270,7 @@ import $ from 'jquery';
 import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
+import axios from 'axios';
 import Mixpanel from 'mixpanel';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
@@ -365,7 +366,6 @@ export default {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.monthPeriod = moment().utc().local().format('MMMM YYYY');
-      this.fetchStatement(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
       this.displayFetchingStatus('Fetching statement', 0);
@@ -384,15 +384,12 @@ export default {
   methods: {
     getPaymentOptions() {
       const payload = {
-        url: `${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`,
-        payload: {
-          country_code: this.sessionInfo.country_code,
-          account_type: 'Owner',
-          amount: parseFloat(this.amount),
-          entry_point: 'Partner Portal',
-        },
+        country_code: this.sessionInfo.country_code,
+        account_type: 'Owner',
+        amount: parseFloat(this.amount),
+        entry_point: 'Partner Portal',
       };
-      this.$store.dispatch('requestAxiosPost', payload).then(response => {
+      axios.post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config).then(response => {
           this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
         })
         .catch(error => {
@@ -401,13 +398,10 @@ export default {
     },
     getVehicles() {
       return new Promise((resolve, reject) => {
-        const payload = {
-          url: `${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`,
-          payload: JSON.stringify({
-            owner_id: this.sessionInfo.id,
-          }),
-        };
-        this.$store.dispatch('requestAxiosPost', payload).then((response) => {
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+        });
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then((response) => {
           this.vehArray = response.data.msg;
           this.listVehicles();
           this.listRiders();
@@ -436,12 +430,9 @@ export default {
 
     fetchStatement(requestType) {
       return new Promise((resolve, reject) => {
-        const payload = {
-          url: `${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`,
-          payload: this.definePayload(requestType),
-        };
+        const payload = this.definePayload(requestType);
         this.displayFetchingStatus('Fetching statement', 0);
-        this.$store.dispatch('requestAxiosPost', payload).then(response => {
+        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
             if (requestType === 1) {
               this.ownerRb = response.data.msg.owner_balance;
               this.showWithdrawButton();
@@ -622,12 +613,8 @@ export default {
       this.payload = payload;
       this.sendWithdrawRequest(payload, notification, paymethod);
     },
-    sendWithdrawRequest(withdrawPayload, notification, paymethod) {
-      const payload = {
-        url: `${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`,
-        payload: withdrawPayload,
-      };
-      this.$store.dispatch('requestAxiosPost', payload).then(response => {
+    sendWithdrawRequest(payload, notification, paymethod) {
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status_code) {
             this.trackWithdrawal(payload);
@@ -668,14 +655,11 @@ export default {
       return new Promise((resolve, reject) => {
         this.responseCount = 0;
         this.bankAccounts = [];
-        const payload = {
-          url: `${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`,
-          payload: JSON.stringify({
-            owner_id: this.sessionInfo.id,
-          }),
-        };
+        const payload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+        });
         let counter = -1;
-        this.$store.dispatch('requestAxiosPost', payload).then(response => {
+        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config).then(response => {
             const parsedResponse = response.data;
             parsedResponse.data.forEach((row, i) => {
               if (row.admin_approval === 1) {
@@ -694,10 +678,7 @@ export default {
     },
     fetchAllBanks() {
       return new Promise((resolve, reject) => {
-        const payload = {
-          url: `${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`,
-        };
-        this.$store.dispatch('requestAxiosGet', payload).then(response => {
+        axios.get(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`, this.config).then(response => {
             const parsedResponse = response.data;
             parsedResponse.data.forEach((row, i) => {
               this.allBanks.push(row);
