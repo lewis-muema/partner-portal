@@ -703,6 +703,8 @@ export default {
       const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
       if (timer1.includes('ago')) {
         return '';
+      } else if (timer1.includes('in a day')) {
+        return 1;
       } else {
         const timer2 = timer1.slice(3, 20);
         return parseInt(timer2.split(' ')[0], 10);

@@ -2,10 +2,6 @@
   <div>
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
-    <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
-      <p class="color-white">{{ notificationMessage }}</p>
-      <div class="loader" v-if="sendingWithdrawRequestStatus"></div>
-    </div>
     <div class="statements__blinder">
       <div class="statement__withdraw-popup statement__row">
         <div class="popup-row statement__row">
@@ -32,24 +28,10 @@
             </span>
           </div>
           <div class="statement__row">
-            <input
-              id="withdrawalAmount"
-              type="text"
-              placeholder="Enter amount"
-              class="full-width input-height input-border"
-              v-model="amount"
-              @input="checkDetails()"
-              @keyup.delete="checkDetails()"
-              :maxlength="amountLength"
-            />
+            <input id="withdrawalAmount" type="text" placeholder="Enter amount" class="full-width input-height input-border" v-model="amount" @input="checkDetails()" @keyup.delete="checkDetails()" :maxlength="amountLength" />
           </div>
           <div class="statement__row">
-            <button
-              id="continue"
-              class="full-width input-height withdraw-buttons statement__withdraw-button"
-              v-if="sendWithdrawStatus"
-              @click="goNext()"
-            >Next</button>
+            <button id="continue" class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="sendWithdrawStatus" @click="goNext()">Next</button>
             <button class="continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
           </div>
         </div>
@@ -57,39 +39,17 @@
           <div class="statement__row">
             <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>
-          <div
-            class="statement__row statement__scrollable-row"
-            v-for="method in payment_methods"
-            :key="method.payment_method_id"
-          >
+          <div class="statement__row statement__scrollable-row" v-for="method in payment_methods" :key="method.payment_method_id">
             <div class="withdraw-payment-options">
-              <input
-                type="radio"
-                v-model="payment_method"
-                name="profileImg"
-                class="statement__column-2 statement__radio-button-margin radio-1"
-                :value="method.payment_method_id"
-                @click="checkedWithDrawal(method.payment_method_id, 0)"
-              />
+              <input type="radio" v-model="payment_method" name="profileImg" class="statement__column-2 statement__radio-button-margin radio-1" :value="method.payment_method_id" @click="checkedWithDrawal(method.payment_method_id, 0)" />
               <span class="statement__column-10">
                 <p class="no-margin">{{ method.name }}</p>
               </span>
             </div>
           </div>
           <div v-if="displayAccounts" class="withdraw-bank-accounts-list">
-            <div
-              class="statement__divided-row centered bank-row"
-              v-for="bankAccount in bankAccounts"
-              :key="bankAccount.id"
-            >
-              <input
-                type="radio"
-                v-model="payment_account"
-                name="profileImg"
-                class="statement__column-2 statement__radio-button-margin radio-1"
-                :value="bankAccount.id"
-                @click="checkedWithDrawal(payment_method, bankAccount.id)"
-              />
+            <div class="statement__divided-row centered bank-row" v-for="bankAccount in bankAccounts" :key="bankAccount.id">
+              <input type="radio" v-model="payment_account" name="profileImg" class="statement__column-2 statement__radio-button-margin radio-1" :value="bankAccount.id" @click="checkedWithDrawal(payment_method, bankAccount.id)" />
               <span class="statement__column-10">
                 <p class="no-margin small-font">{{ bankAccount.bank_name }}</p>
                 <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
@@ -97,11 +57,7 @@
             </div>
           </div>
           <div class="statement__row">
-            <button
-              class="full-width input-height withdraw-buttons statement__withdraw-button"
-              v-if="allowWithdrawal"
-              @click="withdraw()"
-            >Withdraw Cash</button>
+            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal" @click="withdraw()">Withdraw Cash</button>
             <button class="input-height" disabled v-else>Withdraw Cash</button>
           </div>
         </div>
@@ -115,43 +71,23 @@
               <div class="col-2 padding">
                 <select class="dropdown-filter" v-model="riderId" @change="selectRider(riderId)">
                   <option selected value>Driver</option>
-                  <option
-                    v-for="rider in riders"
-                    :value="rider.rider_id"
-                    :key="rider.rider_id"
-                  >{{ rider.f_name }} {{ rider.s_name }}</option>
+                  <option v-for="rider in riders" :value="rider.rider_id" :key="rider.rider_id">{{ rider.f_name }} {{ rider.s_name }}</option>
                 </select>
               </div>
               <div class="col-2 padding">
                 <select class="dropdown-filter" v-model="vehicleId">
                   <option selected value>vehicle</option>
-                  <option
-                    v-for="vehicle in vehicles"
-                    :value="vehicle.id"
-                    :key="vehicle.id"
-                  >{{ vehicle.registration_no }}</option>
+                  <option v-for="vehicle in vehicles" :value="vehicle.id" :key="vehicle.id">{{ vehicle.registration_no }}</option>
                 </select>
               </div>
               <div class="col-3">
-                <datepicker
-                  v-model="from"
-                  input-class="filtIn"
-                  id="dtfrom"
-                  placeholder="From"
-                  name="from"
-                ></datepicker>
+                <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
               </div>
               <div class="col-3">
                 <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
               </div>
               <div class="subFilt col-2">
-                <button
-                  type="button"
-                  id="filtSub"
-                  name="button"
-                  class="btn btn_primary fil-sub"
-                  @click="filt();"
-                >
+                <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub" @click="filt()">
                   <i class="fa fa-filter" aria-hidden="true"></i>
                 </button>
               </div>
@@ -167,10 +103,7 @@
                   <div class="statement__box-content">
                     <span class="statement__box-text">You can withdraw :</span>
                     <br />
-                    <span
-                      class="statement__box-number"
-                      v-if="this.ownerRb"
-                    >{{ ownerRb.currency }} {{ Math.floor(ownerRb.rb * -1) }}</span>
+                    <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.rb * -1) }}</span>
                   </div>
                 </div>
               </div>
@@ -178,23 +111,8 @@
           </div>
           <div class="stat-cards col-2">
             <div class="subFilt">
-              <button
-                type="button"
-                id="filtSub"
-                name="button"
-                class="btn btn_primary fil-sub fil-sub-1 active-btn"
-                @click="closePopup();"
-                v-if="activeStatus"
-              >Withdraw cash</button>
-              <button
-                type="button"
-                id="filtSub"
-                name="button"
-                class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn"
-                @mouseover="showErr(true)"
-                @mouseleave="showErr(false)"
-                v-else
-              >Withdraw cash</button>
+              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">Withdraw cash</button>
+              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>Withdraw cash</button>
               <p class="hidden-btn-error">The button is disabled. You cannot withdraw today</p>
             </div>
           </div>
@@ -202,59 +120,23 @@
         <div class="search-error" id="err">{{ error }}</div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
           <div class="divider-top"></div>
-          <datatable
-            :columns="columns"
-            :rows="rows"
-            :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`"
-            v-if="rows"
-            :per-page="[10, 20, 30, 40, 50]"
-            :default-per-page="10"
-            :clickable="false"
-            :sortable="true"
-            :exact-search="true"
-            :exportable="true"
-          ></datatable>
+          <datatable :columns="columns" :rows="rows" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" v-if="rows" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
         <div class="col-12 padding margin-bottom">
-          <datepicker
-            v-model="from"
-            input-class="filtIn"
-            id="dtfrom"
-            placeholder="From"
-            name="from"
-          ></datepicker>
+          <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
         </div>
         <div class="col-12 padding margin-bottom">
           <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
-          <button
-            type="button"
-            id="filtSub"
-            name="button"
-            class="btn btn_primary fil-sub centered-btn"
-            @click="filt();"
-          >
+          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub centered-btn" @click="filt()">
             <i class="fa fa-filter" aria-hidden="true"></i>
           </button>
         </div>
-        <button
-          type="button"
-          id="filtSub"
-          name="button"
-          class="btn btn_primary fil-sub fil-sub-1 active-btn"
-          @click="closePopup();"
-          v-if="activeStatus"
-        >Withdraw cash</button>
-        <button
-          type="button"
-          id="filtSub"
-          name="button"
-          class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn"
-          v-else
-        >You cannot withdraw today</button>
+        <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">Withdraw cash</button>
+        <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" v-else>You cannot withdraw today</button>
         <div class="search-error" id="err">{{ error }}</div>
         <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.id">
@@ -276,6 +158,7 @@
           </table>
         </div>
       </div>
+      <notify />
     </div>
   </div>
 </template>
@@ -287,6 +170,7 @@ import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 import axios from 'axios';
 import Mixpanel from 'mixpanel';
+import notify from '../components/notification';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -299,6 +183,7 @@ export default {
     Datepicker,
     datatable: DataTable,
     errorHandler,
+    notify,
   },
   data() {
     return {
@@ -314,7 +199,14 @@ export default {
           Authorization: localStorage.token,
         },
       },
-      columns: [{ label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }, { label: 'Driver Name', field: 'rider_name' }],
+      columns: [
+        { label: 'Txn No', field: 'txn' },
+        { label: 'Date', field: 'pay_time' },
+        { label: 'Amount', field: 'amount' },
+        { label: 'Balance', field: 'running_balance' },
+        { label: 'Narrative', field: 'pay_narrative' },
+        { label: 'Driver Name', field: 'rider_name' },
+      ],
       page: 1,
       rows: [
         {
@@ -382,9 +274,9 @@ export default {
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
       this.displayFetchingStatus('Fetching statement', 0);
-      this.getVehicles().then((res1) => {
-        this.fetchStatement(1).then((res2) => {
-          this.fetchAllBanks().then((res3) => {
+      this.getVehicles().then(res1 => {
+        this.fetchStatement(1).then(res2 => {
+          this.fetchAllBanks().then(res3 => {
             this.fetchOwnerBanks();
           });
         });
@@ -395,6 +287,9 @@ export default {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     getPaymentOptions() {
       const payload = {
         country_code: this.sessionInfo.country_code,
@@ -402,7 +297,9 @@ export default {
         amount: parseFloat(this.amount),
         entry_point: 'Partner Portal',
       };
-      axios.post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config).then(response => {
+      axios
+        .post(`${process.env.VUE_APP_AUTH}localisation/accounts/pay_methods`, payload, this.config)
+        .then(response => {
           this.payment_methods = JSON.parse(JSON.stringify(response.data.payment_methods));
         })
         .catch(error => {
@@ -414,16 +311,18 @@ export default {
         const payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
         });
-        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config).then((response) => {
-          this.vehArray = response.data.msg;
-          this.listVehicles();
-          this.listRiders();
-          resolve(response);
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-          resolve(error);
-        });
+        axios
+          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+          .then(response => {
+            this.vehArray = response.data.msg;
+            this.listVehicles();
+            this.listRiders();
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
       });
     },
     handleResize() {
@@ -445,7 +344,9 @@ export default {
       return new Promise((resolve, reject) => {
         const payload = this.definePayload(requestType);
         this.displayFetchingStatus('Fetching statement', 0);
-        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config).then(response => {
+        axios
+          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config)
+          .then(response => {
             if (requestType === 1) {
               this.ownerRb = response.data.msg.owner_balance;
               this.showWithdrawButton();
@@ -544,7 +445,7 @@ export default {
       this.payable_amount = true;
       this.payment_options = false;
       if (this.opened) {
-        this.notificationName = 'message-box-down';
+        this.notify(2);
         this.opened = false;
         document.querySelector('.statements__blinder').style.display = 'none';
         this.addAccountStatus = false;
@@ -587,10 +488,7 @@ export default {
     },
     withdraw() {
       this.sendWithdrawStatus = false;
-      this.notificationName = 'message-box-up';
-      this.notificationType = 'sending';
-      this.notificationMessage = 'Sending request';
-      this.sendingWithdrawRequestStatus = true;
+      this.notify(1, 2, 'Sending request');
       if (this.mpesaWithdrawal && !this.bankWithdrawal) {
         this.constructPayload(1);
       } else if (!this.mpesaWithdrawal && this.bankWithdrawal) {
@@ -622,18 +520,17 @@ export default {
       this.sendWithdrawRequest(payload, notification, paymethod);
     },
     sendWithdrawRequest(payload, notification, paymethod) {
-      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config).then(response => {
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config)
+        .then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status_code) {
-            // this.trackMpesaWithdrawal();
-            // this.trackBankWithdrawal();
-            this.sendingWithdrawRequestStatus = false;
-            this.notificationType = 'success';
-            this.notificationMessage = response.data.message;
+            this.trackWithdrawal(payload);
+            this.notify(1, 1, response.data.message);
             this.from = '';
             this.to = '';
             setTimeout(() => {
-              this.notificationName = 'message-box-down';
+              this.notify(2);
               this.fetchStatement(1);
             }, 4000);
             if (this.opened) {
@@ -641,14 +538,12 @@ export default {
             }
           } else {
             if (Object.prototype.hasOwnProperty.call(response.data, 'status_code')) {
-              this.notificationMessage = response.data.message;
+              this.notify(1, 0, response.data.message);
             } else {
-              this.notificationMessage = response.data.reason;
+              this.notify(1, 0, response.data.reason);
             }
-            this.sendingWithdrawRequestStatus = false;
-            this.notificationType = 'failed';
             setTimeout(() => {
-              this.notificationName = 'message-box-down';
+              this.notify(2);
               this.fetchStatement(1);
             }, 4000);
             if (this.opened) {
@@ -668,7 +563,9 @@ export default {
           owner_id: this.sessionInfo.id,
         });
         let counter = -1;
-        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config).then(response => {
+        axios
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config)
+          .then(response => {
             const parsedResponse = response.data;
             parsedResponse.data.forEach((row, i) => {
               if (row.admin_approval === 1) {
@@ -687,7 +584,9 @@ export default {
     },
     fetchAllBanks() {
       return new Promise((resolve, reject) => {
-        axios.get(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`, this.config).then(response => {
+        axios
+          .get(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/banks`, this.config)
+          .then(response => {
             const parsedResponse = response.data;
             parsedResponse.data.forEach((row, i) => {
               this.allBanks.push(row);

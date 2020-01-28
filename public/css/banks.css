@@ -89,7 +89,7 @@
   margin: auto;
 }
 .banks__confirm-banks-blinder {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0px;
@@ -100,7 +100,6 @@
   justify-content: center;
   align-items: center;
 }
-
 .banks__confirm-banks-withdraw-popup {
   width: 30%;
   background: white;
