@@ -182,9 +182,7 @@
             </template>
           </div>
         </div>
-        <div :class="`${notificationName} notifier ${responseStatus}`">
-          <p class="message">{{ notificationMessage }}</p>
-        </div>
+        <notify />
       </div>
     </div>
   </div>
@@ -193,6 +191,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import timezone from '../mixins/timezone';
+import notify from '../components/notification';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -203,6 +202,7 @@ export default {
   components: {
     verifier,
     errorHandler,
+    notify,
   },
   mixins: [timezone],
   data() {
@@ -267,9 +267,6 @@ export default {
       errorObj: '',
       ordercount: [],
       orderRange: '0 - 100',
-      notificationName: '',
-      notificationMessage: '',
-      responseStatus: '',
     };
   },
   computed: {},
@@ -288,6 +285,9 @@ export default {
     }
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     regcounter(id) {
       this.regOk = id;
     },
@@ -575,22 +575,12 @@ export default {
         .post(`${process.env.VUE_APP_AUTH}orders/${url}`, payload, this.config)
         .then(response => {
           this.orderLoadingStatus = false;
-          this.responseStatus = 'bid_placed';
-          this.notificationMessage = response.data.reason;
-          this.notificationName = 'message-box-up';
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
+          this.notify(3, 1, response.data.reason);
           this.definePayload();
         })
         .catch(error => {
           this.orderLoadingStatus = false;
-          this.responseStatus = 'failed';
-          this.notificationMessage = error.response.data;
-          this.notificationName = 'message-box-up';
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 7000);
+          this.notify(3, 0, error.response.data);
         });
     },
     refreshOrders(ordpayload) {

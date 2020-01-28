@@ -75,13 +75,11 @@ body.dt-print-view {
   padding: 15px;
   margin-bottom: -35px;
 }
-
 .assign-vehicle-option {
   width: 50%;
 }
-
 .statements__blinder {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0px;
@@ -1447,6 +1445,14 @@ button.btn-floating {
     bottom: 20px;
   }
 }
+.notification-popup {
+  width: max-content;
+  padding: 15px;
+  height: max-content;
+  position: fixed;
+  right: 0;
+  margin: 20px;
+}
 .pop-up-success {
   background-color: #05c034;
 }
@@ -1458,6 +1464,7 @@ button.btn-floating {
 }
 .message-box {
   display: none;
+  bottom: -140px;
 }
 .loader {
   border: 4px solid #f3f3f3;
@@ -1471,6 +1478,19 @@ button.btn-floating {
   position: absolute;
   right: 20px;
   top: 14px;
+}
+.loading-icon {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #f78114;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.icon-container {
+  margin-right: 10px;
 }
 @keyframes spin {
   0% {
