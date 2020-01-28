@@ -362,27 +362,7 @@
               </div>
             </template>
           </div>
-          <div :class="`${notificationName} confirmed`" v-if="message === 1">
-            <p class="message">Order confirmed</p>
-          </div>
-          <div :class="`${notificationName} failed`" v-if="message === 2">
-            <p class="message">{{ error }}</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 3">
-            <p class="message">Please select a driver or vehicle</p>
-          </div>
-          <div :class="`${notificationName} failed`" v-if="message === 4">
-            <p class="message">{{ error }}</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 5">
-            <p class="message">Please enter all details and bid within the range</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 6">
-            <p class="message">Please bid within the price range</p>
-          </div>
-          <div :class="`${notificationName} bid_placed`" v-if="message === 7">
-            <p class="message">{{ error }}</p>
-          </div>
+          <notify />
         </div>
       </div>
     </div>
@@ -395,6 +375,7 @@ import 'vue-tel-input/dist/vue-tel-input.css';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
+import notify from '../components/notification';
 import errorHandler from '../components/errorHandler';
 import verifier from '../components/verifier';
 
@@ -406,6 +387,7 @@ export default {
     verifier,
     errorHandler,
     VueTelInput,
+    notify,
   },
   data() {
     return {
@@ -516,6 +498,9 @@ export default {
     }
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     setDriverStatus() {
       this.addDriverStatus = false;
     },
@@ -972,12 +957,7 @@ export default {
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -990,12 +970,7 @@ export default {
           this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.notify(3, 0, `${error.response.data.message}`);
           }
         });
     },
@@ -1008,12 +983,7 @@ export default {
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -1026,12 +996,7 @@ export default {
           this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.notify(3, 0, `${error.response.data.message}`);
           }
         });
     },
@@ -1067,12 +1032,7 @@ export default {
         this.refrigirated = this.vehicles[q].refrigerated;
         this.partnerVendor = parseInt(this.vehicles[q].vendor_type, 10);
         if (this.partnerVendor !== this.orders[id - 1].vendor_type) {
-          this.error = `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`;
-          this.notificationName = 'message-box-up';
-          this.message = 2;
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
+          this.notify(3, 0, `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`);
           this.partnerVendor = null;
         }
       }
