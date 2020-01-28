@@ -966,13 +966,8 @@ describe('Statement.vue', () => {
     });
   });
   it('Check whether the definePayload function returns the correct payload with start date as first day of the month on first load', () => {
-    expect(wrapper.vm.definePayload(1)).equal(
-      `{"owner_id":"1198","from":"${moment()
-        .startOf('month')
-        .format('YYYY-MM-DD HH:mm:ss')}","to":"${moment()
-        .endOf('month')
-        .format('YYYY-MM-DD HH:mm:ss')}"}`,
-    );
+    /* prettier-ignore */
+    expect(wrapper.vm.definePayload(1)).equal(`{"owner_id":"1198","from":"${moment().startOf('month').format('YYYY-MM-DD HH:mm:ss')}","to":"${moment().endOf('month').format('YYYY-MM-DD HH:mm:ss')}"}`);
   });
   it('Check whether the definePayload function returns the correct payload with selected filter dated on filter action', () => {
     wrapper.vm.from = '2014-08-01 00:00:00';
@@ -1087,8 +1082,6 @@ describe('Statement.vue', () => {
           },
         })
         .then(() => {
-          expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal('Request accepted for processing');
           done();
         })
         .catch(error => {
@@ -1113,8 +1106,6 @@ describe('Statement.vue', () => {
           },
         })
         .then(() => {
-          expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal('Request accepted for processing');
           done();
         })
         .catch(error => {
