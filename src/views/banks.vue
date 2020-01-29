@@ -3,11 +3,6 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="banks__container">
-      <!--notification messages-->
-      <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
-        <p class="no-margin color-white">{{ notificationMessage }}</p>
-        <div class="loader" v-if="sendingCodeStatus"></div>
-      </div>
       <!--confirm bank details tab-->
       <div class="banks__confirm-banks-blinder">
         <div class="banks__confirm-banks-withdraw-popup banks__confirm-banks-row">
