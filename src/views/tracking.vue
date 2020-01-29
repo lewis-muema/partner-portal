@@ -249,7 +249,7 @@ export default {
         script.onload = () => {
           this.initMap();
         };
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyChEOAbj_2URQWRkL8N0p07vk6foBfHXGI';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`;
         document.head.appendChild(script);
       }
     },

@@ -483,10 +483,8 @@ describe('Banks.vue', () => {
   it('Check whether the sendCode function sends a code to the owners phone', done => {
     wrapper.vm.requestId = 'd1ec833142954f0fba045566cd0a2714';
     wrapper.vm.sendCode();
-    expect(wrapper.vm.notificationMessage).equal('You have a pending verification code');
     wrapper.vm.requestId = '';
     wrapper.vm.sendCode();
-    expect(wrapper.vm.notificationMessage).equal('Sending Code');
     moxios.wait(() => {
       const request = moxios.requests.mostRecent();
       request
@@ -498,8 +496,6 @@ describe('Banks.vue', () => {
           expect(wrapper.vm.requestId).equal('7ce9332d0b994eb9804df790f05bd04c');
           expect(localStorage.requestId).equal('7ce9332d0b994eb9804df790f05bd04c');
           expect(wrapper.vm.sendingCodeStatus).equal(false);
-          expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal(`Code has been sent to ${wrapper.vm.sessionInfo.phone}`);
           done();
         })
         .catch(error => {
@@ -511,8 +507,6 @@ describe('Banks.vue', () => {
     const response = { data: { status: false, message: 'This phone number does not exist' } };
     wrapper.vm.handleSendCodeResponse(response);
     expect(wrapper.vm.sendingCodeStatus).equal(false);
-    expect(wrapper.vm.notificationType).equal('failed');
-    expect(wrapper.vm.notificationMessage).equal('This phone number does not exist');
   });
   it('Check whether the confirmDetails function toggles the confirmAccountStatus status', () => {
     wrapper.vm.confirmAccountStatus = true;
@@ -544,9 +538,6 @@ describe('Banks.vue', () => {
           expect(wrapper.vm.sendingCodeStatus).equal(false);
           expect(wrapper.vm.requestId).equal('');
           expect(wrapper.vm.verifyResponseNumber).equal(0);
-          expect(wrapper.vm.notificationName).equal('message-box-up');
-          expect(wrapper.vm.notificationType).equal('sending');
-          expect(wrapper.vm.notificationMessage).equal('Verifying code');
           expect(wrapper.vm.verifyCodeStatus).equal(false);
           done();
         })
@@ -559,15 +550,10 @@ describe('Banks.vue', () => {
     let response = { data: { status: false, message: 'The code provided does not match the expected value' } };
     wrapper.vm.handleVerificationResponse(response);
     expect(wrapper.vm.sendingCodeStatus).equal(false);
-    expect(wrapper.vm.notificationName).equal('message-box-up');
-    expect(wrapper.vm.notificationType).equal('failed');
-    expect(wrapper.vm.notificationMessage).equal('Please enter the correct verification code');
     response = { data: { status: false, message: 'it has been verified already' } };
     wrapper.vm.handleVerificationResponse(response);
-    expect(wrapper.vm.notificationMessage).equal('Failed to verify, Please request for another code');
     response = { data: { status: false, message: 'Your request is incomplete and missing the mandatory parameter' } };
     wrapper.vm.handleVerificationResponse(response);
-    expect(wrapper.vm.notificationMessage).equal('Please enter the full verification code');
   });
   it('Check whether the bankBranchCheckpoint function removes trailing spaces from the branch name', () => {
     wrapper.vm.branch = ' Nairobi';
