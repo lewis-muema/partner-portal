@@ -362,41 +362,22 @@
               </div>
             </template>
           </div>
-          <div :class="`${notificationName} confirmed`" v-if="message === 1">
-            <p class="message">Order confirmed</p>
-          </div>
-          <div :class="`${notificationName} failed`" v-if="message === 2">
-            <p class="message">{{ error }}</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 3">
-            <p class="message">Please select a driver or vehicle</p>
-          </div>
-          <div :class="`${notificationName} failed`" v-if="message === 4">
-            <p class="message">{{ error }}</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 5">
-            <p class="message">Please enter all details and bid within the range</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 6">
-            <p class="message">Please bid within the price range</p>
-          </div>
-          <div :class="`${notificationName} bid_placed`" v-if="message === 7">
-            <p class="message">{{ error }}</p>
-          </div>
+          <notify />
         </div>
       </div>
     </div>
   </div>
 </template>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
+
 <script>
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
+import notify from '../components/notification';
+import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let interval = '';
@@ -406,6 +387,7 @@ export default {
     verifier,
     errorHandler,
     VueTelInput,
+    notify,
   },
   data() {
     return {
@@ -516,6 +498,9 @@ export default {
     }
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     setDriverStatus() {
       this.addDriverStatus = false;
     },
@@ -526,7 +511,7 @@ export default {
       this.regOk = id;
     },
     createStaticMapUrl(path) {
-      const google_key = 'AIzaSyDJ_S9JgQJSaHa88SXcPbh9JijQOl8RXpc';
+      const google_key = process.env.GOOGLE_API_KEY;
       const from_cordinates = path.from;
       const to_cordinates = path.to;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=500x200&markers=color:0xF17F3A%7Clabel:P%7C
@@ -750,8 +735,9 @@ export default {
         this.vehicles = [];
         this.getVehiclez = 0;
         this.getRiderz = 0;
-        this.getRiders(id);
-        this.getVehicles(id);
+        this.getVehicles(id).then((response) => {
+          this.getRiders(id);
+        });
       }
       this.vendorType = this.orders[id - 1].vendor_type;
       this.ownerId = this.sessionInfo.id;
@@ -971,12 +957,7 @@ export default {
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -989,12 +970,7 @@ export default {
           this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.notify(3, 0, `${error.response.data.message}`);
           }
         });
     },
@@ -1007,12 +983,7 @@ export default {
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -1025,12 +996,7 @@ export default {
           this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.notify(3, 0, `${error.response.data.message}`);
           }
         });
     },
@@ -1066,12 +1032,7 @@ export default {
         this.refrigirated = this.vehicles[q].refrigerated;
         this.partnerVendor = parseInt(this.vehicles[q].vendor_type, 10);
         if (this.partnerVendor !== this.orders[id - 1].vendor_type) {
-          this.error = `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`;
-          this.notificationName = 'message-box-up';
-          this.message = 2;
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
+          this.notify(3, 0, `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`);
           this.partnerVendor = null;
         }
       }
@@ -1148,53 +1109,61 @@ export default {
       });
     },
     getRiders(id) {
-      const riderload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            const unescaped = response.data;
-            unescaped.data.forEach((row, v) => {
-              row.count = v;
-              this.riders.push(row);
-            });
-            if (this.riders.length !== 0) {
-              this.autoSelectRiders(id);
-            }
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
+      return new Promise((resolve, reject) => {
+        const riderload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
         });
+
+        axios
+          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+          .then(response => {
+            if (response.status === 200) {
+              const unescaped = response.data;
+              unescaped.data.forEach((row, v) => {
+                row.count = v;
+                this.riders.push(row);
+              });
+              if (this.riders.length !== 0) {
+                this.autoSelectRiders(id);
+              }
+            }
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
     getVehicles(id) {
-      const vehicleload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            const unescaped = response.data;
-            let counter = -1;
-            unescaped.data.forEach((row, v) => {
-              if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-                counter += 1;
-                row.count = counter;
-                this.vehicles.push(row);
-              }
-            });
-            if (this.vehicles.length !== 0) {
-              this.autoSelectVehicles(id);
-            }
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
+      return new Promise((resolve, reject) => {
+        const vehicleload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
         });
+        axios
+          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+          .then(response => {
+            if (response.status === 200) {
+              const unescaped = response.data;
+              let counter = -1;
+              unescaped.data.forEach((row, v) => {
+                if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                  counter += 1;
+                  row.count = counter;
+                  this.vehicles.push(row);
+                }
+              });
+              if (this.vehicles.length !== 0) {
+                this.autoSelectVehicles(id);
+              }
+            }
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
     refreshOrders() {
       interval = setInterval(() => {
@@ -1244,7 +1213,7 @@ export default {
         from_date: '2014-02-09',
         limit: `${this.orderRange.split(' ')[0]}, ${100}`,
       };
-      let vendfilter = document.getElementById('vend');
+      const vendfilter = document.getElementById('vend');
       if (vendfilter) {
         vendfilter.value = '';
       }

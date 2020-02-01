@@ -45,7 +45,7 @@
     </div>
     <div class="login__log-cont" v-if="state === 'reset'">
       <div class="login__log-panel">
-        <p class="login__header-text">Set Password</p>
+        <p class="login__header-text">Reset Password</p>
         <div id="reset_error" class="error">{{ loginError }}</div>
         <div class="control-group">
           <div class="login__element">
@@ -58,7 +58,7 @@
               value="Reset Password"
               id="reset"
               @click="postForgot"
-            >Set Password</button>
+            >Reset Password</button>
           </div>
           <a href="#" @click="forgotPwd();" class="login__forgotPass">Sign In</a>
         </div>

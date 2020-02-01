@@ -1,3 +1,42 @@
 import axios from 'axios';
 
-export default {};
+export default {
+    requestAxiosPost({ commit, dispatch }, payload) {
+        return new Promise((resolve, reject) => {
+        const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: localStorage.token,
+            },
+        };
+        axios.post(payload.url, payload.payload, config).then(response => {
+            if (response.data.status) {
+                resolve(response);
+            } else {
+                resolve(response);
+            }
+        }).catch(error => {
+            reject(error);
+        });
+        });
+    },
+    requestAxiosGet({ commit, dispatch }, payload) {
+        return new Promise((resolve, reject) => {
+        const config = {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: localStorage.token,
+            },
+        };
+        axios.get(payload.url, config).then(response => {
+            if (response.data.status) {
+                resolve(response);
+            } else {
+                resolve(response);
+            }
+        }).catch(error => {
+            reject(error);
+        });
+        });
+    },
+};

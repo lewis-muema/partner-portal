@@ -3,21 +3,13 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="banks__container">
-      <!--notification messages-->
-      <div :class="`notification-popup pop-up-${notificationType} ${notificationName}`">
-        <p class="no-margin color-white">{{ notificationMessage }}</p>
-        <div class="loader" v-if="sendingCodeStatus"></div>
-      </div>
       <!--confirm bank details tab-->
       <div class="banks__confirm-banks-blinder">
         <div class="banks__confirm-banks-withdraw-popup banks__confirm-banks-row">
           <div class="popup-row banks__confirm-banks-row">
             <span class="banks__heavy-font">Confirm Details</span>
             <span>
-              <i
-                class="material-icons banks__confirm-banks-cancel-icon"
-                @click="confirmDetails()"
-              >cancel</i>
+              <i class="material-icons banks__confirm-banks-cancel-icon" @click="confirmDetails()">cancel</i>
             </span>
           </div>
           <div class="confirm-details-section">
@@ -30,20 +22,9 @@
             <p class="banks__heavy-font no-margin font-16 color-black">Account number</p>
             <p class="font-16">{{ account }}</p>
           </div>
-          <p
-            class="banks__edit-details banks__confirm-banks-last-row banks__heavy-font font-16 color-black"
-            @click="confirmDetails()"
-          >edit</p>
-          <button
-            class="full-width input-height submit banks__confirm-banks-last-row banks__active-buttons"
-            v-if="!sendingCodeStatus"
-            @click="sendCode();"
-          >submit</button>
-          <button
-            class="full-width input-height submit banks__confirm-banks-last-row"
-            disabled
-            v-else
-          >submit</button>
+          <p class="banks__edit-details banks__confirm-banks-last-row banks__heavy-font font-16 color-black" @click="confirmDetails()">edit</p>
+          <button class="full-width input-height submit banks__confirm-banks-last-row banks__active-buttons" v-if="!sendingCodeStatus" @click="sendCode()">submit</button>
+          <button class="full-width input-height submit banks__confirm-banks-last-row" disabled v-else>submit</button>
         </div>
       </div>
       <!--Show existing owner bank accounts tab-->
@@ -89,29 +70,13 @@
               <p class="no-margin small-font color-black">{{ account1.account_no }}</p>
             </div>
             <div class="banks__table-col">
-              <p
-                class="no-margin small-font color-black"
-                v-if="account1.admin_approval === 0"
-              >Not Approved</p>
-              <p
-                class="no-margin small-font color-black"
-                v-if="account1.admin_approval === 1"
-              >Approved</p>
-              <p
-                class="no-margin small-font color-black"
-                v-if="account1.admin_approval === 2"
-              >Declined</p>
+              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 0">Not Approved</p>
+              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 1">Approved</p>
+              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 2">Declined</p>
             </div>
             <div class="banks__table-col">
-              <p
-                class="no-margin banks__edit-bank-details"
-                @click="addAccount(account1.id)"
-                v-if="account1.admin_approval === 0"
-              >Edit</p>
-              <p
-                class="no-margin banks__no-edit-bank-details"
-                v-if="account1.admin_approval === 1 || account1.admin_approval === 2"
-              >Edit</p>
+              <p class="no-margin banks__edit-bank-details" @click="addAccount(account1.id)" v-if="account1.admin_approval === 0">Edit</p>
+              <p class="no-margin banks__no-edit-bank-details" v-if="account1.admin_approval === 1 || account1.admin_approval === 2">Edit</p>
             </div>
           </div>
         </div>
@@ -123,11 +88,7 @@
           <div class="banks__no-banks-par" v-if="accounts.length === 0 && recievedResponse">
             <p>No banks found</p>
           </div>
-          <div
-            class="banks__table-rows--mobi"
-            v-for="account1 in accounts"
-            :key="account1.account_no"
-          >
+          <div class="banks__table-rows--mobi" v-for="account1 in accounts" :key="account1.account_no">
             <div class="banks__table-col--mobi">
               <p class="bolded">Bank Name</p>
               <p class="no-margin small-font">{{ account1.bank_name }}</p>
@@ -152,15 +113,8 @@
             </div>
             <div class="banks__table-col--mobi">
               <p class="bolded">Action</p>
-              <p
-                class="no-margin banks__edit-bank-details--mobi"
-                v-if="account1.admin_approval === 0"
-                @click="addAccount(account1.id)"
-              >Edit</p>
-              <p
-                class="no-margin banks__no-edit-bank-details"
-                v-if="account1.admin_approval === 1 || account1.admin_approval === 2"
-              >Edit</p>
+              <p class="no-margin banks__edit-bank-details--mobi" v-if="account1.admin_approval === 0" @click="addAccount(account1.id)">Edit</p>
+              <p class="no-margin banks__no-edit-bank-details" v-if="account1.admin_approval === 1 || account1.admin_approval === 2">Edit</p>
             </div>
           </div>
         </div>
@@ -169,21 +123,16 @@
       <div class="banks__verify-code-section">
         <i class="material-icons arrow" @click="verifyDetails()">arrow_back</i>
         <div class="banks__verify-tab">
-          <p
-            class="banks__verify-text font-16"
-          >For your security, Sendy wants to make sure it’s really you. An SMS with your verification code was sent to your phone. Resend code</p>
+          <p class="banks__verify-text font-16">For your security, Sendy wants to make sure it’s really you. An SMS with your verification code was sent to your phone. Resend code</p>
           <input class="banks__verify-inputs" maxlength="4" type="text" v-model="inputCode" />
-          <button
-            class="banks__verify-inputs banks__active-buttons"
-            v-if="verifyCodeStatus"
-            @click="verifyCode()"
-          >verify</button>
+          <button class="banks__verify-inputs banks__active-buttons" v-if="verifyCodeStatus" @click="verifyCode()">verify</button>
           <button class="banks__verify-inputs" disabled v-else>verify</button>
         </div>
       </div>
       <!--add new bank account tab-->
       <div class="banks__new-accounts">
-        <i class="material-icons arrow" @click="addAccount(); fetchOwnerBanks()">arrow_back</i>
+        <!-- prettier-ignore -->
+        <i class="material-icons arrow" @click="addAccount(); fetchOwnerBanks();">arrow_back</i>
         <div class="banks__new-bank-account">
           <div class="banks__new-bank-account-head no-margin">
             <p class="banks__new-bank-account-par no-margin font-16">New Bank Account</p>
@@ -192,63 +141,36 @@
             <p class="banks__input-width font-16">
               <span class="margin-right">Bank name</span>
               <span>
-                <select
-                  class="banks__new-account-input"
-                  @change="bankNameCheckpoint()"
-                  v-model="bankid"
-                >
+                <select class="banks__new-account-input" @change="bankNameCheckpoint()" v-model="bankid">
                   <option selected value="null">Select Bank</option>
-                  <option
-                    class
-                    :value="bank.payment_bank_id"
-                    v-for="bank in banks"
-                    :key="bank.bankid"
-                  >{{ bank.name }}</option>
+                  <option class :value="bank.payment_bank_id" v-for="bank in banks" :key="bank.bankid">{{ bank.name }}</option>
                 </select>
               </span>
             </p>
             <p class="banks__input-width font-16">
               <span class="margin-right">Bank Branch</span>
               <span>
-                <input
-                  class="banks__new-account-input"
-                  type="text"
-                  v-model="branch"
-                  @input="bankBranchCheckpoint()"
-                />
+                <input class="banks__new-account-input" type="text" v-model="branch" @input="bankBranchCheckpoint()" />
               </span>
             </p>
             <p class="banks__input-width font-16">
               <span class="margin-right">Account name</span>
               <span>
-                <input
-                  class="banks__new-account-input"
-                  type="text"
-                  v-model="name"
-                  @input="accountNameCheckpoint()"
-                />
+                <input class="banks__new-account-input" type="text" v-model="name" @input="accountNameCheckpoint()" />
               </span>
             </p>
             <p class="banks__input-width font-16">
               <span class="margin-right">Account number</span>
               <span>
-                <input
-                  class="banks__new-account-input"
-                  type="text"
-                  v-model="account"
-                  @input="accountNoCheckpoint()"
-                />
+                <input class="banks__new-account-input" type="text" v-model="account" @input="accountNoCheckpoint()" />
               </span>
             </p>
-            <button
-              class="banks__input-button submit banks__active-buttons"
-              v-if="submitStatus"
-              @click="confirmDetails()"
-            >Submit</button>
+            <button class="banks__input-button submit banks__active-buttons" v-if="submitStatus" @click="confirmDetails()">Submit</button>
             <button class="banks__input-button submit" disabled v-else>Submit</button>
           </div>
         </div>
       </div>
+      <notify />
     </div>
   </div>
 </template>
@@ -258,6 +180,7 @@ import $ from 'jquery';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
+import notify from '../components/notification';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -267,6 +190,7 @@ export default {
   components: {
     verifier,
     errorHandler,
+    notify,
   },
   data() {
     return {
@@ -332,6 +256,9 @@ export default {
     }
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     isMobile() {
       if (window.innerWidth > 450) {
         this.Mobile = false;
@@ -396,9 +323,7 @@ export default {
     },
     verifyCode() {
       this.verifyResponseNumber = 0;
-      this.notificationName = 'message-box-up';
-      this.notificationType = 'sending';
-      this.notificationMessage = 'Verifying code';
+      this.notify(1, 2, 'Verifying code');
       this.sendingCodeStatus = true;
       this.verifyCodeStatus = false;
       const payload = JSON.stringify({
@@ -429,17 +354,9 @@ export default {
         this.sendingCodeStatus = false;
         localStorage.requestId = '';
         this.requestId = '';
-        setTimeout(() => {
-          this.notificationName = 'message-box-down';
-        }, 4000);
       } else {
         this.sendingCodeStatus = false;
-        this.notificationName = 'message-box-up';
-        this.notificationType = 'failed';
-        this.handleNotifications(parsedResponse);
-        setTimeout(() => {
-          this.notificationName = 'message-box-down';
-        }, 4000);
+        this.notify(3, 0, this.handleNotifications(parsedResponse));
       }
     },
     handleNotifications(parsedResponse) {
@@ -448,40 +365,33 @@ export default {
         const time = new Date(localStorage.time);
         time.setMinutes(time.getMinutes() + 20);
         if (Date() < localStorage.time && Date() > time) {
-          // nothing here
+          return '';
         } else {
-          this.notificationMessage = 'Please enter the correct verification code';
           this.verifyCodeStatus = true;
+          return 'Please enter the correct verification code';
         }
       } else if (parsedResponse.message.indexOf('it has been verified already') > -1) {
-        this.notificationMessage = 'Failed to verify, Please request for another code';
         localStorage.requestId = '';
         this.requestId = '';
         this.verifyCodeStatus = false;
+        return 'Failed to verify, Please request for another code';
       } else if (parsedResponse.message.indexOf('Your request is incomplete and missing the mandatory parameter') > -1) {
-        this.notificationMessage = 'Please enter the full verification code';
         this.verifyCodeStatus = true;
+        return 'Please enter the full verification code';
       } else if (parsedResponse.message.indexOf('A wrong code was provided too many times') > -1) {
-        this.notificationMessage = 'A wrong code was entered too many times, Please request for another';
         localStorage.requestId = '';
         this.requestId = '';
         this.verifyCodeStatus = false;
+        return 'A wrong code was entered too many times, Please request for another';
       }
     },
     sendCode() {
       if (this.requestId !== '') {
         this.verifyDetails();
-        this.notificationName = 'message-box-up';
-        this.notificationType = 'sending';
-        this.notificationMessage = 'You have a pending verification code';
-        setTimeout(() => {
-          this.notificationName = 'message-box-down';
-        }, 3000);
+        this.notify(3, 2, 'You have a pending verification code');
       } else {
         this.codeResponseNumber = 0;
-        this.notificationName = 'message-box-up';
-        this.notificationType = 'sending';
-        this.notificationMessage = 'Sending Code';
+        this.notify(1, 2, 'Sending Code');
         this.sendingCodeStatus = true;
         const payload = JSON.stringify({
           phone_no: this.sessionInfo.phone,
@@ -505,34 +415,21 @@ export default {
         date.setMinutes(date.getMinutes() + 20);
         localStorage.requestId = parsedResponse.request_id;
         localStorage.time = date;
+        this.notify(3, 1, `Code has been sent to ${this.sessionInfo.phone}`);
         this.sendingCodeStatus = false;
-        this.notificationType = 'success';
-        this.notificationMessage = `Code has been sent to ${this.sessionInfo.phone}`;
         this.inputCode = '';
         this.verifyDetails();
-        setTimeout(() => {
-          this.notificationName = 'message-box-down';
-        }, 3000);
       } else {
         this.sendingCodeStatus = false;
-        this.notificationType = 'failed';
-        this.notificationMessage = parsedResponse.message;
-        setTimeout(() => {
-          this.notificationName = 'message-box-down';
-        }, 4000);
+        this.notify(3, 0, parsedResponse.message);
       }
     },
     handleError(error, i) {
       const parsedResponse = response.data;
       this.sendingCodeStatus = false;
       if (i === 1) {
-        this.notificationName = 'message-box-up';
+        this.notify(3, 0, parsedResponse.message);
       }
-      this.notificationType = 'failed';
-      this.notificationMessage = parsedResponse.message;
-      setTimeout(() => {
-        this.notificationName = 'message-box-down';
-      }, 4000);
     },
     fetchOwnerBanks() {
       this.responseCount = 0;
@@ -588,12 +485,10 @@ export default {
           .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/add_owner_bank_account`, payload, this.config)
           .then(response => {
             if (response.data.status) {
-              this.notificationType = 'success';
-              this.notificationMessage = response.data.message;
+              this.notify(3, 1, response.data.message);
               this.TrackBankAddition(payload);
             } else {
-              this.notificationType = 'failed';
-              this.notificationMessage = response.data.message;
+              this.notify(3, 0, response.data.message);
             }
           })
           .catch(error => {
@@ -605,11 +500,9 @@ export default {
           .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/edit_owner_bank_account`, payload, this.config)
           .then(response => {
             if (response.data.status) {
-              this.notificationType = 'success';
-              this.notificationMessage = response.data.message;
+              this.notify(3, 1, response.data.message);
             } else {
-              this.notificationType = 'failed';
-              this.notificationMessage = response.data.message;
+              this.notify(3, 0, response.data.message);
             }
           })
           .catch(error => {
@@ -656,5 +549,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

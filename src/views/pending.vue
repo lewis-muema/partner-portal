@@ -378,44 +378,23 @@
                 </div>
               </template>
             </div>
-            <div :class="`${notificationName} notifier confirmed`" v-if="message === 1">
-              <p class="message">Order confirmed</p>
-            </div>
-            <div :class="`${notificationName} notifier failed`" v-if="message === 2">
-              <p class="message">{{ error }}</p>
-            </div>
-            <div :class="`${notificationName} notifier no-selection`" v-if="message === 3">
-              <p class="message">Please select a driver or vehicle</p>
-            </div>
-            <div :class="`${notificationName} notifier failed`" v-if="message === 4">
-              <p class="message">{{ error }}</p>
-            </div>
-            <div :class="`${notificationName} notifier no-selection`" v-if="message === 5">
-              <p class="message">Please enter all details and bid within the range</p>
-            </div>
-            <div :class="`${notificationName} notifier no-selection`" v-if="message === 6">
-              <p class="message">Please bid within the price range</p>
-            </div>
-            <div :class="`${notificationName} notifier bid_placed`" v-if="message === 7">
-              <p class="message">{{ error }}</p>
-            </div>
+            <notify />
           </div>
         </div>
       </div>
     </div>
   </div>
 </template>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
-
 <script>
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
+import notify from '../components/notification';
+import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier';
 // import truckValidationMixin from '../mixins/truckValidationMixin';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
@@ -426,6 +405,7 @@ export default {
     verifier,
     VueTelInput,
     errorHandler,
+    notify,
   },
   data() {
     return {
@@ -523,8 +503,9 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.fetchOwnerDrivers();
-      this.fetchOwnerVehicles();
+      this.fetchOwnerDrivers().then((res1) => {
+        this.fetchOwnerVehicles().then((res2) => {});
+      });
     }
   },
   beforeDestroy() {
@@ -536,6 +517,9 @@ export default {
     }
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     setDriverStatus() {
       this.addDriverStatus = false;
     },
@@ -555,39 +539,47 @@ export default {
       }
     },
     fetchOwnerDrivers() {
-      const riders = [];
-      const riderPayload = {
-        owner_id: this.sessionInfo.id,
-      };
-      let parsedData = JSON.parse(localStorage.sessionData);
-      axios
-        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
-        .then(res => {
-          res.data.riders.forEach((row, i) => {
-            riders.push(row);
-          });
-          parsedData.payload.riders = riders;
-          localStorage.sessionData = JSON.stringify(parsedData);
-        })
-        .catch(error => {
-          parsedData.payload.riders = [];
-          localStorage.sessionData = JSON.stringify(parsedData);
+        return new Promise((resolve, reject) => {
+        const riders = [];
+        const riderPayload = {
+            owner_id: this.sessionInfo.id,
+        };
+        const parsedData = JSON.parse(localStorage.sessionData);
+        axios
+            .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+            .then(res => {
+                res.data.riders.forEach((row, i) => {
+                    riders.push(row);
+                });
+                parsedData.payload.riders = riders;
+                localStorage.sessionData = JSON.stringify(parsedData);
+                resolve(res);
+            })
+            .catch(error => {
+                parsedData.payload.riders = [];
+                localStorage.sessionData = JSON.stringify(parsedData);
+                resolve(error);
+            });
         });
     },
     fetchOwnerVehicles() {
-      const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            this.allVehicles = response.data.msg;
-            this.getOrders(response.data.msg);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
+        return new Promise((resolve, reject) => {
+        const payload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
+        });
+        axios
+            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+            .then(response => {
+            if (response.status === 200) {
+                this.allVehicles = response.data.msg;
+                this.getOrders(response.data.msg);
+            }
+            resolve(response);
+            })
+            .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+            });
         });
     },
     displayVehicles(id) {
@@ -598,7 +590,7 @@ export default {
       }
     },
     createStaticMapUrl(path) {
-      const google_key = 'AIzaSyDJ_S9JgQJSaHa88SXcPbh9JijQOl8RXpc';
+      const google_key = process.env.GOOGLE_API_KEY;
       const from_cordinates = path.from;
       const to_cordinates = path.to;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=500x200&markers=color:0xF17F3A%7Clabel:P%7C
@@ -696,6 +688,8 @@ export default {
       const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
       if (timer1.includes('ago')) {
         return '';
+      } else if (timer1.includes('in a')) {
+        return 1;
       } else {
         const timer2 = timer1.slice(3, 20);
         return parseInt(timer2.split(' ')[0], 10);
@@ -710,7 +704,7 @@ export default {
         return '';
       } else {
         const timer2 = timer1.slice(3, 20);
-        return timer2.split(' ')[1];
+        return `${timer2.split(' ')[1]} left`;
       }
     },
     timeFormat(id) {
@@ -778,10 +772,11 @@ export default {
     toggle(id) {
       this.getRiderz = 0;
       this.riders = [];
-      this.getRiders();
+      this.getVehicles(id).then((res1) => {
+        this.getRiders();
+      });
       this.getVehiclez = 0;
       this.vehicles = [];
-      this.getVehicles(id);
       const index = this.opened.indexOf(id);
       if (index > -1) {
         this.opened.splice(index, 1);
@@ -1013,12 +1008,7 @@ export default {
       axios
         .post(`${this.auth}v1/complete_partner_order/`, payload, this.config)
         .then(response => {
-          this.notificationName = 'message-box-up';
-          this.message = 7;
-          this.error = `${response.data.order_response.reason}`;
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
+          this.notify(3, 1, response.data.order_response.reason);
           this.opened = [];
           this.orders = [];
           this.responseNo = 0;
@@ -1030,12 +1020,7 @@ export default {
           this.errorObj = error.response;
           if (error.response) {
             this.confirmButtonState = 'confirm order';
-            this.error = `${error.response.data.reason}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.notify(3, 0, `${error.response.data.reason}`);
           }
         });
     },
@@ -1106,12 +1091,7 @@ export default {
         .then(response => {
           this.sendQuoteButtonState = 'adjust quote';
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -1124,12 +1104,7 @@ export default {
           this.errorObj = error.response;
           if (error.response) {
             this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.notify(3, 1, `${error.response.data.message}`);
           }
         });
     },
@@ -1165,12 +1140,7 @@ export default {
         this.refrigirated = this.vehicles[q].refrigerated;
         this.partnerVendor = parseInt(this.vehicles[q].vendor_type, 10);
         if (this.partnerVendor !== this.orders[id - 1].vendor_type) {
-          this.error = `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`;
-          this.notificationName = 'message-box-up';
-          this.message = 2;
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
+          this.notify(3, 0, `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`);
           this.partnerVendor = null;
         }
       }
@@ -1247,45 +1217,53 @@ export default {
       });
     },
     getRiders() {
-      const riderload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            const unescaped = response.data;
-            unescaped.data.forEach((row, v) => {
-              row.count = v;
-              this.riders.push(row);
+        return new Promise((resolve, reject) => {
+        const riderload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
+        });
+        axios
+            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+            .then(response => {
+            if (response.status === 200) {
+                const unescaped = response.data;
+                unescaped.data.forEach((row, v) => {
+                row.count = v;
+                this.riders.push(row);
+                });
+            }
+            resolve(response);
+            })
+            .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
             });
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
         });
     },
     getVehicles(id) {
-      const vehicleload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
-        .then(response => {
-          if (response.status === 200) {
-            const unescaped = response.data;
-            let counter = -1;
-            unescaped.data.forEach((row, v) => {
-              if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-                counter += 1;
-                row.count = counter;
-                this.vehicles.push(row);
-              }
+        return new Promise((resolve, reject) => {
+        const vehicleload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
+        });
+        axios
+            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+            .then(response => {
+            if (response.status === 200) {
+                const unescaped = response.data;
+                let counter = -1;
+                unescaped.data.forEach((row, v) => {
+                if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                    counter += 1;
+                    row.count = counter;
+                    this.vehicles.push(row);
+                }
+                });
+            }
+            resolve(response);
+            })
+            .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
             });
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
         });
     },
     refreshOrders() {
