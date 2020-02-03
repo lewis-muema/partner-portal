@@ -3,7 +3,7 @@ import * as moment from 'moment';
 const timezone = {
     methods: {
     convertToUTC(date) {
-      const UTCDate = moment.utc(date).format('YYYY-MM-DD HH:mm:ss');
+      const UTCDate = moment.utc(date).format();
       return UTCDate;
     },
       convertToLocalTime(date) {
