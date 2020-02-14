@@ -321,28 +321,9 @@
                           <i class="material-icons icon" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
                         </p>
                         <div class="orders__adddriver-form" v-if="addDriverStatus">
-                          <input
-                            type="text"
-                            class="input orders__bid-input"
-                            placeholder="Enter Name"
-                            v-model="driverName"
-                            @input="addDriverName(order.id)"
-                          />
-                          <input
-                            type="text"
-                            class="input orders__bid-input"
-                            placeholder="ID Number"
-                            v-model="ID"
-                            @input="addId(order.id)"
-                            maxlength="8"
-                          />
-                          <vue-tel-input
-                            v-model="driverPhone"
-                            v-bind="bindProps"
-                            id="phone"
-                            class="input orders__bid-input"
-                            @input="addPhone(order.id)"
-                          ></vue-tel-input>
+                          <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
+                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" maxlength="13" />
+                          <vue-tel-input v-model="driverPhone" v-bind="bindProps" id="phone" class="input orders__bid-input" @input="addPhone(order.id)"></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
                           <button

@@ -326,7 +326,7 @@
                             placeholder="ID Number"
                             v-model="ID"
                             @input="addId(order.id)"
-                            maxlength="8"
+                            maxlength="13"
                           />
                           <vue-tel-input
                             v-model="driverPhone"
