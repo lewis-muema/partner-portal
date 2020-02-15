@@ -968,7 +968,7 @@ export default {
         driver_name: this.driverName,
         phone_no: this.driverPhone,
         vendor_id: parseInt(this.vendorType, 10),
-        owner_phone: `+${this.ownerPhone.toString()}`,
+        owner_phone: this.ownerPhone.toString(),
         dl_no: this.driverPhone,
         id_no: this.ID,
         refrigerated: 0,
