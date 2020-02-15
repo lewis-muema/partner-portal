@@ -160,6 +160,7 @@ export default {
       count: '',
       amount: '',
       currency: '',
+      nextTransferAmount: '',
       dataPoints: '',
       dataOptions: {
         responsive: true,
@@ -196,15 +197,18 @@ export default {
       const riderPayload = JSON.stringify({
         rider_ids: riderIds,
       });
-      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/pending_delivery_notes`, riderPayload, this.config).then(response => {
+      this.post(process.env.VUE_APP_AUTH, 'partners/owner_running_bal', payload).then(response => {
         if (response.data.status) {
-          this.count = response.data.pendingDeliveryNotesData[0].count;
-          this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
+          this.nextTransferAmount = response.data.rb;
         }
       }).then(() => {
-        axios
-          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/dashboard`, payload, this.config)
-          .then(response => {
+        this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload).then(response => {
+          if (response.data.status) {
+            this.count = response.data.pendingDeliveryNotesData[0].count;
+            this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
+          }
+        }).then(() => {
+          this.post(process.env.VUE_APP_AUTH, 'rider/admin_partner_api/v5/partner_portal/dashboard', payload).then(response => {
             this.dataStatus = true;
             this.dataResponse = response.data;
             let amount = '';
@@ -226,15 +230,21 @@ export default {
                 },
               ],
             };
-          })
-          .catch(error => {
-            this.errorObj = error.response;
-            this.dataStatus = true;
           });
+        });
       });
     }
   },
   methods: {
+    post(app, url, payload) {
+      return new Promise((resolve, reject) => {
+        axios.post(`${app}${url}`, payload, this.config).then((response) => {
+          resolve(response);
+        }).catch((error) => {
+          resolve(error);
+        });
+      });
+    },
     cashMadeThisMonth() {
       const cashval = this.dataResponse.msg.Cash_made_this_Month;
       if (cashval.split(' ')[1] < 0) {
@@ -264,13 +274,13 @@ export default {
     nextTransfer() {
       const cashval = this.dataResponse.msg.Next_transfer;
       this.currency = cashval.split(' ')[0];
-      if (cashval.split(' ')[1] < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
+      const amount = this.nextTransferAmount === '' ? cashval.split(' ')[1] : this.nextTransferAmount;
+      if (parseInt(amount, 10) < 0) {
+        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(parseInt(amount, 10)))
           .toString()
           .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
       } else {
-        return `${cashval.split(' ')[0]} ${cashval
-          .split(' ')[1]
+        return `${cashval.split(' ')[0]} ${amount
           .toString()
           .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
       }
