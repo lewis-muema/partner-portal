@@ -1312,10 +1312,11 @@ export default {
           });
           this.orderLimit = this.orderLimit + 10;
           this.orderCount = this.orders.length;
-          if (this.$route.path === '/' && this.orderLimit === 100) {
+          const totalOrders = unescaped.count < 100 ? unescaped.count : 100;
+          if (this.$route.path === '/' && this.orderLimit >= totalOrders) {
             this.refreshOrders();
           }
-          if (this.orderLimit < 100) {
+          if (this.orderLimit < totalOrders) {
             this.getOrders(this.vehicleCounter);
           }
         })
