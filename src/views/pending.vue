@@ -63,7 +63,7 @@
               <div class="no-records" v-if="!loadingStatus && orders.length === 0">
                 <p class="no-records-par">There are no orders</p>
               </div>
-              <template v-for="order in orders.slice().reverse()">
+              <template v-for="order in orders">
                 <div
                   class="orders__list-row"
                   @click="toggle(order.id)"
@@ -478,6 +478,9 @@ export default {
         },
       },
       errorObj: '',
+      orderLimit: 0,
+      vehicleCounter: '',
+      orderCount: 0,
     };
   },
   computed: {},
@@ -554,6 +557,7 @@ export default {
             if (response.status === 200) {
                 this.allVehicles = response.data.msg;
                 this.getOrders(response.data.msg);
+                this.loadingStatus = true;
             }
             resolve(response);
             })
@@ -996,6 +1000,7 @@ export default {
           this.TrackOrderConfirmation(payload);
           clearInterval(interval); // stop the interval
           this.getOrders(this.allVehicles);
+          this.loadingStatus = true;
         })
         .catch(error => {
           this.errorObj = error.response;
@@ -1079,6 +1084,7 @@ export default {
             this.trackSendBid(payload);
             clearInterval(interval); // stop the interval
             this.getOrders(this.allVehicles);
+            this.loadingStatus = true;
           }
         })
         .catch(error => {
@@ -1248,41 +1254,42 @@ export default {
         });
     },
     refreshOrders() {
-      interval = setInterval(() => {
-        let order = '';
-        let openid = '';
-        if (this.opened[0]) {
-          openid = this.opened[0];
-          order = this.orders[openid - 1].orderNo;
-        }
-        this.ownerPhone = this.sessionInfo.phone;
-        const orderPayload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
-        });
-        axios
-          .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
-          .then(response => {
-            const unescaped = response.data;
-            this.orders = [];
-            let allDetails = '';
-            unescaped.data.forEach((row, i) => {
-              allDetails = this.populateOrders(row, i);
-              if (order === allDetails.orderno) {
-                this.opened = [];
-                this.opened.push(i + 1);
-              }
-              if (!this.bikesOnly) {
-                this.orders.push(allDetails);
-              }
-            });
-          })
-          .catch(error => {
-            this.errorObj = error.response;
+      if (!this.bikesOnly) {
+        interval = setInterval(() => {
+          let order = '';
+          let openid = '';
+          if (this.opened[0]) {
+            openid = this.opened[0];
+            order = this.orders[openid - 1].orderNo;
+          }
+          this.ownerPhone = this.sessionInfo.phone;
+          const orderPayload = JSON.stringify({
+            owner_id: this.sessionInfo.id,
           });
-      }, 60000);
+          axios
+            .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
+            .then(response => {
+              const unescaped = response.data;
+              this.orders = [];
+              const ordersObject = [];
+              let allDetails = '';
+              unescaped.data.forEach((row, i) => {
+                allDetails = this.populateOrders(row, (this.orderCount - i));
+                if (order === allDetails.orderno) {
+                  this.opened = [];
+                  this.opened.push(i + 1);
+                }
+                this.orders.push(allDetails);
+              });
+            })
+            .catch(error => {
+              this.errorObj = error.response;
+            });
+        }, 60000);
+      }
     },
     getOrders(vehicleCount) {
-      this.loadingStatus = true;
+      this.vehicleCounter = vehicleCount;
       const vehCount = vehicleCount.forEach((row, g) => {
         if (['6', '2', '3', '10', '13', '14', '17', '18', '19', '20', '25'].includes(vehicleCount[g].vehicle.vendor_type)) {
           this.bikesOnly = false;
@@ -1291,20 +1298,25 @@ export default {
       this.ownerPhone = this.sessionInfo.phone;
       const orderPayload = JSON.stringify({
         owner_id: this.sessionInfo.id,
+        limit: `${this.orderLimit}, 10`,
       });
-
+      const orderCount = this.orders.length;
+      if (!this.bikesOnly) {
       axios
         .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
         .then(response => {
           const unescaped = response.data;
           unescaped.data.forEach((row, i) => {
-            if (!this.bikesOnly) {
-              this.orders.push(this.populateOrders(row, i));
-            }
+            this.orders.push(this.populateOrders(row, (orderCount + i)));
             this.loadingStatus = false;
           });
-          if (this.$route.path === '/') {
+          this.orderLimit = this.orderLimit + 10;
+          this.orderCount = this.orders.length;
+          if (this.$route.path === '/' && this.orderLimit === 100) {
             this.refreshOrders();
+          }
+          if (this.orderLimit < 100) {
+            this.getOrders(this.vehicleCounter);
           }
         })
         .catch(error => {
@@ -1313,6 +1325,9 @@ export default {
             this.loadingStatus = false;
           }
         });
+      } else {
+        this.loadingStatus = false;
+      }
     },
     populateOrders(row, i) {
       const orderno = row.order_no;
