@@ -1,10 +1,8 @@
-.withdraw-modal-screen{
-    width: 825% !important;
-    text-align: center !important;
-}
-.withdraw-modal-screen-2 {
-    width: 485% !important;
-    text-align: center !important;
+.withdraw-modal-screen, .withdraw-modal-screen-2 {
+    width: max-content;
+    text-align: center!important;
+    grid-column: span 12;
+    margin: auto;
 }
 .withdraw-payment-options{
     display: inline-block;
