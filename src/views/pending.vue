@@ -450,8 +450,8 @@ export default {
             .then(response => {
             if (response.status === 200) {
                 this.allVehicles = response.data.msg;
-                this.getOrders(response.data.msg);
                 this.loadingStatus = true;
+                this.getOrders(response.data.msg);
             }
             resolve(response);
             })
@@ -925,8 +925,8 @@ export default {
           this.responseNo = 0;
           this.TrackOrderConfirmation(payload);
           clearInterval(interval); // stop the interval
-          this.getOrders(this.allVehicles);
           this.loadingStatus = true;
+          this.getOrders(this.allVehicles);
         })
         .catch(error => {
           this.errorObj = error.response;
@@ -1009,8 +1009,8 @@ export default {
             this.responseNo = 0;
             this.trackSendBid(payload);
             clearInterval(interval); // stop the interval
-            this.getOrders(this.allVehicles);
             this.loadingStatus = true;
+            this.getOrders(this.allVehicles);
           }
         })
         .catch(error => {
