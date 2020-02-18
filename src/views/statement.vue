@@ -119,14 +119,12 @@
         </div>
         <div class="search-error" id="err">{{ error }}</div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
-          sdvcysdvchsdhcgeyg
           <div class="divider-top"></div>
           <datatable :columns="columns" :rows="rows" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" v-if="rows" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
         <div class="col-12 padding margin-bottom">
-          dfbdhgf
           <datepicker
             v-model="from"
             input-class="filtIn"
