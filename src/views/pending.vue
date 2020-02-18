@@ -322,7 +322,7 @@
                         </p>
                         <div class="orders__adddriver-form" v-if="addDriverStatus">
                           <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
-                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" maxlength="13" />
+                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" />
                           <vue-tel-input v-model="driverPhone" v-bind="bindProps" id="phone" class="input orders__bid-input" @input="addPhone(order.id)"></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
@@ -613,7 +613,6 @@ export default {
       this.confirm(id);
     },
     addId(id) {
-      this.ID = this.ID.replace(/[^0-9]/g, '');
       this.confirm(id);
     },
     addPhone(id) {
@@ -915,14 +914,14 @@ export default {
       }
     },
     detailsCheckForAddingDriversAndAddingVehicles() {
-      if (this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
+      if (this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
         return true;
       } else {
         return false;
       }
     },
     detailsCheckForAddingDriverSAndSelectingVehicles() {
-      if (this.vehicleId && this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
+      if (this.vehicleId && this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
         return true;
       } else {
         return false;
@@ -1279,8 +1278,10 @@ export default {
                   this.opened = [];
                   this.opened.push(i + 1);
                 }
-                this.orders.push(allDetails);
+                ordersObject.push(allDetails);
               });
+              ordersObject.reverse();
+              this.orders = ordersObject;
             })
             .catch(error => {
               this.errorObj = error.response;
@@ -1311,7 +1312,7 @@ export default {
             this.loadingStatus = false;
           });
           this.orderLimit = this.orderLimit + 10;
-          this.orderCount = this.orders.length;
+          this.orderCount = this.orders.length - 1;
           const totalOrders = unescaped.count < 100 ? unescaped.count : 100;
           if (this.$route.path === '/' && this.orderLimit >= totalOrders) {
             this.refreshOrders();

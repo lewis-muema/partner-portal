@@ -326,7 +326,6 @@
                             placeholder="ID Number"
                             v-model="ID"
                             @input="addId(order.id)"
-                            maxlength="13"
                           />
                           <vue-tel-input
                             v-model="driverPhone"
@@ -549,7 +548,6 @@ export default {
       this.confirm(id);
     },
     addId(id) {
-      this.ID = this.ID.replace(/[^0-9]/g, '');
       this.confirm(id);
     },
     addPhone(id) {
@@ -876,14 +874,14 @@ export default {
       }
     },
     detailsCheckForAddingDriversAndAddingVehicles() {
-      if (this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
+      if (this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
         return true;
       } else {
         return false;
       }
     },
     detailsCheckForAddingDriverSAndSelectingVehicles() {
-      if (this.vehicleId && this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
+      if (this.vehicleId && this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
         return true;
       } else {
         return false;
