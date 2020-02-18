@@ -184,9 +184,27 @@
                           <i class="material-icons icon" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
                         </p>
                         <div class="orders__addvehicle-form" v-if="addDriverStatus">
-                          <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
-                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" />
-                          <vue-tel-input v-model="driverPhone" v-bind="bindProps" class="input orders__bid-input" id="phone" @input="addPhone(order.id)"></vue-tel-input>
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="Enter Name"
+                            v-model="driverName"
+                            @input="addDriverName(order.id)"
+                          />
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="ID Number"
+                            v-model="ID"
+                            @input="addId(order.id)"
+                          />
+                          <vue-tel-input
+                            v-model="driverPhone"
+                            v-bind="bindProps"
+                            class="input orders__bid-input"
+                            id="phone"
+                            @input="addPhone(order.id)"
+                          ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
                           <button class="orders__disabled-button uppercase" v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 0" disabled>adjust quotes</button>
@@ -713,14 +731,14 @@ export default {
       }
     },
     detailsCheckForAddingDriversAndAddingVehicles() {
-      if (this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
+      if (this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
         return true;
       } else {
         return false;
       }
     },
     detailsCheckForAddingDriverSAndSelectingVehicles() {
-      if (this.vehicleId && this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
+      if (this.vehicleId && this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
         return true;
       } else {
         return false;
