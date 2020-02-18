@@ -48,13 +48,7 @@
                 <p class="no-records-par">There are no orders</p>
               </div>
               <template v-for="order in orders">
-                <div
-                  class="orders__list-row"
-                  @click="toggle(order.id)"
-                  :class="{ opened: opened.includes(order.id) }"
-                  v-if="showParentOrdercard(order.id)"
-                  :key="order.id"
-                >
+                <div class="orders__list-row" @click="toggle(order.id)" :class="{ opened: opened.includes(order.id) }" v-if="showParentOrdercard(order.id)" :key="order.id">
                   <div class="orders__list-col pickup">
                     <p class="orders__mobile-col">Pickup</p>
                     <p class="row1" @mouseover="showFromTooltip(order.id)" @mouseout="hideFromTooltip(order.id)">{{ shortFromName(order.id) }}</p>
@@ -219,7 +213,7 @@
                         </p>
                         <div class="orders__adddriver-form" v-if="addDriverStatus">
                           <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
-                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" maxlength="13" />
+                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" />
                           <vue-tel-input v-model="driverPhone" v-bind="bindProps" id="phone" class="input orders__bid-input" @input="addPhone(order.id)"></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
@@ -370,8 +364,8 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.fetchOwnerDrivers().then((res1) => {
-        this.fetchOwnerVehicles().then((res2) => {});
+      this.fetchOwnerDrivers().then(res1 => {
+        this.fetchOwnerVehicles().then(res2 => {});
       });
     }
   },
@@ -417,49 +411,49 @@ export default {
       }
     },
     fetchOwnerDrivers() {
-        return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const riders = [];
         const riderPayload = {
-            owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.id,
         };
         const parsedData = JSON.parse(localStorage.sessionData);
         axios
-            .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
-            .then(res => {
-                res.data.riders.forEach((row, i) => {
-                    riders.push(row);
-                });
-                parsedData.payload.riders = riders;
-                localStorage.sessionData = JSON.stringify(parsedData);
-                resolve(res);
-            })
-            .catch(error => {
-                parsedData.payload.riders = [];
-                localStorage.sessionData = JSON.stringify(parsedData);
-                resolve(error);
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+          .then(res => {
+            res.data.riders.forEach((row, i) => {
+              riders.push(row);
             });
-        });
+            parsedData.payload.riders = riders;
+            localStorage.sessionData = JSON.stringify(parsedData);
+            resolve(res);
+          })
+          .catch(error => {
+            parsedData.payload.riders = [];
+            localStorage.sessionData = JSON.stringify(parsedData);
+            resolve(error);
+          });
+      });
     },
     fetchOwnerVehicles() {
-        return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-            owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.id,
         });
         axios
-            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
-            .then(response => {
+          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+          .then(response => {
             if (response.status === 200) {
-                this.allVehicles = response.data.msg;
-                this.loadingStatus = true;
-                this.getOrders(response.data.msg);
+              this.allVehicles = response.data.msg;
+              this.loadingStatus = true;
+              this.getOrders(response.data.msg);
             }
             resolve(response);
-            })
-            .catch(error => {
+          })
+          .catch(error => {
             this.errorObj = error.response;
             resolve(error);
-            });
-        });
+          });
+      });
     },
     displayVehicles(id) {
       if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
@@ -519,7 +513,6 @@ export default {
       this.confirm(id);
     },
     addId(id) {
-      this.ID = this.ID.replace(/[^0-9]/g, '');
       this.confirm(id);
     },
     addPhone(id) {
@@ -669,7 +662,7 @@ export default {
     toggle(id) {
       this.getRiderz = 0;
       this.riders = [];
-      this.getVehicles(id).then((res1) => {
+      this.getVehicles(id).then(res1 => {
         this.getRiders();
       });
       this.getVehiclez = 0;
@@ -1130,54 +1123,54 @@ export default {
       });
     },
     getRiders() {
-        return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const riderload = JSON.stringify({
-            owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.id,
         });
         axios
-            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
-            .then(response => {
+          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+          .then(response => {
             if (response.status === 200) {
-                const unescaped = response.data;
-                unescaped.data.forEach((row, v) => {
+              const unescaped = response.data;
+              unescaped.data.forEach((row, v) => {
                 row.count = v;
                 this.riders.push(row);
-                });
+              });
             }
             resolve(response);
-            })
-            .catch(error => {
+          })
+          .catch(error => {
             this.errorObj = error.response;
             resolve(error);
-            });
-        });
+          });
+      });
     },
     getVehicles(id) {
-        return new Promise((resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const vehicleload = JSON.stringify({
-            owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.id,
         });
         axios
-            .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
-            .then(response => {
+          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+          .then(response => {
             if (response.status === 200) {
-                const unescaped = response.data;
-                let counter = -1;
-                unescaped.data.forEach((row, v) => {
+              const unescaped = response.data;
+              let counter = -1;
+              unescaped.data.forEach((row, v) => {
                 if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-                    counter += 1;
-                    row.count = counter;
-                    this.vehicles.push(row);
+                  counter += 1;
+                  row.count = counter;
+                  this.vehicles.push(row);
                 }
-                });
+              });
             }
             resolve(response);
-            })
-            .catch(error => {
+          })
+          .catch(error => {
             this.errorObj = error.response;
             resolve(error);
-            });
-        });
+          });
+      });
     },
     refreshOrders() {
       if (!this.bikesOnly) {
@@ -1200,7 +1193,7 @@ export default {
               const ordersObject = [];
               let allDetails = '';
               unescaped.data.forEach((row, i) => {
-                allDetails = this.populateOrders(row, (this.orderCount - i));
+                allDetails = this.populateOrders(row, this.orderCount - i);
                 if (order === allDetails.orderno) {
                   this.opened = [];
                   this.opened.push(i + 1);
@@ -1228,30 +1221,30 @@ export default {
       });
       const orderCount = this.orders.length;
       if (!this.bikesOnly) {
-      axios
-        .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
-        .then(response => {
-          const unescaped = response.data;
-          unescaped.data.forEach((row, i) => {
-            this.orders.push(this.populateOrders(row, (orderCount + i)));
-            this.loadingStatus = false;
+        axios
+          .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
+          .then(response => {
+            const unescaped = response.data;
+            unescaped.data.forEach((row, i) => {
+              this.orders.push(this.populateOrders(row, orderCount + i));
+              this.loadingStatus = false;
+            });
+            this.orderLimit = this.orderLimit + 10;
+            this.orderCount = this.orders.length;
+            const totalOrders = unescaped.count < 100 ? unescaped.count : 100;
+            if (this.$route.path === '/' && this.orderLimit >= totalOrders) {
+              this.refreshOrders();
+            }
+            if (this.orderLimit < totalOrders) {
+              this.getOrders(this.vehicleCounter);
+            }
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            if (error.response) {
+              this.loadingStatus = false;
+            }
           });
-          this.orderLimit = this.orderLimit + 10;
-          this.orderCount = this.orders.length;
-          const totalOrders = unescaped.count < 100 ? unescaped.count : 100;
-          if (this.$route.path === '/' && this.orderLimit >= totalOrders) {
-            this.refreshOrders();
-          }
-          if (this.orderLimit < totalOrders) {
-            this.getOrders(this.vehicleCounter);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-          if (error.response) {
-            this.loadingStatus = false;
-          }
-        });
       } else {
         this.loadingStatus = false;
       }
