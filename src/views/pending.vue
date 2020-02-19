@@ -343,7 +343,7 @@ export default {
         ignoredCountries: [],
         autocomplete: 'off',
         name: 'phone',
-        maxLen: 13,
+        maxLen: 14,
         wrapperClasses: '',
         inputClasses: '',
         dropdownOptions: {
@@ -517,10 +517,6 @@ export default {
     },
     addPhone(id) {
       this.driverPhone = this.driverPhone.toString().replace(/[^0-9+]/g, '');
-      if (this.driverPhone.toString().startsWith('+') && this.driverPhone.length < 13) {
-        const formattedPhone = this.driverPhone.slice(4, 100);
-        this.driverPhone = `0${formattedPhone}`;
-      }
       setTimeout(() => {
         this.confirm(id);
       }, 200);
@@ -822,14 +818,14 @@ export default {
       }
     },
     detailsCheckForAddingDriversAndAddingVehicles() {
-      if (this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
+      if (this.newRider && this.ID.length > 0 && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
         return true;
       } else {
         return false;
       }
     },
     detailsCheckForAddingDriverSAndSelectingVehicles() {
-      if (this.vehicleId && this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
+      if (this.vehicleId && this.newRider && this.ID.length > 0 && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
         return true;
       } else {
         return false;
