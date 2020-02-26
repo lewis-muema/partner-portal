@@ -545,7 +545,7 @@ export default {
               // this.closePopup();
             }
           } else {
-              this.notify(1, 0, response.data.message);
+            this.notify(1, 0, response.data.message);
             setTimeout(() => {
               this.notify(2);
               this.fetchStatement(1);
@@ -557,6 +557,10 @@ export default {
         })
         .catch(error => {
           this.notify(1, 0, error.response.message);
+          setTimeout(() => {
+            this.notify(2);
+            this.fetchStatement(1);
+          }, 4000);
         });
     },
     fetchOwnerBanks() {
