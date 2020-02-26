@@ -548,7 +548,7 @@ export default {
             if (Object.prototype.hasOwnProperty.call(response.data, 'status_code')) {
               this.notify(1, 0, response.data.message);
             } else {
-              this.notify(1, 0, response.data.reason);
+              this.notify(1, 0, response.data.message);
             }
             setTimeout(() => {
               this.notify(2);
