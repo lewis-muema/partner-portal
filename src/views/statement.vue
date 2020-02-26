@@ -538,7 +538,7 @@ export default {
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/initiate_cash_withdrawal`, payload, this.config)
         .then(response => {
           const parsedResponse = response.data;
-          if (parsedResponse.status_code) {
+          if (parsedResponse.status) {
             this.trackWithdrawal(payload);
             this.notify(1, 1, response.data.message);
             this.from = '';
@@ -551,11 +551,7 @@ export default {
               this.closePopup();
             }
           } else {
-            if (Object.prototype.hasOwnProperty.call(response.data, 'status_code')) {
               this.notify(1, 0, response.data.message);
-            } else {
-              this.notify(1, 0, response.data.reason);
-            }
             setTimeout(() => {
               this.notify(2);
               this.fetchStatement(1);
@@ -566,7 +562,7 @@ export default {
           }
         })
         .catch(error => {
-          this.errorObj = error.response;
+          this.notify(1, 0, error.response.message);
         });
     },
     fetchOwnerBanks() {
