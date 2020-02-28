@@ -1060,6 +1060,8 @@ export default {
         log_book: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${this.logName}`,
         vehicle: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${this.vehImgName}`,
         owner_id: this.sessionInfo.id,
+        trailer_no: 0,
+        kwartos_code: 0,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/add_vehicle`, payload, this.config)
