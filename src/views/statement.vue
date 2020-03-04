@@ -55,9 +55,12 @@
                 <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
               </span>
             </div>
+            <div v-if="bankAccounts.length === 0">
+            You dont have any active bank accounts
+          </div>
           </div>
           <div class="statement__row">
-            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal" @click="withdraw()">Withdraw Cash</button>
+            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal && (bankAccounts.length > 0 || payment_method === 1)" @click="withdraw()">Withdraw Cash</button>
             <button class="input-height" disabled v-else>Withdraw Cash</button>
           </div>
         </div>
