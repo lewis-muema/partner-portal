@@ -559,7 +559,6 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
           this.notify(1, 0, error.response.message);
           setTimeout(() => {
             this.notify(2);
