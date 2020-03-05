@@ -55,9 +55,12 @@
                 <p class="no-margin small-font">{{ bankAccount.account_no }}</p>
               </span>
             </div>
+            <div v-if="bankAccounts.length === 0">
+            You dont have any active bank accounts
+          </div>
           </div>
           <div class="statement__row">
-            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal" @click="withdraw()">Withdraw Cash</button>
+            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal && (bankAccounts.length > 0 || payment_method === 1)" @click="withdraw()">Withdraw Cash</button>
             <button class="input-height" disabled v-else>Withdraw Cash</button>
           </div>
         </div>
@@ -533,16 +536,19 @@ export default {
         .then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status) {
-            this.trackWithdrawal(payload);
             this.notify(1, 1, response.data.message);
             this.from = '';
             this.to = '';
             setTimeout(() => {
-              this.notify(2);
+              if (this.opened) {
+                this.closePopup();
+              }
               this.fetchStatement(1);
             }, 4000);
-            if (this.opened) {
-              // this.closePopup();
+            if (paymethod === 1) {
+              this.trackMpesaWithdrawal();
+            } else {
+              this.trackBankWithdrawal();
             }
           } else {
             this.notify(1, 0, response.data.message);
