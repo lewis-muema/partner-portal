@@ -894,9 +894,9 @@ export default {
       this.rows = [];
       this.displayFetchingStatus('Fetching vehicles', 0);
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
         .then(response => {
-          if (response.data.msg) {
+          if (response.data.vehicles) {
             this.removeFetchingStatus();
             this.populateTable(response);
             document.body.addEventListener('click', this.logger);
@@ -911,7 +911,7 @@ export default {
     },
     populateTable(response) {
       const record = [];
-      response.data.msg.forEach((row, i) => {
+      response.data.vehicles.forEach((row, i) => {
         const riderRow = this.sortRidersActions(row);
         let vehicleRow = '';
         const invitedPhone = this.sortAllocationStatus(row);
@@ -944,13 +944,13 @@ export default {
         if (riderRow.f_name) {
           riderRow.riderName = `${riderRow.f_name} ${riderRow.s_name}`;
         }
-        if (row.allocation && row.allocation[0].allocation_status === '1') {
+        if (row.allocation && row.allocation[0].allocation_status === 1) {
           riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
         } else {
           riderRow.action = `<span class="reassign-driver" id="${row.vehicle.id}">Reassign driver</span>`;
         }
       } else {
-        if (row.allocation && row.allocation[0].allocation_status === '1') {
+        if (row.allocation && row.allocation[0].allocation_status === 1) {
           riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
         } else {
           riderRow.action = `<span class="add-driver" id="${row.vehicle.id}">Add driver</span>`;
@@ -963,11 +963,11 @@ export default {
       let invitedPhone = '';
       if (row.allocation) {
         allocationRow = row.allocation[0];
-        if (allocationRow.allocation_status === '1') {
+        if (allocationRow.allocation_status === 1) {
           invitedPhone = `${allocationRow.rider_phone} (Pending)`;
-        } else if (allocationRow.allocation_status === '2') {
+        } else if (allocationRow.allocation_status === 2) {
           invitedPhone = `${allocationRow.rider_phone} (Accepted)`;
-        } else if (allocationRow.allocation_status === '3') {
+        } else if (allocationRow.allocation_status === 3) {
           invitedPhone = `${allocationRow.rider_phone} (Rejected)`;
         }
       }

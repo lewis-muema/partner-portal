@@ -102,7 +102,7 @@
                     </div>
                   </div>
                   <div class="dashboard__rate-group">
-                    <span class="dashboard__rate-text">Hours online this month</span>
+                    <span class="dashboard__rate-text">Hours online this week</span>
                     <span class="dashboard__rate-number">{{ hoursOnlineThisWeek() }}</span>
                     <div class="dashboard__rate-sm">
                       <div
@@ -112,7 +112,7 @@
                     </div>
                   </div>
                   <div class="dashboard__rate-group">
-                    <span class="dashboard__rate-text">Hours online this week</span>
+                    <span class="dashboard__rate-text">Hours online this month</span>
                     <span class="dashboard__rate-number">{{ hoursOnlineThisMonth() }}</span>
                     <div class="dashboard__rate-sm">
                       <div
@@ -208,14 +208,14 @@ export default {
             this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
           }
         }).then(() => {
-          this.post(process.env.VUE_APP_AUTH, 'rider/admin_partner_api/v5/partner_portal/dashboard', payload).then(response => {
+          this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/dashboard', payload).then(response => {
             this.dataStatus = true;
             this.dataResponse = response.data;
             let amount = '';
             const earnings = [];
             const months = [];
             const amountArray = [];
-            this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
+            this.dataResponse.response.monthly_earnings.forEach((row, i) => {
               amount = parseInt(row.amount, 10);
               months.push(row.month);
               amountArray.push(amount);
@@ -246,7 +246,7 @@ export default {
       });
     },
     cashMadeThisMonth() {
-      const cashval = this.dataResponse.msg.Cash_made_this_Month;
+      const cashval = this.dataResponse.response.cash_made_this_month;
       if (cashval.split(' ')[1] < 0) {
         return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
           .toString()
@@ -259,7 +259,7 @@ export default {
       }
     },
     cashMadeThisWeek() {
-      const cashval = this.dataResponse.msg.Cash_made_this_Week;
+      const cashval = this.dataResponse.response.cash_made_this_week;
       if (cashval.split(' ')[1] < 0) {
         return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
           .toString()
@@ -272,7 +272,7 @@ export default {
       }
     },
     nextTransfer() {
-      const cashval = this.dataResponse.msg.Next_transfer;
+      const cashval = this.dataResponse.response.next_transfer;
       this.currency = cashval.split(' ')[0];
       const amount = this.nextTransferAmount === '' ? cashval.split(' ')[1] : this.nextTransferAmount;
       if (parseInt(amount, 10) < 0) {
@@ -286,44 +286,44 @@ export default {
       }
     },
     ratingThisWeek() {
-      return Math.floor(this.dataResponse.msg.Average_Rating_this_Week);
+      return Math.floor(this.dataResponse.response.average_rating_this_week);
     },
     ratingThisMonth() {
-      return Math.floor(this.dataResponse.msg.Average_Rating_this_Month);
+      return Math.floor(this.dataResponse.response.average_rating_this_month);
     },
     hoursOnlineThisWeek() {
-      return Math.floor(this.dataResponse.msg.Hours_online_this_Week);
+      return Math.floor(this.dataResponse.response.hours_online_this_week);
     },
     hoursOnlineThisMonth() {
-      return Math.floor(this.dataResponse.msg.Hours_online_this_Month);
+      return Math.floor(this.dataResponse.response.hours_online_this_month);
     },
     ratingPercentage() {
-      if (this.dataResponse.msg.Average_Rating_this_Week) {
-        const percent = (Math.floor(this.dataResponse.msg.Average_Rating_this_Week) / 5) * 100;
+      if (this.dataResponse.response.average_rating_this_week) {
+        const percent = (Math.floor(this.dataResponse.response.average_rating_this_week) / 5) * 100;
         return percent;
       } else {
         return 0;
       }
     },
     ratingPercentageMonth() {
-      if (this.dataResponse.msg.Average_Rating_this_Month) {
-        const percent = (Math.floor(this.dataResponse.msg.Average_Rating_this_Month) / 5) * 100;
+      if (this.dataResponse.response.average_rating_this_month) {
+        const percent = (Math.floor(this.dataResponse.response.average_rating_this_month) / 5) * 100;
         return percent;
       } else {
         return 0;
       }
     },
     hoursPercentageWeek() {
-      if (this.dataResponse.msg.Hours_online_this_Week) {
-        const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Week) / 168) * 100;
+      if (this.dataResponse.response.hours_online_this_week) {
+        const percent = (Math.floor(this.dataResponse.response.hours_online_this_week) / 168) * 100;
         return Math.floor(percent);
       } else {
         return 0;
       }
     },
     hoursPercentageMonth() {
-      if (this.dataResponse.msg.Hours_online_this_Month) {
-        const percent = (Math.floor(this.dataResponse.msg.Hours_online_this_Month) / (moment().daysInMonth() * 24)) * 100;
+      if (this.dataResponse.response.hours_online_this_month) {
+        const percent = (Math.floor(this.dataResponse.response.hours_online_this_month) / (moment().daysInMonth() * 24)) * 100;
         return Math.floor(percent);
       } else {
         return 0;
