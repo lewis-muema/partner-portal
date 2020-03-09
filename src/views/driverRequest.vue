@@ -98,6 +98,8 @@ export default {
           } else {
             this.message = response.data.msg;
           }
+        }).catch((err) => {
+          this.message = err.response.data.message;
         });
       } else {
         this.message = 'The link is invalid, Please ask the owner to re-invite you';
