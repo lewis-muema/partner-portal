@@ -10,18 +10,18 @@ describe('Dashboard.vue', () => {
   });
   wrapper.vm.dataResponse = {
     status: true,
-    msg: {
-      Cash_made_this_Month: 'KES -100',
-      Cash_made_this_Week: 'KES -20',
-      Average_Rating_this_Month: 4.1,
-      Average_Rating_this_Week: 2.2,
-      Trips_made_this_Week: '0',
-      Hours_online_this_Month: 400.11,
-      Hours_online_this_Week: 30.8,
-      Trips_made_this_Month: '0',
-      Next_transfer: 'KES -1106385.7500000002',
-      Monthly_earnings: [{ amount: '1090370', month: 'June', default_currency: 'KES' }, { amount: '6878496.749999999', month: 'July', default_currency: 'KES' }, { amount: '285000', month: 'August', default_currency: 'KES' }],
-      Total_Riders: '39',
+    response: {
+      cash_made_this_month: 'KES -100',
+      cash_made_this_week: 'KES -20',
+      average_rating_this_month: 4.1,
+      average_rating_this_week: 2.2,
+      trips_made_this_week: '0',
+      hours_online_this_month: 400.11,
+      hours_online_this_week: 30.8,
+      trips_made_this_month: '0',
+      next_transfer: 'KES -1106385.7500000002',
+      monthly_earnings: [{ amount: '1090370', month: 'June', default_currency: 'KES' }, { amount: '6878496.749999999', month: 'July', default_currency: 'KES' }, { amount: '285000', month: 'August', default_currency: 'KES' }],
+      total_riders: '39',
     },
   };
   it('Check whether cash made this month function always returns a positive', () => {
@@ -55,6 +55,6 @@ describe('Dashboard.vue', () => {
     expect(wrapper.vm.hoursPercentageWeek()).equal(17);
   });
   it('Check whether monthly hours online percentage function always calculates the correct percentage', () => {
-    expect(wrapper.vm.hoursPercentageMonth()).equal(Math.floor((wrapper.vm.dataResponse.msg.Hours_online_this_Month / (moment().daysInMonth() * 24)) * 100));
+    expect(wrapper.vm.hoursPercentageMonth()).equal(Math.floor((wrapper.vm.dataResponse.response.hours_online_this_month / (moment().daysInMonth() * 24)) * 100));
   });
 });

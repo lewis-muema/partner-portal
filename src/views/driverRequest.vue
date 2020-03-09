@@ -7,7 +7,7 @@
         </div>
         <div
           class="driverRequest__request-options"
-          v-if="responseStatus && allocationStatus === '1'"
+          v-if="responseStatus && allocationStatus === 1"
         >
           <div class="driverRequest__request-radio">
             <input type="radio" name="choice" value="1" v-model="statValue" id="req-accept" />
@@ -20,7 +20,7 @@
         </div>
         <div
           class="driverRequest__request-submit"
-          v-if="responseStatus && allocationStatus === '1'"
+          v-if="responseStatus && allocationStatus === 1"
         >
           <button
             type="button"
@@ -74,30 +74,32 @@ export default {
         const payload = JSON.stringify({
           token: this.$route.params.token,
         });
-        axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/allocation_details`, payload, this.config).then(response => {
+        axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/allocation_details`, payload, this.config).then(response => {
           if (response.data.status) {
             this.responseStatus = true;
-            this.allocationType = response.data.msg.allocation_details.allocation_type;
-            this.allocationStatus = response.data.msg.allocation_details.allocation_status;
-            this.token = response.data.msg.allocation_details.token;
-            if (this.allocationStatus === '1') {
+            this.allocationType = response.data.data.allocation_details.allocation_type;
+            this.allocationStatus = response.data.data.allocation_details.allocation_status;
+            this.token = response.data.data.allocation_details.token;
+            if (this.allocationStatus === 1) {
               let vehicleModel = '';
               let vehicleRegistration = '';
-              if (response.data.msg.vehicle_details.model) {
-                vehicleModel = response.data.msg.vehicle_details.model;
+              if (response.data.data.vehicle_details.model) {
+                vehicleModel = response.data.data.vehicle_details.model;
               }
-              if (response.data.msg.vehicle_details.registration_no) {
-                vehicleRegistration = response.data.msg.vehicle_details.registration_no;
+              if (response.data.data.vehicle_details.registration_no) {
+                vehicleRegistration = response.data.data.vehicle_details.registration_no;
               }
-              this.message = `${response.data.msg.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
-            } else if (this.allocationStatus === '2') {
+              this.message = `${response.data.data.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
+            } else if (this.allocationStatus === 2) {
               this.message = 'Rider invite accepted';
-            } else if (this.allocationStatus === '3') {
+            } else if (this.allocationStatus === 3) {
               this.message = 'Rider invite rejected';
             }
           } else {
             this.message = response.data.msg;
           }
+        }).catch((err) => {
+          this.message = err.response.data.message;
         });
       } else {
         this.message = 'The link is invalid, Please ask the owner to re-invite you';

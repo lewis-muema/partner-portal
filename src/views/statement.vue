@@ -546,9 +546,9 @@ export default {
               this.fetchStatement(1);
             }, 4000);
             if (paymethod === 1) {
-              this.trackMpesaWithdrawal();
+              this.trackMpesaWithdrawal(payload);
             } else {
-              this.trackBankWithdrawal();
+              this.trackBankWithdrawal(payload);
             }
           } else {
             this.notify(1, 0, response.data.message);
@@ -657,9 +657,14 @@ export default {
         this.riderNames = 'all riders';
       }
     },
-    trackWithdrawal(payload) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
-        mixpanel.track('Owner Withdrawal', JSON.parse(payload));
+    trackMpesaWithdrawal(payload) {
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track('Owner Withdrawal to Mpesa', JSON.parse(payload));
+      }
+    },
+    trackBankWithdrawal(payload) {
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track('Owner Withdrawal to Bank', JSON.parse(payload));
       }
     },
   },
