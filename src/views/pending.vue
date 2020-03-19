@@ -440,13 +440,11 @@ export default {
           owner_id: this.sessionInfo.id,
         });
         axios
-          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+          .post(`${this.auth}partner/v1/partner_portal/vehicles`, payload, this.config)
           .then(response => {
-            if (response.status === 200) {
-              this.allVehicles = response.data.msg;
-              this.loadingStatus = true;
-              this.getOrders(response.data.msg);
-            }
+            this.allVehicles = response.data.vehicles;
+            this.loadingStatus = true;
+            this.getOrders(this.allVehicles);
             resolve(response);
           })
           .catch(error => {
@@ -915,6 +913,7 @@ export default {
           this.TrackOrderConfirmation(payload);
           clearInterval(interval); // stop the interval
           this.loadingStatus = true;
+          this.orderLimit = 0;
           this.getOrders(this.allVehicles);
         })
         .catch(error => {
@@ -999,6 +998,7 @@ export default {
             this.trackSendBid(payload);
             clearInterval(interval); // stop the interval
             this.loadingStatus = true;
+            this.orderLimit = 0;
             this.getOrders(this.allVehicles);
           }
         })
@@ -1124,15 +1124,13 @@ export default {
           owner_id: this.sessionInfo.id,
         });
         axios
-          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
+          .post(`${this.auth}partner/v1/partner_portal/available_riders`, riderload, this.config)
           .then(response => {
-            if (response.status === 200) {
-              const unescaped = response.data;
-              unescaped.data.forEach((row, v) => {
-                row.count = v;
-                this.riders.push(row);
-              });
-            }
+            const unescaped = response.data;
+            unescaped.available_riders.forEach((row, v) => {
+              row.count = v;
+              this.riders.push(row);
+            });
             resolve(response);
           })
           .catch(error => {
@@ -1147,19 +1145,17 @@ export default {
           owner_id: this.sessionInfo.id,
         });
         axios
-          .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
+          .post(`${this.auth}partner/v1/partner_portal/available_vehicles`, vehicleload, this.config)
           .then(response => {
-            if (response.status === 200) {
-              const unescaped = response.data;
-              let counter = -1;
-              unescaped.data.forEach((row, v) => {
-                if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
-                  counter += 1;
-                  row.count = counter;
-                  this.vehicles.push(row);
-                }
-              });
-            }
+            const unescaped = response.data;
+            let counter = -1;
+            unescaped.available_vehicles.forEach((row, v) => {
+              if (row.vendor_type === this.orders[id - 1].vendor_type) {
+                counter += 1;
+                row.count = counter;
+                this.vehicles.push(row);
+              }
+            });
             resolve(response);
           })
           .catch(error => {
