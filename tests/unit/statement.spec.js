@@ -77,7 +77,7 @@ describe('Statement.vue', () => {
   };
   const vehiclesAndRiders = {
     status: true,
-    msg: [
+    vehicles: [
       {
         vehicle: {
           id: '562',
@@ -903,7 +903,7 @@ describe('Statement.vue', () => {
           response: vehiclesAndRiders,
         })
         .then(() => {
-          expect(wrapper.vm.vehArray[0].vehicle.model).equal(vehiclesAndRiders.msg[0].vehicle.model);
+          expect(wrapper.vm.vehArray[0].vehicle.model).equal(vehiclesAndRiders.vehicles[0].vehicle.model);
           expect(wrapper.vm.riders[1].f_name).equal('Samuel ');
           expect(wrapper.vm.vehicles[1].model).equal('mondo');
           done();

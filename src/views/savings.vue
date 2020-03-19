@@ -171,26 +171,18 @@ export default {
       const payload = this.definePayload(requestType);
       this.displayFetchingStatus('Fetching savings', 0);
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/savings`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/savings`, payload, this.config)
         .then(response => {
-          if (requestType === 2) {
-            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
-          }
-          if (response.data.msg) {
-            this.handleResponse(response);
-          } else {
-            if (requestType === 2) {
-              this.error = 'No savings found for this period';
-              setTimeout(() => {
-                this.error = '';
-              }, 4000);
-            }
-            this.rows = [];
-            this.displayFetchingStatus('No savings found for this period', 0);
-          }
+          $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
+          this.handleResponse(response);
         })
         .catch(error => {
-          this.errorObj = error.response;
+          this.error = error.response.data.message;
+          setTimeout(() => {
+            this.error = '';
+          }, 4000);
+          this.rows = [];
+          this.displayFetchingStatus(error.response.data.message, 0);
         });
     },
     definePayload(requestType) {
@@ -220,7 +212,7 @@ export default {
       });
       return payload;
     },
-     dateFormat(date) {
+    dateFormat(date) {
         const UTCDate = this.convertToUTC(date);
         const local = this.convertToLocalTime(UTCDate);
         return local;
@@ -228,7 +220,7 @@ export default {
     handleResponse(response) {
       const record = [];
       let currency = '';
-      response.data.msg.forEach((row, i) => {
+      response.data.savings.forEach((row, i) => {
         this.sessionInfo.riders.forEach((rider, x) => {
           if (rider.rider_id === row.rider_id) {
             currency = rider.default_currency;
