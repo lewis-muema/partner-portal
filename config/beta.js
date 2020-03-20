@@ -7,5 +7,5 @@ module.exports = {
   CHECK_VERIFICATION: 'https://api.sendyit.com/parcel/index.php/api/v10/check_verification/',
   MIXPANEL: 'b36c8592008057290bf5e1186135ca2f',
   BASE: 'https://beta-partner.sendyit.com/',
-  GOOGLE_API_KEY: 'AIzaSyBQMADIJhz5ckM28Zt0eWKbZfQyzsHXYCI',
+  GOOGLE_API_KEY: 'AIzaSyAhkxyTtJznhU-kZ9wc1u6AXxChFu44Zww',
 };
