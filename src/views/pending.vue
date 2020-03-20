@@ -1204,7 +1204,7 @@ export default {
     getOrders(vehicleCount) {
       this.vehicleCounter = vehicleCount;
       const vehCount = vehicleCount.forEach((row, g) => {
-        if (['6', '2', '3', '10', '13', '14', '17', '18', '19', '20', '25'].includes(vehicleCount[g].vehicle.vendor_type)) {
+        if (['6', '2', '3', '10', '13', '14', '17', '18', '19', '20', '25'].includes(vehicleCount[g].vehicle.vendor_type.toString())) {
           this.bikesOnly = false;
         }
       });
