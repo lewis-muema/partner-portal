@@ -6,5 +6,6 @@ module.exports = {
   VERIFY_PHONE: 'https://api.sendyit.com/parcel/index.php/api/v10/verify_phone',
   CHECK_VERIFICATION: 'https://api.sendyit.com/parcel/index.php/api/v10/check_verification/',
   MIXPANEL: 'b36c8592008057290bf5e1186135ca2f',
-  GOOGLE_API_KEY: 'AIzaSyBQMADIJhz5ckM28Zt0eWKbZfQyzsHXYCI',
+  BASE: 'https://partner.sendyit.com/',
+  GOOGLE_API_KEY: 'AIzaSyAhkxyTtJznhU-kZ9wc1u6AXxChFu44Zww',
 };
