@@ -62,7 +62,7 @@
     </div>
   </div>
 </div>
-<surveyFooter v-if="this.nps_eligibility == true"/>
+<surveyFooter v-if="this.nps_eligibility"/>
 </div>
 </template>
 <script>
