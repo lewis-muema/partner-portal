@@ -1,4 +1,5 @@
 <template>
+<div>
 <div class="header">
   <div class="header-primary">
     <div class="primary-inner">
@@ -61,9 +62,11 @@
     </div>
   </div>
 </div>
+<surveyFooter v-if="this.nps_eligibility"/>
+</div>
 </template>
-
 <script>
+
 import axios from 'axios';
 
 export default {
