@@ -2,6 +2,7 @@ module.exports = {
   DOCKER_ENV: 'development',
   NODE_ENV: 'development',
   VUE_APP_AUTH: 'https://authtest.sendyit.com/',
+  ADONIS_PRIVATE_API: 'https://authtest.sendyit.com/adonis/',
   ONBOARDING_PORTAL: 'https://partnertest.sendyit.com/onboarding_portal/#/',
   VERIFY_PHONE: 'https://apitest.sendyit.com/parcel/index.php/api/v10/verify_phone',
   CHECK_VERIFICATION: 'https://apitest.sendyit.com/parcel/index.php/api/v10/check_verification/',
