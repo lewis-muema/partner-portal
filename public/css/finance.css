@@ -300,6 +300,7 @@ tr.shown td.details-control {
 
 .vehicles__mod-up {
   flex-direction: column;
+  padding-top: 40px !important;
 }
 
 .add-driver-modal {

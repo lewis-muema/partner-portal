@@ -86,7 +86,7 @@ describe('DriverRequest.vue', () => {
           response: {
             status: true,
             data: {
-              allocation_details: {
+              allocation_details: [{
                 temp_rider_allocation_id: 247,
                 token: 'y7ajN',
                 rider_id: 17162,
@@ -100,7 +100,7 @@ describe('DriverRequest.vue', () => {
                 rider_migrated: 2,
                 date_time: '2019-09-06 14:48:14',
                 status: 1,
-              },
+              }],
               vehicle_details: {
                 id: 1337,
                 model: 'Actros',
@@ -176,11 +176,17 @@ describe('DriverRequest.vue', () => {
       const request = moxios.requests.mostRecent();
       request
         .respondWith({
-          status: 200,
-          response: { status: false, msg: 'Application was accepted on 2019-08-23 10:07:44' },
+          status: 404,
+          response: {
+            code: 404,
+            errorCode: 'NOT_FOUND',
+            message: 'Token provided does not exist in our database',
+            description: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404',
+            language: 'en',
+          },
         })
         .then(() => {
-          expect(wrapper.vm.message).equal('Application was accepted on 2019-08-23 10:07:44');
+          expect(wrapper.vm.message).equal('Token provided does not exist in our database');
           done();
         })
         .catch(error => {
