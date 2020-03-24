@@ -77,9 +77,9 @@ export default {
         axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/allocation_details`, payload, this.config).then(response => {
           if (response.data.status) {
             this.responseStatus = true;
-            this.allocationType = response.data.data.allocation_details.allocation_type;
-            this.allocationStatus = response.data.data.allocation_details.allocation_status;
-            this.token = response.data.data.allocation_details.token;
+            this.allocationType = response.data.data.allocation_details[0].allocation_type;
+            this.allocationStatus = response.data.data.allocation_details[0].allocation_status;
+            this.token = response.data.data.allocation_details[0].token;
             if (this.allocationStatus === 1) {
               let vehicleModel = '';
               let vehicleRegistration = '';
@@ -109,16 +109,19 @@ export default {
       const stat = this.statValue;
       const payload = JSON.stringify({
         token: this.token,
-        status: stat,
+        status: parseInt(stat, 10),
       });
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/process_rider_invite`, payload, this.config).then(response => {
-        this.message = response.data.msg;
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/process_rider_invite`, payload, this.config).then(response => {
+        this.message = response.data.message;
         this.responseStatus = false;
         if (this.allocationType === 3) {
           setTimeout(() => {
             window.location.href = process.env.ONBOARDING_PORTAL;
           }, 3000);
         }
+      }).catch(error => {
+        this.message = error.response.data.message;
+        this.responseStatus = false;
       });
     },
   },

@@ -1064,7 +1064,7 @@ export default {
         kwartos_code: 0,
       };
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/add_vehicle`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/add_vehicle`, payload, this.config)
         .then(response => {
           if (response.data.status) {
             this.fetchVehicles();
@@ -1075,17 +1075,15 @@ export default {
               $('#upErr5').fadeOut('slow');
               this.$modal.hide('confirm-documents-modal');
             }, 2000);
-          } else {
-            $('#upErr5')
-              .html(`Something went wrong while adding the vehicle. Please try again. ${response.data.msg}.`)
+          }
+        })
+        .catch(error => {
+          $('#upErr5')
+              .html(`Something went wrong while adding the vehicle. ${error.response.data.message}. Please try again.`)
               .fadeIn('slow');
             setTimeout(() => {
               $('#upErr5').fadeOut('slow');
             }, 5000);
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
         });
     },
     upload(id) {
@@ -1253,7 +1251,7 @@ export default {
         .html('Sending driver invite.')
         .fadeIn('slow');
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/allocate_rider`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/allocate_rider`, payload, this.config)
         .then(response => {
           if (response.data.status) {
             $('#upErr2').fadeOut('slow');
@@ -1278,7 +1276,7 @@ export default {
         temp_rider_allocation_id: this.cancelAllocationId,
       };
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/cancel_allocation`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/cancel_allocation`, payload, this.config)
         .then(response => {
           if (response.data.status) {
             this.$modal.hide('invite-cancel-modal');
@@ -1326,22 +1324,18 @@ export default {
     },
     sendOwnerDriverRequest(payload) {
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/create_owner_rider`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/create_owner_rider`, payload, this.config)
         .then(response => {
-          if (response.data.status) {
-            this.$modal.hide('driver-owner-modal');
-            this.fetchVehicles();
-          } else {
-            $('#upErr')
-              .html(response.data.msg)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr').fadeOut('slow');
-            }, 3000);
-          }
+          this.$modal.hide('driver-owner-modal');
+          this.fetchVehicles();
         })
-        .catch(() => {
-          this.errorObj = error.response;
+        .catch(error => {
+          $('#upErr')
+            .html(error.response.data.message)
+            .fadeIn('slow');
+          setTimeout(() => {
+            $('#upErr').fadeOut('slow');
+          }, 10000);
         });
     },
     showVehicleModal() {

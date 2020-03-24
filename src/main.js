@@ -39,6 +39,7 @@ Vue.use(SendyAuth, {
     },
   },
 });
+Vue.use(VueMask);
 Vue.use(Rate);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);

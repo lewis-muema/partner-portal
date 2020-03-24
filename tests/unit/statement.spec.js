@@ -472,7 +472,7 @@ describe('Statement.vue', () => {
   };
   const dataResponse = {
     status: true,
-    msg: {
+    details: {
       statement: [
         {
           owner_id: '532',
@@ -954,10 +954,10 @@ describe('Statement.vue', () => {
       request
         .respondWith({
           status: 200,
-          response: { status: true, msg: { statement: null, owner_balance: { currency: 'KES', rb: -1928789.8, is_withdrawal_day: false } } },
+          response: { status: true, details: { statement: [], owner_balance: { currency: 'KES', rb: -1928789.8, is_withdrawal_day: false } } },
         })
         .then(() => {
-          expect(wrapper.vm.error).equal('No statement found for this period');
+          expect(wrapper.vm.rows.length).equal(0);
           done();
         })
         .catch(error => {
@@ -972,7 +972,7 @@ describe('Statement.vue', () => {
   it('Check whether the definePayload function returns the correct payload with selected filter dated on filter action', () => {
     wrapper.vm.from = '2014-08-01 00:00:00';
     wrapper.vm.to = '2019-08-31 23:59:59';
-    expect(wrapper.vm.definePayload(2)).equal('{"owner_id":"1198","from":"2014-08-01 00:00:00","to":"2019-08-31 23:59:59","vehicle_id":"","rider_id":""}');
+    expect(wrapper.vm.definePayload(2)).equal('{"owner_id":"1198","from":"2014-08-01 00:00:00","to":"2019-08-31 23:59:59","vehicle_id":null,"rider_id":null}');
   });
   it('Check whether the handleResponse function models the response into the accurate json', () => {
     const response = {

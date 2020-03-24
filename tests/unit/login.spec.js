@@ -92,7 +92,7 @@ describe('Login.vue', () => {
       request
         .respondWith({
           status: 200,
-          response: { status: true, msg: 'Password has been reset and sent to +254795510441' },
+          response: { status: true, message: 'Password has been reset and sent to +254795510441' },
         })
         .then(() => {
           expect(wrapper.vm.loginError).equal('Password has been reset and sent to +254795510441');

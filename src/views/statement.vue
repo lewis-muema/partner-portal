@@ -351,24 +351,18 @@ export default {
         const payload = this.definePayload(requestType);
         this.displayFetchingStatus('Fetching statement', 0);
         axios
-          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_statement`, payload, this.config)
           .then(response => {
             if (requestType === 1) {
-              this.ownerRb = response.data.msg.owner_balance;
+              this.ownerRb = response.data.details.owner_balance;
               this.showWithdrawButton();
             } else {
               $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
               this.removeFetchingStatus();
             }
-            if (response.data.msg.statement !== null) {
+            if (response.data.details.statement.length > 0) {
               this.handleResponse(response);
             } else {
-              if (requestType === 2) {
-                this.error = 'No statement found for this period';
-                setTimeout(() => {
-                  this.error = '';
-                }, 4000);
-              }
               this.rows = [];
               this.displayFetchingStatus('No statement found for this period', 0);
             }
@@ -399,14 +393,14 @@ export default {
         });
       } else {
         $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
-        firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
-        lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
+        firstDay = `${moment(this.from).format('YYYY-MM-DD')} 00:00:00`;
+        lastDay = `${moment(this.to).format('YYYY-MM-DD')} 23:59:59`;
         payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
           from: firstDay,
           to: lastDay,
-          vehicle_id: this.vehicleId,
-          rider_id: this.riderId,
+          vehicle_id: this.vehicleId === '' ? null : this.vehicleId,
+          rider_id: this.riderId === '' ? null : this.riderId,
         });
       }
       return payload;
@@ -418,8 +412,8 @@ export default {
     },
     handleResponse(response) {
       const record = [];
-      this.ownerRb = response.data.msg.owner_balance;
-      response.data.msg.statement.forEach((row, i) => {
+      this.ownerRb = response.data.details.owner_balance;
+      response.data.details.statement.forEach((row, i) => {
         const rbRb = row.running_balance.split(' ')[1] * -1;
         const currencyRb = row.running_balance.split(' ')[0];
         const rbAmount = row.amount.split(' ')[1] * -1;

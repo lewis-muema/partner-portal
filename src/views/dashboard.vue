@@ -197,40 +197,34 @@ export default {
       const riderPayload = JSON.stringify({
         rider_ids: riderIds,
       });
-      this.post(process.env.VUE_APP_AUTH, 'partners/owner_running_bal', payload).then(response => {
+      this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload).then(response => {
         if (response.data.status) {
-          this.nextTransferAmount = response.data.rb;
+          this.count = response.data.pendingDeliveryNotesData[0].count;
+          this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
         }
       }).then(() => {
-        this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload).then(response => {
-          if (response.data.status) {
-            this.count = response.data.pendingDeliveryNotesData[0].count;
-            this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
-          }
-        }).then(() => {
-          this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/dashboard', payload).then(response => {
-            this.dataStatus = true;
-            this.dataResponse = response.data;
-            let amount = '';
-            const earnings = [];
-            const months = [];
-            const amountArray = [];
-            this.dataResponse.response.monthly_earnings.forEach((row, i) => {
-              amount = parseInt(row.amount, 10);
-              months.push(row.month);
-              amountArray.push(amount);
-            });
-            this.dataPoints = {
-              labels: months,
-              datasets: [
-                {
-                  label: 'Amount',
-                  backgroundColor: 'rgba(23,130,197,.8)',
-                  data: amountArray,
-                },
-              ],
-            };
+        this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/dashboard', payload).then(response => {
+          this.dataStatus = true;
+          this.dataResponse = response.data;
+          let amount = '';
+          const earnings = [];
+          const months = [];
+          const amountArray = [];
+          this.dataResponse.response.monthly_earnings.forEach((row, i) => {
+            amount = parseInt(row.amount, 10);
+            months.push(row.month);
+            amountArray.push(amount);
           });
+          this.dataPoints = {
+            labels: months,
+            datasets: [
+              {
+                label: 'Amount',
+                backgroundColor: 'rgba(23,130,197,.8)',
+                data: amountArray,
+              },
+            ],
+          };
         });
       });
     }
@@ -274,7 +268,7 @@ export default {
     nextTransfer() {
       const cashval = this.dataResponse.response.next_transfer;
       this.currency = cashval.split(' ')[0];
-      const amount = this.nextTransferAmount === '' ? cashval.split(' ')[1] : this.nextTransferAmount;
+      const amount = cashval.split(' ')[1];
       if (parseInt(amount, 10) < 0) {
         return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(parseInt(amount, 10)))
           .toString()
