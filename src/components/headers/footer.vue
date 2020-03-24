@@ -7,7 +7,7 @@
     <br/>
     </div>
   </div>
-  <div class="row" style="padding: 20px 0px 20px 0px;">
+  <div class="row" id="info">
     <div class="col-lg-12">
       <span>
       0 Not Likely
@@ -20,7 +20,7 @@
     <span>
       10 Very Likely
     </span>
-    <button style="border: none;background-color:#fff;font-weight: bolder;" @click="cancelSurvey()">
+    <button class="dismissbtn" @click="cancelSurvey()">
         X
       </button>
     </div>
@@ -33,17 +33,16 @@
     <br/>
     </div>
   </div>
-  <div class="row" style="padding: 20px 0px 20px 0px;">
+  <div class="row" id="info">
     <div class="col-lg-11">
       <span>
         <textarea id="opinion" v-model="opinion"></textarea>
-        <div class="clear"></div>
     <button id="submitbtn" @click="submitSurvey()">
       Submit
       </button>
       </span></div>
       <div class="col-lg-1">
-    <button style="border: none;background-color:#fff;font-weight: bolder;" @click="cancelSurvey()">
+    <button class="dismissbtn" @click="cancelSurvey()">
         X
       </button>
     </div>
@@ -152,10 +151,6 @@ beforeMount () {
 </script>
 
 <style>
-div.clear{
-  display: none;
-}
-
 #footer{
 position: fixed;
     bottom: 0;
@@ -181,6 +176,16 @@ line-height: 133%;
 display: inline;
 color:
 #F57F20;
+}
+
+.dismissbtn{
+  border: none;
+  background-color:#fff;
+  font-weight: bolder;
+}
+
+#info{
+  padding: 20px 0px 20px 0px;
 }
 
 .circles{
