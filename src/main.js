@@ -44,11 +44,11 @@ Vue.use(ApmVuePlugin, {
   router,
   config: {
     serviceName: 'Vue-partner-portal',
-    serverUrl: process.env.VUE_APP_AUTH,
+    serverUrl: process.env.ELASTIC_APM_SERVER_URL,
     serviceVersion: process.env.ELASTIC_APM_SERVICE_VERSION,
     environment: process.env.DOCKER_ENV,
     distributedTracingOrigins: [
-      process.env.ELASTIC_APM_DISTRIBUTED_TRACING_ORIGINS,
+      process.env.VUE_APP_AUTH,
     ],
   },
 });
