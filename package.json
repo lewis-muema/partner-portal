@@ -3,14 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "cross-env DOCKER_ENV=\"development\" vue-cli-service serve --fix",
+    "serve": "cross-env DOCKER_ENV=\"development\" vue-cli-service serve",
     "build": "cross-env DOCKER_ENV=\"production\" vue-cli-service build",
     "beta": "cross-env DOCKER_ENV=\"beta\" vue-cli-service build",
     "staging": "cross-env DOCKER_ENV=\"staging\"  vue-cli-service build",
-    "lint": "cross-env DOCKER_ENV=\"development\" vue-cli-service lint --fix",
+    "lint": "cross-env DOCKER_ENV=\"development\" vue-cli-service lint",
     "test:unit": "cross-env DOCKER_ENV=\"development\" vue-cli-service test:unit"
   },
   "dependencies": {
+    "@elastic/apm-rum-vue": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",

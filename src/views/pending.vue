@@ -1185,7 +1185,7 @@ export default {
               const ordersObject = [];
               let allDetails = '';
               unescaped.data.forEach((row, i) => {
-                allDetails = this.populateOrders(row, this.orderCount - i);
+                allDetails = this.populateOrders(row, unescaped.data.length - (i + 1));
                 if (order === allDetails.orderno) {
                   this.opened = [];
                   this.opened.push(i + 1);
@@ -1219,7 +1219,7 @@ export default {
           .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
           .then(response => {
             const unescaped = response.data;
-            unescaped.data.forEach((row, i) => {
+            unescaped.data.reverse().forEach((row, i) => {
               this.orders.push(this.populateOrders(row, orderCount + i));
               this.loadingStatus = false;
             });

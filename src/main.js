@@ -16,6 +16,7 @@ import {
  Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress,
 } from 'element-ui';
 import SendyAuth from '@sendyit/auth';
+import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -37,6 +38,18 @@ Vue.use(SendyAuth, {
       // google's client key & identification for gapi
       clientId: '',
     },
+  },
+});
+Vue.use(ApmVuePlugin, {
+  router,
+  config: {
+    serviceName: 'Vue-partner-portal',
+    serverUrl: process.env.VUE_APP_AUTH,
+    serviceVersion: process.env.ELASTIC_APM_SERVICE_VERSION,
+    environment: process.env.DOCKER_ENV,
+    distributedTracingOrigins: [
+      process.env.ELASTIC_APM_DISTRIBUTED_TRACING_ORIGINS,
+    ],
   },
 });
 Vue.use(VueMask);
