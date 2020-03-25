@@ -198,6 +198,12 @@ export default {
         localStorage.token = accessToken;
         localStorage.refreshToken = refreshToken;
         const parsedData = JSON.parse(sessionData);
+        this.$apm.setUserContext({
+          owner_id: parsedData.payload.id,
+          username: parsedData.payload.name,
+          email: parsedData.payload.email,
+          phone: parsedData.payload.phone,
+        });
         parsedData.payload.super_user = false;
         sessionData = JSON.stringify(parsedData);
         const expiry = new Date();
