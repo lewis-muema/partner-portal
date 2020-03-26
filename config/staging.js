@@ -1,3 +1,5 @@
+const packageJson = require('../package');
+
 module.exports = {
   DOCKER_ENV: 'staging',
   NODE_ENV: 'production',
@@ -8,4 +10,6 @@ module.exports = {
   MIXPANEL: 'b36c8592008057290bf5e1186135ca2f',
   BASE: 'https://partnertest.sendyit.com/',
   GOOGLE_API_KEY: 'AIzaSyBClCBMpwB-uisYlmoKlDMF-X8bY4MoXqc',
+  ELASTIC_APM_SERVER_URL: 'https://staging-apm.sendyit.com:443',
+  ELASTIC_APM_SERVICE_VERSION: packageJson.version,
 };

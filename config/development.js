@@ -1,3 +1,5 @@
+const packageJson = require('../package');
+
 module.exports = {
   DOCKER_ENV: 'development',
   NODE_ENV: 'development',
@@ -8,4 +10,6 @@ module.exports = {
   MIXPANEL: 'b36c8592008057290bf5e1186135ca2f',
   BASE: 'http://localhost:8080/',
   GOOGLE_API_KEY: 'AIzaSyBnM4OCMY-uyLelgBSYBQycayIV3yCAwtc',
+  ELASTIC_APM_SERVER_URL: 'http://localhost:8200',
+  ELASTIC_APM_SERVICE_VERSION: packageJson.version,
 };
