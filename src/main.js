@@ -15,6 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import {
  Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress,
 } from 'element-ui';
+import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -22,6 +23,19 @@ import store from './store';
 // configure language
 locale.use(lang);
 
+Vue.use(ApmVuePlugin, {
+  router,
+  config: {
+    serviceName: 'vue-partner-portal',
+    serverUrl: process.env.ELASTIC_APM_SERVER_URL,
+    serviceVersion: process.env.ELASTIC_APM_SERVICE_VERSION,
+    environment: process.env.DOCKER_ENV,
+    distributedTracingOrigins: [
+      process.env.VUE_APP_AUTH,
+    ],
+  },
+});
+Vue.use(VueMask);
 Vue.use(Rate);
 Vue.use(Dropdown);
 Vue.use(DropdownMenu);
