@@ -99,7 +99,7 @@ beforeMount () {
       return this.surveyStatus;
     },
     fadeSurvey() {
-      $('#footer').fadeOut(1000);
+      $('#footer').fadeOut(3000);
     },
     getSessionData() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
