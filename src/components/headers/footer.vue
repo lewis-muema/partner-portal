@@ -90,7 +90,7 @@ beforeMount () {
       return this.selectedRating;
     },
     submitSurvey() {
-      if (this.selectedRating !== '' && this.opinion !== '') {
+      if (this.selectedRating !== '') {
       this.surveyStatus = 1;
       this.postSurvey();
       } else {
