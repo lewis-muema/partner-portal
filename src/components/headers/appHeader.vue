@@ -66,10 +66,13 @@
 </div>
 </template>
 <script>
-
 import axios from 'axios';
+import surveyFooter from './footer.vue';
 
 export default {
+  components: {
+    surveyFooter,
+  },
   data() {
     return {
       dropdown: false,
@@ -82,6 +85,7 @@ export default {
       },
       performance_status: false,
       super_user: false,
+      nps_eligibility: null,
     };
   },
   computed: {},
@@ -89,6 +93,8 @@ export default {
     this.$store.commit('setSessionInfo', JSON.parse(localStorage.sessionData).payload);
     this.$store.commit('setOwnerId', JSON.parse(localStorage.sessionData).payload.id);
     this.fetchBikeDrivers();
+    this.npsEligibility();
+
     if (localStorage.sessionData) {
       this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
     }
@@ -152,6 +158,22 @@ export default {
           this.performance_status = false;
         });
     },
+npsEligibility() {
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const userPayload = {
+        respondent_type: 'owner',
+        respondent_id: sessionInfo.id,
+      };
+      axios
+        .post(`${process.env.ADONIS_PRIVATE_API}nps/verify`, userPayload, this.config)
+        .then(res => {
+          this.nps_eligibility = res.data.valid;
+        })
+        .catch(error => {
+          console.log('User does not meet criteria for NPS');
+        });
+    },
+
   },
 };
 </script>
