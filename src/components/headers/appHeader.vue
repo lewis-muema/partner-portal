@@ -169,9 +169,7 @@ npsEligibility() {
         .then(res => {
           this.nps_eligibility = res.data.valid;
         })
-        .catch(error => {
-          console.log('User does not meet criteria for NPS');
-        });
+        .catch(error => error);
     },
 
   },
