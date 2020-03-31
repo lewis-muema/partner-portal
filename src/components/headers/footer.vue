@@ -48,7 +48,7 @@
     </div>
   </div>
   </div>
-  <div class="container" v-if="surveyStatus == 1">
+  <div class="container" v-if="surveyStatus === 1">
   <div class="row">
     <div class="col-lg-12">
     <h5 class="align-middle">{{ message }}</h5>
