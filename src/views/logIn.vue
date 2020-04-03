@@ -14,6 +14,7 @@
 <script>
 import VueTelInput from 'vue-tel-input';
 import $ from 'jquery';
+import axios from 'axios';
 
 export default {
   title: 'Partner Portal - Log In',
@@ -94,7 +95,25 @@ export default {
       expiry.setDate(expiry.getDate() + 3);
       localStorage.expiryDate = expiry;
       localStorage.sessionData = sessionData;
-      this.$router.push({ path: '/' });
+      this.fetchSignatureStatus(parsedData.payload.phone);
+    },
+    fetchSignatureStatus(phoneNo) {
+      const payload = {
+        phone_no: phoneNo,
+        is_owner: true,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/management/get_partner_details`, payload)
+        .then(response => {
+          if (!response.data.message.documents.signature) {
+            this.$router.push({ path: '/signature' });
+          } else {
+            this.$router.push({ path: '/' });
+          }
+        })
+        .catch(error => {
+          this.$router.push({ path: '/' });
+        });
     },
     signInError(error) {
       this.notificationName = 'message-box-up';
