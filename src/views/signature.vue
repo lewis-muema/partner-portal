@@ -5,18 +5,18 @@
     <div v-if="phase === 1">
       <p class="signature--intro__header">Welcome to Sendy</p>
       <p class="signature--body__par">Welcome to Sendy! Before you get started here are the terms and conditions for <br />using our service. It is important to us that both partners(you) and customers <br />have the best possible experience</p>
-      <p class="signature--body__par">By checking on the boxes you acknowladge you have <br />read and agree with the following terms:</p>
+      <p class="signature--body__par">By checking on the boxes you acknowledge you have <br />read and agree with the following terms:</p>
       <div class="signature--terms">
         <div class="signature--options">
-          <input type="checkbox" class="" name="" value="false" v-model="partnerStatus" />
+          <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="partnerStatus" />
           <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://docs.google.com/document/d/1GVHvPV9nk0c3SJWehSR0HpUTDw8g6EYuPQdVGDNJ8Ek/edit">Partner Contract</a> This states the driver responsibilities, Payment terms and penalties</span>
         </div>
         <div class="signature--options">
-          <input type="checkbox" class="" name="" value="false" v-model="termStatus" />
+          <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="termStatus" />
           <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/terms">Terms and conditions</a></span>
         </div>
         <div class="signature--options">
-          <input type="checkbox" class="" name="" value="false" v-model="privacyStatus" />
+          <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="privacyStatus" />
           <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/privacy">Data and Privacy</a></span>
         </div>
         <br />
@@ -268,5 +268,9 @@ export default {
 }
 .signature--buttons {
   padding-bottom: 40px;
+}
+.signature--checkbox {
+  width: max-content !important;
+  height: max-content !important;
 }
 </style>
