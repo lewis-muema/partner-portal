@@ -1,28 +1,27 @@
+/* eslint-disable object-curly-newline */
 import Vue from 'vue';
 import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VModal from 'vue-js-modal';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {
- faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner,
-} from '@fortawesome/free-solid-svg-icons';
+import { faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import VueMask from 'v-mask';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VuePageTitle from 'vue-page-title';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
-import {
- Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress,
-} from 'element-ui';
+import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress } from 'element-ui';
 import SendyAuth from '@sendyit/auth';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
+import VueSignaturePad from 'vue-signature-pad';
 import App from './App.vue';
 import router from './router';
 import store from './store';
 
 // configure language
 locale.use(lang);
+Vue.use(VueSignaturePad);
 
 Vue.use(SendyAuth, {
   // social authentication driver: 'google'
@@ -47,9 +46,7 @@ Vue.use(ApmVuePlugin, {
     serverUrl: process.env.ELASTIC_APM_SERVER_URL,
     serviceVersion: process.env.ELASTIC_APM_SERVICE_VERSION,
     environment: process.env.DOCKER_ENV,
-    distributedTracingOrigins: [
-      process.env.VUE_APP_AUTH,
-    ],
+    distributedTracingOrigins: [process.env.VUE_APP_AUTH],
   },
 });
 Vue.use(VueMask);

@@ -17,6 +17,7 @@ import Performance from './views/performance.vue';
 import ExternalLogin from './views/externalLogin.vue';
 import AuthLogin from './views/authLogin.vue';
 import ForgotPassword from './views/forgotPassword.vue';
+import Signature from './views/signature.vue';
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/login',
       name: 'logIn',
       component: Login,
+    },
+    {
+      path: '/signature',
+      name: 'signature',
+      component: Signature,
     },
     {
       path: '/',
