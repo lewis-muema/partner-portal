@@ -105,7 +105,7 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/management/get_partner_details`, payload)
         .then(response => {
-          if (!response.data.message.documents.signature) {
+          if (!response.data.documents.signature) {
             this.$router.push({ path: '/signature' });
           } else {
             this.$router.push({ path: '/' });
