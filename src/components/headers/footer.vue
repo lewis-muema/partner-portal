@@ -20,7 +20,10 @@
     <span>
       10 Very Likely
     </span>
-    <button class="dismissbtn" @click="cancelSurvey()">
+    <button class="dismissbtn" @click="cancelSurvey()" v-if="dismissStatus === 1" disabled>
+        X
+      </button>
+      <button class="dismissbtn" @click="cancelSurvey()" v-else>
         X
       </button>
     </div>
@@ -37,18 +40,24 @@
     <div class="col-lg-11">
       <span>
         <textarea id="opinion" v-model="opinion"></textarea>
-    <button id="submitbtn" @click="submitSurvey()">
+    <button id="submitbtn" @click="submitSurvey()" v-if="submitStatus === 1" disabled>
+      Submit
+      </button>
+      <button id="submitbtn" @click="submitSurvey()" v-else>
       Submit
       </button>
       </span></div>
       <div class="col-lg-1">
-    <button class="dismissbtn" @click="cancelSurvey()">
+    <button class="dismissbtn" @click="cancelSurvey()" v-if="dismissStatus === 1" disabled>
+        X
+      </button>
+      <button class="dismissbtn" @click="cancelSurvey()" v-else>
         X
       </button>
     </div>
   </div>
   </div>
-  <div class="container" v-if="surveyStatus == 1">
+  <div class="container" v-if="surveyStatus === 1">
   <div class="row">
     <div class="col-lg-12">
     <h5 class="align-middle">{{ message }}</h5>
@@ -72,6 +81,8 @@ export default {
       surveyStatus: 0,
       ownerID: null,
       countryCode: '',
+      dismissStatus: null,
+      submitStatus: null,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -107,11 +118,12 @@ beforeMount () {
       this.countryCode = sessionInfo.country_code;
     },
     postSurvey() {
+      this.submitStatus = 1;
       const surveyPayload = {
         respondent_type: 'owner',
         respondent_id: this.ownerID,
         country_code: this.countryCode,
-        business_unit_id: 1,
+        business_unit_id: null,
         score: this.selectedRating,
         reason: this.opinion,
       };
@@ -122,15 +134,17 @@ beforeMount () {
           this.fadeSurvey();
         })
         .catch(error => {
+          this.submitStatus = 0;
           this.message = 'Sorry Something went wrong. Try Again';
         });
     },
     cancelSurvey() {
+      this.dismissStatus = 1;
       const surveyPayload = {
         respondent_type: 'owner',
         respondent_id: this.ownerID,
         country_code: this.countryCode,
-        business_unit_id: 1,
+        business_unit_id: null,
         dismissed: true,
       };
       axios
@@ -144,6 +158,7 @@ beforeMount () {
         })
         .catch(error => {
           this.message = 'Sorry Something went wrong. Try Again';
+          this.dismissStatus = 0;
         });
     },
 },
