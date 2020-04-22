@@ -158,7 +158,7 @@
                         <p class="orders__bidvehicle-type heading uppercase">select a vehicle to service this order</p>
                         <select class="orders__bidvehicle-type-input par" v-if="!addVehicleStatus" v-model="count" @change="vehicleSelector(order.id)">
                           <option class selected value="null">Select a vehicle</option>
-                          <option class v-for="vehicle in vehicles" :value="vehicle.count" :key="vehicle.count">{{ vehicle.make }} {{ vehicle.model }} ({{ vehicle.registration_no }}) {{ vehicle.vendor_disp_name }}</option>
+                          <option class v-for="vehicle in vehicles" :value="vehicle.count" :key="vehicle.count">{{ vehicle.registration_no }} {{ displayVehicles(vehicle.count) }}</option>
                         </select>
                         <select class="orders__bidvehicle-type-input disabled par" v-if="addVehicleStatus" @click="setVehicleStatus()" readonly>
                           <option class value selected>Select a vehicle</option>
@@ -352,6 +352,15 @@ export default {
     },
     regcounter(id) {
       this.regOk = id;
+    },
+    displayVehicles(id) {
+      if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
+        return `(${this.vehicles[id].load_capacity} Tonnes)`;
+      } else if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
+        return `(${this.vehicles[id].make} ${this.vehicles[id].model})`;
+      } else {
+        return '';
+      }
     },
     createStaticMapUrl(path) {
       const google_key = process.env.GOOGLE_API_KEY;
@@ -863,10 +872,6 @@ export default {
         this.vehicleId = this.vehicles[q].vehicle_id;
         this.refrigirated = this.vehicles[q].refrigerated;
         this.partnerVendor = parseInt(this.vehicles[q].vendor_type, 10);
-        if (this.partnerVendor !== this.orders[id - 1].vendor_type) {
-          this.notify(3, 0, `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`);
-          this.partnerVendor = null;
-        }
       }
       setTimeout(() => {
         this.confirm(id);
@@ -976,7 +981,11 @@ export default {
             const unescaped = response.data;
             let counter = -1;
             unescaped.available_vehicles.forEach((row, v) => {
-              if (row.vendor_type === this.orders[id - 1].vendor_type) {
+              if ([20, 25].includes(this.orders[id - 1].vendor_type) && [20, 25].includes(row.vendor_type)) {
+                counter += 1;
+                row.count = counter;
+                this.vehicles.push(row);
+              } else if (row.vendor_type === this.orders[id - 1].vendor_type) {
                 counter += 1;
                 row.count = counter;
                 this.vehicles.push(row);
