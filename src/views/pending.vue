@@ -570,7 +570,9 @@ export default {
         });
     },
     displayVehicles(id) {
-      if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
+      if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
+        return `(${this.vehicles[id].load_capacity} Tonnes)`;
+      } else if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
         return `(${this.vehicles[id].make} ${this.vehicles[id].model})`;
       } else {
         return '';
@@ -1118,10 +1120,6 @@ export default {
         this.vehicleId = this.vehicles[q].vehicle_id;
         this.refrigirated = this.vehicles[q].refrigerated;
         this.partnerVendor = parseInt(this.vehicles[q].vendor_type, 10);
-        if (this.partnerVendor !== this.orders[id - 1].vendor_type) {
-          this.notify(3, 0, `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`);
-          this.partnerVendor = null;
-        }
       }
       setTimeout(() => {
         this.confirm(id);
@@ -1230,11 +1228,15 @@ export default {
                 const unescaped = response.data;
                 let counter = -1;
                 unescaped.data.forEach((row, v) => {
-                if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                  if (['20', '25'].includes(this.orders[id - 1].vendor_type.toString()) && ['20', '25'].includes(row.vendor_type)) {
                     counter += 1;
                     row.count = counter;
                     this.vehicles.push(row);
-                }
+                  } else if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+                    counter += 1;
+                    row.count = counter;
+                    this.vehicles.push(row);
+                  }
                 });
             }
             resolve(response);
