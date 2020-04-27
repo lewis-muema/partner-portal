@@ -248,4 +248,10 @@ a,
 a:hover {
   color: #f57f20;
 }
+.login__phone-input .dropdown, .login__phone-input .dropdown .selection {
+  padding: 0px !important;
+}
+.login__phone-input .dropdown .selection {
+  margin-left: 15px;
+}
 </style>
