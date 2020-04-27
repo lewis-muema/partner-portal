@@ -9,7 +9,7 @@
       <div class="signature--terms">
         <div class="signature--options">
           <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="partnerStatus" />
-          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://docs.google.com/document/d/1GVHvPV9nk0c3SJWehSR0HpUTDw8g6EYuPQdVGDNJ8Ek/edit">Partner Contract</a> This states the driver responsibilities, Payment terms and penalties</span>
+          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/partner-contract/service-agreement-ke">Partner Contract</a> This states the driver responsibilities, Payment terms and penalties</span>
         </div>
         <div class="signature--options">
           <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="termStatus" />
