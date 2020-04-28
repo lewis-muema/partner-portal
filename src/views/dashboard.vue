@@ -241,43 +241,23 @@ export default {
     },
     cashMadeThisMonth() {
       const cashval = this.dataResponse.response.cash_made_this_month;
-      if (cashval.split(' ')[1] < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      } else {
-        return `${cashval.split(' ')[0]} ${cashval
-          .split(' ')[1]
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      }
+      return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
     },
     cashMadeThisWeek() {
       const cashval = this.dataResponse.response.cash_made_this_week;
-      if (cashval.split(' ')[1] < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      } else {
-        return `${cashval.split(' ')[0]} ${cashval
-          .split(' ')[1]
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      }
+      return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
     },
     nextTransfer() {
       const cashval = this.dataResponse.response.next_transfer;
       this.currency = cashval.split(' ')[0];
       const amount = cashval.split(' ')[1];
-      if (parseInt(amount, 10) < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(parseInt(amount, 10)))
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      } else {
-        return `${cashval.split(' ')[0]} ${amount
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      }
+      return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(parseInt(amount, 10)))
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
     },
     ratingThisWeek() {
       return Math.floor(this.dataResponse.response.average_rating_this_week);
