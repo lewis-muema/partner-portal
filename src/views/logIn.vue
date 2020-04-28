@@ -100,6 +100,7 @@ export default {
     fetchSignatureStatus(phoneNo) {
       const payload = {
         phone_no: phoneNo,
+        is_owner: true,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/management/get_partner_details`, payload)
