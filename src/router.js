@@ -15,6 +15,7 @@ import DriverRequest from './views/driverRequest.vue';
 import ExternalTracking from './views/externalTracking.vue';
 import Performance from './views/performance.vue';
 import ExternalLogin from './views/externalLogin.vue';
+import Signature from './views/signature.vue';
 
 Vue.use(Router);
 
@@ -26,6 +27,11 @@ export default new Router({
       path: '/login',
       name: 'logIn',
       component: Login,
+    },
+    {
+      path: '/signature',
+      name: 'signature',
+      component: Signature,
     },
     {
       path: '/',

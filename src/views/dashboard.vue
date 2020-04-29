@@ -160,7 +160,6 @@ export default {
       count: '',
       amount: '',
       currency: '',
-      nextTransferAmount: '',
       dataPoints: '',
       dataOptions: {
         responsive: true,
@@ -197,40 +196,34 @@ export default {
       const riderPayload = JSON.stringify({
         rider_ids: riderIds,
       });
-      this.post(process.env.VUE_APP_AUTH, 'partners/owner_running_bal', payload).then(response => {
+      this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload).then(response => {
         if (response.data.status) {
-          this.nextTransferAmount = response.data.rb;
+          this.count = response.data.pendingDeliveryNotesData[0].count;
+          this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
         }
       }).then(() => {
-        this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload).then(response => {
-          if (response.data.status) {
-            this.count = response.data.pendingDeliveryNotesData[0].count;
-            this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
-          }
-        }).then(() => {
-          this.post(process.env.VUE_APP_AUTH, 'rider/admin_partner_api/v5/partner_portal/dashboard', payload).then(response => {
-            this.dataStatus = true;
-            this.dataResponse = response.data;
-            let amount = '';
-            const earnings = [];
-            const months = [];
-            const amountArray = [];
-            this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
-              amount = parseInt(row.amount, 10);
-              months.push(row.month);
-              amountArray.push(amount);
-            });
-            this.dataPoints = {
-              labels: months,
-              datasets: [
-                {
-                  label: 'Amount',
-                  backgroundColor: 'rgba(23,130,197,.8)',
-                  data: amountArray,
-                },
-              ],
-            };
+        this.post(process.env.VUE_APP_AUTH, 'rider/admin_partner_api/v5/partner_portal/dashboard', payload).then(response => {
+          this.dataStatus = true;
+          this.dataResponse = response.data;
+          let amount = '';
+          const earnings = [];
+          const months = [];
+          const amountArray = [];
+          this.dataResponse.msg.Monthly_earnings.forEach((row, i) => {
+            amount = parseInt(row.amount, 10);
+            months.push(row.month);
+            amountArray.push(amount);
           });
+          this.dataPoints = {
+            labels: months,
+            datasets: [
+              {
+                label: 'Amount',
+                backgroundColor: 'rgba(23,130,197,.8)',
+                data: amountArray,
+              },
+            ],
+          };
         });
       });
     }
@@ -247,43 +240,23 @@ export default {
     },
     cashMadeThisMonth() {
       const cashval = this.dataResponse.msg.Cash_made_this_Month;
-      if (cashval.split(' ')[1] < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      } else {
-        return `${cashval.split(' ')[0]} ${cashval
-          .split(' ')[1]
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      }
+      return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
     },
     cashMadeThisWeek() {
       const cashval = this.dataResponse.msg.Cash_made_this_Week;
-      if (cashval.split(' ')[1] < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      } else {
-        return `${cashval.split(' ')[0]} ${cashval
-          .split(' ')[1]
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      }
+      return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(cashval.split(' ')[1]))
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
     },
     nextTransfer() {
       const cashval = this.dataResponse.msg.Next_transfer;
       this.currency = cashval.split(' ')[0];
-      const amount = this.nextTransferAmount === '' ? cashval.split(' ')[1] : this.nextTransferAmount;
-      if (parseInt(amount, 10) < 0) {
-        return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(parseInt(amount, 10)))
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      } else {
-        return `${cashval.split(' ')[0]} ${amount
-          .toString()
-          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
-      }
+      const amount = cashval.split(' ')[1];
+      return `${cashval.split(' ')[0]} ${Math.floor(Math.abs(parseInt(amount, 10)))
+        .toString()
+        .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')}`;
     },
     ratingThisWeek() {
       return Math.floor(this.dataResponse.msg.Average_Rating_this_Week);

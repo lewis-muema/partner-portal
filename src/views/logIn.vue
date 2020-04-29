@@ -5,36 +5,17 @@
         <p class="login__header-text">Log in to Sendy</p>
         <div class="control-group">
           <div class="login__element">
-            <vue-tel-input
-              v-model="tel"
-              v-bind="bindProps"
-              class="login__phone-input"
-              @validate="Valid"
-            ></vue-tel-input>
+            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
           </div>
           <div class="login__element">
-            <input
-              class="login__password-input"
-              type="password"
-              name="password"
-              id="password"
-              placeholder="Password"
-              required
-              v-model="password"
-            />
+            <input class="login__password-input" type="password" name="password" id="password" placeholder="Password" required v-model="password" />
           </div>
           <div id="loggin_error" class="error">{{ loginError }}</div>
           <div class="login__element">
-            <button
-              class="form-control login__btn"
-              type="submit"
-              value="Log in"
-              id="login"
-              @click="postLogin"
-            >Log In</button>
+            <button class="form-control login__btn" type="submit" value="Log in" id="login" @click="postLogin">Log In</button>
           </div>
           <div class="login__inst">
-            <a href="#" @click="forgotPwd();" class="login__forgotPass">Forgot Password?</a>
+            <a href="#" @click="forgotPwd()" class="login__forgotPass">Forgot Password?</a>
           </div>
           <div class="login__inst">
             Don't have an account?
@@ -52,15 +33,9 @@
             <vue-tel-input v-model="tel" v-bind="bindProps"></vue-tel-input>
           </div>
           <div class="login__element">
-            <button
-              class="form-control reset__btn"
-              type="submit"
-              value="Reset Password"
-              id="reset"
-              @click="postForgot"
-            >Reset Password</button>
+            <button class="form-control reset__btn" type="submit" value="Reset Password" id="reset" @click="postForgot">Reset Password</button>
           </div>
-          <a href="#" @click="forgotPwd();" class="login__forgotPass">Sign In</a>
+          <a href="#" @click="forgotPwd()" class="login__forgotPass">Sign In</a>
         </div>
       </div>
     </div>
@@ -154,7 +129,24 @@ export default {
     redirect() {
       window.location.href = process.env.ONBOARDING_PORTAL;
     },
-
+    fetchSignatureStatus(phoneNo) {
+      const payload = {
+        phone_no: phoneNo,
+        is_owner: true,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/management/get_partner_details`, payload)
+        .then(response => {
+          if (!response.data.documents.signature) {
+            this.$router.push({ path: '/signature' });
+          } else {
+            this.$router.push({ path: '/' });
+          }
+        })
+        .catch(error => {
+          this.$router.push({ path: '/' });
+        });
+    },
     postForgot() {
       // eslint-disable-next-line quotes
       this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
@@ -211,7 +203,7 @@ export default {
         localStorage.expiryDate = expiry;
         localStorage.sessionData = sessionData;
         this.TrackLogin(parsedData.payload);
-        this.$router.push({ path: '/' });
+        this.fetchSignatureStatus(parsedData.payload.phone);
       } else {
         this.handleButton('LOG IN');
         this.error('Sorry, your details did not match!', 7000);
@@ -255,5 +247,11 @@ p {
 a,
 a:hover {
   color: #f57f20;
+}
+.login__phone-input .dropdown, .login__phone-input .dropdown .selection {
+  padding: 0px !important;
+}
+.login__phone-input .dropdown .selection {
+  margin-left: 15px;
 }
 </style>
