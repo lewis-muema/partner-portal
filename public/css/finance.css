@@ -104,8 +104,6 @@ body.dt-print-view {
   margin-top: 10px;
 }
 .statement__scrollable-row {
-  overflow-y: scroll;
-  max-height: 200px;
   display: inline-block;
 }
 .statement__scrollable-row::-webkit-scrollbar {
