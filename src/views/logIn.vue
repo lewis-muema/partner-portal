@@ -30,7 +30,7 @@
         <div id="reset_error" class="error">{{ loginError }}</div>
         <div class="control-group">
           <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps"></vue-tel-input>
+            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
           </div>
           <div class="login__element">
             <button class="form-control reset__btn" type="submit" value="Reset Password" id="reset" @click="postForgot">Reset Password</button>
