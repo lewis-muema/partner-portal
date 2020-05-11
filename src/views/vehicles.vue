@@ -1257,18 +1257,17 @@ export default {
             $('#upErr2').fadeOut('slow');
             this.$modal.hide('confirm-driver-modal');
             this.fetchVehicles();
-          } else {
-            $('#upErr2').fadeOut('slow');
-            $('#upErr2')
-              .html(response.data.msg)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr2').fadeOut('slow');
-            }, 3000);
           }
         })
         .catch(() => {
           this.errorObj = error.response;
+          $('#upErr2').fadeOut('slow');
+          $('#upErr2')
+            .html(error.response.data.message)
+            .fadeIn('slow');
+          setTimeout(() => {
+            $('#upErr2').fadeOut('slow');
+          }, 3000);
         });
     },
     cancelInvite() {
@@ -1281,18 +1280,17 @@ export default {
           if (response.data.status) {
             this.$modal.hide('invite-cancel-modal');
             this.fetchVehicles();
-          } else {
-            $('#upErr3').fadeOut('slow');
-            $('#upErr3')
-              .html(response.data.msg)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr3').fadeOut('slow');
-            }, 3000);
           }
         })
         .catch(() => {
           this.errorObj = error.response;
+          $('#upErr3').fadeOut('slow');
+          $('#upErr3')
+            .html(error.response.data.message)
+            .fadeIn('slow');
+          setTimeout(() => {
+            $('#upErr3').fadeOut('slow');
+          }, 3000);
         });
     },
     createOwnerDriver() {

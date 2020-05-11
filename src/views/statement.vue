@@ -550,13 +550,10 @@ export default {
               this.notify(2);
               this.fetchStatement(1);
             }, 4000);
-            if (this.opened) {
-              // this.closePopup();
-            }
           }
         })
         .catch(error => {
-          this.notify(1, 0, error.response.message);
+          this.notify(1, 0, error.response.data.message);
           setTimeout(() => {
             this.notify(2);
             this.fetchStatement(1);
