@@ -104,4 +104,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.forgot--password-input .dropdown {
+  padding: 0 !important;
+}
+.forgot--password-input .dropdown .selection {
+  padding: 0 !important;
+  margin-left: 10px;
+}
+</style>
