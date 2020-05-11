@@ -86,6 +86,9 @@ export default {
           this.handleButton('Reset Password');
           this.error('Please try again', 7000);
         }
+      }).catch(error => {
+        this.handleButton('Reset Password');
+        this.error(error.response.data.message, 7000);
       });
     },
     handleButton(data) {
