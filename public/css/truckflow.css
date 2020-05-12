@@ -88,6 +88,9 @@ a {
   background-color: #fff;
   margin-right: 10px;
 }
+.container__search-element:disabled {
+  color: #c1c0c0;
+}
 .container__search-element2 {
   height: 100%;
   width: 100%;

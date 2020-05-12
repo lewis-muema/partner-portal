@@ -11,17 +11,6 @@
           <span class="container__search-input">
             <input type="text" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
           </span>
-          <span class="container__search-select">
-            <select name class="container__search-element select-font" @change="filterVendor()" id="vend">
-              <option value selected>Select type of truck</option>
-              <option value="3T Truck">3 Tonne Truck</option>
-              <option value="5T Truck">5 Tonne Truck</option>
-              <option value="10T Truck">10 Tonne Truck</option>
-              <option value="14T Truck">14 Tonne Truck</option>
-              <option value="20T Truck">20 Tonne Truck</option>
-              <option value="28T Truck">28 Tonne Truck</option>
-            </select>
-          </span>
           <span class="container__search-select" v-if="ordercount.length > 0">
             <select name class="container__search-element select-font" @change="definePayload()" v-model="orderRange">
               <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>

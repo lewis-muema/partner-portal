@@ -12,8 +12,10 @@
             <input type="text" onfocus="value = ''" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
           </span>
           <span class="container__search-select">
-            <select name class="container__search-element select-font" @change="filterVendor()" id="vend">
+            <select name class="container__search-element select-font" @change="filterVendor()" id="vend" :disabled="orders.length === 0">
               <option value selected>Select type of truck</option>
+              <option value="Pick up">Pick Up</option>
+              <option value="Van">Van</option>
               <option value="3T Truck">3 Tonne Truck</option>
               <option value="5T Truck">5 Tonne Truck</option>
               <option value="10T Truck">10 Tonne Truck</option>
