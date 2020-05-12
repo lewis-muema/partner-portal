@@ -13,7 +13,7 @@
               <input type="text" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
             </span>
             <span class="container__search-select">
-              <select name class="container__search-element select-font" @change="filterVendor()" id="vend">
+              <select name class="container__search-element select-font" @change="filterVendor()" id="vend" :disabled="!refreshStatus">
                 <option value selected>Select type of truck</option>
                 <option value="Pick up">Pick Up</option>
                 <option value="Van">Van</option>
@@ -25,6 +25,9 @@
                 <option value="28T Truck">28 Tonne Truck</option>
                 <option value="Freight">Freight Truck</option>
               </select>
+            </span>
+            <span class="container__search-loader">
+              <div class="pending-orders-loading-spinner" v-if="!refreshStatus"></div>
             </span>
           </div>
 
@@ -358,6 +361,7 @@ export default {
       orderLimit: 0,
       vehicleCounter: '',
       orderCount: 0,
+      refreshStatus: false,
     };
   },
   computed: {},
@@ -1228,6 +1232,7 @@ export default {
             const totalOrders = unescaped.count < 100 ? unescaped.count : 100;
             if (this.$route.path === '/' && this.orderLimit >= totalOrders) {
               this.refreshOrders();
+              this.refreshStatus = true;
             }
             if (this.orderLimit < totalOrders) {
               this.getOrders(this.vehicleCounter);
