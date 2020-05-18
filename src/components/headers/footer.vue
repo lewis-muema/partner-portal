@@ -32,18 +32,15 @@
     <div class="container" v-if="selectedRating !== '' && surveyStatus !== 1">
   <div class="row">
     <div class="col-lg-12">
-    <h5 class="align-middle">What do you like most about Sendy?(Optional)</h5>
+    <h5 class="align-middle">What do you like most about Sendy?</h5>
     <br/>
     </div>
   </div>
   <div class="row" id="info">
     <div class="col-lg-11">
       <span>
-        <textarea id="opinion" v-model="opinion"></textarea>
-    <button id="submitbtn" @click="submitSurvey()" v-if="submitStatus === 1" disabled>
-      Submit
-      </button>
-      <button id="submitbtn" @click="submitSurvey()" v-else>
+        <textarea v-model="opinion" :class="this.error === 1? 'opinionerror' : 'opinion'"></textarea>
+    <button id="submitbtn" @click="submitSurvey()">
       Submit
       </button>
       </span></div>
@@ -90,6 +87,7 @@ export default {
         },
       },
       message: '',
+      error: null,
       };
   },
 beforeMount () {
@@ -101,9 +99,12 @@ beforeMount () {
       return this.selectedRating;
     },
     submitSurvey() {
-      if (this.selectedRating !== '') {
+      if (this.selectedRating !== '' && this.opinion !== '') {
       this.surveyStatus = 1;
       this.postSurvey();
+      } else if (this.opinion === '') {
+      this.surveyStatus = 0;
+      this.error = 1;
       } else {
         this.surveyStatus = 0;
       }
@@ -220,9 +221,21 @@ color: #757575;
   color: #fff;
 }
 
-#opinion{ border: 1px solid
+.opinion{ border: 1px solid
 rgb(189, 189, 189);
 box-sizing: border-box;
+box-shadow:
+rgba(0, 0, 0, 0.15) 0px 5px 10px;
+border-radius: 5px;
+width: 80%;
+margin-right: 20px;
+height: 65px;
+resize: none;
+}
+
+.opinionerror{
+  border: 2px solid rgb(255, 30, 30);
+  box-sizing: border-box;
 box-shadow:
 rgba(0, 0, 0, 0.15) 0px 5px 10px;
 border-radius: 5px;
