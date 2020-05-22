@@ -230,8 +230,8 @@ export default {
           rider_id: row.rider_id,
           txn: row.txn,
           pay_time: this.dateFormat(row.pay_time),
-          amount: `${currency} ${row.amount}`,
-          running_balance: `${currency} ${row.running_balance}`,
+          amount: `${currency} ${row.amount * -1}`,
+          running_balance: `${currency} ${row.running_balance * -1}`,
           pay_narrative: row.pay_narrative,
         });
       });

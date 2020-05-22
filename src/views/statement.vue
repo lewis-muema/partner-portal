@@ -86,8 +86,9 @@
               <div class="col-3">
                 <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
               </div>
-              <div class="col-3">
+              <div class="col-3 to-date-selector">
                 <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+                <i v-if="to || from || vehicleId || riderId" class="fa fa-times-circle clear-inputs-icon" aria-hidden="true" @click="clearFilters()"></i>
               </div>
               <div class="subFilt col-2">
                 <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub" @click="filt()">
@@ -130,8 +131,9 @@
         <div class="col-12 padding margin-bottom">
           <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
         </div>
-        <div class="col-12 padding margin-bottom">
-          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+        <div class="col-12 padding margin-bottom to-date-selector">
+          <datepicker v-model="to" input-class="filtIn to-filter-input" id="dtto" placeholder="To" name="to"></datepicker>
+          <i v-if="to || from || vehicleId || riderId" class="fa fa-times-circle clear-inputs-icon" aria-hidden="true" @click="clearFilters()"></i>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
           <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub centered-btn" @click="filt()">
@@ -295,6 +297,17 @@ export default {
   methods: {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
+    },
+    clearFilters() {
+      this.to = '';
+      this.from = '';
+      this.vehicleId = '';
+      this.riderId = '';
+      this.fetchStatement(1).then(res2 => {
+        this.fetchAllBanks().then(res3 => {
+          this.fetchOwnerBanks();
+        });
+      });
     },
     getPaymentOptions() {
       const payload = {
