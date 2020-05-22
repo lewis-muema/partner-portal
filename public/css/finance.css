@@ -756,6 +756,20 @@ input:-ms-input-placeholder {
   font-size: 14.9px;
 }
 
+.to-date-selector {
+  display: flex;
+  align-items: center;
+}
+
+.clear-inputs-icon {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.to-date-selector .vdp-datepicker {
+  width: 100%;
+}
+
 .printContain {
   overflow: hidden;
   font-size: 13px;
