@@ -201,6 +201,9 @@
                         <p class="map__details-dest par">{{ order.to_name }}</p>
                         <p class="map__details-distance heading uppercase">distance</p>
                         <p class="map__details-distance par">{{ order.distance }}</p>
+                        <p class="map__details-date heading uppercase">Order type</p>
+                        <p class="map__details-date par" v-if="order.order_type === 'Normal order'">{{ order.order_type }}</p>
+                        <p class="map__details-date par capitalize-text" v-else>{{ order.order_type.order_type_tag.replace(/_/g, " ") }}</p>
                       </div>
                     </div>
                   </div>
@@ -774,6 +777,8 @@ export default {
       orderDetails.orderStatus = orderStatus;
       orderDetails.confirmStatus = confirmStatus;
       orderDetails.delivery_status = row.delivery_status;
+      orderDetails.vat_amount = row.vat_amount;
+      orderDetails.order_type = Object.prototype.hasOwnProperty.call(JSON.parse(row.order_details).values, 'dedicated_order_details') ? JSON.parse(row.order_details).values.dedicated_order_details : 'Normal order';
       return orderDetails;
     },
   },
@@ -781,4 +786,7 @@ export default {
 </script>
 
 <style>
+.capitalize-text {
+  text-transform: capitalize;
+}
 </style>
