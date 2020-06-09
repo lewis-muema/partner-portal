@@ -126,6 +126,9 @@
                           <p class="map__details-pickup par">{{ order.from_name }}</p>
                           <p class="map__details-date heading uppercase">date and time</p>
                           <p class="map__details-date par">{{ timeFormat(order.id) }}</p>
+                          <p class="map__details-date heading uppercase">Order type</p>
+                          <p class="map__details-date par" v-if="order.order_type === 'Normal order'">{{ order.order_type }}</p>
+                          <p class="map__details-date par capitalize-text" v-else>{{ order.order_type.order_type_tag.replace(/_/g, " ") }}</p>
                         </div>
                         <div class="map__details-col">
                           <p class="map__details-dest heading uppercase">destination</p>
@@ -1286,6 +1289,7 @@ export default {
       orderDetails.takeHome = takehome;
       orderDetails.orderNo = orderno;
       orderDetails.vat_amount = row.vat_amount;
+      orderDetails.order_type = Object.prototype.hasOwnProperty.call(JSON.parse(row.order_details).values, 'dedicated_order_details') ? JSON.parse(row.order_details).values.dedicated_order_details : 'Normal order';
       return orderDetails;
     },
     TrackOrderConfirmation(payload) {
@@ -1314,5 +1318,8 @@ a {
 
 .validation-error--message {
   color: #f17f3a;
+}
+.capitalize-text {
+  text-transform: capitalize;
 }
 </style>
