@@ -777,7 +777,6 @@ export default {
       orderDetails.orderStatus = orderStatus;
       orderDetails.confirmStatus = confirmStatus;
       orderDetails.delivery_status = row.delivery_status;
-      orderDetails.vat_amount = row.vat_amount;
       orderDetails.order_type = Object.prototype.hasOwnProperty.call(JSON.parse(row.order_details).values, 'dedicated_order_details') ? JSON.parse(row.order_details).values.dedicated_order_details : 'Normal order';
       return orderDetails;
     },
