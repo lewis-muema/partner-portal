@@ -67,7 +67,7 @@
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
           <span class="dashboard__box-number dashboard-header">Time spent online </span>
-          <div class="" style="margin-left: 4%; padding-top: 37px;width:86%; !important">
+          <div class="online-time--outer">
             <span class="dashboard__box-number online--time-inner"> {{ this.onlineTime() }}</span>
             <el-progress type="line" :percentage="onlineRate()" :stroke-width="10" :color="colors" :show-text="false"></el-progress>
           </div>
@@ -100,6 +100,22 @@
           </div>
           <div class="riderstats__box-extra delay--extra">
             <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are delivered in {{ this.rider_stats.avg_delivery_time }} minutes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row dashboard__row">
+      <div class="dashboard__box-container stats-container">
+        <div class="dashboard__dash-box stats--dashboard">
+          <span class="dashboard__box-number dashboard-header">Orders reassigned</span>
+          <div class="riderstats__box-content delay-inner">
+            <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.dispatch_info.cancelled }} Orders</span>
+          </div>
+          <div v-if="this.rider_stats.dispatch_info.reassign_reasons.length > 0" class="riderstats__box-extra top-reasons-section">
+            <span class="dashboard__box-text top-reasons-header">Top reasons why you reassigned orders today</span>
+            <div v-for="(reassign_reasons, index) in this.rider_stats.dispatch_info.reassign_reasons" :key="index">
+              <span class="dashboard__box-text" style="">{{ reassign_reasons.reason }} <a class="reassign-count">{{ reassign_reasons.count }}</a></span>
+            </div>
           </div>
         </div>
       </div>
