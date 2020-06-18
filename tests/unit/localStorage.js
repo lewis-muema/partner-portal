@@ -1,11 +1,11 @@
 import Vue from 'vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
- faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity,
+ faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faCoins, faMobile, faGasPump, faCalendarWeek,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity);
+library.add(faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faCoins, faMobile, faGasPump, faCalendarWeek);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 

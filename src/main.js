@@ -4,7 +4,8 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import VModal from 'vue-js-modal';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faUserSecret, faStar as fasStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner, faCoins, faMobile, faGasPump, faCalendarWeek, faStarHalf, faCloudUploadAlt, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import VueMask from 'v-mask';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import VuePageTitle from 'vue-page-title';
@@ -61,7 +62,7 @@ Vue.use(Progress);
 
 Vue.use(VuePageTitle);
 
-library.add(faUserSecret, faStar, faChartBar, faMoneyBillAlt, faUniversity, faSpinner);
+library.add(faUserSecret, fasStar, farStar, faStarHalf, faChartBar, faMoneyBillAlt, faUniversity, faSpinner, faCoins, faMobile, faGasPump, faCalendarWeek, faCloudUploadAlt, faArrowLeft);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
