@@ -15,8 +15,8 @@
   min-height: 90px;
   background: #fff;
   width: 100%;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
+  box-shadow: 0px 1px 4px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
   margin-bottom: 15px;
 }
 .dashboard__box-container {
@@ -38,6 +38,71 @@
   line-height: 90px;
 }
 
+.new-dashboard__box-icon {
+  color: #fff;
+  display: flex;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+  float: left;
+}
+
+.new-dashboard-online-hours {
+  color: #F28226;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 7px;
+}
+
+.new-dashboard-ratings {
+  padding: 7px 0px 7px 0px;
+}
+
+.new-dashboard__box-icon-blue {
+  color: #2197E5 !important;
+}
+
+.new-dashboard__box-icon-blue-highlight {
+  background-color: #F5FAFE !important;
+}
+
+.new-dashboard__box-icon-yellow {
+  color: #D3C657 !important;
+}
+
+.new-dashboard__box-icon-yellow-highlight {
+  background-color: #FBFAF0 !important;
+}
+
+.new-dashboard__box-icon-maroon {
+  color: #7E1419 !important;
+}
+
+.new-dashboard__box-icon-maroon-highlight {
+  background-color: #FFF8F8 !important;
+}
+
+.new-dashboard__box-icon-green {
+  color: #43B634 !important;
+}
+
+.new-dashboard__box-icon-green-highlight {
+  background-color: #F5FBF4 !important;
+}
+
+.new-dashboard__box-icon-orange {
+  color: #F28226 !important;
+}
+
+.new-dashboard__box-icon-orange-highlight {
+  background-color: #FEF8F4 !important;
+}
+
 .dashboard__box-content {
   padding: 5px 10px;
   margin-left: 90px;
@@ -51,10 +116,27 @@
   text-overflow: ellipsis;
 }
 
+.new-dashboard__box-text {
+  display: block;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #8F9BB3;
+  padding: 15px 0px 5px 0px !important;
+}
+
 .dashboard__box-number {
   display: block;
   padding-top: 5px;
   font-size: 18px;
+}
+
+.new-dashboard__box-number {
+  display: block;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 5px 0px 10px 0px !important;
 }
 
 .dashboard__box-subscript {
@@ -126,6 +208,140 @@
 
 .dashboard__rate-group {
   padding-top: 25px;
+  box-shadow: 0px 1px 7px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 15px 40px 15px 40px;
+  margin-top: 30px;
+}
+
+.upload-invoice-back-button {
+  width: 40px !important;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.upload-invoice-span {
+  display: flex;
+  align-items: center;
+}
+
+.new-dashboard-upload-container {
+  width: 500px;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.dashboard-partner-label {
+  color: #8F9BB3;
+}
+
+.dashboard-partner-filter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  height: 80px;
+}
+
+.dashboard-partner-select {
+  height: 40px;
+  border-radius: 5px;
+  width: 150px;
+  margin-left: 15px;
+  border-color: #E4E9F2;
+  padding-left: 10px;
+  color: #8F9BB3;
+}
+
+.center-text {
+  text-align: center;
+}
+
+.upload-pad-icon {
+  font-size: 90px;
+  margin: 75px;
+}
+
+.upload-pad-text {
+  margin: 0px 0px 45px 0px;
+  font-size: 17px;
+}
+
+.upload-invoice-pad {
+  height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  border: 1px dashed #C5CEE0;
+}
+
+.upload-invoice-buttons {
+  padding: 20px 0px 50px 0px;
+}
+
+.upload-invoice-next-button {
+  float: right;
+  width: 200px;
+  height: 50px;
+  border-radius: 5px;
+  border: 0px;
+  background: #f18327;
+  color: white;
+  font-weight: 800;
+}
+
+.upload-invoice-delete-button {
+  width: 200px;
+  height: 50px;
+  border-radius: 5px;
+  border: 2px solid #E4E9F2;
+  background: white;
+  color: #8F9BB3;
+  font-weight: 600;
+}
+
+.dashboard-currency-selector {
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  height: 75px;
+  align-items: flex-end;
+  position: relative;
+  margin: 0px 45px 0px 45px;
+}
+
+.dashboard-currency-buttons {
+  padding: 10px;
+  border: 1px solid #eaeaea;
+  width: 150px;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.dashboard-upload-invoice-button {
+  position: absolute;
+  right: 0px;
+  margin-bottom: 5px;
+  bottom: 10px;
+  padding: 8px 20px 8px 20px;
+  border-radius: 5px;
+  border: 0px;
+  background: #2197E5;
+  color: #fff;
+  font-weight: 700;
+}
+
+.active-currency {
+  background: #F28226;
+  color: #fff;
+}
+
+.half-star {
+  margin-left: -16px;
+}
+
+.all-stars {
+  font-size: 15px;
 }
 
 .dashboard__rate-text {
@@ -136,6 +352,30 @@
 
 .head-smol {
   font-size: 21px;
+}
+
+.new-dashboard-head-smol {
+  font-size: 21px;
+  padding-left: 10%;
+  border-bottom: 1px solid #E4E9F2;
+  padding-bottom: 10px;
+}
+
+.graph-invisible {
+  display: none;
+}
+
+.new-dashboard-active-graph {
+  border-bottom: 5px solid #F28226;
+}
+
+.new-dashboard-graph-selector {
+  padding: 0px 0px 8px 5px !important;
+  text-align: right;
+  margin: 0px 15px 0px 15px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .dashboard__rate-number {
