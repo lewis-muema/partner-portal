@@ -24,7 +24,7 @@
             </span>
             <span class="statement__column-9">
               <p class="no-margin large-font">Balance</p>
-              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
+              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.running_balance * -1 }}</p>
             </span>
           </div>
           <div class="statement__row">
@@ -35,7 +35,7 @@
             <button class="continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
           </div>
         </div>
-        <div id="payment-title" class="withdraw-modal-screen-2" v-if="payment_options">
+        <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
             <p class="no-margin x-large-font">How do you want to be paid?</p>
           </div>
@@ -56,8 +56,8 @@
               </span>
             </div>
             <div v-if="bankAccounts.length === 0">
-            You dont have any active bank accounts
-          </div>
+              You dont have any active bank accounts
+            </div>
           </div>
           <div class="statement__row">
             <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal && (bankAccounts.length > 0 || payment_method === 1)" @click="withdraw()">Withdraw Cash</button>
@@ -86,8 +86,9 @@
               <div class="col-3">
                 <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
               </div>
-              <div class="col-3">
+              <div class="col-3 to-date-selector">
                 <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+                <i v-if="to || from || vehicleId || riderId" class="fa fa-times-circle clear-inputs-icon" aria-hidden="true" @click="clearFilters()"></i>
               </div>
               <div class="subFilt col-2">
                 <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub" @click="filt()">
@@ -106,7 +107,7 @@
                   <div class="statement__box-content">
                     <span class="statement__box-text">You can withdraw :</span>
                     <br />
-                    <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.rb * -1) }}</span>
+                    <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
                   </div>
                 </div>
               </div>
@@ -121,34 +122,47 @@
           </div>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
+        <div class="orders__list-currency-filter">
+          <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
+            {{ currency }}
+          </div>
+        </div>
+        <div class="statement__list-cash-filter">
+          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+        </div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
           <div class="divider-top"></div>
-          <datatable :columns="columns" :rows="rows" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" v-if="rows" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
+          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
         <div class="col-12 padding margin-bottom">
-          <datepicker
-            v-model="from"
-            input-class="filtIn"
-            id="dtfrom"
-            placeholder="From"
-            name="from"
-          ></datepicker>
+          <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
         </div>
-        <div class="col-12 padding margin-bottom">
-          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+        <div class="col-12 padding margin-bottom to-date-selector">
+          <datepicker v-model="to" input-class="filtIn to-filter-input" id="dtto" placeholder="To" name="to"></datepicker>
+          <i v-if="to || from || vehicleId || riderId" class="fa fa-times-circle clear-inputs-icon" aria-hidden="true" @click="clearFilters()"></i>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
           <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub centered-btn" @click="filt()">
             <i class="fa fa-filter" aria-hidden="true"></i>
           </button>
         </div>
-        <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">Withdraw cash</button>
-        <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" v-else>You cannot withdraw today</button>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
-        <div class="statement__mobile-view" v-for="row in rows" :key="row.id">
+        <div class="orders__list-currency-filter-mobile">
+          <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
+            {{ currency }}
+          </div>
+        </div>
+        <div class="statement__list-cash-filter">
+          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+        </div>
+        <p v-if="filteredTransactions.length === 0" class="no-loans">No {{ mode }} found for this period</p>
+        <div class="statement__mobile-view" v-for="row in filteredTransactions" :key="row.id">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
@@ -201,6 +215,7 @@ export default {
       sessionInfo: '',
       payment_options: false,
       payment_methods: [],
+      statement_payment_methods: [],
       payment_method: '',
       payment_account: '',
       payable_amount: true,
@@ -233,7 +248,8 @@ export default {
       to: '',
       error: '',
       windowWidth: '',
-      ownerRb: '',
+      ownerRbs: '',
+      ownerBalance: '',
       bankAccounts: [],
       allBanks: [],
       opened: false,
@@ -268,6 +284,10 @@ export default {
       monthPeriod: '',
       errorObj: '',
       payload: '',
+      pay_method: 0,
+      fetchingStatus: false,
+      currencies: [],
+      activeCurrency: '',
     };
   },
   computed: {
@@ -277,12 +297,72 @@ export default {
     allowWithdrawal() {
       return this.payment_method !== '';
     },
+    paymentMethods() {
+      let methods = [];
+      if (this.pay_method === 1) {
+        methods = [5];
+        return methods;
+      }
+      if (this.pay_method === 2) {
+        this.statement_payment_methods.forEach(row => {
+          if (row !== 5) {
+            methods.push(row);
+          }
+        });
+        return methods;
+      }
+      methods = this.statement_payment_methods;
+      return methods;
+    },
+    filteredTransactions() {
+      const statements = [];
+      this.rows.forEach(row => {
+        if (this.paymentMethods.includes(row.pay_method) && row.currency === this.activeCurrency) {
+          statements.push(row);
+        }
+      });
+      return statements;
+    },
+    mode() {
+      if (this.pay_method === 0) {
+        return 'statements';
+      } else if (this.pay_method === 1) {
+        return 'cash orders';
+      }
+      return 'non-cash orders';
+    },
+    ownerRb() {
+      if (this.ownerRbs) {
+        let rb;
+        this.ownerRbs.forEach(row => {
+          if (row.currency === this.activeCurrency) {
+            rb = row;
+          }
+        });
+        return rb;
+      }
+      return '';
+    },
+  },
+  watch: {
+    pay_method() {
+      if (this.filteredTransactions.length === 0 && !this.fetchingStatus) {
+        this.displayFetchingStatus(`No ${this.mode} found for this period`, 0);
+      } else {
+        this.removeFetchingStatus();
+      }
+    },
+    filteredTransactions() {
+      this.$refs.input.currentPage = 1;
+    },
   },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.monthPeriod = moment().utc().local().format('MMMM YYYY');
-      this.fetchStatement(1);
+      this.monthPeriod = moment()
+        .utc()
+        .local()
+        .format('MMMM YYYY');
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
       this.displayFetchingStatus('Fetching statement', 0);
@@ -302,9 +382,21 @@ export default {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
     },
+    clearFilters() {
+      this.to = '';
+      this.from = '';
+      this.vehicleId = '';
+      this.riderId = '';
+      this.fetchStatement(1).then(res2 => {
+        this.fetchAllBanks().then(res3 => {
+          this.fetchOwnerBanks();
+        });
+      });
+    },
     getPaymentOptions() {
       const payload = {
         country_code: this.sessionInfo.country_code,
+        currency: this.activeCurrency,
         account_type: 'Owner',
         amount: parseFloat(this.amount),
         entry_point: 'Partner Portal',
@@ -324,9 +416,9 @@ export default {
           owner_id: this.sessionInfo.id,
         });
         axios
-          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
           .then(response => {
-            this.vehArray = response.data.msg;
+            this.vehArray = response.data.vehicles;
             this.listVehicles();
             this.listRiders();
             resolve(response);
@@ -357,26 +449,23 @@ export default {
         const payload = this.definePayload(requestType);
         this.displayFetchingStatus('Fetching statement', 0);
         axios
-          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/owner_statement`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_statement`, payload, this.config)
           .then(response => {
+            this.currencies = response.data.details.owner_balance.currencies;
+            this.activeCurrency = this.currencies[0];
+            this.ownerRbs = response.data.details.owner_balance.rb;
+            this.ownerBalance = response.data.details.owner_balance;
             if (requestType === 1) {
-              this.ownerRb = response.data.msg.owner_balance;
               this.showWithdrawButton();
             } else {
               $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
               this.removeFetchingStatus();
             }
-            if (response.data.msg.statement !== null) {
+            if (response.data.details.statement.length > 0) {
               this.handleResponse(response);
             } else {
-              if (requestType === 2) {
-                this.error = 'No statement found for this period';
-                setTimeout(() => {
-                  this.error = '';
-                }, 4000);
-              }
               this.rows = [];
-              this.displayFetchingStatus('No statement found for this period', 0);
+              this.displayFetchingStatus(`No ${this.mode} found for this period`, 0);
             }
             resolve(response);
           })
@@ -405,31 +494,33 @@ export default {
         });
       } else {
         $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
-        firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
-        lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
+        firstDay = `${moment(this.from).format('YYYY-MM-DD')} 00:00:00`;
+        lastDay = `${moment(this.to).format('YYYY-MM-DD')} 23:59:59`;
         payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
           from: firstDay,
           to: lastDay,
-          vehicle_id: this.vehicleId,
-          rider_id: this.riderId,
+          vehicle_id: this.vehicleId === '' ? null : this.vehicleId,
+          rider_id: this.riderId === '' ? null : this.riderId,
         });
       }
       return payload;
     },
     dateFormat(date) {
-        const UTCDate = this.convertToUTC(date);
-        const local = this.convertToLocalTime(UTCDate);
-        return local;
+      const UTCDate = this.convertToUTC(date);
+      const local = this.convertToLocalTime(UTCDate);
+      return local;
     },
     handleResponse(response) {
       const record = [];
-      this.ownerRb = response.data.msg.owner_balance;
-      response.data.msg.statement.forEach((row, i) => {
-        const rbRb = row.running_balance.split(' ')[1] * -1;
-        const currencyRb = row.running_balance.split(' ')[0];
-        const rbAmount = row.amount.split(' ')[1] * -1;
-        const currencyAmount = row.amount.split(' ')[0];
+      response.data.details.statement.forEach((row, i) => {
+        const rbRb = row.running_balance;
+        const currencyRb = row.currency;
+        const rbAmount = row.amount;
+        const currencyAmount = row.currency;
+        if (!this.statement_payment_methods.includes(row.payment_method)) {
+          this.statement_payment_methods.push(row.payment_method);
+        }
         record.push({
           txn: row.txn,
           pay_time: this.dateFormat(row.pay_time),
@@ -438,12 +529,19 @@ export default {
           pay_narrative: row.pay_narrative,
           rider_name: row.rider_name,
           id: i,
+          pay_method: row.payment_method,
+          currency: row.currency,
         });
       });
       this.removeFetchingStatus();
       this.rows = record;
     },
     displayFetchingStatus(message, time) {
+      if (message === 'Fetching statement') {
+        this.fetchingStatus = true;
+      } else {
+        this.fetchingStatus = false;
+      }
       setTimeout(() => {
         if (document.getElementsByTagName('tbody').length > 0) {
           const list = document.getElementsByTagName('tbody')[0];
@@ -452,6 +550,7 @@ export default {
       }, time);
     },
     removeFetchingStatus() {
+      this.fetchingStatus = false;
       const element = document.querySelector('.records-placeholder');
       if (typeof element !== 'undefined' && element !== null) {
         element.parentNode.removeChild(element);
@@ -474,7 +573,7 @@ export default {
     },
     checkDetails() {
       this.amount = this.amount.toString().replace(/[^0-9]/g, '');
-      this.sendWithdrawStatus = parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101;
+      this.sendWithdrawStatus = parseInt(this.amount, 10) <= parseInt(this.ownerRb.running_balance, 10) * -1 && parseInt(this.amount, 10) >= 101;
     },
     checkedWithDrawal(option, value) {
       if (option === 1) {
@@ -552,9 +651,9 @@ export default {
               this.fetchStatement(1);
             }, 4000);
             if (paymethod === 1) {
-              this.trackMpesaWithdrawal();
+              this.trackMpesaWithdrawal(payload);
             } else {
-              this.trackBankWithdrawal();
+              this.trackBankWithdrawal(payload);
             }
           } else {
             this.notify(1, 0, response.data.message);
@@ -562,13 +661,10 @@ export default {
               this.notify(2);
               this.fetchStatement(1);
             }, 4000);
-            if (this.opened) {
-              // this.closePopup();
-            }
           }
         })
         .catch(error => {
-          this.notify(1, 0, error.response.message);
+          this.notify(1, 0, error.response.data.message);
           setTimeout(() => {
             this.notify(2);
             this.fetchStatement(1);
@@ -627,7 +723,7 @@ export default {
       }
     },
     showWithdrawButton() {
-      if (this.ownerRb.is_withdrawal_day) {
+      if (this.ownerBalance.is_withdrawal_day) {
         this.activeStatus = true;
         if (document.querySelector('.active-btn')) {
           document.querySelector('.active-btn').style.display = 'block';
@@ -663,18 +759,14 @@ export default {
         this.riderNames = 'all riders';
       }
     },
-    trackBankWithdrawal() {
-      if (process.env.ENVIRONMENT === 'production') {
-        mixpanel.track('Withdraw to bank (partner portal)');
-      } else {
-        mixpanel.track('Test withdraw to bank (partner portal)');
+    trackMpesaWithdrawal(payload) {
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track('Owner Withdrawal to Mpesa', JSON.parse(payload));
       }
     },
-    trackMpesaWithdrawal() {
-      if (process.env.ENVIRONMENT === 'production') {
-        mixpanel.track('Withdraw to M-pesa (partner portal)');
-      } else {
-        mixpanel.track('Test withdraw to M-pesa (partner portal)');
+    trackBankWithdrawal(payload) {
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track('Owner Withdrawal to Bank', JSON.parse(payload));
       }
     },
   },

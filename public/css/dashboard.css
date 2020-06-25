@@ -53,7 +53,7 @@
 }
 
 .new-dashboard-online-hours {
-  color: #F28226;
+  color: #f28226;
   font-size: 18px;
   font-weight: 700;
   padding: 7px;
@@ -64,43 +64,43 @@
 }
 
 .new-dashboard__box-icon-blue {
-  color: #2197E5 !important;
+  color: #2197e5 !important;
 }
 
 .new-dashboard__box-icon-blue-highlight {
-  background-color: #F5FAFE !important;
+  background-color: #f5fafe !important;
 }
 
 .new-dashboard__box-icon-yellow {
-  color: #D3C657 !important;
+  color: #d3c657 !important;
 }
 
 .new-dashboard__box-icon-yellow-highlight {
-  background-color: #FBFAF0 !important;
+  background-color: #fbfaf0 !important;
 }
 
 .new-dashboard__box-icon-maroon {
-  color: #7E1419 !important;
+  color: #7e1419 !important;
 }
 
 .new-dashboard__box-icon-maroon-highlight {
-  background-color: #FFF8F8 !important;
+  background-color: #fff8f8 !important;
 }
 
 .new-dashboard__box-icon-green {
-  color: #43B634 !important;
+  color: #43b634 !important;
 }
 
 .new-dashboard__box-icon-green-highlight {
-  background-color: #F5FBF4 !important;
+  background-color: #f5fbf4 !important;
 }
 
 .new-dashboard__box-icon-orange {
-  color: #F28226 !important;
+  color: #f28226 !important;
 }
 
 .new-dashboard__box-icon-orange-highlight {
-  background-color: #FEF8F4 !important;
+  background-color: #fef8f4 !important;
 }
 
 .dashboard__box-content {
@@ -122,7 +122,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #8F9BB3;
+  color: #8f9bb3;
   padding: 15px 0px 5px 0px !important;
 }
 
@@ -226,13 +226,21 @@
 }
 
 .new-dashboard-upload-container {
-  width: 500px;
+  width: 70%;
   margin: auto;
   margin-top: 20px;
 }
 
+.upload-invoice-inputs {
+  padding: 10px;
+}
+
+.upload-invoice-pad-inputs {
+  display: flex;
+}
+
 .dashboard-partner-label {
-  color: #8F9BB3;
+  color: #8f9bb3;
 }
 
 .dashboard-partner-filter {
@@ -248,9 +256,9 @@
   border-radius: 5px;
   width: 150px;
   margin-left: 15px;
-  border-color: #E4E9F2;
+  border-color: #e4e9f2;
   padding-left: 10px;
-  color: #8F9BB3;
+  color: #8f9bb3;
 }
 
 .center-text {
@@ -268,11 +276,29 @@
 }
 
 .upload-invoice-pad {
-  height: 400px;
+  height: 300px;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  border: 1px dashed #C5CEE0;
+  align-items: center;
+  border: 1px dashed #c5cee0;
+}
+
+.upload__invoice-inputs {
+  border: 1px solid #eeeeee;
+  height: 40px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.upload-invoice-submit-button {
+  height: 40px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 5px;
+  color: #f28226;
+  border: 2px solid #f28226;
+  cursor: pointer;
+  margin-top: 27px;
 }
 
 .upload-invoice-buttons {
@@ -281,23 +307,60 @@
 
 .upload-invoice-next-button {
   float: right;
-  width: 200px;
-  height: 50px;
+  width: 120px;
+  height: 35px;
   border-radius: 5px;
   border: 0px;
-  background: #f18327;
+  background: linear-gradient(90deg, #f0f0f0 0%, #bebebe 76.56%);
   color: white;
   font-weight: 800;
+}
+
+.invoice-attached-label {
+  font-style: italic;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.invoice-change-label {
+  font-style: italic;
+  font-size: 12px;
+  text-decoration: underline;
+  color: #f18327;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ready-upload-status {
+  background: linear-gradient(90deg, #fed929 0%, #f57f20 76.56%) !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.inactive-upload-status {
+  pointer-events: none;
+}
+
+.uploading-gifs {
+  width: 150px;
+  margin: auto;
+  display: block;
 }
 
 .upload-invoice-delete-button {
   width: 200px;
   height: 50px;
   border-radius: 5px;
-  border: 2px solid #E4E9F2;
+  border: 2px solid #e4e9f2;
   background: white;
-  color: #8F9BB3;
+  color: #8f9bb3;
   font-weight: 600;
+}
+
+.upload-invoice-container {
+  width: max-content;
 }
 
 .dashboard-currency-selector {
@@ -326,13 +389,13 @@
   padding: 8px 20px 8px 20px;
   border-radius: 5px;
   border: 0px;
-  background: #2197E5;
+  background: #2197e5;
   color: #fff;
   font-weight: 700;
 }
 
 .active-currency {
-  background: #F28226;
+  background: #f28226;
   color: #fff;
 }
 
@@ -357,7 +420,7 @@
 .new-dashboard-head-smol {
   font-size: 21px;
   padding-left: 10%;
-  border-bottom: 1px solid #E4E9F2;
+  border-bottom: 1px solid #e4e9f2;
   padding-bottom: 10px;
 }
 
@@ -366,7 +429,7 @@
 }
 
 .new-dashboard-active-graph {
-  border-bottom: 5px solid #F28226;
+  border-bottom: 5px solid #f28226;
 }
 
 .new-dashboard-graph-selector {
@@ -376,6 +439,19 @@
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.new-dashboard-graph-img {
+  display: block;
+  margin: auto;
+  margin-top: 60px;
+}
+
+.new-dashboard-graph-label {
+  text-align: center;
+  font-size: 15px;
+  margin: 20px;
+  font-weight: 600;
 }
 
 .dashboard__rate-number {
