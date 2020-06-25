@@ -24,7 +24,7 @@
             </span>
             <span class="statement__column-9">
               <p class="no-margin large-font">Balance</p>
-              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.rb * -1 }}</p>
+              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.running_balance * -1 }}</p>
             </span>
           </div>
           <div class="statement__row">
@@ -56,8 +56,8 @@
               </span>
             </div>
             <div v-if="bankAccounts.length === 0">
-            You dont have any active bank accounts
-          </div>
+              You dont have any active bank accounts
+            </div>
           </div>
           <div class="statement__row">
             <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal && (bankAccounts.length > 0 || payment_method === 1)" @click="withdraw()">Withdraw Cash</button>
@@ -107,7 +107,7 @@
                   <div class="statement__box-content">
                     <span class="statement__box-text">You can withdraw :</span>
                     <br />
-                    <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.rb * -1) }}</span>
+                    <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
                   </div>
                 </div>
               </div>
@@ -122,9 +122,19 @@
           </div>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
+        <div class="orders__list-currency-filter">
+          <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
+            {{ currency }}
+          </div>
+        </div>
+        <div class="statement__list-cash-filter">
+          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+        </div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
           <div class="divider-top"></div>
-          <datatable :columns="columns" :rows="rows" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" v-if="rows" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
+          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
@@ -141,8 +151,18 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No statement found for this period</p>
-        <div class="statement__mobile-view" v-for="row in rows" :key="row.id">
+        <div class="orders__list-currency-filter-mobile">
+          <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
+            {{ currency }}
+          </div>
+        </div>
+        <div class="statement__list-cash-filter">
+          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+        </div>
+        <p v-if="filteredTransactions.length === 0" class="no-loans">No {{ mode }} found for this period</p>
+        <div class="statement__mobile-view" v-for="row in filteredTransactions" :key="row.id">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
@@ -195,6 +215,7 @@ export default {
       sessionInfo: '',
       payment_options: false,
       payment_methods: [],
+      statement_payment_methods: [],
       payment_method: '',
       payment_account: '',
       payable_amount: true,
@@ -227,7 +248,8 @@ export default {
       to: '',
       error: '',
       windowWidth: '',
-      ownerRb: '',
+      ownerRbs: '',
+      ownerBalance: '',
       bankAccounts: [],
       allBanks: [],
       opened: false,
@@ -262,6 +284,10 @@ export default {
       monthPeriod: '',
       errorObj: '',
       payload: '',
+      pay_method: 0,
+      fetchingStatus: false,
+      currencies: [],
+      activeCurrency: '',
     };
   },
   computed: {
@@ -270,6 +296,64 @@ export default {
     },
     allowWithdrawal() {
       return this.payment_method !== '';
+    },
+    paymentMethods() {
+      let methods = [];
+      if (this.pay_method === 1) {
+        methods = [5];
+        return methods;
+      }
+      if (this.pay_method === 2) {
+        this.statement_payment_methods.forEach(row => {
+          if (row !== 5) {
+            methods.push(row);
+          }
+        });
+        return methods;
+      }
+      methods = this.statement_payment_methods;
+      return methods;
+    },
+    filteredTransactions() {
+      const statements = [];
+      this.rows.forEach(row => {
+        if (this.paymentMethods.includes(row.pay_method) && row.currency === this.activeCurrency) {
+          statements.push(row);
+        }
+      });
+      return statements;
+    },
+    mode() {
+      if (this.pay_method === 0) {
+        return 'statements';
+      } else if (this.pay_method === 1) {
+        return 'cash orders';
+      }
+      return 'non-cash orders';
+    },
+    ownerRb() {
+      if (this.ownerRbs) {
+        let rb;
+        this.ownerRbs.forEach(row => {
+          if (row.currency === this.activeCurrency) {
+            rb = row;
+          }
+        });
+        return rb;
+      }
+      return '';
+    },
+  },
+  watch: {
+    pay_method() {
+      if (this.filteredTransactions.length === 0 && !this.fetchingStatus) {
+        this.displayFetchingStatus(`No ${this.mode} found for this period`, 0);
+      } else {
+        this.removeFetchingStatus();
+      }
+    },
+    filteredTransactions() {
+      this.$refs.input.currentPage = 1;
     },
   },
   created() {
@@ -312,6 +396,7 @@ export default {
     getPaymentOptions() {
       const payload = {
         country_code: this.sessionInfo.country_code,
+        currency: this.activeCurrency,
         account_type: 'Owner',
         amount: parseFloat(this.amount),
         entry_point: 'Partner Portal',
@@ -366,8 +451,11 @@ export default {
         axios
           .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_statement`, payload, this.config)
           .then(response => {
+            this.currencies = response.data.details.owner_balance.currencies;
+            this.activeCurrency = this.currencies[0];
+            this.ownerRbs = response.data.details.owner_balance.rb;
+            this.ownerBalance = response.data.details.owner_balance;
             if (requestType === 1) {
-              this.ownerRb = response.data.details.owner_balance;
               this.showWithdrawButton();
             } else {
               $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
@@ -377,7 +465,7 @@ export default {
               this.handleResponse(response);
             } else {
               this.rows = [];
-              this.displayFetchingStatus('No statement found for this period', 0);
+              this.displayFetchingStatus(`No ${this.mode} found for this period`, 0);
             }
             resolve(response);
           })
@@ -425,12 +513,14 @@ export default {
     },
     handleResponse(response) {
       const record = [];
-      this.ownerRb = response.data.details.owner_balance;
       response.data.details.statement.forEach((row, i) => {
-        const rbRb = row.running_balance.split(' ')[1] * -1;
-        const currencyRb = row.running_balance.split(' ')[0];
-        const rbAmount = row.amount.split(' ')[1] * -1;
-        const currencyAmount = row.amount.split(' ')[0];
+        const rbRb = row.running_balance;
+        const currencyRb = row.currency;
+        const rbAmount = row.amount;
+        const currencyAmount = row.currency;
+        if (!this.statement_payment_methods.includes(row.payment_method)) {
+          this.statement_payment_methods.push(row.payment_method);
+        }
         record.push({
           txn: row.txn,
           pay_time: this.dateFormat(row.pay_time),
@@ -439,12 +529,19 @@ export default {
           pay_narrative: row.pay_narrative,
           rider_name: row.rider_name,
           id: i,
+          pay_method: row.payment_method,
+          currency: row.currency,
         });
       });
       this.removeFetchingStatus();
       this.rows = record;
     },
     displayFetchingStatus(message, time) {
+      if (message === 'Fetching statement') {
+        this.fetchingStatus = true;
+      } else {
+        this.fetchingStatus = false;
+      }
       setTimeout(() => {
         if (document.getElementsByTagName('tbody').length > 0) {
           const list = document.getElementsByTagName('tbody')[0];
@@ -453,6 +550,7 @@ export default {
       }, time);
     },
     removeFetchingStatus() {
+      this.fetchingStatus = false;
       const element = document.querySelector('.records-placeholder');
       if (typeof element !== 'undefined' && element !== null) {
         element.parentNode.removeChild(element);
@@ -475,7 +573,7 @@ export default {
     },
     checkDetails() {
       this.amount = this.amount.toString().replace(/[^0-9]/g, '');
-      this.sendWithdrawStatus = parseInt(this.amount, 10) <= parseInt(this.ownerRb.rb, 10) * -1 && parseInt(this.amount, 10) >= 101;
+      this.sendWithdrawStatus = parseInt(this.amount, 10) <= parseInt(this.ownerRb.running_balance, 10) * -1 && parseInt(this.amount, 10) >= 101;
     },
     checkedWithDrawal(option, value) {
       if (option === 1) {
@@ -625,7 +723,7 @@ export default {
       }
     },
     showWithdrawButton() {
-      if (this.ownerRb.is_withdrawal_day) {
+      if (this.ownerBalance.is_withdrawal_day) {
         this.activeStatus = true;
         if (document.querySelector('.active-btn')) {
           document.querySelector('.active-btn').style.display = 'block';

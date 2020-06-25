@@ -226,9 +226,17 @@
 }
 
 .new-dashboard-upload-container {
-  width: 500px;
+  width: 70%;
   margin: auto;
   margin-top: 20px;
+}
+
+.upload-invoice-inputs {
+  padding: 10px;
+}
+
+.upload-invoice-pad-inputs {
+  display: flex;
 }
 
 .dashboard-partner-label {
@@ -268,11 +276,29 @@
 }
 
 .upload-invoice-pad {
-  height: 400px;
+  height: 300px;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   border: 1px dashed #c5cee0;
+}
+
+.upload__invoice-inputs {
+  border: 1px solid #eeeeee;
+  height: 40px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.upload-invoice-submit-button {
+  height: 40px;
+  text-align: center;
+  padding: 8px;
+  border-radius: 5px;
+  color: #f28226;
+  border: 2px solid #f28226;
+  cursor: pointer;
+  margin-top: 27px;
 }
 
 .upload-invoice-buttons {
@@ -281,13 +307,46 @@
 
 .upload-invoice-next-button {
   float: right;
-  width: 200px;
-  height: 50px;
+  width: 120px;
+  height: 35px;
   border-radius: 5px;
   border: 0px;
-  background: #f18327;
+  background: linear-gradient(90deg, #f0f0f0 0%, #bebebe 76.56%);
   color: white;
   font-weight: 800;
+}
+
+.invoice-attached-label {
+  font-style: italic;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.invoice-change-label {
+  font-style: italic;
+  font-size: 12px;
+  text-decoration: underline;
+  color: #f18327;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ready-upload-status {
+  background: linear-gradient(90deg, #fed929 0%, #f57f20 76.56%) !important;
+}
+
+.hidden {
+  display: none;
+}
+
+.inactive-upload-status {
+  pointer-events: none;
+}
+
+.uploading-gifs {
+  width: 150px;
+  margin: auto;
+  display: block;
 }
 
 .upload-invoice-delete-button {
@@ -298,6 +357,10 @@
   background: white;
   color: #8f9bb3;
   font-weight: 600;
+}
+
+.upload-invoice-container {
+  width: max-content;
 }
 
 .dashboard-currency-selector {
@@ -376,6 +439,19 @@
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.new-dashboard-graph-img {
+  display: block;
+  margin: auto;
+  margin-top: 60px;
+}
+
+.new-dashboard-graph-label {
+  text-align: center;
+  font-size: 15px;
+  margin: 20px;
+  font-weight: 600;
 }
 
 .dashboard__rate-number {

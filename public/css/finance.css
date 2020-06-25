@@ -104,7 +104,6 @@ body.dt-print-view {
   margin-top: 10px;
 }
 .statement__scrollable-row {
-  overflow-y: scroll;
   max-height: 200px;
   display: inline-block;
 }
@@ -490,6 +489,7 @@ label {
   line-height: 42px;
   height: 42px;
   font-size: 21px;
+  padding: 0px;
 }
 
 .statement__box-icon-orange {

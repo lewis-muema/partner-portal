@@ -12,7 +12,7 @@ import VuePageTitle from 'vue-page-title';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
-import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress } from 'element-ui';
+import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, DatePicker } from 'element-ui';
 import SendyAuth from '@sendyit/auth';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import VueSignaturePad from 'vue-signature-pad';
@@ -59,6 +59,7 @@ Vue.use(Menu);
 Vue.use(Submenu);
 Vue.use(MenuItem);
 Vue.use(Progress);
+Vue.use(DatePicker);
 
 Vue.use(VuePageTitle);
 
