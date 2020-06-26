@@ -40,7 +40,7 @@
             </span>
             <div class="dashboard__box-content">
               <span class="new-dashboard__box-text">Weekly airime purchase</span>
-              <span class="new-dashboard__box-number new-dashboard__box-icon-maroon">{{ activeCurrency }} 0</span>
+              <span class="new-dashboard__box-number new-dashboard__box-icon-maroon">{{ activeCurrency }} {{ weeklyAirtimePurchases }}</span>
             </div>
           </div>
         </div>
@@ -340,8 +340,8 @@ export default {
     airtimeDataPoints() {
       const months = [];
       const amountArray = [];
-      if (Object.keys(this.currencyStats).length > 0 && this.currencyStats[this.activeCurrency].airtimePurchases) {
-        this.currencyStats[this.activeCurrency].airtimePurchases.forEach((row, i) => {
+      if (Object.keys(this.currencyStats).length > 0 && this.currencyStats[this.activeCurrency].airtimeDistributions) {
+        this.currencyStats[this.activeCurrency].airtimeDistributions.forEach((row, i) => {
           months.push(row.month);
           amountArray.push(parseInt(row.amount, 10));
         });
@@ -377,6 +377,12 @@ export default {
       }
       return 0;
     },
+    weeklyAirtimePurchases() {
+      if (Object.keys(this.currencyStats).length > 0 && this.currencyStats[this.activeCurrency].weeklyAirtimePurchases) {
+        return Math.abs(parseFloat(this.currencyStats[this.activeCurrency].weeklyAirtimePurchases, 100));
+      }
+      return 0;
+    },
     uploadInvoiceStatus() {
       if (this.invoiceNumber && this.numberOfOrders && this.dateRange && document.getElementById('invoiceUpload')['files'] && this.invoiceSuccessUpload) {
         return true;
@@ -403,7 +409,7 @@ export default {
         this.dataPoints = this.ordersDataPoints;
       } else if (this.activeGraph === 'fuel advance') {
         this.dataPoints = this.fuelDataPoints;
-      } else if (val === 'airtime purchases') {
+      } else if (this.activeGraph === 'airtime purchases') {
         this.dataPoints = this.airtimeDataPoints;
       }
     },
@@ -415,36 +421,47 @@ export default {
       const payload = JSON.stringify({
         owner_id: parseInt(this.sessionInfo.id, 10),
       });
-      const riderIds = [];
-      this.sessionInfo.riders.forEach((row, i) => {
-        riderIds.push(row.rider_id);
-      });
-      const riderPayload = JSON.stringify({
-        rider_ids: riderIds,
-      });
-      this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload)
-        .then(response => {
-          if (response.data.status) {
-            this.count = response.data.pendingDeliveryNotesData[0].count;
-            this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
+      this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/dashboard', payload).then(response => {
+        this.dataStatus = true;
+        this.dataResponse = response.data;
+        Object.values(this.dataResponse.data).forEach((row, i) => {
+          if (typeof row === 'string' || typeof row === 'number') {
+            this.ownerStats[Object.keys(this.dataResponse.data)[i]] = row;
           }
-        })
-        .then(() => {
-          this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/dashboard', payload).then(response => {
-            this.dataStatus = true;
-            this.dataResponse = response.data;
-            Object.values(this.dataResponse.data).forEach((row, i) => {
-              if (typeof row === 'string' || typeof row === 'number') {
-                this.ownerStats[Object.keys(this.dataResponse.data)[i]] = row;
-              }
-              if (typeof row === 'object') {
-                this.currencyStats[Object.keys(this.dataResponse.data)[i]] = row;
-              }
-            });
-            this.activeCurrency = Object.keys(this.currencyStats)[0];
-            this.dataPoints = this.revenueDataPoints;
-          });
+          if (typeof row === 'object') {
+            this.currencyStats[Object.keys(this.dataResponse.data)[i]] = row;
+          }
         });
+        this.activeCurrency = Object.keys(this.currencyStats)[0];
+        this.dataPoints = this.revenueDataPoints;
+      }).then(() => {
+        if (Object.prototype.hasOwnProperty.call(this.sessionInfo, 'riders')) {
+          const riderIds = [];
+          this.sessionInfo.riders.forEach((row, i) => {
+            riderIds.push(row.rider_id);
+          });
+          const riderPayload = JSON.stringify({
+            rider_ids: riderIds,
+          });
+          this.getPendingDeliveryNotes(riderPayload);
+        } else {
+          this.getVehicles().then(data => {
+            const riderIds = [];
+            const parsedData = JSON.parse(localStorage.sessionData);
+            parsedData.payload.riders = this.riders;
+            localStorage.sessionData = JSON.stringify(parsedData);
+            this.riders.forEach((row, i) => {
+              riderIds.push(row.rider_id);
+            });
+            const riderPayload = JSON.stringify({
+              rider_ids: riderIds,
+            });
+            this.getPendingDeliveryNotes(riderPayload);
+          });
+        }
+      }).catch(error => {
+        this.errorObj = error.response;
+      });
     }
   },
   methods: {
@@ -471,6 +488,17 @@ export default {
 
       document.head.appendChild(script);
     },
+    getPendingDeliveryNotes(riderPayload) {
+      this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/pending_delivery_notes', riderPayload)
+      .then(response => {
+        if (response.data.status) {
+          this.count = response.data.pendingDeliveryNotesData[0].count;
+          this.amount = response.data.pendingDeliveryNotesData[0].total_amount;
+        }
+      }).catch(error => {
+        this.errorObj = error.response;
+      });
+    },
     getVehicles() {
       return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
@@ -482,9 +510,11 @@ export default {
             this.vehArray = response.data.msg;
             this.listVehicles();
             this.listRiders();
+            resolve(response);
           })
           .catch(error => {
             this.errorObj = error.response;
+            reject(response);
           });
       });
     },
@@ -526,6 +556,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
+            this.errorObj = error.response;
             resolve(error);
           });
       });
