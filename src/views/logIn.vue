@@ -99,9 +99,14 @@ export default {
   },
   created() {
     if (localStorage.expiryDate) {
-      localStorage.removeItem('expiryDate');
-      localStorage.removeItem('sessionData');
-      localStorage.removeItem('token');
+      axios
+        .post(`${process.env.VUE_APP_AUTH}logout`, { refresh_token: localStorage.refreshToken })
+        .then(response => {
+          localStorage.removeItem('expiryDate');
+          localStorage.removeItem('sessionData');
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+        });
     }
   },
   methods: {
