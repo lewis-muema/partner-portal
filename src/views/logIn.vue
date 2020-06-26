@@ -61,6 +61,16 @@ export default {
     this.onboardingPortal = process.env.ONBOARDING_PORTAL;
     $('p').css({ 'font-size': '13px' });
     $('input').css({ width: '293px' });
+    if (localStorage.expiryDate) {
+      axios
+        .post(`${process.env.VUE_APP_AUTH}logout`, { refresh_token: localStorage.refreshToken })
+        .then(response => {
+          localStorage.removeItem('expiryDate');
+          localStorage.removeItem('sessionData');
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
+        });
+    }
   },
   methods: {
     /* eslint-disable */
