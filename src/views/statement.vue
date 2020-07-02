@@ -24,7 +24,7 @@
             </span>
             <span class="statement__column-9">
               <p class="no-margin large-font">Balance</p>
-              <p class="no-margin large-font">{{ ownerRb.currency }} {{ ownerRb.running_balance * -1 }}</p>
+              <p class="no-margin large-font">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</p>
             </span>
           </div>
           <div class="statement__row">
