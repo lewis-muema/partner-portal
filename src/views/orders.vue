@@ -65,6 +65,11 @@
           <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
         </select>
         <div class="bids">
+          <div class="orders__list-cash-filter">
+            <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
+            <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
+            <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+          </div>
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
               <div class="orders__col-head pickup uppercase">pickup location</div>
@@ -82,7 +87,7 @@
             <div class="no-records" v-if="!loadingStatus && orders.length === 0">
               <p class="no-records-par">There are no orders</p>
             </div>
-            <template v-for="order in orders">
+            <template v-for="order in filteredOrders">
               <div
                 class="orders__list-row"
                 @click="toggle(order.id)"
@@ -354,9 +359,38 @@ export default {
       errorObj: '',
       ordercount: [],
       orderRange: '0 - 100',
+      pay_method: 0,
+      payment_methods: [],
     };
   },
-  computed: {},
+  computed: {
+    paymentMethods() {
+      let methods = [];
+      if (this.pay_method === 1) {
+        methods = [5];
+        return methods;
+      }
+      if (this.pay_method === 2) {
+        this.payment_methods.forEach(row => {
+          if (row !== 5) {
+            methods.push(row);
+          }
+        });
+        return methods;
+      }
+      methods = this.payment_methods;
+      return methods;
+    },
+    filteredOrders() {
+      const orders = [];
+      this.orders.forEach(row => {
+        if (this.paymentMethods.includes(row.pay_method)) {
+          orders.push(row);
+        }
+      });
+      return orders;
+    },
+  },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
@@ -764,6 +798,9 @@ export default {
         orderDetails.amount = row.amount;
       } else {
         orderDetails.amount = row.take_home;
+      }
+      if (!this.payment_methods.includes(orderDetails.pay_method)) {
+        this.payment_methods.push(orderDetails.pay_method);
       }
       orderDetails.orderNo = orderno;
       orderDetails.id = i + 1;
