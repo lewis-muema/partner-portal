@@ -13,6 +13,7 @@
   "dependencies": {
     "@elastic/apm-rum-vue": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
+    "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
     "aws-s3": "^2.0.5",
@@ -44,7 +45,7 @@
     "vue-signature-pad": "^2.0.0",
     "vue-tel-input": "^2.2.2",
     "vuejs-datatable": "^1.7.0",
-    "vuejs-datepicker": "^1.5.4",
+    "vuejs-datepicker": "^1.6.2",
     "vuejs-datetimepicker": "^1.1.13",
     "vuex": "^3.0.1",
     "webpack-merge": "^4.2.1"

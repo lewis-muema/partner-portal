@@ -104,6 +104,7 @@ body.dt-print-view {
   margin-top: 10px;
 }
 .statement__scrollable-row {
+  max-height: 200px;
   display: inline-block;
 }
 .statement__scrollable-row::-webkit-scrollbar {
@@ -298,6 +299,7 @@ tr.shown td.details-control {
 
 .vehicles__mod-up {
   flex-direction: column;
+  padding-top: 40px !important;
 }
 
 .add-driver-modal {
@@ -487,6 +489,7 @@ label {
   line-height: 42px;
   height: 42px;
   font-size: 21px;
+  padding: 0px;
 }
 
 .statement__box-icon-orange {
@@ -751,6 +754,20 @@ input:-ms-input-placeholder {
 
 .ui-widget {
   font-size: 14.9px;
+}
+
+.to-date-selector {
+  display: flex;
+  align-items: center;
+}
+
+.clear-inputs-icon {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.to-date-selector .vdp-datepicker {
+  width: 100%;
 }
 
 .printContain {
