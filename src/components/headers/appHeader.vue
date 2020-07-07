@@ -32,6 +32,9 @@
               <router-link to="/savings" class="dropdown-link">
                 <p class="dropdown-item">Savings</p>
               </router-link>
+              <router-link to="/documents" class="dropdown-link">
+                <p class="dropdown-item">Documents</p>
+              </router-link>
               <router-link v-if="performance_status" to="/performance" class="dropdown-link">
                 <p class="dropdown-item">Performance</p>
               </router-link>

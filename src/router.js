@@ -13,6 +13,7 @@ import Vehicles from './views/vehicles.vue';
 import Tracking from './views/tracking.vue';
 import DriverRequest from './views/driverRequest.vue';
 import ExternalTracking from './views/externalTracking.vue';
+import Documents from './views/documents.vue';
 import Performance from './views/performance.vue';
 import ExternalLogin from './views/externalLogin.vue';
 import AuthLogin from './views/authLogin.vue';
@@ -134,6 +135,11 @@ export default new Router({
       path: '/forgotpassword',
       name: 'forgotpassword',
       component: ForgotPassword,
+    },
+    {
+      path: '/documents',
+      name: 'documents',
+      component: Documents,
     },
   ],
 });
