@@ -4,19 +4,18 @@
       <div class="rider--stats-menu">
         <div class="secondary-inner">
           <div class="secnav-container rider--stats-section">
-            <span class="secnav-page" :class="activeTab === 'drivingLicense' ? 'active' : ''" @click="activeTab = 'drivingLicense'" >Driving License</span>
-            <span class="secnav-page" :class="activeTab === 'insurance' ? 'active' : ''" @click="activeTab = 'insurance'" >Insurance</span>
-            <span class="secnav-page" :class="activeTab === 'bikeStatus' ? 'active' : ''" @click="activeTab = 'bikeStatus'" >Bike status</span>
-            <span class="secnav-page" :class="activeTab === 'refunds' ? 'active' : ''" @click="activeTab = 'refunds'" >Refunds</span>
+            <span class="secnav-page" :class="activeTab === 'drivingLicense' ? 'active' : ''" @click="activeTab = 'drivingLicense'">Driving License</span>
+            <span class="secnav-page" :class="activeTab === 'insurance' ? 'active' : ''" @click="activeTab = 'insurance'">Insurance</span>
+            <span class="secnav-page" :class="activeTab === 'bikeStatus' ? 'active' : ''" @click="activeTab = 'bikeStatus'">Bike status</span>
+            <span class="secnav-page" :class="activeTab === 'refunds' ? 'active' : ''" @click="activeTab = 'refunds'">Refunds</span>
           </div>
-
         </div>
       </div>
     </div>
-    <drivingLicense v-if="activeTab === 'drivingLicense'"/>
-    <insurance v-if="activeTab === 'insurance'"/>
-    <bikeStatus v-if="activeTab === 'bikeStatus'"/>
-    <refunds v-if="activeTab === 'refunds'"/>
+    <drivingLicense v-if="activeTab === 'drivingLicense'" />
+    <insurance v-if="activeTab === 'insurance'" />
+    <bikeStatus v-if="activeTab === 'bikeStatus'" />
+    <refunds v-if="activeTab === 'refunds'" />
   </div>
 </template>
 
@@ -29,11 +28,11 @@ import refunds from './refunds.vue';
 export default {
   name: 'Documents',
   components: {
-     drivingLicense,
-     insurance,
-     bikeStatus,
-     refunds,
-   },
+    drivingLicense,
+    insurance,
+    bikeStatus,
+    refunds,
+  },
   data() {
     return {
       activeTab: 'drivingLicense',
@@ -65,5 +64,5 @@ export default {
 </script>
 
 <style>
-@import '../assets/css/performance.css';
+@import '../assets/css/performance.css?v=1';
 </style>

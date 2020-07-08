@@ -2,7 +2,7 @@
   <documentsLoading v-if="show_loading" />
   <div class="stats-dash" v-else>
     <div class="row dashboard__row">
-      <el-table :data="tableData" style="width: 100%">
+      <el-table :data="tableData" class="documents-table-outer">
         <el-table-column label="" width="50">
           <i class="el-icon-success success-license"></i>
         </el-table-column>
@@ -122,8 +122,5 @@ export default {
 </script>
 
 <style>
-@import '../assets/css/performance_section.css';
-.insurance-rider-data {
-  padding-top: 3%;
-}
+@import '../assets/css/performance_section.css?v=1';
 </style>

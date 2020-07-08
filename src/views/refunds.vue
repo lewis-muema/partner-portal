@@ -245,5 +245,5 @@ export default {
 </script>
 
 <style>
-@import '../assets/css/performance_section.css';
+@import '../assets/css/performance_section.css?v=1';
 </style>

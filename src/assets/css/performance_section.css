@@ -287,3 +287,71 @@
 .refund-main-dialog {
   width: 100%;
 }
+.dialog-inner-label {
+  font-size: 15px;
+  line-height: 21px;
+  color: #000000;
+}
+.el-dialog__title {
+  margin-left: 3% !important;
+}
+.vendor_active_final {
+  background: #edf8ff;
+  border: 2px solid #1b7fc3;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  animation: flip-scale-down-diag-2 0.5s linear;
+}
+@keyframes flip-scale-down-diag-2 {
+  0% {
+    transform: scale(1) rotate3d(-1, 1, 0, 0deg);
+  }
+  50% {
+    transform: scale(0.4) rotate3d(-1, 1, 0, -90deg);
+  }
+  100% {
+    transform: scale(1) rotate3d(-1, 1, 0, -180deg);
+  }
+}
+.carrier-upper-padding {
+  padding-top: 2%;
+  margin-bottom: 8%;
+}
+.vendors-final-outerline {
+  display: flex;
+  justify-content: space-between;
+  width: 89%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+.vendor-final-cards {
+  border: 1.0945px solid #d8d8d8;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  width: 42%;
+}
+.vendor-types-final {
+  height: 82px;
+  min-width: 74px;
+  padding: 15%;
+  cursor: pointer;
+  margin-left: 14%;
+}
+.vendor-label {
+  text-align: center;
+  font-size: 12px;
+  line-height: 21px;
+  color: #000000;
+}
+.radio-options {
+  color: #000000;
+}
+.documents-table-outer {
+  width: 100%;
+}
+.bike-status-rider-label {
+  padding-top: 3%;
+}
+.insurance-rider-data {
+  padding-top: 3%;
+}
