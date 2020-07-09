@@ -1,5 +1,5 @@
 <template lang="html">
-  <documentsLoading v-if="show_loading" />
+  <documentsLoading v-if="show_loading"/>
   <div class="stats-dash" v-else>
     <div class="request-refund--section">
       <el-button size="mini" class="request-refund-btn" @click="openRefundDialog()">
@@ -53,25 +53,34 @@
             <p>
               Description
             </p>
-            <input type="text" class="request_refund-inputs" />
+            <input type="text" class="request_refund-inputs" v-model="description" />
           </div>
           <div class="request-refund-inputs">
             <p>
               Order number
             </p>
-            <input type="text" class="request_refund-inputs" />
+            <input type="text" class="request_refund-inputs" v-model="order_number" />
           </div>
+          <div class="request-refund-inputs">
+            <p>
+              Partner
+            </p>
+            <el-select v-model="rider" placeholder="Select Partner" class="refund-rider-info">
+              <el-option v-for="item in rider_list" :key="item.rider_id" :label="item.name" :value="item.rider_id"> </el-option>
+            </el-select>
+          </div>
+
           <div class="request-refund-inputs">
             <p>
               Refund amount
             </p>
-            <input type="text" class="request_refund-inputs" />
+            <input type="number" class="request_refund-inputs" v-model="refund_amount" />
           </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false" class="confirm-refund">Confirm</el-button>
+        <el-button type="primary" @click="initiateRefund()" class="confirm-refund">Confirm</el-button>
       </span>
     </el-dialog>
 
@@ -79,7 +88,7 @@
       <div class="inner-dialog">
         <div class="drag-image">
           <div class="download-refund-img">
-            <img class="refund-documents" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" alt="" />
+            <img class="refund-documents" :src="requestViewData.documents" alt="" />
           </div>
         </div>
         <div class="main-dialog">
@@ -99,7 +108,7 @@
             <p class="request-refund-label">
               Refund amount
             </p>
-            <p class="refund-text">Ksh {{ requestViewData.amount }}</p>
+            <p class="refund-text">{{ requestViewData.currency }} {{ requestViewData.amount }}</p>
           </div>
         </div>
       </div>
@@ -107,16 +116,20 @@
         <el-button @click="closeDialog()" class="cancel-refund">Back</el-button>
       </span>
     </el-dialog>
-  </div></template>
+    <notify /></div></template>
 
 <script>
+import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
 import documentsLoading from './documentsLoading.vue';
+import notify from '../components/notification';
+
+let s3 = '';
 
 export default {
   name: 'refunds',
-  components: { documentsLoading },
+  components: { documentsLoading, notify },
   data() {
     return {
       show_loading: true,
@@ -133,57 +146,140 @@ export default {
       refundRequest: false,
       requestViewData: {},
       refundImageData: {},
-      refundsData: [
-        {
-          id: 1,
-          rider_id: 1,
-          name: 'James Doe',
-          vendor_type: 1,
-          phone_no: '0729464402',
-          description: 'Kitui delivery fee',
-          order_no: 'ADDF4U4U4U44I',
-          amount: 1200,
-          documents: ['https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/refund_requests/1/1593766051139.jpg', 'https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/refund_requests/1/1593769844106.jpg'],
-          status: 0,
-          date: '2020-07-03 00:00:00',
-        },
-        {
-          id: 2,
-          rider_id: 1,
-          name: 'James Doe',
-          vendor_type: 1,
-          phone_no: '0729464402',
-          description: 'Kitui delivery fee',
-          order_no: 'ADDF4U4U4U44I',
-          amount: 1200,
-          documents: ['https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/refund_requests/1/1593766051139.jpg', 'https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/refund_requests/1/1593769844106.jpg'],
-          status: 1,
-          date: '2020-07-03 00:00:00',
-        },
-        {
-          id: 3,
-          rider_id: 1,
-          name: 'James Doe',
-          vendor_type: 1,
-          phone_no: '0729464402',
-          description: 'Kitui delivery fee',
-          order_no: 'ADDF4U4U4U44I',
-          amount: 1200,
-          documents: ['https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/refund_requests/1/1593766051139.jpg', 'https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/refund_requests/1/1593769844106.jpg'],
-          status: 2,
-          date: '2020-07-03 00:00:00',
-        },
-      ],
+      rider_list: [],
+      rider: '',
+      description: '',
+      order_number: '',
+      refund_amount: '',
+      fileName: '',
+      refundsData: [],
     };
   },
   created() {
+    this.initiateS3();
+    this.fetchDrivers();
     setTimeout(() => {
       this.getRefundsData();
     }, 5000);
   },
   methods: {
+    initiateS3() {
+      const script = document.createElement('script');
+      script.onload = () => {
+        const albumBucketName = 'sendy-partner-docs';
+        const bucketRegion = 'eu-west-1';
+        const IdentityPoolId = 'eu-west-1:2812c134-0c22-4755-be2d-8fa850a041ee';
+
+        AWS.config.update({
+          region: bucketRegion,
+          credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId,
+          }),
+        });
+
+        s3 = new AWS.S3({
+          apiVersion: '2006-03-01',
+          params: { Bucket: albumBucketName },
+        });
+      };
+      script.src = 'https://sdk.amazonaws.com/js/aws-sdk-2.7.20.min.js';
+
+      document.head.appendChild(script);
+    },
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     getRefundsData() {
-      this.show_loading = false;
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const payload = {
+        owner_id: sessionInfo.id,
+      };
+      axios
+        .post(`${process.env.PARTNERS_APP}owner_refund_requests`, payload, this.config)
+        .then(res => {
+          this.show_loading = false;
+          this.refundsData = res.data;
+        })
+        .catch(error => {
+          this.show_loading = false;
+          this.refundsData = [];
+        });
+    },
+    fetchDrivers() {
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const riderPayload = {
+        owner_id: sessionInfo.id,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+        .then(res => {
+          this.rider_list = res.data.riders;
+        })
+        .catch(error => {
+          this.rider_list = [];
+        });
+    },
+    initiateRefund() {
+      if (Object.keys(this.refundImageData).length === 0 || this.description === '' || this.order_number === '' || this.rider === '' || this.refund_amount === '') {
+        this.notify(3, 0, 'Kindly provide all values');
+      } else {
+        const file = this.refundImageData.file;
+        const fileType = file.type;
+        const fileName = this.sanitizeFilename(file.name);
+        const rider = parseInt(this.rider, 10);
+        this.fileName = fileName;
+        const albumPhotosKey = `${encodeURIComponent('refund_requests')}/${rider}/`;
+        const photoKey = albumPhotosKey + fileName;
+        this.fileName = photoKey;
+        s3.upload(
+          {
+            Key: photoKey,
+            Body: file,
+            ACL: 'public-read',
+            ContentType: fileType,
+          },
+          (err, data) => {
+            if (err) {
+              console.log('There was an error uploading your photo: ', err.message);
+            } else {
+              this.requestToBackend();
+            }
+            // eslint-disable-next-line comma-dangle
+          }
+        );
+      }
+    },
+    requestToBackend() {
+      const payload = {
+        rider_id: parseInt(this.rider, 10),
+        description: this.description,
+        order_no: this.order_number,
+        amount: this.refund_amount,
+        documents: [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`],
+      };
+      axios
+        .post(`${process.env.PARTNERS_APP}request_refund`, payload, this.config)
+        .then(res => {
+          this.dialogVisible = false;
+          this.show_loading = true;
+          this.getRefundsData();
+          this.clearSavedData();
+        })
+        .catch(error => {
+          this.notify(3, 0, 'Request Refund Error . Try again');
+        });
+    },
+    clearSavedData() {
+      this.refundImageData = [];
+      this.description = '';
+      this.order_number = '';
+      this.rider = '';
+      this.refund_amount = '';
+    },
+    sanitizeFilename(name) {
+      const rider = parseInt(this.rider, 10);
+      const temp_name = `refunds_${new Date().getTime()}.${name.split('.').pop()}`;
+      return temp_name;
     },
     checkStatus(value) {
       let status = '';
@@ -225,7 +321,6 @@ export default {
     },
     handlePictureCardPreview(file) {
       this.refundImageData = file;
-      console.log('file', file);
     },
     closeDialog() {
       this.refundRequest = false;
@@ -244,6 +339,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import '../assets/css/performance_section.css?v=1';
 </style>

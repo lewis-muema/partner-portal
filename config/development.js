@@ -13,4 +13,5 @@ module.exports = {
   GOOGLE_API_KEY: 'AIzaSyBnM4OCMY-uyLelgBSYBQycayIV3yCAwtc',
   ELASTIC_APM_SERVER_URL: 'http://localhost:8200',
   ELASTIC_APM_SERVICE_VERSION: packageJson.version,
+  PARTNERS_APP: 'https://authtest.sendyit.com/partners/',
 };
