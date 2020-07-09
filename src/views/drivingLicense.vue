@@ -128,7 +128,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import '../assets/css/performance_section.css?v=1';
 .driver-info {
   padding-top: 9%;

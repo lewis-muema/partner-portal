@@ -40,4 +40,23 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+.el-message-box__headerbtn {
+  text-align: end !important;
+  border-style: none !important;
+}
+.el-button--small {
+  width: 30% !important;
+}
+.el-dialog__headerbtn {
+  text-align: end !important;
+  border-style: none !important;
+}
+.el-dialog {
+  max-height: 75%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.el-dialog__headerbtn :focus {
+  outline: none !important ;
+}
 </style>
