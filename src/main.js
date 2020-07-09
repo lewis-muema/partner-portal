@@ -12,7 +12,7 @@ import VuePageTitle from 'vue-page-title';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
-import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, RadioButton } from 'element-ui';
+import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, RadioButton } from 'element-ui';
 import SendyAuth from '@sendyit/auth';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import VueSignaturePad from 'vue-signature-pad';
@@ -69,6 +69,8 @@ Vue.use(Upload);
 Vue.use(Radio);
 Vue.use(RadioGroup);
 Vue.use(RadioButton);
+Vue.use(Select);
+Vue.use(Option);
 Vue.use(Loading.directive);
 
 Vue.prototype.$confirm = MessageBox.confirm;

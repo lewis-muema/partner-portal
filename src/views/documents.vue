@@ -12,10 +12,10 @@
         </div>
       </div>
     </div>
-    <drivingLicense v-if="activeTab === 'drivingLicense'" />
-    <insurance v-if="activeTab === 'insurance'" />
-    <bikeStatus v-if="activeTab === 'bikeStatus'" />
-    <refunds v-if="activeTab === 'refunds'" />
+    <drivingLicense v-if="activeTab === 'drivingLicense'" :key="componentKey" />
+    <insurance v-if="activeTab === 'insurance'" :key="componentKey" />
+    <bikeStatus v-if="activeTab === 'bikeStatus'" :key="componentKey" />
+    <refunds v-if="activeTab === 'refunds'" :key="componentKey" />
   </div>
 </template>
 
@@ -36,33 +36,21 @@ export default {
   data() {
     return {
       activeTab: 'drivingLicense',
+      componentKey: 0,
     };
   },
-  methods: {
-    showActiveLicense() {
-      if (this.$route.path === '/drivingLicense') {
-        return 'active';
-      }
-    },
-    showActiveInsurance() {
-      if (this.$route.path === '/insurance') {
-        return 'active';
-      }
-    },
-    showActiveBikeStatus() {
-      if (this.$route.path === '/bikeStatus') {
-        return 'active';
-      }
-    },
-    showActiveRefunds() {
-      if (this.$route.path === '/refunds') {
-        return 'active';
-      }
+  watch: {
+    activeTab(session) {
+      this.componentKey += 1;
     },
   },
+  created() {
+    this.componentKey += 1;
+  },
+  methods: {},
 };
 </script>
 
-<style>
+<style scoped>
 @import '../assets/css/performance.css?v=1';
 </style>

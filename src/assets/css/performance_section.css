@@ -182,6 +182,7 @@
   background-color: #635c5c;
   border-color: #635c5c;
   color: #fff;
+  width: 90% !important;
 }
 .declined-highlight {
   color: #ff0000;
@@ -201,6 +202,7 @@
   border-color: #ff7900;
   color: #fff;
   height: 48px !important;
+  width: 14% !important;
 }
 .inner-dialog {
   display: flex;
@@ -354,4 +356,10 @@
 }
 .insurance-rider-data {
   padding-top: 3%;
+}
+.refund-rider-info {
+  width: 100% !important;
+}
+button:focus {
+  outline: none !important;
 }
