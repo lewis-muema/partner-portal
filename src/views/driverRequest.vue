@@ -94,6 +94,8 @@ export default {
               this.message = 'Rider invite accepted';
             } else if (this.allocationStatus === 3) {
               this.message = 'Rider invite rejected';
+            } else if (this.allocationStatus === 4) {
+              this.message = 'Rider invite cancelled by the owner';
             }
           } else {
             this.message = response.data.msg;
