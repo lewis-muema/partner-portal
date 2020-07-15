@@ -56,7 +56,7 @@
             </div>
             <div class="loading" v-if="loadingStatus"></div>
             <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-              <p class="no-records-par">There are no orders</p>
+              <p class="no-records-par">{{ loaderMessage }}</p>
             </div>
             <template v-for="order in filteredOrders">
               <div
@@ -285,6 +285,7 @@ export default {
       orderRange: '0 - 100',
       pay_method: 0,
       payment_methods: [],
+      loaderMessage: 'There are no orders',
     };
   },
   computed: {
@@ -706,6 +707,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
+            this.loaderMessage = 'We are experiencing some issues while fetching your orders, Please try again later';
             this.loadingStatus = false;
           }
         });
