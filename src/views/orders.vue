@@ -6,35 +6,16 @@
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
           <span class="container__search-input">
-            <input
-              type="text"
-              onfocus="value = ''"
-              class="container__search-element"
-              id="inp"
-              placeholder="Enter pickup"
-              @input="filterPickup()"
-              @keyup.delete="refresh()"
-            />
+            <input type="text" onfocus="value = ''" class="container__search-element" id="inp" placeholder="Enter pickup" @input="filterPickup()" @keyup.delete="refresh()" />
           </span>
           <span class="container__search-input">
-            <input
-              type="text"
-              onfocus="value = ''"
-              class="container__search-element"
-              id="dst"
-              placeholder="Enter destination"
-              @input="filterDest()"
-              @keyup.delete="refresh()"
-            />
+            <input type="text" onfocus="value = ''" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
           </span>
           <span class="container__search-select">
-            <select
-              name
-              class="container__search-element select-font"
-              @change="filterVendor()"
-              id="vend"
-            >
+            <select name class="container__search-element select-font" @change="filterVendor()" id="vend" :disabled="orders.length === 0">
               <option value selected>Select type of truck</option>
+              <option value="Pick up">Pick Up</option>
+              <option value="Van">Van</option>
               <option value="3T Truck">3 Tonne Truck</option>
               <option value="5T Truck">5 Tonne Truck</option>
               <option value="10T Truck">10 Tonne Truck</option>
@@ -45,23 +26,12 @@
             </select>
           </span>
           <span class="container__search-select" v-if="ordercount.length > 0">
-            <select
-              name
-              class="container__search-element select-font"
-              @change="definePayload()"
-              v-model="orderRange"
-            >
+            <select name class="container__search-element select-font" @change="definePayload()" v-model="orderRange">
               <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
             </select>
           </span>
         </div>
-        <select
-          name
-          class="order-range"
-          @change="definePayload()"
-          v-model="orderRange"
-          v-if="ordercount.length > 0"
-        >
+        <select name class="order-range" @change="definePayload()" v-model="orderRange" v-if="ordercount.length > 0">
           <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
         </select>
         <div class="bids">
@@ -80,12 +50,13 @@
               <div class="orders__col-head truck uppercase">truck</div>
               <div class="orders__col-head orderNo">order number</div>
               <div class="orders__col-head price-align uppercase">price</div>
+              <div class="orders__col-head price-align uppercase">vat</div>
               <div class="orders__col-head bid-in uppercase"></div>
               <div class="orders__col-head center-action uppercase">action</div>
             </div>
             <div class="loading" v-if="loadingStatus"></div>
             <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-              <p class="no-records-par">There are no orders</p>
+              <p class="no-records-par">{{ loaderMessage }}</p>
             </div>
             <template v-for="order in filteredOrders">
               <div
@@ -97,14 +68,8 @@
               >
                 <div class="orders__list-col pickup">
                   <p class="orders__mobile-col">Pickup</p>
-                  <p
-                    class="row1"
-                    @mouseover="showFromTooltip(order.id)"
-                    @mouseout="hideFromTooltip(order.id)"
-                  >{{ shortFromName(order.id) }}</p>
-                  <span
-                    :class="`tooltiptext sp${order.id}`"
-                  >{{ order.from_name }}, {{ order.start_address }}</span>
+                  <p class="row1" @mouseover="showFromTooltip(order.id)" @mouseout="hideFromTooltip(order.id)">{{ shortFromName(order.id) }}</p>
+                  <span :class="`tooltiptext sp${order.id}`">{{ order.from_name }}, {{ order.start_address }}</span>
                 </div>
                 <div class="orders__list-col load">
                   <p class="orders__mobile-col">Load</p>
@@ -112,14 +77,8 @@
                 </div>
                 <div class="orders__list-col destination">
                   <p class="orders__mobile-col">Destination</p>
-                  <p
-                    class="row2"
-                    @mouseover="showToTooltip(order.id)"
-                    @mouseout="hideToTooltip(order.id)"
-                  >{{ shortToName(order.id) }}</p>
-                  <span
-                    :class="`tooltiptext sps${order.id}`"
-                  >{{ order.to_name }}, {{ order.end_address }}</span>
+                  <p class="row2" @mouseover="showToTooltip(order.id)" @mouseout="hideToTooltip(order.id)">{{ shortToName(order.id) }}</p>
+                  <span :class="`tooltiptext sps${order.id}`">{{ order.to_name }}, {{ order.end_address }}</span>
                 </div>
                 <div class="orders__list-col distance">
                   <p class="orders__mobile-col">Distance</p>
@@ -137,56 +96,35 @@
                   <p class="orders__mobile-col">order number</p>
                   <p>{{ order.orderNo }}</p>
                 </div>
+
                 <div class="orders__list-col price-align">
                   <p class="orders__mobile-col">Price</p>
                   <p class="right-align">{{ order.currency }} {{ currencyFormat(order.id) }}</p>
                 </div>
+                <div class="orders__list-col price-align">
+                  <p class="orders__mobile-col">Vat</p>
+                  <p class="right-align">{{ order.currency }} {{ vatCurrencyFormat(order.id) }}</p>
+                </div>
+
                 <div class="orders__list-col bid-in"></div>
                 <div class="orders__list-col center-action">
                   <P class="orders__mobile-col uppercase">action</P>
                   <div class="orders__statuses">
                     <span>
-                      <p
-                        class="orders__confirm-icon confirmedbutton orders__buttons"
-                        v-if="confirmedStatus(order)"
-                      >confirmed</p>
-                      <p
-                        class="orders__confirm-icon in-transitButton orders__buttons"
-                        v-if="inTransitStatus(order)"
-                      >in transit</p>
-                      <p
-                        class="orders__confirm-icon deliveredButton orders__buttons"
-                        v-if="deliveredStatus(order)"
-                      >delivered</p>
-                      <p
-                        class="orders__confirm-icon pendingDnotes orders__buttons"
-                        v-if="pendingDnotes(order)"
-                      >pending d.notes</p>
-                      <p
-                        class="orders__confirm-icon cancelledButton orders__buttons"
-                        v-if="cancelledStatus(order)"
-                      >cancelled</p>
+                      <p class="orders__confirm-icon confirmedbutton orders__buttons" v-if="confirmedStatus(order)">confirmed</p>
+                      <p class="orders__confirm-icon in-transitButton orders__buttons" v-if="inTransitStatus(order)">in transit</p>
+                      <p class="orders__confirm-icon deliveredButton orders__buttons" v-if="deliveredStatus(order)">delivered</p>
+                      <p class="orders__confirm-icon pendingDnotes orders__buttons" v-if="pendingDnotes(order)">pending d.notes</p>
+                      <p class="orders__confirm-icon cancelledButton orders__buttons" v-if="cancelledStatus(order)">cancelled</p>
                     </span>
                     <span>
-                      <i
-                        class="material-icons icon arrow"
-                        :class="orderStatuses(order)"
-                        v-if="opened.includes(order.id)"
-                      >keyboard_arrow_down</i>
-                      <i
-                        class="material-icons icon arrow"
-                        :class="orderStatuses(order)"
-                        v-if="!opened.includes(order.id)"
-                      >keyboard_arrow_right</i>
+                      <i class="material-icons icon arrow" :class="orderStatuses(order)" v-if="opened.includes(order.id)">keyboard_arrow_down</i>
+                      <i class="material-icons icon arrow" :class="orderStatuses(order)" v-if="!opened.includes(order.id)">keyboard_arrow_right</i>
                     </span>
                   </div>
                 </div>
               </div>
-              <div
-                v-if="opened.includes(order.id)"
-                :class="'row-' + order.id "
-                :key="order.orderNo"
-              >
+              <div v-if="opened.includes(order.id)" :class="'row-' + order.id" :key="order.orderNo">
                 <div colspan="8" class="expanded-row">
                   <div class="map-details--go-back" @click="toggle(order.id)">
                     <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
@@ -213,7 +151,7 @@
                     </div>
                   </div>
                   <div class="order__column">
-                    <p class="order__weight heading uppercase">approximate weight of the order</p>
+                    <p class="order__weight heading uppercase">weight of the order</p>
                     <p class="order__weight par" v-if="!weight">Not applicable</p>
                     <p class="order__weight par" v-else>{{ weight }}</p>
                     <p class="order__loader heading uppercase">loader(s) needed</p>
@@ -242,29 +180,15 @@
                         <p class="order__amount par">D Notes NOT delivered</p>
                       </div>
                       <div class="assigned" v-if="orderStatuses(order) === 'confirmedbutton'">
-                        <button
-                          class="intransit--order__button order__button"
-                          @click="completeOrder(order, 'rider_app_pick_up')"
-                          v-if="sessionInfo.super_user"
-                        >
+                        <button class="intransit--order__button order__button" @click="completeOrder(order, 'rider_app_pick_up')" v-if="sessionInfo.super_user">
                           Pick up the order
-                          <div
-                            class="loading-spinner intransit--order__spinner"
-                            v-if="orderLoadingStatus"
-                          ></div>
+                          <div class="loading-spinner intransit--order__spinner" v-if="orderLoadingStatus"></div>
                         </button>
                       </div>
                       <div class="assigned" v-if="orderStatuses(order) === 'in-transitButton'">
-                        <button
-                          class="complete--order__button order__button"
-                          @click="completeOrder(order, 'rider_app_deliver')"
-                          v-if="sessionInfo.super_user"
-                        >
+                        <button class="complete--order__button order__button" @click="completeOrder(order, 'rider_app_deliver')" v-if="sessionInfo.super_user">
                           Complete order
-                          <div
-                            class="loading-spinner complete--order__spinner"
-                            v-if="orderLoadingStatus"
-                          ></div>
+                          <div class="loading-spinner complete--order__spinner" v-if="orderLoadingStatus"></div>
                         </button>
                       </div>
                     </div>
@@ -282,10 +206,10 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import timezone from '../mixins/timezone';
 import notify from '../components/notification';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
-import timezone from '../mixins/timezone';
 
 let interval = '';
 
@@ -361,6 +285,7 @@ export default {
       orderRange: '0 - 100',
       pay_method: 0,
       payment_methods: [],
+      loaderMessage: 'There are no orders',
     };
   },
   computed: {
@@ -504,6 +429,17 @@ export default {
         .toString()
         .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
         .split('.')[0];
+    },
+    vatCurrencyFormat(id) {
+      if (this.orders[id - 1].vat_amount) {
+        const amount = this.orders[id - 1].vat_amount;
+        return amount
+          .toString()
+          .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
+          .split('.')[0];
+      } else {
+        return 0;
+      }
     },
     formatDistance(id) {
       const distance = this.orders[id - 1].distance;
@@ -672,7 +608,10 @@ export default {
         sim_card_sn: order.driverSerial,
         rider_phone: order.driverPhone,
         order_no: order.orderNo,
-        destination: { lat: -1.23, lng: 38.45 },
+        destination: {
+          lat: -1.23,
+          lng: 38.45,
+        },
         distance: 9,
         polyline: 'encoded_string',
         version_code: 1000,
@@ -768,6 +707,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
+            this.loaderMessage = 'We are experiencing some issues while fetching your orders, Please try again later';
             this.loadingStatus = false;
           }
         });
@@ -814,6 +754,7 @@ export default {
       orderDetails.orderStatus = orderStatus;
       orderDetails.confirmStatus = confirmStatus;
       orderDetails.delivery_status = row.delivery_status;
+      orderDetails.vat_amount = row.vat_amount;
       orderDetails.order_type = Object.prototype.hasOwnProperty.call(JSON.parse(row.order_details).values, 'dedicated_order_details') ? JSON.parse(row.order_details).values.dedicated_order_details : 'Normal order';
       return orderDetails;
     },
