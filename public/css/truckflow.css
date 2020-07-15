@@ -146,6 +146,9 @@ a {
   background-color: #fff;
   margin-right: 10px;
 }
+.container__search-element:disabled {
+  color: #c1c0c0;
+}
 .container__search-element2 {
   height: 100%;
   width: 100%;
@@ -226,7 +229,7 @@ button {
 .orders__list-toprow,
 .orders__list-row {
   display: grid;
-  grid-template-columns: repeat(16, 1fr);
+  grid-template-columns: repeat(17, 1fr);
   border-top: 1px solid #8a8a8a;
   padding: 5px;
 }
@@ -359,6 +362,7 @@ button {
   margin-right: auto;
   min-width: 70%;
   text-transform: uppercase;
+  width: auto;
 }
 .confirmed-for-others-button-menu {
   background-color: grey;
