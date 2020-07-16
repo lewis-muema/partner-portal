@@ -14,4 +14,5 @@ module.exports = {
   ELASTIC_APM_SERVER_URL: 'https://apm.sendyit.com:443',
   ELASTIC_APM_SERVICE_VERSION: packageJson.version,
   PARTNERS_APP: 'https://auth.sendyit.com/partners/',
+  NODE_PARTNER_API: 'https://auth.sendyit.com/partner/v1/',
 };

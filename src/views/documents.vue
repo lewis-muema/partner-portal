@@ -6,7 +6,7 @@
           <div class="secnav-container rider--stats-section">
             <span class="secnav-page" :class="activeTab === 'drivingLicense' ? 'active' : ''" @click="activeTab = 'drivingLicense'">Driving License</span>
             <span class="secnav-page" :class="activeTab === 'insurance' ? 'active' : ''" @click="activeTab = 'insurance'">Insurance</span>
-            <span class="secnav-page" :class="activeTab === 'bikeStatus' ? 'active' : ''" @click="activeTab = 'bikeStatus'">Bike status</span>
+            <span v-if="bikeRidersStatus" class="secnav-page" :class="activeTab === 'bikeStatus' ? 'active' : ''" @click="activeTab = 'bikeStatus'">Bike status</span>
             <span class="secnav-page" :class="activeTab === 'refunds' ? 'active' : ''" @click="activeTab = 'refunds'">Refunds</span>
           </div>
         </div>
@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import drivingLicense from './drivingLicense.vue';
 import insurance from './insurance.vue';
 import bikeStatus from './bikeStatus.vue';
@@ -37,6 +38,13 @@ export default {
     return {
       activeTab: 'drivingLicense',
       componentKey: 0,
+      config: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.token,
+        },
+      },
+      bikeRidersStatus: false,
     };
   },
   watch: {
@@ -46,8 +54,30 @@ export default {
   },
   created() {
     this.componentKey += 1;
+    this.fetchDrivers();
   },
-  methods: {},
+  methods: {
+    fetchDrivers() {
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const riderPayload = {
+        owner_id: sessionInfo.id,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
+        .then(res => {
+          const data = res.data.riders;
+          const riderArray = data.filter(obj => obj.vendor_type === 1);
+          if (riderArray.length > 0) {
+            this.bikeRidersStatus = true;
+          } else {
+            this.bikeRidersStatus = false;
+          }
+        })
+        .catch(error => {
+          this.bikeRidersStatus = false;
+        });
+    },
+  },
 };
 </script>
 
