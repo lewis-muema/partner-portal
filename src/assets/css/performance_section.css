@@ -363,3 +363,14 @@
 button:focus {
   outline: none !important;
 }
+.declined-license {
+  font-size: 26px;
+  margin-top: 30%;
+  color: #FF7100;
+}
+.driver-info {
+  padding-top: 9%;
+}
+.pending-license {
+  color: #ff7100;
+}
