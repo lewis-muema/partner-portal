@@ -1,122 +1,127 @@
 <template lang="html">
-  <documentsLoading v-if="show_loading"/>
-  <div class="stats-dash" v-else>
-    <div class="request-refund--section">
-      <el-button size="mini" class="request-refund-btn" @click="openRefundDialog()">
-        Request refund
-      </el-button>
-    </div>
-    <div class="row dashboard__row">
-      <el-table :data="refundsData" class="refund-main-dialog">
-        <el-table-column prop="description" label="Description"> </el-table-column>
-        <el-table-column label="Refund amount">
-          <template slot-scope="scope"> Ksh {{ refundsData[scope.$index]['amount'] }} </template>
-        </el-table-column>
-        <el-table-column prop="order_no" label="Order number"> </el-table-column>
-        <el-table-column label="Date">
-          <template slot-scope="scope">
-            {{ formatDate(refundsData[scope.$index]['date']) }}
-          </template>
-        </el-table-column>
-        <el-table-column label="Status">
-          <template slot-scope="scope">
-            <span :class="showStatusHiglight(refundsData[scope.$index]['status'])">{{ checkStatus(refundsData[scope.$index]['status']) }} </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="Document">
-          <template slot-scope="scope">
-            <el-button size="mini" class="update-license" @click="openRefundView(refundsData[scope.$index])">
-              View
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <el-dialog title="Request refund" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
-      <div class="inner-dialog">
-        <div class="drag-image">
-          <div class="download-refund-img">
-            <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
-              <i class="el-icon-upload"></i>
-              <div v-if="Object.keys(refundImageData).length > 0">Change</div>
-              <div v-else>Drop file here or <em>click to upload</em></div>
-            </el-upload>
-            <div v-if="Object.keys(refundImageData).length > 0">
-              <span class="reward-upload-label">
-                Document uploaded successfully .
-              </span>
+  <div class="">
+    <errorHandler :error="errorObj" v-if="errorObj" />
+    <documentsLoading v-if="show_loading" />
+    <div class="stats-dash" v-else>
+      <div class="request-refund--section">
+        <el-button size="mini" class="request-refund-btn" @click="openRefundDialog()">
+          Request refund
+        </el-button>
+      </div>
+      <div class="row dashboard__row">
+        <el-table :data="refundsData" class="refund-main-dialog">
+          <el-table-column prop="description" label="Description"> </el-table-column>
+          <el-table-column label="Refund amount">
+            <template slot-scope="scope"> Ksh {{ refundsData[scope.$index]['amount'] }} </template>
+          </el-table-column>
+          <el-table-column prop="order_no" label="Order number"> </el-table-column>
+          <el-table-column label="Date">
+            <template slot-scope="scope">
+              {{ formatDate(refundsData[scope.$index]['date']) }}
+            </template>
+          </el-table-column>
+          <el-table-column label="Status">
+            <template slot-scope="scope">
+              <span :class="showStatusHiglight(refundsData[scope.$index]['status'])">{{ checkStatus(refundsData[scope.$index]['status']) }} </span>
+            </template>
+          </el-table-column>
+          <el-table-column label="Document">
+            <template slot-scope="scope">
+              <el-button size="mini" class="update-license" @click="openRefundView(refundsData[scope.$index])">
+                View
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <el-dialog title="Request refund" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+        <div class="inner-dialog">
+          <div class="drag-image">
+            <div class="download-refund-img">
+              <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
+                <i class="el-icon-upload"></i>
+                <div v-if="Object.keys(refundImageData).length > 0">Change</div>
+                <div v-else>Drop file here or <em>click to upload</em></div>
+              </el-upload>
+              <div v-if="Object.keys(refundImageData).length > 0">
+                <span class="reward-upload-label">
+                  Document uploaded successfully .
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="main-dialog">
+            <div class="request-refund-inputs">
+              <p>
+                Description
+              </p>
+              <input type="text" class="request_refund-inputs" v-model="description" />
+            </div>
+            <div class="request-refund-inputs">
+              <p>
+                Order number
+              </p>
+              <input type="text" class="request_refund-inputs" v-model="order_number" />
+            </div>
+            <div class="request-refund-inputs">
+              <p>
+                Partner
+              </p>
+              <el-select v-model="rider" placeholder="Select Partner" class="refund-rider-info">
+                <el-option v-for="item in rider_list" :key="item.rider_id" :label="item.name" :value="item.rider_id"> </el-option>
+              </el-select>
+            </div>
+
+            <div class="request-refund-inputs">
+              <p>
+                Refund amount
+              </p>
+              <input type="number" class="request_refund-inputs" v-model="refund_amount" />
             </div>
           </div>
         </div>
-        <div class="main-dialog">
-          <div class="request-refund-inputs">
-            <p>
-              Description
-            </p>
-            <input type="text" class="request_refund-inputs" v-model="description" />
-          </div>
-          <div class="request-refund-inputs">
-            <p>
-              Order number
-            </p>
-            <input type="text" class="request_refund-inputs" v-model="order_number" />
-          </div>
-          <div class="request-refund-inputs">
-            <p>
-              Partner
-            </p>
-            <el-select v-model="rider" placeholder="Select Partner" class="refund-rider-info">
-              <el-option v-for="item in rider_list" :key="item.rider_id" :label="item.name" :value="item.rider_id"> </el-option>
-            </el-select>
-          </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
+          <el-button type="primary" @click="initiateRefund()" class="confirm-refund">Confirm</el-button>
+        </span>
+      </el-dialog>
 
-          <div class="request-refund-inputs">
-            <p>
-              Refund amount
-            </p>
-            <input type="number" class="request_refund-inputs" v-model="refund_amount" />
+      <el-dialog title="View Refund Request" :visible.sync="refundRequest" width="50%" :before-close="handleClose">
+        <div class="inner-dialog">
+          <div class="drag-image">
+            <div class="download-refund-img">
+              <img class="refund-documents" :src="requestViewData.documents" alt="" />
+            </div>
+          </div>
+          <div class="main-dialog">
+            <div class="request-refund-inputs">
+              <p class="request-refund-label">
+                Description
+              </p>
+              <p class="refund-text">{{ requestViewData.description }}</p>
+            </div>
+            <div class="request-refund-inputs">
+              <p class="request-refund-label">
+                Order number
+              </p>
+              <p class="refund-text">{{ requestViewData.order_no }}</p>
+            </div>
+            <div class="request-refund-inputs">
+              <p class="request-refund-label">
+                Refund amount
+              </p>
+              <p class="refund-text">{{ requestViewData.currency }} {{ requestViewData.amount }}</p>
+            </div>
           </div>
         </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-        <el-button type="primary" @click="initiateRefund()" class="confirm-refund">Confirm</el-button>
-      </span>
-    </el-dialog>
-
-    <el-dialog title="View Refund Request" :visible.sync="refundRequest" width="50%" :before-close="handleClose">
-      <div class="inner-dialog">
-        <div class="drag-image">
-          <div class="download-refund-img">
-            <img class="refund-documents" :src="requestViewData.documents" alt="" />
-          </div>
-        </div>
-        <div class="main-dialog">
-          <div class="request-refund-inputs">
-            <p class="request-refund-label">
-              Description
-            </p>
-            <p class="refund-text">{{ requestViewData.description }}</p>
-          </div>
-          <div class="request-refund-inputs">
-            <p class="request-refund-label">
-              Order number
-            </p>
-            <p class="refund-text">{{ requestViewData.order_no }}</p>
-          </div>
-          <div class="request-refund-inputs">
-            <p class="request-refund-label">
-              Refund amount
-            </p>
-            <p class="refund-text">{{ requestViewData.currency }} {{ requestViewData.amount }}</p>
-          </div>
-        </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog()" class="cancel-refund">Back</el-button>
-      </span>
-    </el-dialog>
-    <notify /></div></template>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="closeDialog()" class="cancel-refund">Back</el-button>
+        </span>
+      </el-dialog>
+      <notify />
+    </div>
+  </div>
+</template>
 
 <script>
 import S3 from 'aws-s3';
@@ -124,12 +129,13 @@ import axios from 'axios';
 import moment from 'moment';
 import documentsLoading from './documentsLoading.vue';
 import notify from '../components/notification';
+import errorHandler from '../components/errorHandler';
 
 let s3 = '';
 
 export default {
   name: 'refunds',
-  components: { documentsLoading, notify },
+  components: { documentsLoading, notify, errorHandler },
   data() {
     return {
       show_loading: true,
@@ -153,6 +159,7 @@ export default {
       refund_amount: '',
       fileName: '',
       refundsData: [],
+      errorObj: '',
     };
   },
   created() {
@@ -201,6 +208,7 @@ export default {
           this.refundsData = res.data;
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.show_loading = false;
           this.refundsData = [];
         });
@@ -216,6 +224,7 @@ export default {
           this.rider_list = res.data.riders;
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.rider_list = [];
         });
     },
@@ -266,6 +275,7 @@ export default {
           this.clearSavedData();
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.notify(3, 0, 'Request Refund Error . Try again');
         });
     },
