@@ -1,65 +1,68 @@
 <template lang="html">
-  <documentsLoading v-if="show_loading" />
-  <div class="stats-dash" v-else>
-    <div class="row dashboard__row">
-      <el-table :data="licenseData" class="documents-table-outer">
-        <el-table-column label="" width="50">
-          <template slot-scope="scope">
-            <i class="el-icon-success success-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 1"></i>
-            <i class="el-icon-warning declined-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 0"></i>
-            <i class="el-icon-circle-close declined-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 2"></i>
-            <i class="el-icon-circle-close declined-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 3"></i>
-          </template>
-        </el-table-column>
-        <el-table-column width="400">
-          <template slot-scope="scope">
-            <div class="performance--outer-overlay">
-              <div class="partner--image">
-                <img class="partner-icon" :src="`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/photo/${licenseData[scope.$index]['photo']}`" alt="" />
+  <div>
+    <errorHandler :error="errorObj" v-if="errorObj" />
+    <documentsLoading v-if="show_loading" />
+    <div class="stats-dash" v-else>
+      <div class="row dashboard__row">
+        <el-table :data="licenseData" class="documents-table-outer">
+          <el-table-column label="" width="50">
+            <template slot-scope="scope">
+              <i class="el-icon-success success-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 1"></i>
+              <i class="el-icon-warning declined-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 0"></i>
+              <i class="el-icon-circle-close declined-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 2"></i>
+              <i class="el-icon-circle-close declined-license" v-if="licenseIconStatus(licenseData[scope.$index]) === 3"></i>
+            </template>
+          </el-table-column>
+          <el-table-column width="400">
+            <template slot-scope="scope">
+              <div class="performance--outer-overlay">
+                <div class="partner--image">
+                  <img class="partner-icon" :src="`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/photo/${licenseData[scope.$index]['photo']}`" alt="" />
+                </div>
+                <div class="rider--info driver-info">
+                  <p class="rider--name">{{ licenseData[scope.$index]['name'] }}</p>
+                </div>
               </div>
-              <div class="rider--info driver-info">
-                <p class="rider--name">{{ licenseData[scope.$index]['name'] }}</p>
+            </template>
+          </el-table-column>
+          <el-table-column width="700">
+            <template slot-scope="scope">
+              <span :class="showStatusHiglight(licenseData[scope.$index])">{{ licenseStatus(licenseData[scope.$index]) }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot-scope="scope">
+              <el-button size="mini" class="update-license" @click="openUpdateDialog(licenseData[scope.$index])">
+                Update
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <el-dialog title="Update Driving License" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
+        <div class="inner-dialog">
+          <div class="drag-image">
+            <div class="download-refund-img">
+              <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
+                <i class="el-icon-upload"></i>
+                <div v-if="Object.keys(licenseImageData).length > 0">Change</div>
+                <div v-else>Drop file here or <em>click to upload</em></div>
+              </el-upload>
+              <div v-if="Object.keys(licenseImageData).length > 0">
+                <span class="reward-upload-label">
+                  Document uploaded successfully .
+                </span>
               </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column width="700">
-          <template slot-scope="scope">
-            <span :class="showStatusHiglight(licenseData[scope.$index])">{{ licenseStatus(licenseData[scope.$index]) }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column>
-          <template slot-scope="scope">
-            <el-button size="mini" class="update-license" @click="openUpdateDialog(licenseData[scope.$index])">
-              Update
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
-    <el-dialog title="Update Driving License" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
-      <div class="inner-dialog">
-        <div class="drag-image">
-          <div class="download-refund-img">
-            <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
-              <i class="el-icon-upload"></i>
-              <div v-if="Object.keys(licenseImageData).length > 0">Change</div>
-              <div v-else>Drop file here or <em>click to upload</em></div>
-            </el-upload>
-            <div v-if="Object.keys(licenseImageData).length > 0">
-              <span class="reward-upload-label">
-                Document uploaded successfully .
-              </span>
             </div>
           </div>
         </div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-        <el-button type="primary" @click="uploadDl()" class="confirm-refund">Update</el-button>
-      </span>
-    </el-dialog>
-    <notify />
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
+          <el-button type="primary" @click="uploadDl()" class="confirm-refund">Update</el-button>
+        </span>
+      </el-dialog>
+      <notify />
+    </div>
   </div>
 </template>
 
@@ -69,12 +72,13 @@ import axios from 'axios';
 import moment from 'moment';
 import documentsLoading from './documentsLoading.vue';
 import notify from '../components/notification';
+import errorHandler from '../components/errorHandler';
 
 let s3 = '';
 
 export default {
   name: 'drivingLicense',
-  components: { documentsLoading, notify },
+  components: { documentsLoading, notify, errorHandler },
   data() {
     return {
       show_loading: true,
@@ -90,6 +94,7 @@ export default {
       dialogVisible: false,
       fileName: '',
       licenseData: [],
+      errorObj: '',
     };
   },
   created() {
@@ -111,6 +116,7 @@ export default {
           this.licenseData = res.data.data;
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.show_loading = false;
           this.licenseData = [];
         });
@@ -154,6 +160,8 @@ export default {
       let label = '';
       if (data.driving_license.expiry_date === null || data.driving_license.expiry_date === '' || currentTime.diff(data.driving_license.expiry_date, 'days') >= 0) {
         label = 3;
+      } else if (currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
+        label = 1;
       } else if (data.driving_license.renewal_status === 0) {
         label = 0;
       } else if (data.driving_license.renewal_status === 2) {
@@ -168,6 +176,8 @@ export default {
       let className = '';
       if (data.driving_license.expiry_date === null || data.driving_license.expiry_date === '' || currentTime.diff(data.driving_license.expiry_date, 'days') >= 0) {
         className = 'pending-license';
+      } else if (currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
+        className = '';
       } else if (data.driving_license.renewal_status === 0) {
         className = 'pending-license';
       } else if (data.driving_license.renewal_status === 2) {
@@ -223,6 +233,7 @@ export default {
           this.clearSavedData();
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.notify(3, 0, 'Request Refund Error . Try again');
         });
     },
