@@ -76,6 +76,9 @@ a {
   width: auto;
   justify-content: flex-end;
 }
+.withdrawal-button-mobile {
+  margin: 15px;
+}
 .orders__list-currency-filter-mobile {
   display: flex;
   align-items: center;
