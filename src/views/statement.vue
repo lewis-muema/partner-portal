@@ -151,6 +151,10 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
+        <div class="withdrawal-button-mobile">
+          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">Withdraw cash</button>
+          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>Withdraw cash</button>
+        </div>
         <div class="orders__list-currency-filter-mobile">
           <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
             {{ currency }}
