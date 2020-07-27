@@ -39,11 +39,12 @@
           <div class="drag-image">
             <div class="download-refund-img">
               <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
+                <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
-                <div v-if="Object.keys(refundImageData).length > 0">Change</div>
+                <div v-if="fileName !== ''">Change</div>
                 <div v-else>Drop file here or <em>click to upload</em></div>
               </el-upload>
-              <div v-if="Object.keys(refundImageData).length > 0">
+              <div v-if="fileName !== ''">
                 <span class="reward-upload-label">
                   Document uploaded successfully .
                 </span>
@@ -82,7 +83,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-          <el-button type="primary" @click="initiateRefund()" class="confirm-refund">Confirm</el-button>
+          <el-button type="primary" @click="initiateRequest()" class="confirm-refund">Confirm</el-button>
         </span>
       </el-dialog>
 
@@ -124,6 +125,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
@@ -161,6 +163,19 @@ export default {
       refundsData: [],
       errorObj: '',
     };
+  },
+  computed: {
+    img_section_style() {
+      if (typeof this.fileName === 'undefined' || this.fileName === null) {
+        return {
+          background: 'url(https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/photo/default_pic.jpg)',
+        };
+      } else {
+        return {
+          background: `url(https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName})`,
+        };
+      }
+    },
   },
   created() {
     this.initiateS3();
@@ -228,9 +243,9 @@ export default {
           this.rider_list = [];
         });
     },
-    initiateRefund() {
-      if (Object.keys(this.refundImageData).length === 0 || this.description === '' || this.order_number === '' || this.rider === '' || this.refund_amount === '') {
-        this.notify(3, 0, 'Kindly provide all values');
+    uploadToS3() {
+      if (Object.keys(this.refundImageData).length === 0) {
+        this.notify(3, 0, 'Kindly upload refund image');
       } else {
         const file = this.refundImageData.file;
         const fileType = file.type;
@@ -251,33 +266,39 @@ export default {
             if (err) {
               console.log('There was an error uploading your photo: ', err.message);
             } else {
-              this.requestToBackend();
+              const imageId = 'imagePreview';
+              const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
+              $(`#${imageId}`).attr('src', src);
             }
             // eslint-disable-next-line comma-dangle
           }
         );
       }
     },
-    requestToBackend() {
-      const payload = {
-        rider_id: parseInt(this.rider, 10),
-        description: this.description,
-        order_no: this.order_number,
-        amount: this.refund_amount,
-        documents: [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`],
-      };
-      axios
-        .post(`${process.env.PARTNERS_APP}request_refund`, payload, this.config)
-        .then(res => {
-          this.dialogVisible = false;
-          this.show_loading = true;
-          this.getRefundsData();
-          this.clearSavedData();
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-          this.notify(3, 0, 'Request Refund Error . Try again');
-        });
+    initiateRequest() {
+      if (Object.keys(this.refundImageData).length === 0 || this.description === '' || this.order_number === '' || this.rider === '' || this.refund_amount === '') {
+        this.notify(3, 0, 'Kindly provide all values');
+      } else {
+        const payload = {
+          rider_id: parseInt(this.rider, 10),
+          description: this.description,
+          order_no: this.order_number,
+          amount: this.refund_amount,
+          documents: [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`],
+        };
+        axios
+          .post(`${process.env.PARTNERS_APP}request_refund`, payload, this.config)
+          .then(res => {
+            this.dialogVisible = false;
+            this.show_loading = true;
+            this.getRefundsData();
+            this.clearSavedData();
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            this.notify(3, 0, 'Request Refund Error . Try again');
+          });
+      }
     },
     clearSavedData() {
       this.refundImageData = [];
@@ -285,6 +306,7 @@ export default {
       this.order_number = '';
       this.rider = '';
       this.refund_amount = '';
+      this.closeDialog();
     },
     sanitizeFilename(name) {
       const rider = parseInt(this.rider, 10);
@@ -331,12 +353,17 @@ export default {
     },
     handlePictureCardPreview(file) {
       this.refundImageData = file;
+      this.uploadToS3();
     },
     closeDialog() {
+      const imageId = 'imagePreview';
       this.refundRequest = false;
       this.dialogVisible = false;
       this.refundImageData = {};
       this.requestViewData = {};
+      this.fileName = '';
+      const src = 'https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg';
+      $(`#${imageId}`).attr('src', src);
     },
     openRefundDialog() {
       this.dialogVisible = true;
