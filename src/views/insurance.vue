@@ -252,12 +252,14 @@ export default {
     insuaranceIconStatus(data) {
       const currentTime = moment();
       let label = '';
-      if (data.insurance.expiry_date === null || data.insurance.expiry_date === '' || currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
+      if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
+        label = 3;
+      } else if (data.insurance.renewal_status === 0) {
+        label = 0;
+      } else if (data.insurance.expiry_date === null || data.insurance.expiry_date === '' || data.insurance.renewal_status === -1) {
         label = 3;
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') < 0) {
         label = 1;
-      } else if (data.insurance.renewal_status === 0) {
-        label = 0;
       } else if (data.insurance.renewal_status === 2) {
         label = 2;
       } else {
@@ -270,12 +272,10 @@ export default {
       let className = '';
       if (data.insurance.expiry_date === null || data.insurance.expiry_date === '' || currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
         className = 'pending-license';
+      } else if (data.insurance.renewal_status === 0 || data.insurance.renewal_status === 2 || data.insurance.renewal_status === -1) {
+        className = 'pending-license';
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') < 0) {
         className = '';
-      } else if (data.driving_license.renewal_status === 0) {
-        className = 'pending-license';
-      } else if (data.driving_license.renewal_status === 2) {
-        className = 'pending-license';
       } else {
         className = '';
       }
@@ -284,8 +284,10 @@ export default {
     insuaranceStatus(data) {
       const currentTime = moment();
       let text = '';
-      if (data.insurance.expiry_date === null || data.insurance.expiry_date === '') {
+      if ((data.insurance.expiry_date === null || data.insurance.expiry_date === '') && data.insurance.renewal_status === -1) {
         text = 'Missing document expiry date';
+      } else if (data.insurance.renewal_status === 0) {
+        text = 'Pending approval';
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
         text = `Insuarance document expires on ${moment(data.insurance.expiry_date).format('MMMM Do , YYYY')} `;
       } else {

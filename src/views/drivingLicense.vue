@@ -153,9 +153,11 @@ export default {
     licenseStatus(data) {
       const currentTime = moment();
       let text = '';
-      if (data.driving_license.expiry_date === null || data.driving_license.expiry_date === '') {
+      if ((data.driving_license.expiry_date === null || data.driving_license.expiry_date === '') && data.driving_license.renewal_status === -1) {
         text = 'Missing document expiry date';
-      } else if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0) {
+      } else if (data.driving_license.renewal_status === 0) {
+        text = 'Pending approval';
+      } else if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0 || currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
         text = `Delivery license expires on ${moment(data.driving_license.expiry_date).format('MMMM Do , YYYY')} `;
       } else {
         text = `Delivery license expires on ${moment(data.driving_license.expiry_date).format('MMMM Do , YYYY')} `;
@@ -165,12 +167,14 @@ export default {
     licenseIconStatus(data) {
       const currentTime = moment();
       let label = '';
-      if (data.driving_license.expiry_date === null || data.driving_license.expiry_date === '' || currentTime.diff(data.driving_license.expiry_date, 'days') >= 0) {
+      if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0) {
+        label = 3;
+      } else if (data.driving_license.renewal_status === 0) {
+        label = 0;
+      } else if (data.driving_license.expiry_date === null || data.driving_license.expiry_date === '' || data.driving_license.renewal_status === -1) {
         label = 3;
       } else if (currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
         label = 1;
-      } else if (data.driving_license.renewal_status === 0) {
-        label = 0;
       } else if (data.driving_license.renewal_status === 2) {
         label = 2;
       } else {
@@ -183,12 +187,10 @@ export default {
       let className = '';
       if (data.driving_license.expiry_date === null || data.driving_license.expiry_date === '' || currentTime.diff(data.driving_license.expiry_date, 'days') >= 0) {
         className = 'pending-license';
+      } else if (data.driving_license.renewal_status === 0 || data.driving_license.renewal_status === 2 || data.driving_license.renewal_status === -1) {
+        className = 'pending-license';
       } else if (currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
         className = '';
-      } else if (data.driving_license.renewal_status === 0) {
-        className = 'pending-license';
-      } else if (data.driving_license.renewal_status === 2) {
-        className = 'pending-license';
       } else {
         className = '';
       }
