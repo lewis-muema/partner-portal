@@ -44,11 +44,12 @@
           <div class="drag-image">
             <div class="download-refund-img">
               <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
+                <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
-                <div v-if="Object.keys(licenseImageData).length > 0">Change</div>
+                <div v-if="fileName !== ''">Change</div>
                 <div v-else>Drop file here or <em>click to upload</em></div>
               </el-upload>
-              <div v-if="Object.keys(licenseImageData).length > 0">
+              <div v-if="fileName !== ''">
                 <span class="reward-upload-label">
                   Document uploaded successfully .
                 </span>
@@ -58,7 +59,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-          <el-button type="primary" @click="uploadDl()" class="confirm-refund">Update</el-button>
+          <el-button type="primary" @click="initiateUpload()" class="confirm-refund">Update</el-button>
         </span>
       </el-dialog>
       <notify />
@@ -67,6 +68,7 @@
 </template>
 
 <script>
+import $ from 'jquery';
 import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
@@ -126,8 +128,12 @@ export default {
       this.dialogVisible = true;
     },
     closeDialog() {
+      const imageId = 'imagePreview';
       this.dialogVisible = false;
       this.licenseImageData = {};
+      this.fileName = '';
+      const src = 'https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg';
+      $(`#${imageId}`).attr('src', src);
     },
     handleClose(done) {
       this.$confirm('Are you sure to close this dialog?')
@@ -139,6 +145,7 @@ export default {
     },
     handlePictureCardPreview(file) {
       this.licenseImageData = file;
+      this.uploadDl();
     },
     handleRemove(file, fileList) {
       this.licenseImageData = {};
@@ -209,7 +216,9 @@ export default {
             if (err) {
               console.log('There was an error uploading your photo: ', err.message);
             } else {
-              this.initiateUpload();
+              const imageId = 'imagePreview';
+              const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
+              $(`#${imageId}`).attr('src', src);
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -217,25 +226,29 @@ export default {
       }
     },
     initiateUpload() {
-      const payload = {
-        riderId: parseInt(this.rider, 10),
-        type: 1,
-        data: {},
-        document: `https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`,
-      };
-      axios
-        .post(`${process.env.NODE_PARTNER_API}partner_portal/update_document`, payload, this.config)
-        .then(res => {
-          this.notify(3, 1, 'Driving License submitted');
-          this.dialogVisible = false;
-          this.show_loading = true;
-          this.getLicenseData();
-          this.clearSavedData();
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-          this.notify(3, 0, 'Request Refund Error . Try again');
-        });
+      if (this.fileName !== '') {
+        const payload = {
+          riderId: parseInt(this.rider, 10),
+          type: 1,
+          data: {},
+          document: `https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`,
+        };
+        axios
+          .post(`${process.env.NODE_PARTNER_API}partner_portal/update_document`, payload, this.config)
+          .then(res => {
+            this.notify(3, 1, 'Driving License submitted');
+            this.dialogVisible = false;
+            this.show_loading = true;
+            this.getLicenseData();
+            this.clearSavedData();
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            this.notify(3, 0, 'Request Refund Error . Try again');
+          });
+      } else {
+        this.notify(3, 0, 'Kindly upload driving license');
+      }
     },
     sanitizeFilename(name) {
       const rider = parseInt(this.rider, 10);
@@ -270,6 +283,8 @@ export default {
     },
     clearSavedData() {
       this.licenseImageData = {};
+      this.fileName = '';
+      this.closeDialog();
     },
   },
 };

@@ -374,3 +374,7 @@ button:focus {
 .pending-license {
   color: #ff7100;
 }
+.upload_image {
+  width: 100%;
+  height: 132px;
+}

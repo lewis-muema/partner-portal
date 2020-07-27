@@ -24,3 +24,8 @@
     max-height: 145px;
     overflow: scroll;
 }
+.el-icon-upload{
+   font-size: 15px !important;
+   margin: 0 !important;
+   line-height: 0 !important;
+}
