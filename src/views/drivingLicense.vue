@@ -46,7 +46,7 @@
               <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
-                <div v-if="fileName !== ''">Change</div>
+                <div v-if="fileName !== ''">{{ uploading_text }}</div>
                 <div v-else>Drop file here or <em>click to upload</em></div>
               </el-upload>
               <div v-if="fileName !== ''">
@@ -97,6 +97,7 @@ export default {
       fileName: '',
       licenseData: [],
       errorObj: '',
+      uploading_text: 'Change',
     };
   },
   created() {
@@ -134,6 +135,7 @@ export default {
       this.fileName = '';
       const src = 'https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg';
       $(`#${imageId}`).attr('src', src);
+      this.uploading_text = 'Change';
     },
     handleClose(done) {
       this.$confirm('Are you sure to close this dialog?')
@@ -158,9 +160,9 @@ export default {
       } else if (data.driving_license.renewal_status === 0) {
         text = 'Pending approval';
       } else if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0 || currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
-        text = `Delivery license expires on ${moment(data.driving_license.expiry_date).format('MMMM Do , YYYY')} `;
+        text = `Delivery license expires on ${data.driving_license.expiry_date} `;
       } else {
-        text = `Delivery license expires on ${moment(data.driving_license.expiry_date).format('MMMM Do , YYYY')} `;
+        text = `Delivery license expires on ${data.driving_license.expiry_date} `;
       }
       return text;
     },
@@ -200,6 +202,7 @@ export default {
       if (Object.keys(this.licenseImageData).length === 0) {
         this.notify(3, 0, 'Kindly upload driving license');
       } else {
+        this.uploading_text = 'Loading Preview ...';
         const file = this.licenseImageData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -216,11 +219,13 @@ export default {
           },
           (err, data) => {
             if (err) {
+              this.uploading_text = 'Change';
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
+              this.uploading_text = 'Change';
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -286,6 +291,7 @@ export default {
     clearSavedData() {
       this.licenseImageData = {};
       this.fileName = '';
+      this.uploading_text = 'Change';
       this.closeDialog();
     },
   },
