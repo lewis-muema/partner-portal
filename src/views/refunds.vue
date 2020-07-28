@@ -41,7 +41,7 @@
               <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
-                <div v-if="fileName !== ''">Change</div>
+                <div v-if="fileName !== ''">{{ uploading_text }}</div>
                 <div v-else>Drop file here or <em>click to upload</em></div>
               </el-upload>
               <div v-if="fileName !== ''">
@@ -113,6 +113,12 @@
               </p>
               <p class="refund-text">{{ requestViewData.currency }} {{ requestViewData.amount }}</p>
             </div>
+            <div class="request-refund-inputs" v-if="requestViewData.status === 2">
+              <p class="request-refund-label">
+                Declined Reason
+              </p>
+              <p class="refund-text">{{ requestViewData.reason }}</p>
+            </div>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -162,6 +168,7 @@ export default {
       fileName: '',
       refundsData: [],
       errorObj: '',
+      uploading_text: 'Change',
     };
   },
   computed: {
@@ -247,6 +254,7 @@ export default {
       if (Object.keys(this.refundImageData).length === 0) {
         this.notify(3, 0, 'Kindly upload refund image');
       } else {
+        this.uploading_text = 'Loading Preview ...';
         const file = this.refundImageData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -264,11 +272,13 @@ export default {
           },
           (err, data) => {
             if (err) {
+              this.uploading_text = 'Change';
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
+              this.uploading_text = 'Change';
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -356,6 +366,7 @@ export default {
       this.uploadToS3();
     },
     closeDialog() {
+      this.uploading_text = 'Change';
       const imageId = 'imagePreview';
       this.refundRequest = false;
       this.dialogVisible = false;
