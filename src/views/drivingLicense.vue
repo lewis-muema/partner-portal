@@ -154,7 +154,7 @@ export default {
       const currentTime = moment();
       let text = '';
       if ((data.driving_license.expiry_date === null || data.driving_license.expiry_date === '') && data.driving_license.renewal_status === -1) {
-        text = 'Missing document expiry date';
+        text = 'Kindly upload driving license';
       } else if (data.driving_license.renewal_status === 0) {
         text = 'Pending approval';
       } else if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0 || currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {

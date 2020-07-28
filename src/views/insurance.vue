@@ -285,7 +285,7 @@ export default {
       const currentTime = moment();
       let text = '';
       if ((data.insurance.expiry_date === null || data.insurance.expiry_date === '') && data.insurance.renewal_status === -1) {
-        text = 'Missing document expiry date';
+        text = 'Kindly upload insurance document';
       } else if (data.insurance.renewal_status === 0) {
         text = 'Pending approval';
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
