@@ -43,7 +43,7 @@
               <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
-                <div v-if="fileName !== ''">Change</div>
+                <div v-if="fileName !== ''">{{ uploading_text }}</div>
                 <div v-else>Drop file here or <em>click to upload</em></div>
               </el-upload>
               <div v-if="fileName !== ''">
@@ -110,6 +110,7 @@ export default {
       rider: '',
       fileName: '',
       errorObj: '',
+      uploading_text: 'Change',
     };
   },
   created() {
@@ -163,6 +164,7 @@ export default {
       if (Object.keys(this.insuranceImageData).length === 0) {
         this.notify(3, 0, 'Kindly upload insurance document');
       } else {
+        this.uploading_text = 'Loading Preview ...';
         const file = this.insuranceImageData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -179,11 +181,13 @@ export default {
           },
           (err, data) => {
             if (err) {
+              this.uploading_text = 'Change';
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
+              this.uploading_text = 'Change';
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -233,6 +237,7 @@ export default {
       this.fileName = '';
       const src = 'https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg';
       $(`#${imageId}`).attr('src', src);
+      this.uploading_text = 'Change';
     },
     handleClose(done) {
       this.$confirm('Are you sure to close this dialog?')
@@ -248,6 +253,7 @@ export default {
     },
     handleRemove(file, fileList) {
       this.insuranceImageData = {};
+      this.uploading_text = 'Change';
     },
     insuaranceIconStatus(data) {
       const currentTime = moment();
@@ -289,9 +295,9 @@ export default {
       } else if (data.insurance.renewal_status === 0) {
         text = 'Pending approval';
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
-        text = `Insuarance document expires on ${moment(data.insurance.expiry_date).format('MMMM Do , YYYY')} `;
+        text = `Insurance document expires on ${data.insurance.expiry_date} `;
       } else {
-        text = `Insuarance document expires on ${moment(data.insurance.expiry_date).format('MMMM Do , YYYY')} `;
+        text = `Insurance document expires on ${data.insurance.expiry_date} `;
       }
       return text;
     },
