@@ -24,26 +24,28 @@
           </el-table-column>
           <el-table-column>
             <template slot-scope="scope">
-              <el-button size="mini" class="update-license" :class="bikeData[scope.$index]['update_carrier_type'] === 1 ? 'action-button--active' : 'action-button--disable'" @click="openUpdateDialog(bikeData[scope.$index])">
+              <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(bikeData[scope.$index])">
                 Update
               </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-dialog title="Type of bike & CBD status" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
+      <el-dialog :title="dialogTitle()" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
         <div class="inner-dialog">
           <div class="drag-image">
-            <p class="dialog-inner-label">What is the type of your bike?</p>
-            <div class="carrier-upper-padding">
-              <div class="vendors-final-outerline">
-                <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'box' }" @click="selectCard('box', 1)">
-                  <img class="vendor-types-final" :src="getVendorIcon(1)" alt="" />
-                  <p class="vendor-label">Bike with a Box</p>
-                </div>
-                <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'no-box' }" @click="selectCard('no-box', 0)">
-                  <img class="vendor-types-final" :src="getVendorIcon(0)" alt="" />
-                  <p class="vendor-label">Bike without Box</p>
+            <div v-if="bikeDialogData.update_carrier_type === 1">
+              <p class="dialog-inner-label">What is the type of your bike?</p>
+              <div class="carrier-upper-padding">
+                <div class="vendors-final-outerline">
+                  <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'box' }" @click="selectCard('box', 1)">
+                    <img class="vendor-types-final" :src="getVendorIcon(1)" alt="" />
+                    <p class="vendor-label">Bike with a Box</p>
+                  </div>
+                  <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'no-box' }" @click="selectCard('no-box', 0)">
+                    <img class="vendor-types-final" :src="getVendorIcon(0)" alt="" />
+                    <p class="vendor-label">Bike without Box</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -120,12 +122,23 @@ export default {
         });
     },
     openUpdateDialog(data) {
+      this.carrier_type = '';
       this.bikeDialogData = data;
+      if (data.update_carrier_type !== 1) {
+        this.carrier_type = data.carrier_type;
+      }
       this.dialogVisible = true;
     },
     closeDialog() {
       this.dialogVisible = false;
       this.bikeDialogData = {};
+    },
+    dialogTitle() {
+      let text = 'Type of bike & CBD status';
+      if (this.bikeDialogData.update_carrier_type !== 1) {
+        text = 'CBD status';
+      }
+      return text;
     },
     handleClose(done) {
       this.$confirm('Are you sure to close this dialog?')
