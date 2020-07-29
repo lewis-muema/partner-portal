@@ -160,7 +160,7 @@ export default {
       } else if (data.driving_license.renewal_status === 0) {
         text = 'Pending approval';
       } else if (data.driving_license.renewal_status === 2) {
-        text = 'Document declined : Kindy re-upload document';
+        text = 'Document declined : Kindy re-upload or contact Customer Support';
       } else if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0 || currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
         text = `Delivery license expires on ${data.driving_license.expiry_date} `;
       } else {

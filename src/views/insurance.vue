@@ -293,7 +293,7 @@ export default {
       } else if (data.insurance.renewal_status === 0) {
         text = 'Pending approval';
       } else if (data.insurance.renewal_status === 2) {
-        text = 'Document declined : Kindy re-upload document';
+        text = 'Document declined : Kindy re-upload or contact Customer Support';
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
         text = `Insurance document expires on ${data.insurance.expiry_date} `;
       } else {
