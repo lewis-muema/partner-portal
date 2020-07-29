@@ -262,12 +262,12 @@ export default {
         label = 3;
       } else if (data.insurance.renewal_status === 0) {
         label = 0;
+      } else if (data.insurance.renewal_status === 2) {
+        label = 2;
       } else if (data.insurance.expiry_date === null || data.insurance.expiry_date === '' || data.insurance.renewal_status === -1) {
         label = 3;
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') < 0) {
         label = 1;
-      } else if (data.insurance.renewal_status === 2) {
-        label = 2;
       } else {
         label = 1;
       }
@@ -294,6 +294,8 @@ export default {
         text = 'Kindly upload insurance document';
       } else if (data.insurance.renewal_status === 0) {
         text = 'Pending approval';
+      } else if (data.insurance.renewal_status === 2) {
+        text = 'Document declined : Kindy re-upload document';
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
         text = `Insurance document expires on ${data.insurance.expiry_date} `;
       } else {
