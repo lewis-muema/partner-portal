@@ -260,10 +260,8 @@ export default {
       let label = '';
       if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
         label = 3;
-      } else if (data.insurance.renewal_status === 0) {
+      } else if (data.insurance.renewal_status === 0 || data.insurance.renewal_status === 2) {
         label = 0;
-      } else if (data.insurance.renewal_status === 2) {
-        label = 2;
       } else if (data.insurance.expiry_date === null || data.insurance.expiry_date === '' || data.insurance.renewal_status === -1) {
         label = 3;
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') < 0) {
