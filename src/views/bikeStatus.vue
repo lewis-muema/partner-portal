@@ -175,9 +175,11 @@ export default {
         const payload = {
           sim_card_sn: this.bikeDialogData.sim_card_sn,
           rider_phone: this.bikeDialogData.rider_phone,
-          carrier_type: parseInt(this.carrier_type, 10),
           license_status: parseInt(this.radio, 10),
         };
+        if (this.bikeDialogData.update_carrier_type === 1) {
+          payload.carrier_type = parseInt(this.carrier_type, 10);
+        }
         axios
           .post(`${process.env.PARTNERS_APP}partner_details_update`, payload, this.config)
           .then(res => {
