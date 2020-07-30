@@ -20,7 +20,7 @@
                   <img class="partner-icon" :src="`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/photo/${licenseData[scope.$index]['photo']}`" alt="" />
                 </div>
                 <div class="rider--info driver-info">
-                  <p class="rider--name">{{ licenseData[scope.$index]['name'] }}</p>
+                  <p class="rider--name">{{ licenseData[scope.$index]['rider_name'] }}</p>
                 </div>
               </div>
             </template>
