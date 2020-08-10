@@ -32,7 +32,7 @@
                   <router-link to="/savings" class="dropdown-link">
                     <p class="dropdown-item">Savings</p>
                   </router-link>
-                  <router-link to="/documents" class="dropdown-link" v-if="disableRoute">
+                  <router-link to="/documents" class="dropdown-link">
                     <p class="dropdown-item">Documents</p>
                   </router-link>
 
@@ -99,9 +99,6 @@ export default {
         state = true;
       }
       return state;
-    },
-    disableRoute() {
-      return false;
     },
   },
   created() {
