@@ -7,8 +7,8 @@
         <el-table :data="bikeData" class="documents-table-outer">
           <el-table-column label="" width="60">
             <template slot-scope="scope">
-              <i class="el-icon-success success-license" v-if="bikeData[scope.$index]['update_carrier_type'] !== 1"></i>
-              <i class="el-icon-warning declined-license" v-if="bikeData[scope.$index]['update_carrier_type'] === 1"></i>
+              <i class="el-icon-success success-license" v-if="bikeData[scope.$index]['update_license_status'] !== 1"></i>
+              <i class="el-icon-warning declined-license" v-if="bikeData[scope.$index]['update_license_status'] === 1"></i>
             </template>
           </el-table-column>
           <el-table-column width="400">
@@ -22,7 +22,7 @@
           </el-table-column>
           <el-table-column width="700">
             <template slot-scope="scope">
-              <div v-if="bikeData[scope.$index]['update_carrier_type'] === 1">
+              <div v-if="bikeData[scope.$index]['update_license_status'] === 1">
                 <span class="highlight-bike-status"> Update details </span>
               </div>
               <div v-else>
@@ -32,7 +32,7 @@
           </el-table-column>
           <el-table-column>
             <template slot-scope="scope">
-              <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(bikeData[scope.$index])" :class="{ disableUpdateBtn: bikeData[scope.$index]['update_carrier_type'] !== 1 }">
+              <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(bikeData[scope.$index])" :class="{ disableUpdateBtn: bikeData[scope.$index]['update_license_status'] !== 1 }">
                 Update
               </el-button>
             </template>
@@ -42,23 +42,15 @@
       <el-dialog :title="dialogTitle()" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
         <div class="inner-dialog">
           <div class="drag-image">
-            <div v-if="bikeDialogData.update_carrier_type === 1">
-              <p class="dialog-inner-label">What is the type of your bike?</p>
-              <div class="carrier-upper-padding">
-                <div class="vendors-final-outerline">
-                  <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'box' }" @click="selectCard('box', 1)">
-                    <img class="vendor-types-final" :src="getVendorIcon(1)" alt="" />
-                    <p class="vendor-label">Bike with a Box</p>
-                  </div>
-                  <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'no-box' }" @click="selectCard('no-box', 0)">
-                    <img class="vendor-types-final" :src="getVendorIcon(0)" alt="" />
-                    <p class="vendor-label">Bike without Box</p>
-                  </div>
-                </div>
-              </div>
+            <p class="dialog-inner-label">Do you have a CBD license?</p>
+            <div class="">
+              <el-radio v-model="radio" label="1" class="radio-options">Yes</el-radio>
             </div>
             <div class="">
-              <p class="dialog-inner-label">Upload image of your bike</p>
+              <el-radio v-model="radio" label="2" class="radio-options">No</el-radio>
+            </div>
+            <div class="" v-if="radio === '1'">
+              <p class="dialog-inner-label">Upload image of the license</p>
               <div class="bike-image">
                 <div class="download-refund-img">
                   <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
@@ -76,11 +68,12 @@
               </div>
             </div>
           </div>
-          <span slot="footer" class="dialog-footer submit-dialog-footer">
-            <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-            <el-button type="primary" @click="initiateBikeUpdate()" class="confirm-refund">Update</el-button>
-          </span>
-        </div></el-dialog>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
+          <el-button type="primary" @click="initiateCbdLicenseUpdate()" class="confirm-refund">Update</el-button>
+        </span>
+      </el-dialog>
       <notify />
     </div>
   </div>
@@ -172,12 +165,12 @@ export default {
         });
     },
     openUpdateDialog(data) {
-      this.carrier_type = '';
+      this.radio = '';
+      this.fileName = '';
+      this.bikeStatusData = {};
+      this.uploading_text = 'Change';
       this.bikeDialogData = data;
       this.rider = data.rider_id;
-      if (data.update_carrier_type !== 1) {
-        this.carrier_type = data.carrier_type;
-      }
       this.dialogVisible = true;
     },
     closeDialog() {
@@ -188,7 +181,7 @@ export default {
       this.uploading_text = 'Change';
     },
     dialogTitle() {
-      return 'Type of bike & CBD status';
+      return 'CBD status';
     },
     handleClose(done) {
       this.$confirm('Are you sure to close this dialog?')
@@ -206,23 +199,32 @@ export default {
       return `https://images.sendyit.com/web_platform/vendor_type/side/v2/${id}.svg`;
     },
     bikeStatus(data) {
-      let carrier_name = 'Bike without a box';
-      if (data.carrier_type === 1) {
-        carrier_name = 'Bike with a box';
+      let cbd_state = 'Doesn’t have a CBD license';
+
+      if (data.license_status === 1) {
+        cbd_state = 'Has a CBD license';
       }
 
-      return carrier_name;
+      return cbd_state;
     },
-    initiateBikeUpdate() {
-      if (this.carrier_type === '' || Object.keys(this.bikeStatusData).length === 0) {
+    initiateCbdLicenseUpdate() {
+      if (this.radio === '') {
         this.notify(3, 0, 'Kindly provide all values');
+      } else if (this.radio === '1' && Object.keys(this.bikeStatusData).length === 0) {
+        this.notify(3, 0, 'Kindly upload cbd license document');
       } else {
         const payload = {
           sim_card_sn: this.bikeDialogData.sim_card_sn,
           rider_phone: this.bikeDialogData.rider_phone,
-          carrier_type: parseInt(this.carrier_type, 10),
-          carrier_type_docs: [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`],
+          license_status: parseInt(this.radio, 10),
         };
+
+        if (this.radio === '1') {
+          payload.license_status_docs = [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`];
+        }
+
+        console.log('payload', payload);
+
         axios
           .post(`${process.env.PARTNERS_APP}partner_details_update`, payload, this.config)
           .then(res => {
@@ -251,7 +253,7 @@ export default {
     },
     uploadBikeData() {
       if (Object.keys(this.bikeStatusData).length === 0) {
-        this.notify(3, 0, 'Kindly upload bike image ');
+        this.notify(3, 0, 'Kindly upload cbd licence document');
       } else {
         this.uploading_text = 'Loading Preview ...';
         const file = this.bikeStatusData.file;
@@ -285,7 +287,7 @@ export default {
       }
     },
     sanitizeFilename(name) {
-      const temp_name = `bike_img_${new Date().getTime()}.${name.split('.').pop()}`;
+      const temp_name = `cbd_license_${new Date().getTime()}.${name.split('.').pop()}`;
       return temp_name;
     },
   },
