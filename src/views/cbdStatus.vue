@@ -223,8 +223,6 @@ export default {
           payload.license_status_docs = [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`];
         }
 
-        console.log('payload', payload);
-
         axios
           .post(`${process.env.PARTNERS_APP}partner_details_update`, payload, this.config)
           .then(res => {
