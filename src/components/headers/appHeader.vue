@@ -62,6 +62,9 @@
         <router-link to="/quotes" class="secnav-page" :class="showActiveQuotes()">My Quotes</router-link>
         <router-link to="/orders" class="secnav-page" :class="showActiveOrders()">My Orders</router-link>
       </div>
+      <div class="secnav-container">
+        <router-link to="/auxilliary" class="secnav-page" :class="showAuxilliaryServices()">Auxilliary Services</router-link>
+      </div>
     </div>
   </div>
 </div>
@@ -135,6 +138,11 @@ export default {
     },
     showActiveOrders() {
       if (this.$route.path === '/orders') {
+        return 'active';
+      }
+    },
+    showAuxilliaryServices() {
+      if (this.$route.path === '/auxilliary') {
         return 'active';
       }
     },

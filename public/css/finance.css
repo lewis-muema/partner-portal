@@ -1323,6 +1323,7 @@ button.btn-floating {
   }
   .printContain {
     padding: 10px 10px;
+    min-height: 250px;
   }
   .mobile-tab {
     background-color: #1782c5;

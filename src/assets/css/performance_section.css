@@ -384,3 +384,8 @@ button:focus {
 .submit-dialog-footer{
   width: 100%;
 }
+@media (max-width: 599px) {
+  .stats-container {
+    width: 100% !important;
+  }
+}
