@@ -122,6 +122,8 @@ import moment from 'moment';
 import errorHandler from '../../../../components/errorHandler';
 import verifier from '../../../../components/verifier';
 
+let timer = '';
+
 export default {
   components: {
     errorHandler,
@@ -140,6 +142,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      pollActive: false,
     };
   },
   watch: {
@@ -149,13 +152,22 @@ export default {
       },
       deep: true,
     },
+    pollActive(val) {
+      if (val) {
+        this.poll();
+      }
+    },
   },
   created() {
     if (localStorage.sessionData) {
       this.loadingStatus = true;
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.getFuelAdvances();
+      this.pollActive = true;
     }
+  },
+  beforeDestroy() {
+    clearTimeout(timer);
   },
   methods: {
     changeTab(index, data) {
@@ -190,6 +202,14 @@ export default {
             resolve(error);
             });
         });
+    },
+    poll() {
+      if (this.pollActive) {
+        timer = setTimeout(() => {
+          this.getFuelAdvances();
+          this.poll();
+        }, 60000);
+      }
     },
   },
 };
