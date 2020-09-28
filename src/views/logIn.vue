@@ -118,11 +118,23 @@ export default {
           if (!response.data.documents.signature) {
             this.$router.push({ path: '/signature' });
           } else {
-            this.$router.push({ path: '/' });
+            if (localStorage.externalURL) {
+              const URL = localStorage.externalURL;
+              localStorage.removeItem('externalURL');
+              this.$router.push({ path: URL });
+            } else {
+              this.$router.push({ path: '/' });
+            }
           }
         })
         .catch(error => {
-          this.$router.push({ path: '/' });
+          if (localStorage.externalURL) {
+            const URL = localStorage.externalURL;
+            localStorage.removeItem('externalURL');
+            this.$router.push({ path: URL });
+          } else {
+            this.$router.push({ path: '/' });
+          }
         });
     },
     signInError(error) {
