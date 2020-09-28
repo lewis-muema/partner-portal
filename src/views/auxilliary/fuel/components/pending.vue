@@ -367,11 +367,13 @@ export default {
     },
   },
   created() {
-    this.loadingStatus = true;
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    this.getFuelStations();
-    this.getFuelTypes();
-    this.getFuelAdvances();
+    if (localStorage.sessionData) {
+      this.loadingStatus = true;
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.getFuelStations();
+      this.getFuelTypes();
+      this.getFuelAdvances();
+    }
   },
   methods: {
     notify(status, type, message) {
