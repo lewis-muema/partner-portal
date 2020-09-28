@@ -324,6 +324,8 @@ import notify from '../../../../components/notification';
 import errorHandler from '../../../../components/errorHandler';
 import verifier from '../../../../components/verifier';
 
+let timer = '';
+
 export default {
   components: {
     notify,
@@ -355,6 +357,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      pollActive: false,
     };
   },
   watch: {
@@ -365,6 +368,11 @@ export default {
       },
       deep: true,
     },
+    pollActive(val) {
+      if (val) {
+        this.poll();
+      }
+    },
   },
   created() {
     if (localStorage.sessionData) {
@@ -373,7 +381,11 @@ export default {
       this.getFuelStations();
       this.getFuelTypes();
       this.getFuelAdvances();
+      this.pollActive = true;
     }
+  },
+  beforeDestroy() {
+    clearTimeout(timer);
   },
   methods: {
     notify(status, type, message) {
@@ -488,6 +500,14 @@ export default {
             resolve(error);
             });
         });
+    },
+    poll() {
+      if (this.pollActive) {
+        timer = setTimeout(() => {
+          this.getFuelAdvances();
+          this.poll();
+        }, 60000);
+      }
     },
     actionFuelAdvance(index) {
       return new Promise((resolve, reject) => {
