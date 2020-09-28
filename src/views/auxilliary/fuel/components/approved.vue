@@ -151,9 +151,11 @@ export default {
     },
   },
   created() {
-    this.loadingStatus = true;
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    this.getFuelAdvances();
+    if (localStorage.sessionData) {
+      this.loadingStatus = true;
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.getFuelAdvances();
+    }
   },
   methods: {
     changeTab(index, data) {

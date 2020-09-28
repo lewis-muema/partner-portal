@@ -96,12 +96,11 @@ export default {
   },
   computed: {},
   created() {
-    this.$store.commit('setSessionInfo', JSON.parse(localStorage.sessionData).payload);
-    this.$store.commit('setOwnerId', JSON.parse(localStorage.sessionData).payload.id);
-    this.fetchBikeDrivers();
-    this.npsEligibility();
-
     if (localStorage.sessionData) {
+      this.$store.commit('setSessionInfo', JSON.parse(localStorage.sessionData).payload);
+      this.$store.commit('setOwnerId', JSON.parse(localStorage.sessionData).payload.id);
+      this.fetchBikeDrivers();
+      this.npsEligibility();
       this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
     }
   },

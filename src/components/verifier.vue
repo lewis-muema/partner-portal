@@ -12,6 +12,7 @@ export default {
   computed: {},
   created() {
     if (this.date === undefined || new Date() > new Date(this.date) || localStorage.token === undefined || localStorage.sessionData === undefined) {
+      localStorage.externalURL = this.$route.path;
       this.$router.push({ path: '/login' });
     }
   },

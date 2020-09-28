@@ -221,11 +221,13 @@ export default {
     },
   },
   created() {
-    this.loadingStatus = true;
-    this.getFuelStations();
-    this.getFuelTypes();
-    this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-    this.getLegibleOrders();
+    if (localStorage.sessionData) {
+      this.loadingStatus = true;
+      this.getFuelStations();
+      this.getFuelTypes();
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.getLegibleOrders();
+    }
   },
   methods: {
     notify(status, type, message) {
