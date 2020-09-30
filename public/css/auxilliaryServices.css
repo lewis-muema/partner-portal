@@ -329,6 +329,16 @@
   font-weight: 600;
   font-size: 14px;
 }
+.legible-orders-error-message {
+  text-align: center;
+  height: 40px;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 800;
+}
 .place-request-container {
   border: 1px solid #8a8a8a61;
 }
