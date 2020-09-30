@@ -785,10 +785,6 @@ export default {
   methods: {
     fetchVehicles() {
       const date = new Date();
-      const riderIds = [];
-      this.sessionInfo.riders.forEach((row, i) => {
-        riderIds.push(parseInt(row.rider_id, 10));
-      });
       const payload = JSON.stringify({
         owner_id: this.sessionInfo.id,
       });
