@@ -79,7 +79,7 @@
       <div v-if="opened.includes(index)">
         <div class="place-request-inputs-container">
           <div class="place-request-inputs-header">
-            You can request a maximum of {{ order.order_details.currency }} {{ order.max_advance }}
+            You can request a maximum of {{ order.order_details.currency }} {{ parseFloat(order.max_advance).toFixed(2) }}
           </div>
           <div>
             Total amount <br />
@@ -253,6 +253,10 @@ export default {
       } else {
         this.opened.splice(index, 1); // this allows you to open only one tab at a time.
         this.opened.push(id);
+        this.fuel = '';
+        this.station = '';
+        this.amount = '';
+        this.address = '';
       }
     },
     getStationAddresses(station) {
@@ -363,7 +367,13 @@ export default {
             .then(response => {
               this.loadingStatus = false;
               if (response.status === 200) {
-                this.orders = response.data.data;
+                const legibleOrders = [];
+                response.data.data.forEach(row => {
+                  if (parseFloat(row.max_advance) > 0) {
+                    legibleOrders.push(row);
+                  }
+                });
+                this.orders = legibleOrders;
               }
             resolve(response);
             })
