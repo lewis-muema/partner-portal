@@ -112,7 +112,7 @@
               <div
                 class="declined-requests-standard-column-adv declined-requests-column-ovverride"
               >
-                {{ order.request_details.Percentage }} %
+                {{ order.request_details.percentage }} %
               </div>
             </div>
           </div>
