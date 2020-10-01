@@ -63,7 +63,7 @@
         <router-link to="/orders" class="secnav-page" :class="showActiveOrders()">My Orders</router-link>
       </div>
       <div class="secnav-container">
-        <router-link to="/auxilliary" class="secnav-page" :class="showAuxilliaryServices()">Auxilliary Services</router-link>
+        <router-link to="/auxilliary" class="secnav-page" :class="showAuxilliaryServices()">Auxiliary Services</router-link>
       </div>
     </div>
   </div>

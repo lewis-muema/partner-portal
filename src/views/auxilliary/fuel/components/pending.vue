@@ -9,7 +9,7 @@
         <el-select class="fuel-request-reason-input" v-model="rejectReason">
           <el-option v-for="(reason, index) in reasons" :key="index" :value="reason" :label="reason"></el-option>
         </el-select>
-        <button :class="rejectReason !== '' && loading === false ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" @click="actionFuelAdvance()">Confirm</button>
+        <button :class="rejectReason !== '' && loading === false ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" @click="actionFuelAdvance(rowIndex)">Confirm</button>
       </div>
     </div>
     <div
@@ -527,6 +527,10 @@ export default {
             .then(response => {
               this.loading = false;
               if (response.status === 200) {
+                if (!this.approvalStatus) {
+                  this.loadingStatus = true;
+                  this.orders = [];
+                }
                 this.notify(3, 1, response.data.message);
                 this.approvalStatus = '';
                 this.getFuelAdvances();
