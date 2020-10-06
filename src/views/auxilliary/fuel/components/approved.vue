@@ -62,7 +62,7 @@
               <div
                 class="approved-requests-standard-column-adv approved-requests-column-ovverride"
               >
-                {{ dateFormat(order.request_details.date_time) }}
+                {{ dateFormat(order.owner_details.owner_approval_date) }}
               </div>
               <div class="approved-requests-large-column-adv">
                 <div class="approved-requests-orderno">
@@ -189,7 +189,7 @@ export default {
                 const rawData = response.data.data;
                 rawData.forEach((row, i) => {
                   row.activeMenuTab = oldOrders.length > 0 && oldOrders.length > i ? oldOrders[i].activeMenuTab : 'details';
-                  row.request_details.order_type = row.request_details.order_type === 1 ? 'On-demand' : 'Dedicated';
+                  row.request_details.order_type = row.request_details.order_type.charAt(0).toUpperCase() + row.request_details.order_type.slice(1).split('_')[0];
                 });
                 this.loadingStatus = false;
                 this.orders = rawData;
