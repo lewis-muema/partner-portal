@@ -156,17 +156,20 @@ export default {
       // eslint-disable-next-line quotes
       this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
       this.tel = this.tel.replace(/ /g, '');
-      const payload = JSON.stringify({
+      const payload = {
         phone: this.tel,
-      });
-      axios.post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/account`, payload).then(response => {
-        if (response.status === 200) {
-          this.handleButton('SET PASSWORD');
-          this.error(response.data.msg, 7000);
+      };
+      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/account`, payload).then(response => {
+        if (response.data.status) {
+          this.handleButton('Reset Password');
+          this.error(response.data.message, 7000);
         } else {
-          this.handleButton('SET PASSWORD');
+          this.handleButton('Reset Password');
           this.error('Please try again', 7000);
         }
+      }).catch(error => {
+        this.handleButton('Reset Password');
+        this.error(error.response.data.message, 7000);
       });
     },
     postLogin() {
