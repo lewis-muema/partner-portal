@@ -230,10 +230,10 @@ export default {
   },
   created() {
     if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.loadingStatus = true;
       this.getFuelStations();
       this.getFuelTypes();
-      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       this.getLegibleOrders();
       this.pollActive = true;
     }
@@ -331,7 +331,7 @@ export default {
     getFuelStations() {
       return new Promise((resolve, reject) => {
         axios
-            .get(`${this.auth}adonis/aux/fuel/fuel-stations`, this.config)
+            .get(`${this.auth}adonis/aux/fuel/fuel-stations?country_code=${this.sessionInfo.country_code.toLowerCase()}`, this.config)
             .then(response => {
               if (response.status === 200) {
                 this.stations = response.data.data;
