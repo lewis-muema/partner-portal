@@ -43,6 +43,7 @@
             Details
           </div>
           <div
+            v-if="order.admin_details"
             class="declined-requests-actions-menu-items"
             :class="
               order.activeMenuTab === 'reason' ? 'active-actions-menu-item' : ''
@@ -71,7 +72,7 @@
               <div
                 class="declined-requests-standard-column-adv declined-requests-column-ovverride"
               >
-                {{ dateFormat(order.owner_details.owner_approval_date) }}
+                {{ dateFormat(order) }}
               </div>
               <div class="declined-requests-large-column-adv">
                 <div class="declined-requests-orderno">
@@ -197,15 +198,15 @@ export default {
     thousandsSeparator(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
-    declinedUser(order) {
-      if (order.owner_details.status === 'declined') {
-        return 'Owner';
-      } else {
-        return 'Ops';
+    dateFormat(order) {
+      if (order.owner_details.owner_approval_date) {
+        return moment(order.owner_details.owner_approval_date).format(
+          'YYYY-MM-DD HH:mm:ss',
+        );
       }
-    },
-    dateFormat(date) {
-      return moment(date).format('YYYY-MM-DD HH:mm:ss');
+      return moment(order.request_details.date_time).format(
+        'YYYY-MM-DD HH:mm:ss',
+      );
     },
     getFuelAdvances() {
       return new Promise((resolve, reject) => {
