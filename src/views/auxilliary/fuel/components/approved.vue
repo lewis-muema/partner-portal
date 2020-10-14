@@ -25,6 +25,9 @@
         <div class="approved-requests-driver-name">
           {{ order.driver_details.name }}
         </div>
+        <div class="pending-requests-driver-name">
+          {{ order.driver_details.vehicle_no }}
+        </div>
         <div class="approved-requests-driver-phone">
           {{ order.driver_details.phone }}
         </div>
