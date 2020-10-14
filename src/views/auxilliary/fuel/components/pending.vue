@@ -36,6 +36,9 @@
         <div class="pending-requests-driver-name">
           {{ order.driver_details.name }}
         </div>
+        <div class="pending-requests-driver-name">
+          {{ order.driver_details.vehicle_no }}
+        </div>
         <div class="pending-requests-driver-phone">
           {{ order.driver_details.phone }}
         </div>
@@ -73,7 +76,7 @@
           </div>
           <div
             class="pending-requests-actions-menu-items"
-            v-if="order.fuel_advanced"
+            v-if="order.request_details.advanced"
             :class="
               order.activeMenuTab === 'advanced'
                 ? 'active-actions-menu-item'
@@ -262,48 +265,48 @@
               <div
                 class="pending-requests-standard-column-adv pending-requests-column-ovverride"
               >
-                {{ dateFormat(order.request_details.date_time) }}
+                {{ dateFormat(order.request_details.advanced.request_details.date_time) }}
               </div>
               <div class="pending-requests-large-column-adv">
                 <div class="pending-requests-orderno">
-                  {{ order.request_details.order_no }}
+                  {{ order.request_details.advanced.request_details.order_no }}
                 </div>
                 <div class="pending-requests-pickup">
                   <div class="pending-requests-pickup-indicator"></div>
-                  {{ order.request_details.pick_up }}
+                  {{ order.request_details.advanced.request_details.pick_up }}
                 </div>
                 <div class="pending-requests-destination">
                   <div class="pending-requests-destination-indicator"></div>
-                  {{ order.request_details.destination }}
+                  {{ order.request_details.advanced.request_details.destination }}
                 </div>
               </div>
               <div
                 class="pending-requests-standard-column-adv pending-requests-column-ovverride"
               >
-                {{ order.request_details.currency }}
-                {{ thousandsSeparator(order.request_details.amount) }}
+                {{ order.request_details.advanced.request_details.currency }}
+                {{ thousandsSeparator(order.request_details.advanced.request_details.amount) }}
               </div>
               <div
                 class="pending-requests-standard-column-adv pending-requests-column-ovverride"
               >
-                {{ order.request_details.station }}<br />({{
-                  order.request_details.address
+                {{ order.request_details.advanced.request_details.station }}<br />({{
+                  order.request_details.advanced.request_details.address
                 }})
               </div>
               <div
                 class="pending-requests-standard-column-adv pending-requests-column-ovverride"
               >
-                {{ order.request_details.fuel_type }}
+                {{ order.request_details.advanced.request_details.fuel_type }}
               </div>
               <div
                 class="pending-requests-standard-column-adv pending-requests-column-ovverride"
               >
-                {{ order.request_details.order_type }}
+                {{ order.request_details.advanced.request_details.order_type.charAt(0).toUpperCase() + order.request_details.advanced.request_details.order_type.slice(1).split('_')[0] }}
               </div>
               <div
                 class="pending-requests-standard-column-adv pending-requests-column-ovverride"
               >
-                {{ order.request_details.percentage }} %
+                {{ order.request_details.advanced.request_details.percentage }} %
               </div>
             </div>
           </div>
