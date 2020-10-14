@@ -1323,6 +1323,7 @@ button.btn-floating {
   }
   .printContain {
     padding: 10px 10px;
+    min-height: 250px;
   }
   .mobile-tab {
     background-color: #1782c5;
@@ -1467,6 +1468,7 @@ button.btn-floating {
   position: fixed;
   right: 0;
   margin: 20px;
+  z-index: 5000;
 }
 .pop-up-success {
   background-color: #05c034;

@@ -378,3 +378,8 @@ button:focus {
   width: 100%;
   height: 132px;
 }
+@media (max-width: 599px) {
+  .stats-container {
+    width: 100% !important;
+  }
+}

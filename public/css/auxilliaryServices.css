@@ -1,0 +1,481 @@
+.fuel-advance-container {
+  padding: 30px 45px 0px 45px;
+}
+.fuel-advance-heading {
+  color: #EA7125;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0px 0px 10px 0px;
+  border-bottom: 1px solid #E4E7ED;
+}
+.fuel-advance-menu {
+  display: flex;
+  height: 49px;
+  align-items: center;
+}
+.fuel-advance-menu-tabs {
+  width: 150px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.fuel-advance-menu-tabs-active {
+  color: white;
+  background: #EA7125;
+}
+.pending-requests-containers,
+.approved-requests-containers,
+.declined-requests-containers {
+  height: 568px;
+  overflow-y: scroll;
+}
+.pending-requests-tabs,
+.approved-requests-tabs,
+.declined-requests-tabs {
+  height: 180px;
+  display: flex;
+  margin: 10px 0px 10px 0px;
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border: 1px solid #f2f6fc;
+  border-radius: 5px;
+  padding-right: 10px;
+}
+.pending-requests-driver-photo,
+.approved-requests-driver-photo,
+.declined-requests-driver-photo {
+  height: 100px;
+  width: 100px;
+  border-radius: 50px;
+  margin: 5px;
+}
+.pending-requests-driver-details,
+.approved-requests-driver-details,
+.declined-requests-driver-details {
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.pending-requests-driver-details {
+  border-left: 5px solid #ea7125;
+}
+.approved-requests-driver-details {
+  border-left: 5px solid #1E7D11;
+}
+.declined-requests-driver-details {
+  border-left: 5px solid #D2212A;
+}
+.pending-requests-driver-name,
+.pending-requests-driver-phone,
+.approved-requests-driver-name,
+.approved-requests-driver-phone,
+.declined-requests-driver-name,
+.declined-requests-driver-phone {
+  color: #909399;
+  font-size: 14px;
+}
+.pending-requests-actions-menu,
+.approved-requests-actions-menu,
+.declined-requests-actions-menu {
+  display: flex;
+  height: 40px;
+  align-items: center;
+}
+.pending-requests-actions-menu-items,
+.approved-requests-actions-menu-items,
+.declined-requests-actions-menu-items {
+  width: 100px;
+  text-align: center;
+  cursor: pointer;
+  color: #919191;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.active-actions-menu-item {
+  text-decoration: underline;
+  color: #ea7125 !important;
+}
+.pending-requests-actions-table-header,
+.pending-requests-actions-table-body,
+.approved-requests-actions-table-header,
+.approved-requests-actions-table-body,
+.declined-requests-actions-table-header,
+.declined-requests-actions-table-body {
+  display: flex;
+  padding-left: 30px;
+}
+.pending-requests-standard-column,
+.approved-requests-standard-column,
+.declined-requests-standard-column {
+  width: 15%;
+}
+.pending-requests-column-ovverride,
+.approved-requests-column-ovverride,
+.declined-requests-column-ovverride {
+  color: #000000;
+  font-size: 14px;
+  margin: 10px 0px 5px 0px;
+  padding: 0px 10px 0px 0px;
+}
+.pending-requests-large-column,
+.approved-requests-large-column,
+.declined-requests-large-column {
+  width: 25%;
+}
+.pending-requests-actions,
+.approved-requests-actions,
+.declined-requests-actions {
+  width: -webkit-fill-available;
+  margin-left: 50px;
+}
+.pending-requests-actions-table-header,
+.approved-requests-actions-table-header,
+.declined-requests-actions-table-header {
+  border-bottom: 1px solid #dcdfe6;
+  height: 30px;
+  color: #1871ac;
+  font-size: 14px;
+  align-items: center;
+}
+.pending-requests-orderno,
+.approved-requests-orderno,
+.declined-requests-orderno {
+  color: #000000;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px 0px 5px 0px;
+}
+.pending-requests-pickup,
+.pending-requests-destination,
+.approved-requests-pickup,
+.approved-requests-destination,
+.declined-requests-pickup,
+.declined-requests-destination {
+  font-weight: 500;
+  font-size: 12px;
+  color: #606266;
+  margin: 5px 0px 5px 0px;
+  display: flex;
+  align-items: center;
+}
+.pending-requests-pickup-indicator,
+.approved-requests-pickup-indicator,
+.declined-requests-pickup-indicator {
+  width: 7px;
+  height: 7px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: #ea7125;
+}
+.pending-requests-destination-indicator,
+.approved-requests-destination-indicator,
+.declined-requests-destination-indicator {
+  width: 7px;
+  height: 7px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: #1871ac;
+}
+.pending-requests-edit-inputs,
+.approved-requests-edit-inputs,
+.declined-requests-edit-inputs {
+  border: 1px solid #dcdfe6;
+  background: #ffffff;
+  box-sizing: border-box;
+  border-radius: 5px;
+  height: 40px;
+  margin: 0px 5px 0px 5px;
+  width: -webkit-fill-available;
+  padding: 10px;
+}
+.pending-requests-update-button,
+.approved-requests-update-button,
+.declined-requests-update-button {
+  background: #ea7125;
+  border: 1px solid #dcdfe6;
+  box-sizing: border-box;
+  border-radius: 5px;
+  color: white;
+  height: 40px;
+  width: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 5px;
+}
+.pending-requests-edit,
+.approved-requests-edit,
+.declined-requests-edit {
+  margin: 20px;
+  position: relative;
+}
+.pending-requests-edit-top,
+.approved-requests-edit-top,
+.declined-requests-edit-top {
+  display: flex;
+}
+.pending-requests-edit-bottom,
+.approved-requests-edit-bottom,
+.declined-requests-edit-bottom {
+  display: flex;
+  justify-content: flex-end;
+}
+.pending-requests-input-label,
+.approved-requests-input-label,
+.declined-requests-input-label {
+  margin: 5px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #1871ac;
+}
+.pending-requests-filler,
+.approved-requests-filler,
+.declined-requests-filler {
+  width: -webkit-fill-available;
+}
+.pending-requests-info,
+.approved-requests-info,
+.declined-requests-info {
+  position: absolute;
+  right: 0px;
+  top: -40px;
+  color: #000000;
+  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #dff1fd;
+  cursor: pointer;
+}
+.pending-requests-popover,
+.approved-requests-popover,
+.declined-requests-popover {
+  background: #1871ac;
+  color: white;
+}
+.pending-requests-owner-container,
+.approved-requests-owner-container,
+.declined-requests-owner-container {
+  display: flex;
+  align-items: center;
+  height: 130px;
+  padding-left: 30px;
+}
+.approved-requests-owner-container {
+  padding-top: 20px;
+}
+.pending-requests-owner-details,
+.approved-requests-owner-details,
+.declined-requests-owner-details {
+  margin: 10px 0px 10px 0px;
+  font-size: 14px;
+}
+.pending-requests-owner-label,
+.approved-requests-owner-label,
+.declined-requests-owner-label {
+  color: #909090;
+  margin-right: 5px;
+}
+.approved-requests-owner-sections,
+.declined-requests-owner-sections {
+  width: 30%;
+}
+.pending-requests-owner-section-left {
+  width: 40%;
+  border-right: 1px solid #e4e7ed;
+}
+.pending-requests-owner-section-right {
+  width: 40%;
+  padding-left: 10%;
+}
+.approved-question-override,
+.declined-question-override {
+  color: #ea7125;
+}
+.approved-input-override,
+.declined-input-override {
+  display: flex;
+  align-items: center;
+}
+.pending-requests-spacer-2,
+.approved-requests-spacer-2,
+.declined-requests-spacer-2 {
+  margin-right: 10px;
+}
+.pending-requests-spacer-1,
+.approved-requests-spacer-1,
+.declined-requests-spacer-1 {
+  margin-right: 25px;
+}
+.pending-requests-large-column-adv,
+.approved-requests-large-column-adv,
+.declined-requests-large-column-adv {
+  width: 28%;
+}
+.pending-requests-standard-column-adv,
+.approved-requests-standard-column-adv,
+.declined-requests-standard-column-adv {
+  width: 12%;
+}
+.approved-requests-section-header,
+.declined-requests-section-header {
+  color: #ea7125;
+  font-weight: 600;
+  font-size: 14px;
+}
+.legible-orders-error-message {
+  text-align: center;
+  height: 40px;
+  background: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 800;
+}
+.place-request-container {
+  border: 1px solid #8a8a8a61;
+}
+.place-request-inputs-container {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  border: 1px solid #E4E7ED;
+  margin-bottom: 20px;
+  align-items: center;
+  height: max-content;
+}
+.place-request-inputs-header {
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  background: #FFFBF5;
+  width: 100%;
+  border-bottom: 1px solid #E4E7ED;
+  margin-bottom: 15px;
+}
+.place-request-inputs {
+  width: 250px !important;
+  margin: 10px 0px 10px 0px;
+  height: 40px;
+}
+.place-request-button {
+  width: auto !important;
+  padding: 10px;
+  margin: 0px !important;
+}
+.place-request-button-container {
+  width: 250px;
+  justify-content: flex-end;
+  display: flex;
+  height: 70px;
+  margin-top: 10px;
+}
+.el-input__icon {
+  line-height: 25px !important;
+}
+.fuel-blinder {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: #00000052;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.fuel-advance-components {
+  position: relative;
+  z-index: 5;
+}
+.fuel-request-rejection-dialogue {
+  width: 400px;
+  height: 200px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  position: relative;
+}
+.fuel-request-reason-input {
+  width: 225px;
+  margin: 10px;
+}
+.fuel-request-reason-button-inactive {
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background: #DCDFE6;
+  border: 1px solid #DCDFE6;
+  color: white;
+  pointer-events: none;
+}
+.fuel-request-reason-button-active {
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background: #F28226;
+  border: 1px solid #F28226;
+  color: white;
+}
+.fuel-request-close-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
+.approved-fuel-request {
+  color: #1E7D11;
+  font-size: 14px;
+  font-weight: 600;
+}
+.rejected-fuel-request {
+  color: #D2212A;
+  font-size: 14px;
+  font-weight: 600;
+}
+.edit-action-input {
+  color: #F28226;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.fuel-submit-override {
+  margin: 5px;
+}
+.no-requests-tab {
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 25px;
+  font-weight: 600;
+  color: #ea7224;
+}
+.container-height-override {
+  height: 400px;
+}
+@media (max-width: 1370px) {
+  .pending-requests-tabs, .approved-requests-tabs, .declined-requests-tabs {
+    width: 1270px;
+  }
+}
+@media (max-width: 768px) {
+  .fuel-advance-menu-tabs {
+    font-size: 12px;
+  }
+  .place-request-inputs-container {
+    width: 320px;
+  }
+}

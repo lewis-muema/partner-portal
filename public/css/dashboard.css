@@ -519,6 +519,36 @@
     width: 100%;
     margin-right: 1%;
   }
+  .dashboard-upload-invoice-button {
+    bottom: 50px;
+  }
+  .dashboard-currency-selector {
+    height: 100px;
+  }
+  .new-dashboard-head-smol {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    align-items: center;
+    padding: 0% !important;
+    margin: auto;
+  }
+  .upload-invoice-pad {
+    height: 500px;
+  }
+  .upload-invoice-container {
+    width: 250px;
+  }
+  .upload-invoice-pad-inputs {
+    flex-direction: column;
+  }
+  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 230px !important;
+  }
+  .el-date-range-picker {
+    width: 400px !important;
+    overflow: scroll !important;
+}
 }
 
 @media only screen and (max-width: 1024px) {
