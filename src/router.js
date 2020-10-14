@@ -17,6 +17,7 @@ import Documents from './views/documents.vue';
 import Performance from './views/performance.vue';
 import ExternalLogin from './views/externalLogin.vue';
 import Signature from './views/signature.vue';
+import auxilliaryServices from './views/auxilliary/auxilliaryServices.vue';
 
 Vue.use(Router);
 
@@ -128,6 +129,11 @@ export default new Router({
       path: '/documents',
       name: 'documents',
       component: Documents,
+    },
+    {
+      path: '/auxilliary',
+      name: 'auxilliary',
+      component: auxilliaryServices,
     },
   ],
 });
