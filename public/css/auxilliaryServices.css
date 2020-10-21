@@ -466,6 +466,14 @@
 .container-height-override {
   height: 400px;
 }
+.edit-amount-message {
+  margin-right: auto;
+  font-style: italic;
+  color: #d20505;
+  font-size: 12px;
+  margin-top: 10px;
+  font-weight: 600;
+}
 @media (max-width: 1370px) {
   .pending-requests-tabs, .approved-requests-tabs, .declined-requests-tabs {
     width: 1270px;
