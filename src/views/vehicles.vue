@@ -791,9 +791,9 @@ export default {
       this.rows = [];
       this.displayFetchingStatus('Fetching vehicles', 0);
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
         .then(response => {
-          if (response.data.msg) {
+          if (response.data.vehicles) {
             this.removeFetchingStatus();
             this.populateTable(response);
             document.body.addEventListener('click', this.logger);
@@ -808,7 +808,7 @@ export default {
     },
     populateTable(response) {
       const record = [];
-      response.data.msg.forEach((row, i) => {
+      response.data.vehicles.forEach((row, i) => {
         const riderRow = this.sortRidersActions(row);
         let vehicleRow = '';
         const invitedPhone = this.sortAllocationStatus(row);
@@ -841,13 +841,13 @@ export default {
         if (riderRow.f_name) {
           riderRow.riderName = `${riderRow.f_name} ${riderRow.s_name}`;
         }
-        if (row.allocation && row.allocation[0].allocation_status === '1') {
+        if (row.allocation && row.allocation[0].allocation_status === 1) {
           riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
         } else {
           riderRow.action = `<span class="reassign-driver" id="${row.vehicle.id}">Reassign driver</span>`;
         }
       } else {
-        if (row.allocation && row.allocation[0].allocation_status === '1') {
+        if (row.allocation && row.allocation[0].allocation_status === 1) {
           riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
         } else {
           riderRow.action = `<span class="add-driver" id="${row.vehicle.id}">Add driver</span>`;
@@ -860,11 +860,11 @@ export default {
       let invitedPhone = '';
       if (row.allocation) {
         allocationRow = row.allocation[0];
-        if (allocationRow.allocation_status === '1') {
+        if (allocationRow.allocation_status === 1) {
           invitedPhone = `${allocationRow.rider_phone} (Pending)`;
-        } else if (allocationRow.allocation_status === '2') {
+        } else if (allocationRow.allocation_status === 2) {
           invitedPhone = `${allocationRow.rider_phone} (Accepted)`;
-        } else if (allocationRow.allocation_status === '3') {
+        } else if (allocationRow.allocation_status === 3) {
           invitedPhone = `${allocationRow.rider_phone} (Rejected)`;
         }
       }
@@ -958,7 +958,7 @@ export default {
         kwartos_code: 0,
       };
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/add_vehicle`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/add_vehicle`, payload, this.config)
         .then(response => {
           if (response.data.status) {
             this.fetchVehicles();
@@ -969,17 +969,16 @@ export default {
               $('#upErr5').fadeOut('slow');
               this.$modal.hide('confirm-documents-modal');
             }, 2000);
-          } else {
-            $('#upErr5')
-              .html(`Something went wrong while adding the vehicle. Please try again. ${response.data.msg}.`)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr5').fadeOut('slow');
-            }, 5000);
           }
         })
         .catch(error => {
           this.errorObj = error.response;
+          $('#upErr5')
+              .html(`Something went wrong while adding the vehicle. ${error.response.data.message}. Please try again.`)
+              .fadeIn('slow');
+            setTimeout(() => {
+              $('#upErr5').fadeOut('slow');
+            }, 5000);
         });
     },
     upload(id) {
@@ -1147,24 +1146,23 @@ export default {
         .html('Sending driver invite.')
         .fadeIn('slow');
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/allocate_rider`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/allocate_rider`, payload, this.config)
         .then(response => {
           if (response.data.status) {
             $('#upErr2').fadeOut('slow');
             this.$modal.hide('confirm-driver-modal');
             this.fetchVehicles();
-          } else {
-            $('#upErr2').fadeOut('slow');
-            $('#upErr2')
-              .html(response.data.msg)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr2').fadeOut('slow');
-            }, 3000);
           }
         })
-        .catch(() => {
+        .catch(error => {
           this.errorObj = error.response;
+          $('#upErr2').fadeOut('slow');
+          $('#upErr2')
+            .html(error.response.data.message)
+            .fadeIn('slow');
+          setTimeout(() => {
+            $('#upErr2').fadeOut('slow');
+          }, 3000);
         });
     },
     cancelInvite() {
@@ -1172,23 +1170,22 @@ export default {
         temp_rider_allocation_id: this.cancelAllocationId,
       };
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/cancel_allocation`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/cancel_allocation`, payload, this.config)
         .then(response => {
           if (response.data.status) {
             this.$modal.hide('invite-cancel-modal');
             this.fetchVehicles();
-          } else {
-            $('#upErr3').fadeOut('slow');
-            $('#upErr3')
-              .html(response.data.msg)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr3').fadeOut('slow');
-            }, 3000);
           }
         })
-        .catch(() => {
+        .catch(error => {
           this.errorObj = error.response;
+          $('#upErr3').fadeOut('slow');
+          $('#upErr3')
+            .html(error.response.data.message)
+            .fadeIn('slow');
+          setTimeout(() => {
+            $('#upErr3').fadeOut('slow');
+          }, 3000);
         });
     },
     createOwnerDriver() {
@@ -1220,22 +1217,19 @@ export default {
     },
     sendOwnerDriverRequest(payload) {
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/create_owner_rider`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/create_owner_rider`, payload, this.config)
         .then(response => {
-          if (response.data.status) {
-            this.$modal.hide('driver-owner-modal');
-            this.fetchVehicles();
-          } else {
-            $('#upErr')
-              .html(response.data.msg)
-              .fadeIn('slow');
-            setTimeout(() => {
-              $('#upErr').fadeOut('slow');
-            }, 3000);
-          }
+          this.$modal.hide('driver-owner-modal');
+          this.fetchVehicles();
         })
-        .catch(() => {
+        .catch(error => {
           this.errorObj = error.response;
+          $('#upErr')
+            .html(error.response.data.message)
+            .fadeIn('slow');
+          setTimeout(() => {
+            $('#upErr').fadeOut('slow');
+          }, 10000);
         });
     },
     showVehicleModal() {

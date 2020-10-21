@@ -152,7 +152,8 @@
                   type="text"
                   class="pending-requests-edit-inputs"
                   v-model="editData[index].request_details.amount"
-                  :disabled="order.owner_details.status !== 'pending'"
+                  :disabled="order.owner_details.status !== 'pending' || maxFuelAmount === 0"
+                  @input="regulateAmount(index)"
                 />
               </div>
               <div class="pending-requests-filler">
@@ -210,6 +211,9 @@
               </div>
             </div>
             <div class="pending-requests-edit-bottom">
+              <div v-if="rowIndex === index" class="edit-amount-message">
+                {{ editMessage }}
+              </div>
               <button class="fuel-submit-override" v-loading="loading && rowIndex === index" :class="!loading && validate(index) ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" @click="editFuelAdvance(index)">Update</button>
             </div>
           </div>
@@ -354,6 +358,9 @@ export default {
       editData: [],
       loading: false,
       errorObj: '',
+      maxFuelAmount: 0,
+      editMessage: '',
+      fetchStatus: false,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -370,6 +377,11 @@ export default {
         // console.log(after);
       },
       deep: true,
+    },
+    rowIndex(val) {
+      if (this.orders[val].activeMenuTab === 'edit' && !this.fetchStatus) {
+        this.fetchMaxAdvance(this.editData[val].request_details.order_no, val);
+      }
     },
     pollActive(val) {
       if (val) {
@@ -412,8 +424,14 @@ export default {
             this.editData[index].request_details.address = addressVal.name;
           }
         }, 500);
+        this.fetchMaxAdvance(this.editData[index].request_details.order_no, index);
       }
       this.orders[index].activeMenuTab = data;
+    },
+    regulateAmount(index) {
+      if (this.editData[index].request_details.amount > this.maxFuelAmount) {
+        this.editData[index].request_details.amount = this.maxFuelAmount;
+      }
     },
     thousandsSeparator(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -432,6 +450,29 @@ export default {
     },
     dateFormat(date) {
       return moment(date).format('YYYY-MM-DD HH:mm:ss');
+    },
+    fetchMaxAdvance(order, index) {
+      return new Promise((resolve, reject) => {
+        this.editMessage = '';
+        this.fetchStatus = true;
+        axios
+            .get(`${this.auth}adonis/aux/fuel/max-advance/${order}`, this.config)
+            .then(response => {
+              this.fetchStatus = false;
+              if (response.status === 200) {
+                this.maxFuelAmount = response.data.data.available_advance;
+                this.editMessage = `The maximum amount you can edit is ${response.data.data.available_advance}`;
+              }
+            resolve(response);
+            })
+            .catch(error => {
+              this.fetchStatus = false;
+              this.errorObj = error.response;
+              this.maxFuelAmount = 0;
+              this.editMessage = 'The total amount for fuel advancement has already been reached for this order, we cant allow you to edit it';
+            resolve(error);
+            });
+        });
     },
     getFuelStations() {
       return new Promise((resolve, reject) => {
@@ -483,6 +524,7 @@ export default {
                       amount: row.request_details.amount,
                       station: row.request_details.station,
                       address: row.request_details.address,
+                      order_no: row.request_details.order_no,
                     },
                     owner_details: {
                       status: row.owner_details.status,
