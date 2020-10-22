@@ -460,8 +460,8 @@ export default {
             .then(response => {
               this.fetchStatus = false;
               if (response.status === 200) {
-                this.maxFuelAmount = response.data.data.available_advance;
-                this.editMessage = `The maximum amount you can edit is ${response.data.data.available_advance}`;
+                this.maxFuelAmount = response.data.data.available_advance + this.orders[index].request_details.amount;
+                this.editMessage = `The maximum amount you can edit is ${response.data.data.available_advance + this.orders[index].request_details.amount}`;
               }
             resolve(response);
             })
