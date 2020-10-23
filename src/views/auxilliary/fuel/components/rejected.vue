@@ -46,7 +46,6 @@
             Details
           </div>
           <div
-            v-if="order.admin_details"
             class="declined-requests-actions-menu-items"
             :class="
               order.activeMenuTab === 'reason' ? 'active-actions-menu-item' : ''
@@ -127,7 +126,7 @@
             <div class="declined-requests-owner-sections">
               <div class="declined-requests-owner-details">
                 <span class="declined-requests-owner-label">{{
-                  order.admin_details.reason ? order.admin_details.reason : 'No reason given'
+                  order.owner_details.reason ? order.owner_details.reason : 'No reason given'
                 }}</span>
               </div>
             </div>
