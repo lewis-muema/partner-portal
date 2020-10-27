@@ -23,7 +23,7 @@
             <p class="font-16">{{ account }}</p>
           </div>
           <p class="banks__edit-details banks__confirm-banks-last-row banks__heavy-font font-16 color-black" @click="confirmDetails()">edit</p>
-          <button class="full-width input-height submit banks__confirm-banks-last-row banks__active-buttons" v-if="!sendingCodeStatus" @click="sendCode()">submit</button>
+          <button class="full-width input-height submit banks__confirm-banks-last-row banks__active-buttons" v-if="!sendingCodeStatus" @click="sendCode(1)">submit</button>
           <button class="full-width input-height submit banks__confirm-banks-last-row" disabled v-else>submit</button>
         </div>
       </div>
@@ -123,7 +123,7 @@
       <div class="banks__verify-code-section">
         <i class="material-icons arrow" @click="verifyDetails()">arrow_back</i>
         <div class="banks__verify-tab">
-          <p class="banks__verify-text font-16">For your security, Sendy wants to make sure it’s really you. An SMS with your verification code was sent to your phone. Resend code</p>
+          <p class="banks__verify-text font-16">For your security, Sendy wants to make sure it’s really you. An SMS with your verification code was sent to your phone. <span class="resend-code" @click="sendCode(2)">Resend code</span></p>
           <input class="banks__verify-inputs" maxlength="4" type="text" v-model="inputCode" />
           <button class="banks__verify-inputs banks__active-buttons" v-if="verifyCodeStatus" @click="verifyCode()">verify</button>
           <button class="banks__verify-inputs" disabled v-else>verify</button>
@@ -332,11 +332,12 @@ export default {
       });
 
       axios
-        .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/check_verification`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}v1/check_verification`, payload, this.config)
         .then(response => {
           this.handleVerificationResponse(response);
         })
         .catch(error => {
+          this.handleVerificationResponse(error.response);
           this.errorObj = error.response;
           this.handleError(error, 1);
         });
@@ -385,19 +386,21 @@ export default {
         return 'A wrong code was entered too many times, Please request for another';
       }
     },
-    sendCode() {
+    sendCode(code) {
       if (this.requestId !== '') {
-        this.verifyDetails();
+        if (code === 1) {
+          this.verifyDetails();
+        }
         this.notify(3, 2, 'You have a pending verification code');
       } else {
         this.codeResponseNumber = 0;
         this.notify(1, 2, 'Sending Code');
         this.sendingCodeStatus = true;
         const payload = JSON.stringify({
-          phone_no: this.sessionInfo.phone,
+          number: this.sessionInfo.phone,
         });
         axios
-          .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/verify_phone`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}v1/request_verification`, payload, this.config)
           .then(response => {
             this.handleSendCodeResponse(response);
           })
