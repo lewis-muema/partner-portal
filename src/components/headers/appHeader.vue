@@ -68,9 +68,6 @@
           </div>
         </div>
       </div>
-      <div class="secnav-container">
-        <router-link to="/auxilliary" class="secnav-page" :class="showAuxilliaryServices()">Auxiliary Services</router-link>
-      </div>
     </div>
     <surveyFooter v-if="this.nps_eligibility" />
   </div>
