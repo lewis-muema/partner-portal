@@ -51,7 +51,13 @@
                 <p class="no-records-par">There are no orders</p>
               </div>
               <template v-for="order in orders">
-                <div class="orders__list-row" @click="toggle(order.id)" :class="{ opened: opened.includes(order.id) }" v-if="showParentOrdercard(order.id)" :key="order.id">
+                <div
+                  class="orders__list-row"
+                  @click="toggle(order.id)"
+                  :class="{ opened: opened.includes(order.id) }"
+                  v-if="showParentOrdercard(order.id)"
+                  :key="order.id"
+                >
                   <div class="orders__list-col pickup">
                     <p class="orders__mobile-col">Pickup</p>
                     <p class="row1" @mouseover="showFromTooltip(order.id)" @mouseout="hideFromTooltip(order.id)">{{ shortFromName(order.id) }}</p>
@@ -86,6 +92,10 @@
                     <p class="orders__mobile-col">Price</p>
                     <p v-if="order.bid_status === 0" class="right-align">{{ order.currency }} {{ currencyFormat(order.id) }}</p>
                     <p v-if="order.bid_status === 1" class="right-align">{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
+                  </div>
+                  <div class="orders__list-col price-align">
+                    <p class="orders__mobile-col">VAT</p>
+                    <p>{{ order.currency }} {{ vatCurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col price-align">
                     <p class="orders__mobile-col">VAT</p>
@@ -360,7 +370,6 @@ export default {
         },
       },
       errorObj: '',
-      carrierTypes: ['Open', 'Closed/Boxed body', 'Refrigerated', 'Flatbed/Skeleton', 'Tipper', 'Reefer', 'Highside'],
       orderLimit: 0,
       vehicleCounter: '',
       orderCount: 0,
@@ -387,17 +396,6 @@ export default {
   methods: {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
-    },
-    formatVendorName(order) {
-      if (order.vendorname === 'Freight') {
-        // add load weight
-        const packageDetails = order.package_details;
-
-        if ('load_weight' in packageDetails && packageDetails.load_weight > 0) {
-          return `${order.vendorname}  (${packageDetails.load_weight} T)`;
-        }
-      }
-      return order.vendorname;
     },
     setDriverStatus() {
       this.addDriverStatus = false;

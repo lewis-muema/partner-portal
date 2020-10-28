@@ -505,9 +505,9 @@ export default {
           owner_id: this.sessionInfo.id,
         });
         axios
-          .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/vehicles`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
           .then(response => {
-            this.vehArray = response.data.msg;
+            this.vehArray = response.data.vehicles;
             this.listVehicles();
             this.listRiders();
             resolve(response);
@@ -575,13 +575,13 @@ export default {
     },
     hoursOnlineThisWeek() {
       if (Object.prototype.hasOwnProperty.call(this.ownerStats, 'hoursOnlineThisWeek')) {
-        return this.ownerStats.hoursOnlineThisWeek;
+        return this.ownerStats.hoursOnlineThisWeek.toFixed(2);
       }
       return 0;
     },
     hoursOnlineThisMonth() {
       if (Object.prototype.hasOwnProperty.call(this.ownerStats, 'hoursOnlineThisMonth')) {
-        return this.ownerStats.hoursOnlineThisMonth;
+        return this.ownerStats.hoursOnlineThisMonth.toFixed(2);
       }
       return 0;
     },
