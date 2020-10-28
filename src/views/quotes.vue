@@ -6,18 +6,59 @@
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
           <span class="container__search-input">
-            <input type="text" class="container__search-element" id="inp" placeholder="Enter pickup" @input="filterPickup()" @keyup.delete="refresh()" />
+            <input
+              type="text"
+              class="container__search-element"
+              id="inp"
+              placeholder="Enter pickup"
+              @input="filterPickup()"
+              @keyup.delete="refresh()"
+            />
           </span>
           <span class="container__search-input">
-            <input type="text" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
+            <input
+              type="text"
+              class="container__search-element"
+              id="dst"
+              placeholder="Enter destination"
+              @input="filterDest()"
+              @keyup.delete="refresh()"
+            />
+          </span>
+          <span class="container__search-select">
+            <select
+              name
+              class="container__search-element select-font"
+              @change="filterVendor()"
+              id="vend"
+            >
+              <option value selected>Select type of truck</option>
+              <option value="3T Truck">3 Tonne Truck</option>
+              <option value="5T Truck">5 Tonne Truck</option>
+              <option value="10T Truck">10 Tonne Truck</option>
+              <option value="14T Truck">14 Tonne Truck</option>
+              <option value="20T Truck">20 Tonne Truck</option>
+              <option value="28T Truck">28 Tonne Truck</option>
+            </select>
           </span>
           <span class="container__search-select" v-if="ordercount.length > 0">
-            <select name class="container__search-element select-font" @change="definePayload()" v-model="orderRange">
+            <select
+              name
+              class="container__search-element select-font"
+              @change="definePayload()"
+              v-model="orderRange"
+            >
               <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
             </select>
           </span>
         </div>
-        <select name class="order-range" @change="definePayload()" v-model="orderRange" v-if="ordercount.length > 0">
+        <select
+          name
+          class="order-range"
+          @change="definePayload()"
+          v-model="orderRange"
+          v-if="ordercount.length > 0"
+        >
           <option :value="order" v-for="order in ordercount" :key="order">{{ order }}</option>
         </select>
         <div class="bids">
@@ -39,11 +80,23 @@
               <p class="no-records-par">There are no orders</p>
             </div>
             <template v-for="order in orders.slice().reverse()">
-              <div class="orders__list-row" @click="toggle(order.id)" :class="{ opened: opened.includes(order.id) }" v-if="showParentOrdercard(order.id)" :key="order.id">
+              <div
+                class="orders__list-row"
+                @click="toggle(order.id)"
+                :class="{ opened: opened.includes(order.id) }"
+                v-if="showParentOrdercard(order.id)"
+                :key="order.id"
+              >
                 <div class="orders__list-col pickup">
                   <p class="orders__mobile-col">Pickup</p>
-                  <p class="row1" @mouseover="showFromTooltip(order.id)" @mouseout="hideFromTooltip(order.id)">{{ shortFromName(order.id) }}</p>
-                  <span :class="`tooltiptext sp${order.id}`">{{ order.from_name }}, {{ order.start_address }}</span>
+                  <p
+                    class="row1"
+                    @mouseover="showFromTooltip(order.id)"
+                    @mouseout="hideFromTooltip(order.id)"
+                  >{{ shortFromName(order.id) }}</p>
+                  <span
+                    :class="`tooltiptext sp${order.id}`"
+                  >{{ order.from_name }}, {{ order.start_address }}</span>
                 </div>
                 <div class="orders__list-col load">
                   <p class="orders__mobile-col">Load</p>
@@ -51,8 +104,14 @@
                 </div>
                 <div class="orders__list-col destination">
                   <p class="orders__mobile-col">Destination</p>
-                  <p class="row2" @mouseover="showToTooltip(order.id)" @mouseout="hideToTooltip(order.id)">{{ shortToName(order.id) }}</p>
-                  <span :class="`tooltiptext sps${order.id}`">{{ order.to_name }}, {{ order.end_address }}</span>
+                  <p
+                    class="row2"
+                    @mouseover="showToTooltip(order.id)"
+                    @mouseout="hideToTooltip(order.id)"
+                  >{{ shortToName(order.id) }}</p>
+                  <span
+                    :class="`tooltiptext sps${order.id}`"
+                  >{{ order.to_name }}, {{ order.end_address }}</span>
                 </div>
                 <div class="orders__list-col distance">
                   <p class="orders__mobile-col">Distance</p>
@@ -77,15 +136,37 @@
                 <div class="orders__list-col bid-in"></div>
                 <div class="orders__list-col center-action">
                   <P class="orders__mobile-col uppercase">action</P>
-                  <button class="orders__sendquote-icon button-menu uppercase" v-if="order.bidPlaced === 0 && !opened.includes(order.id) && order.confirmStatus === 0 && order.orderStatus === 1">adjust quote</button>
-                  <button class="orders__hidedetails-icon button-menu uppercase" v-if="order.bidPlaced === 0 && opened.includes(order.id) && order.confirmStatus === 0 && order.orderStatus === 1">hide details</button>
-                  <button class="orders__bidplaced-icon button-menu uppercase" v-if="order.bidPlaced === 1 && order.confirmStatus === 0 && order.orderStatus === 1">bid updated</button>
-                  <button class="confirmed-for-others-button-menu button-menu uppercase" v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.awardStatus === 0">not awarded</button>
-                  <button class="cancelled-button-menu button-menu uppercase" v-if="order.orderStatus === 2 || order.orderStatus === 0">cancelled</button>
-                  <button class="awarded-to-you-button-menu button-menu uppercase" v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.awardStatus === 1">awarded</button>
+                  <button
+                    class="orders__sendquote-icon button-menu uppercase"
+                    v-if="order.bidPlaced === 0 && !opened.includes(order.id) && order.confirmStatus === 0 && order.orderStatus === 1"
+                  >adjust quote</button>
+                  <button
+                    class="orders__hidedetails-icon button-menu uppercase"
+                    v-if="order.bidPlaced === 0 && opened.includes(order.id) && order.confirmStatus === 0 && order.orderStatus === 1"
+                  >hide details</button>
+                  <button
+                    class="orders__bidplaced-icon button-menu uppercase"
+                    v-if="order.bidPlaced === 1 && order.confirmStatus === 0 && order.orderStatus === 1"
+                  >bid updated</button>
+                  <button
+                    class="confirmed-for-others-button-menu button-menu uppercase"
+                    v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.awardStatus === 0"
+                  >not awarded</button>
+                  <button
+                    class="cancelled-button-menu button-menu uppercase"
+                    v-if="order.orderStatus === 2 || order.orderStatus === 0"
+                  >cancelled</button>
+                  <button
+                    class="awarded-to-you-button-menu button-menu uppercase"
+                    v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.awardStatus === 1"
+                  >awarded</button>
                 </div>
               </div>
-              <div v-if="opened.includes(order.id)" :class="`open-row row-${order.id}`" :key="order.orderNo">
+              <div
+                v-if="opened.includes(order.id)"
+                :class="`open-row row-${order.id}`"
+                :key="order.orderNo"
+              >
                 <div class="blinder" v-if="cancelStatus">
                   <div class="confirm-cancel">
                     <p class="cancel-par">Are you sure you want to cancel this quote?</p>
@@ -116,7 +197,7 @@
                     </div>
                   </div>
                   <div class="order__column">
-                    <p class="order__weight heading uppercase">weight of the order</p>
+                    <p class="order__weight heading uppercase">approximate weight of the order</p>
                     <p class="order__weight par" v-if="!weight">Not applicable</p>
                     <p class="order__weight par" v-else>{{ weight }}</p>
                     <p class="order__loader heading uppercase">loader(s) needed</p>
@@ -130,26 +211,51 @@
                   </div>
                   <div class="order__column">
                     <p class="order__amount heading uppercase" v-if="order.bid_status === 0">amount</p>
-                    <p class="order__amount par" v-if="order.bid_status === 0">{{ order.currency }} {{ currencyFormat(order.id) }}</p>
+                    <p
+                      class="order__amount par"
+                      v-if="order.bid_status === 0"
+                    >{{ order.currency }} {{ currencyFormat(order.id) }}</p>
                     <div v-if="order.confirmed === 0 && order.bidPlaced === 0">
                       <div class="order__bidtimer-duration" v-if="order.bid_status === 1">
                         <span class="order__price-estimate">
-                          <p class="order__amount heading uppercase">the minimum amount the client is willing to pay is</p>
-                          <p class="order__estimate-amount par">{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
+                          <p
+                            class="order__amount heading uppercase"
+                          >the minimum amount the client is willing to pay is</p>
+                          <p
+                            class="order__estimate-amount par"
+                          >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
                         </span>
                         <span class="order__price-estimate"></span>
                       </div>
                       <div v-if="order.confirmStatus === 0 && order.orderStatus === 1">
                         <div class="order__quote-amount">
                           <p class="order__amount heading uppercase">your quote</p>
-                          <input type="text" class="input orders__bid-input" placeholder="Enter quote amount" @input="confirm(order.id)" v-model="quoteAmount" />
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="Enter quote amount"
+                            @input="confirm(order.id)"
+                            v-model="quoteAmount"
+                          />
                         </div>
-                        <p class="orders__bidvehicle-type heading uppercase">select a vehicle to service this order</p>
-                        <select class="orders__bidvehicle-type-input par" v-if="!addVehicleStatus" v-model="count" @change="vehicleSelector(order.id)">
+                        <p
+                          class="orders__bidvehicle-type heading uppercase"
+                        >select a vehicle to service this order</p>
+                        <select
+                          class="orders__bidvehicle-type-input par"
+                          v-if="!addVehicleStatus"
+                          v-model="count"
+                          @change="vehicleSelector(order.id)"
+                        >
                           <option class selected value="null">Select a vehicle</option>
                           <option class v-for="vehicle in vehicles" :value="vehicle.count" :key="vehicle.count">{{ vehicle.registration_no }} {{ displayVehicles(vehicle.count) }}</option>
                         </select>
-                        <select class="orders__bidvehicle-type-input disabled par" v-if="addVehicleStatus" @click="setVehicleStatus()" readonly>
+                        <select
+                          class="orders__bidvehicle-type-input disabled par"
+                          v-if="addVehicleStatus"
+                          @click="setVehicleStatus()"
+                          readonly
+                        >
                           <option class value selected>Select a vehicle</option>
                         </select>
                         <p class="orders__addvehicle link" @click="toggleVehicle(order.id)">
@@ -157,15 +263,44 @@
                           <i class="material-icons icon" v-if="addVehicleStatus">remove</i>&nbsp;&nbsp;Add a vehicle
                         </p>
                         <div class="orders__adddriver-form" v-if="addVehicleStatus">
-                          <input type="text" class="input orders__bid-input" placeholder="Enter Registration Number" v-model="regNo" @input="addRegNo(order.id)" />
-                          <input type="text" class="input orders__bid-input" placeholder="Enter Insurance Number" v-model="insuNo" @input="addInsuNo(order.id)" />
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="Enter Registration Number"
+                            v-model="regNo"
+                            @input="addRegNo(order.id)"
+                          />
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="Enter Insurance Number"
+                            v-model="insuNo"
+                            @input="addInsuNo(order.id)"
+                          />
                         </div>
-                        <p class="orders__assigndriver heading uppercase">select a driver to assign to this order</p>
-                        <select class="orders__assigndriver-input par" v-if="!addDriverStatus" v-model="count1" @change="driverSelector(order.id)">
+                        <p
+                          class="orders__assigndriver heading uppercase"
+                        >select a driver to assign to this order</p>
+                        <select
+                          class="orders__assigndriver-input par"
+                          v-if="!addDriverStatus"
+                          v-model="count1"
+                          @change="driverSelector(order.id)"
+                        >
                           <option class selected value="null">Select a driver</option>
-                          <option class v-for="rider in riders" :value="rider.count" :key="rider.count">{{ rider.rider_name }}</option>
+                          <option
+                            class
+                            v-for="rider in riders"
+                            :value="rider.count"
+                            :key="rider.count"
+                          >{{ rider.rider_name }}</option>
                         </select>
-                        <select class="orders__assigndriver-input disabled par" v-if="addDriverStatus" @click="setDriverStatus()" readonly>
+                        <select
+                          class="orders__assigndriver-input disabled par"
+                          v-if="addDriverStatus"
+                          @click="setDriverStatus()"
+                          readonly
+                        >
                           <option class value selected>Select a driver</option>
                         </select>
                         <p class="orders__add-driver link" @click="toggleDriver()">
@@ -173,19 +308,48 @@
                           <i class="material-icons icon" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
                         </p>
                         <div class="orders__addvehicle-form" v-if="addDriverStatus">
-                          <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
-                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" />
-                          <vue-tel-input v-model="driverPhone" v-bind="bindProps" class="input orders__bid-input" id="phone" @input="addPhone(order.id)"></vue-tel-input>
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="Enter Name"
+                            v-model="driverName"
+                            @input="addDriverName(order.id)"
+                          />
+                          <input
+                            type="text"
+                            class="input orders__bid-input"
+                            placeholder="ID Number"
+                            v-model="ID"
+                            @input="addId(order.id)"
+                          />
+                          <vue-tel-input
+                            v-model="driverPhone"
+                            v-bind="bindProps"
+                            class="input orders__bid-input"
+                            id="phone"
+                            @input="addPhone(order.id)"
+                          ></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
-                          <button class="orders__disabled-button uppercase" v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 0" disabled>adjust quotes</button>
-                          <button class="orders__sendquote-button uppercase" @click="sendBid(order.id)" v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 1">{{ sendQuoteButtonState }}</button>
+                          <button
+                            class="orders__disabled-button uppercase"
+                            v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 0"
+                            disabled
+                          >adjust quotes</button>
+                          <button
+                            class="orders__sendquote-button uppercase"
+                            @click="sendBid(order.id)"
+                            v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 1"
+                          >{{ sendQuoteButtonState }}</button>
                         </div>
                         <p class="cancel-quote" @click="cancelStatus = true">or cancel this quote</p>
                       </div>
                     </div>
                     <div class="center-action center-action--lower force-leftalign">
-                      <button class="orders__confirmed-button uppercase" v-if="order.confirmed === 1">confirmed</button>
+                      <button
+                        class="orders__confirmed-button uppercase"
+                        v-if="order.confirmed === 1"
+                      >confirmed</button>
                     </div>
                   </div>
                 </div>

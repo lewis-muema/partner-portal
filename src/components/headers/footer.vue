@@ -20,10 +20,7 @@
     <span>
       10 Very Likely
     </span>
-    <button class="dismissbtn" @click="cancelSurvey()" v-if="dismissStatus === 1" disabled>
-        X
-      </button>
-      <button class="dismissbtn" @click="cancelSurvey()" v-else>
+    <button class="dismissbtn" @click="cancelSurvey()">
         X
       </button>
     </div>
@@ -32,23 +29,20 @@
     <div class="container" v-if="selectedRating !== '' && surveyStatus !== 1">
   <div class="row">
     <div class="col-lg-12">
-    <h5 class="align-middle">What do you like most about Sendy?</h5>
+    <h5 class="align-middle">What do you like most about Sendy?(Optional)</h5>
     <br/>
     </div>
   </div>
   <div class="row" id="info">
     <div class="col-lg-11">
       <span>
-        <textarea v-model="opinion" :class="this.error === 1? 'opinionerror' : 'opinion'"></textarea>
+        <textarea id="opinion" v-model="opinion"></textarea>
     <button id="submitbtn" @click="submitSurvey()">
       Submit
       </button>
       </span></div>
       <div class="col-lg-1">
-    <button class="dismissbtn" @click="cancelSurvey()" v-if="dismissStatus === 1" disabled>
-        X
-      </button>
-      <button class="dismissbtn" @click="cancelSurvey()" v-else>
+    <button class="dismissbtn" @click="cancelSurvey()">
         X
       </button>
     </div>
@@ -78,8 +72,6 @@ export default {
       surveyStatus: 0,
       ownerID: null,
       countryCode: '',
-      dismissStatus: null,
-      submitStatus: null,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +79,6 @@ export default {
         },
       },
       message: '',
-      error: null,
       };
   },
 beforeMount () {
@@ -99,12 +90,9 @@ beforeMount () {
       return this.selectedRating;
     },
     submitSurvey() {
-      if (this.selectedRating !== '' && this.opinion !== '') {
+      if (this.selectedRating !== '') {
       this.surveyStatus = 1;
       this.postSurvey();
-      } else if (this.opinion === '') {
-      this.surveyStatus = 0;
-      this.error = 1;
       } else {
         this.surveyStatus = 0;
       }
@@ -119,12 +107,11 @@ beforeMount () {
       this.countryCode = sessionInfo.country_code;
     },
     postSurvey() {
-      this.submitStatus = 1;
       const surveyPayload = {
         respondent_type: 'owner',
         respondent_id: this.ownerID,
         country_code: this.countryCode,
-        business_unit_id: null,
+        business_unit_id: 1,
         score: this.selectedRating,
         reason: this.opinion,
       };
@@ -135,17 +122,15 @@ beforeMount () {
           this.fadeSurvey();
         })
         .catch(error => {
-          this.submitStatus = 0;
           this.message = 'Sorry Something went wrong. Try Again';
         });
     },
     cancelSurvey() {
-      this.dismissStatus = 1;
       const surveyPayload = {
         respondent_type: 'owner',
         respondent_id: this.ownerID,
         country_code: this.countryCode,
-        business_unit_id: null,
+        business_unit_id: 1,
         dismissed: true,
       };
       axios
@@ -159,7 +144,6 @@ beforeMount () {
         })
         .catch(error => {
           this.message = 'Sorry Something went wrong. Try Again';
-          this.dismissStatus = 0;
         });
     },
 },
@@ -221,21 +205,9 @@ color: #757575;
   color: #fff;
 }
 
-.opinion{ border: 1px solid
+#opinion{ border: 1px solid
 rgb(189, 189, 189);
 box-sizing: border-box;
-box-shadow:
-rgba(0, 0, 0, 0.15) 0px 5px 10px;
-border-radius: 5px;
-width: 80%;
-margin-right: 20px;
-height: 65px;
-resize: none;
-}
-
-.opinionerror{
-  border: 2px solid rgb(255, 30, 30);
-  box-sizing: border-box;
 box-shadow:
 rgba(0, 0, 0, 0.15) 0px 5px 10px;
 border-radius: 5px;

@@ -13,7 +13,6 @@ import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
 import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, Input, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, RadioButton } from 'element-ui';
-import SendyAuth from '@sendyit/auth';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import VueSignaturePad from 'vue-signature-pad';
 import App from './App.vue';
@@ -24,26 +23,10 @@ import store from './store';
 locale.use(lang);
 Vue.use(VueSignaturePad);
 
-Vue.use(SendyAuth, {
-  // social authentication driver: 'google'
-  // default: google
-  driver: 'basic',
-
-  // internal authentication url
-  authUrl: `${process.env.VUE_APP_AUTH}partner_portal/login`,
-
-  // custom configurations for social drivers
-  configs: {
-    google: {
-      // google's client key & identification for gapi
-      clientId: '',
-    },
-  },
-});
 Vue.use(ApmVuePlugin, {
   router,
   config: {
-    serviceName: 'Vue-partner-portal',
+    serviceName: 'vue-partner-portal',
     serverUrl: process.env.ELASTIC_APM_SERVER_URL,
     serviceVersion: process.env.ELASTIC_APM_SERVICE_VERSION,
     environment: process.env.DOCKER_ENV,
