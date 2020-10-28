@@ -65,8 +65,8 @@ describe('Dashboard.vue', () => {
   wrapper.vm.ownerStats = {
     averageRatingThisWeek: 3,
     averageRatingThisMonth: 4,
-    hoursOnlineThisMonth: 0.0081,
-    hoursOnlineThisWeek: 0.0081,
+    hoursOnlineThisMonth: 0.023,
+    hoursOnlineThisWeek: 0.023,
   };
   it('Check whether cash made this month function always returns a positive', () => {
     expect(wrapper.vm.cashMadeThisMonth).equal(100);
@@ -92,10 +92,10 @@ describe('Dashboard.vue', () => {
     expect(wrapper.vm.ratingThisMonth()[4]).equal(0);
   });
   it('Check whether weekly online hours function always returns the correct the hours', () => {
-    expect(wrapper.vm.hoursOnlineThisWeek()).equal(0.0081);
+    expect(wrapper.vm.hoursOnlineThisWeek()).equal('0.02');
   });
   it('Check whether monthly online hours function always returns the correct the hours', () => {
-    expect(wrapper.vm.hoursOnlineThisMonth()).equal(0.0081);
+    expect(wrapper.vm.hoursOnlineThisMonth()).equal('0.02');
   });
   it('Check whether currencies function always returns the correct currencies array', () => {
     expect(wrapper.vm.currencies[0]).equal('KES');

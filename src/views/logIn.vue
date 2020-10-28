@@ -43,9 +43,15 @@
 </template>
 
 <script>
-import VueTelInput from 'vue-tel-input';
 import $ from 'jquery';
+import VueTelInput from 'vue-tel-input';
+import 'vue-tel-input/dist/vue-tel-input.css';
 import axios from 'axios';
+import sha1 from 'js-sha1';
+import Mixpanel from 'mixpanel';
+import { Base64 } from 'js-base64';
+
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   title: 'Partner Portal - Log In',
@@ -54,6 +60,10 @@ export default {
   },
   data() {
     return {
+      state: 'login',
+      tel: '',
+      password: '',
+      phoneValidity: false,
       bindProps: {
         defaultCountry: 'KE',
         disabledFetchingCountry: false,
@@ -79,19 +89,15 @@ export default {
         },
         validCharactersOnly: true,
       },
-      phoneValidity: false,
-      baseURL: '',
-      onboardingPortal: '',
-      notificationName: '',
-      notificationType: '',
-      error: '',
+      loginError: '',
     };
   },
-  mounted() {
-    this.baseURL = window.location.origin;
-    this.onboardingPortal = process.env.ONBOARDING_PORTAL;
-    $('p').css({ 'font-size': '13px' });
-    $('input').css({ width: '293px' });
+  computed: {
+    displayNo() {
+      return this.tel;
+    },
+  },
+  created() {
     if (localStorage.expiryDate) {
       axios
         .post(`${process.env.VUE_APP_AUTH}logout`, { refresh_token: localStorage.refreshToken })
@@ -107,11 +113,11 @@ export default {
     /* eslint-disable */
     Valid: function({ number, isValid, country }) {
       this.phoneValidity = isValid;
-      if (number) {
+      if (this.tel) {
         if (isValid) {
-          $('.tel-input').css({ 'border-color': 'rgb(34, 255, 112)', 'box-shadow': '0px 1px 5px 1px #00ff5a' });
+          $('.login__phone-input').css({ 'border-color': 'rgb(34, 255, 112)', 'box-shadow': '0px 1px 5px 1px #00ff5a' });
         } else {
-          $('.tel-input').css({ 'border-color': 'rgb(255, 160, 160)', 'box-shadow': 'rgba(255, 0, 0, 0.58) 0px 1px 5px 1px' });
+          $('.login__phone-input').css({ 'border-color': 'rgb(255, 160, 160)', 'box-shadow': 'rgba(255, 0, 0, 0.58) 0px 1px 5px 1px' });
         }
       }
     },
@@ -194,13 +200,6 @@ export default {
           this.error('Please try again', 7000);
         }
       });
-      parsedData.payload.super_user = false;
-      sessionData = JSON.stringify(parsedData);
-      const expiry = new Date();
-      expiry.setDate(expiry.getDate() + 3);
-      localStorage.expiryDate = expiry;
-      localStorage.sessionData = sessionData;
-      this.fetchSignatureStatus(parsedData.payload.phone);
     },
     handleResponse(response) {
       const refreshToken = response.data.refresh_token;
@@ -230,31 +229,44 @@ export default {
         this.error('Sorry, your details did not match!', 7000);
       }
     },
-    signInError(error) {
-      this.notificationName = 'message-box-up';
-      this.notificationType = 'failed';
-      if (error.status) {
-        this.error = 'Please try again';
+    handleButton(data) {
+      if (this.state === 'login') {
+        $('.login__btn').html(data);
       } else {
-        this.error = 'Sorry, your details did not match!';
+        $('.reset__btn').html(data);
       }
+    },
+    error(errorStatement, timeout) {
+      this.loginError = errorStatement;
       setTimeout(() => {
-        this.notificationName = 'message-box-down';
-      }, 3000);
+        this.loginError = '';
+      }, timeout);
+    },
+    TrackLogin(response) {
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track('Owner Login Web', {
+          Name: response.name,
+          Phone: response.phone,
+          Id_no: response.id_no,
+          email: response.email,
+          Owner_id: response.id,
+          Country: response.country_code,
+          Currency: response.default_currency,
+        });
+      }
     },
   },
 };
 </script>
 
 <style>
-.tel-input {
-  width: 293px;
+p {
+  font-size: 24px;
+  color: #666;
 }
-.tel-input .dropdown {
-  padding: 0 !important;
-}
-.tel-input .dropdown .selection {
-  padding: 0 !important;
+a,
+a:hover {
+  color: #f57f20;
 }
 .login__phone-input .dropdown, .login__phone-input .dropdown .selection {
   padding: 0px !important;
