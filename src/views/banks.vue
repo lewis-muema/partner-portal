@@ -332,11 +332,12 @@ export default {
       });
 
       axios
-        .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/check_verification`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}v1/check_verification`, payload, this.config)
         .then(response => {
           this.handleVerificationResponse(response);
         })
         .catch(error => {
+          this.handleVerificationResponse(error.response);
           this.errorObj = error.response;
           this.handleError(error, 1);
         });
@@ -396,10 +397,10 @@ export default {
         this.notify(1, 2, 'Sending Code');
         this.sendingCodeStatus = true;
         const payload = JSON.stringify({
-          phone_no: this.sessionInfo.phone,
+          number: this.sessionInfo.phone,
         });
         axios
-          .post(`${process.env.VUE_APP_AUTH}private/parcel/index.php/api/v11/verify_phone`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}v1/request_verification`, payload, this.config)
           .then(response => {
             this.handleSendCodeResponse(response);
           })

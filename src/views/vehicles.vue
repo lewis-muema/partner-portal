@@ -1074,6 +1074,7 @@ export default {
           }
         })
         .catch(error => {
+          this.errorObj = error.response;
           $('#upErr5')
               .html(`Something went wrong while adding the vehicle. ${error.response.data.message}. Please try again.`)
               .fadeIn('slow');
@@ -1255,7 +1256,7 @@ export default {
             this.fetchVehicles();
           }
         })
-        .catch(() => {
+        .catch(error => {
           this.errorObj = error.response;
           $('#upErr2').fadeOut('slow');
           $('#upErr2')
@@ -1278,7 +1279,7 @@ export default {
             this.fetchVehicles();
           }
         })
-        .catch(() => {
+        .catch(error => {
           this.errorObj = error.response;
           $('#upErr3').fadeOut('slow');
           $('#upErr3')
@@ -1324,6 +1325,7 @@ export default {
           this.fetchVehicles();
         })
         .catch(error => {
+          this.errorObj = error.response;
           $('#upErr')
             .html(error.response.data.message)
             .fadeIn('slow');
