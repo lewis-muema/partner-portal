@@ -233,6 +233,10 @@
 .pop-up-sending {
   background-color: #f78114;
 }
+.resend-code {
+  cursor: pointer;
+  color: #f78114;
+}
 .loader {
   border: 4px solid #f3f3f3;
   border-top: 4px solid #f78114;

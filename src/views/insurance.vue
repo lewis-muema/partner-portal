@@ -196,6 +196,8 @@ export default {
     },
     initiateUpload() {
       if (Object.keys(this.insuranceImageData).length === 0 || this.certificate_no === '' || this.policy_no === '') {
+        this.notify(3, 0, 'Kindly provide all values');
+      } else {
         const payload = {
           riderId: parseInt(this.rider, 10),
           type: 2,
@@ -218,8 +220,6 @@ export default {
             this.errorObj = error.response;
             this.notify(3, 0, 'Request Refund Error . Try again');
           });
-      } else {
-        this.notify(3, 0, 'Kindly provide all values');
       }
     },
     clearSavedData() {

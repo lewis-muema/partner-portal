@@ -23,6 +23,22 @@ body {
   float: left;
   margin-right: 10px;
 }
+.pending-orders-loading-spinner {
+  width: 20px;
+  height: 20px;
+  border-color: black;
+  border: solid;
+  border-radius: 100px;
+  border-top-color: white;
+  border-width: 2px;
+  animation: fa-spin 2s infinite linear;
+  float: left;
+  margin-right: 10px;
+}
+.container__search-loader {
+  display: flex;
+  align-items: center;
+}
 @-moz-document url-prefix() {
   table {
     width: 100%;

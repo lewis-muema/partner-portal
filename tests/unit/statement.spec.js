@@ -77,7 +77,7 @@ describe('Statement.vue', () => {
   };
   const vehiclesAndRiders = {
     status: true,
-    msg: [
+    vehicles: [
       {
         vehicle: {
           id: '562',
@@ -472,7 +472,7 @@ describe('Statement.vue', () => {
   };
   const dataResponse = {
     status: true,
-    msg: {
+    details: {
       statement: [
         {
           owner_id: '532',
@@ -903,7 +903,7 @@ describe('Statement.vue', () => {
           response: vehiclesAndRiders,
         })
         .then(() => {
-          expect(wrapper.vm.vehArray[0].vehicle.model).equal(vehiclesAndRiders.msg[0].vehicle.model);
+          expect(wrapper.vm.vehArray[0].vehicle.model).equal(vehiclesAndRiders.vehicles[0].vehicle.model);
           expect(wrapper.vm.riders[1].f_name).equal('Samuel ');
           expect(wrapper.vm.vehicles[1].model).equal('mondo');
           done();
@@ -996,7 +996,7 @@ describe('Statement.vue', () => {
   it('Check whether the definePayload function returns the correct payload with selected filter dated on filter action', () => {
     wrapper.vm.from = '2014-08-01 00:00:00';
     wrapper.vm.to = '2019-08-31 23:59:59';
-    expect(wrapper.vm.definePayload(2)).equal('{"owner_id":"1198","from":"2014-08-01 00:00:00","to":"2019-08-31 23:59:59","vehicle_id":"","rider_id":""}');
+    expect(wrapper.vm.definePayload(2)).equal('{"owner_id":"1198","from":"2014-08-01 00:00:00","to":"2019-08-31 23:59:59","vehicle_id":null,"rider_id":null}');
   });
   it('Check whether the handleResponse function models the response into the accurate json', () => {
     const response = {
