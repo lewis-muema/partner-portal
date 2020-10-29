@@ -15,10 +15,19 @@
 .login__sign-up {
   color: #f57f20;
 }
-
+.sendy--basic-container {
+  text-align: center;
+}
 .login__forgotPass:hover,
 .login__sign-up:hover {
   text-decoration: underline;
+}
+.tel-input {
+  width: 270px;
+  margin: auto;
+}
+.forgot--password-input {
+  width: 100%;
 }
 
 .login__logo {
@@ -31,7 +40,7 @@
 
 .reset__btn,
 .login__btn {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }

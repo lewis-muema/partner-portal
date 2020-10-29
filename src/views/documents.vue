@@ -7,6 +7,7 @@
             <span class="secnav-page" :class="activeTab === 'drivingLicense' ? 'active' : ''" @click="activeTab = 'drivingLicense'">Driving License</span>
             <span class="secnav-page" :class="activeTab === 'insurance' ? 'active' : ''" @click="activeTab = 'insurance'">Insurance</span>
             <span v-if="bikeRidersStatus" class="secnav-page" :class="activeTab === 'bikeStatus' ? 'active' : ''" @click="activeTab = 'bikeStatus'">Bike status</span>
+            <span v-if="bikeRidersStatus" class="secnav-page" :class="activeTab === 'cbdStatus' ? 'active' : ''" @click="activeTab = 'cbdStatus'">Bike CBD License</span>
             <span class="secnav-page" :class="activeTab === 'refunds' ? 'active' : ''" @click="activeTab = 'refunds'">Refunds</span>
           </div>
         </div>
@@ -15,6 +16,7 @@
     <drivingLicense v-if="activeTab === 'drivingLicense'" :key="componentKey" />
     <insurance v-if="activeTab === 'insurance'" :key="componentKey" />
     <bikeStatus v-if="activeTab === 'bikeStatus'" :key="componentKey" />
+    <cbdStatus v-if="activeTab === 'cbdStatus'" :key="componentKey" />
     <refunds v-if="activeTab === 'refunds'" :key="componentKey" />
   </div>
 </template>
@@ -24,6 +26,7 @@ import axios from 'axios';
 import drivingLicense from './drivingLicense.vue';
 import insurance from './insurance.vue';
 import bikeStatus from './bikeStatus.vue';
+import cbdStatus from './cbdStatus.vue';
 import refunds from './refunds.vue';
 
 export default {
@@ -32,6 +35,7 @@ export default {
     drivingLicense,
     insurance,
     bikeStatus,
+    cbdStatus,
     refunds,
   },
   data() {
