@@ -238,7 +238,7 @@ export default {
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, 'Bike Status Update Error . Try again');
+            this.notify(3, 0, `${this.vehicleDialogData.vendor_disp_name} Status Update Error . Try again`);
           });
       }
     },
