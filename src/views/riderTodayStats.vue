@@ -27,11 +27,11 @@
             <div class="dashboard--progress">
               <div class="row row--extra-align">
                 <div class="completed--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.confirmed }} orders confirmed</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.confirmed }} orders confirmed</span>
               </div>
               <div class="row row--extra-align">
                 <div class="uncompleted--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.rejected }} orders rejected</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.rejected }} orders rejected</span>
               </div>
             </div>
           </div>
@@ -48,11 +48,11 @@
             <div class="dashboard--progress">
               <div class="row row--extra-align">
                 <div class="completed--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.completed }} orders completed</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.completed }} orders completed</span>
               </div>
               <div class="row row--extra-align">
                 <div class="uncompleted--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.cancelled }} orders cancelled</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.cancelled }} orders cancelled</span>
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@
               <span class="dashboard__box-text"><i class="far fa-lightbulb"></i><a class="active-target-hours"> {{ onlineTarget() }} </a>to go to reach your daily target</span>
             </div>
             <div v-else>
-              <span class="dashboard__box-text"><i class="fas fa-check-circle checked-daily-target"></i> Daily target of <a>{{ this.rider_stats.online_target/3600 }} hours</a> achieved</span>
+              <span class="dashboard__box-text"><i class="fas fa-check-circle checked-daily-target"></i> Daily target of <a>{{ this.rider_stats.online_target / 3600 }} hours</a> achieved</span>
             </div>
           </div>
         </div>
