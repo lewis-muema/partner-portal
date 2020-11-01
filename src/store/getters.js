@@ -14,4 +14,7 @@ export default {
   getSessionInfo(state) {
     return state.sessionInfo;
   },
+  getSelectedPartner(state) {
+    return state.selected_partner;
+  },
 };

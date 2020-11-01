@@ -65,6 +65,7 @@ export default {
         },
       },
       visible: false,
+      listed_vendors: [1, 2, 3],
     };
   },
   created() {
@@ -79,23 +80,37 @@ export default {
   },
   methods: {
     trackRiderPerformanceLoad(payload) {
-      const data = JSON.parse(payload);
       if (process.env.DOCKER_ENV === 'production') {
-        mixpanel.track('Rider Performance Loaded', data);
+        mixpanel.track('Rider Performance Loaded', payload);
       }
     },
     fetchBikeDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
         owner_id: sessionInfo.id,
-        vendor_type: 1,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
         .then(res => {
+          const fetched_list = res.data.riders;
+          if (Object.keys(fetched_list).length > 0) {
+            const filtered_list = res.data.riders.filter(obj => this.listed_vendors.includes(obj.vendor_type));
+
+            const setRider = this.$store.getters.getSelectedPartner;
+            if (Object.keys(setRider).length > 0) {
+              this.rider_list.push(setRider);
+              const fetched_data = filtered_list.filter(obj => obj.rider_id !== setRider.rider_id);
+              if (fetched_data.length > 0) {
+                for (let i = 0; i < fetched_data.length; i++) {
+                  this.rider_list.push(fetched_data[i]);
+                }
+              }
+            } else {
+              this.rider_list = filtered_list;
+            }
+          }
           this.$store.commit('setBikeAvailability', true);
-          this.$store.commit('setBikeRiders', res.data.riders);
-          this.rider_list = res.data.riders;
+          this.$store.commit('setBikeRiders', this.rider_list);
           this.singleRiderIdentifier();
           this.riderLengthIdentifier();
         })

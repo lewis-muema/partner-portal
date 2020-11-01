@@ -15,6 +15,7 @@ import DriverRequest from './views/driverRequest.vue';
 import ExternalTracking from './views/externalTracking.vue';
 import Documents from './views/documents.vue';
 import Performance from './views/performance.vue';
+import PerformanceStats from './views/performanceLoader.vue';
 import ExternalLogin from './views/externalLogin.vue';
 import Signature from './views/signature.vue';
 import auxilliaryServices from './views/auxilliary/auxilliaryServices.vue';
@@ -124,6 +125,11 @@ export default new Router({
       path: '/performance',
       name: 'performance',
       component: Performance,
+    },
+    {
+      path: '/performance/partner-stats',
+      name: 'partner-stats',
+      component: PerformanceStats,
     },
     {
       path: '/documents',
