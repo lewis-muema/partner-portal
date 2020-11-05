@@ -14,4 +14,7 @@ export default {
   setSessionInfo(state, sessionInfo) {
     state.sessionInfo = sessionInfo;
   },
+  setSelectedPartner(state, vendor) {
+    state.selected_partner = vendor;
+  },
 };

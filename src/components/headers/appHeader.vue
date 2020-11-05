@@ -36,7 +36,7 @@
                     <p class="dropdown-item">Documents</p>
                   </router-link>
 
-                  <router-link v-if="performance_status" to="/performance" class="dropdown-link">
+                  <router-link to="/performance" class="dropdown-link">
                     <p class="dropdown-item">Performance</p>
                   </router-link>
                   <div @click="trainingRedirect()" class="dropdown-link">
