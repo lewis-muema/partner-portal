@@ -14,6 +14,7 @@ const state = {
   rider_id: '',
   owner_id: '',
   sessionInfo: '',
+  selected_partner: [],
 };
 
 export default {

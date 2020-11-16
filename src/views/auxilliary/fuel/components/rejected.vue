@@ -125,9 +125,15 @@
           >
             <div class="declined-requests-owner-sections">
               <div class="declined-requests-owner-details">
-                <span class="declined-requests-owner-label">{{
-                  order.owner_details.reason ? order.owner_details.reason : 'No reason given'
+                <span class="declined-requests-owner-label" v-if="order.owner_details.reason">{{
+                  order.owner_details.reason
                 }}</span>
+                <span class="declined-requests-owner-label" v-else-if="order.admin_details.reason">
+                  {{ order.admin_details.reason }}
+                </span>
+                <span v-else>
+                  No reason given
+                </span>
               </div>
             </div>
           </div>
