@@ -36,7 +36,7 @@
                     <p class="dropdown-item">Documents</p>
                   </router-link>
 
-                  <router-link to="/performance" class="dropdown-link">
+                  <router-link v-if="show_performance" to="/performance" class="dropdown-link">
                     <p class="dropdown-item">Performance</p>
                   </router-link>
                   <div @click="trainingRedirect()" class="dropdown-link">
@@ -93,6 +93,7 @@ export default {
       performance_status: false,
       super_user: false,
       nps_eligibility: null,
+      show_performance: false,
     };
   },
   computed: {
@@ -111,6 +112,7 @@ export default {
       this.fetchBikeDrivers();
       this.npsEligibility();
       this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
+      this.checkPerformanceStatus();
     }
   },
   methods: {
@@ -187,6 +189,19 @@ export default {
         .post(`${process.env.ADONIS_PRIVATE_API}nps/verify`, userPayload, this.config)
         .then(res => {
           this.nps_eligibility = res.data.valid;
+        })
+        .catch(error => error);
+    },
+    checkPerformanceStatus() {
+      this.show_performance = false;
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      const userPayload = {
+        owner_id: sessionInfo.id,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/performance_status`, userPayload, this.config)
+        .then(res => {
+          this.show_performance = res.data.performance_status;
         })
         .catch(error => error);
     },
