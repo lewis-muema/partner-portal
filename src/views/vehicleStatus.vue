@@ -4,61 +4,63 @@
     <documentsLoading v-if="show_loading" />
     <div class="stats-dash" v-else>
       <div class="row dashboard__row">
-        <el-table :data="bikeData" class="documents-table-outer">
+        <el-table :data="vehicleData" class="documents-table-outer">
           <el-table-column label="" width="60">
             <template slot-scope="scope">
-              <i class="el-icon-success success-license" v-if="bikeData[scope.$index]['update_carrier_type'] !== 1"></i>
-              <i class="el-icon-warning declined-license" v-if="bikeData[scope.$index]['update_carrier_type'] === 1"></i>
+              <i class="el-icon-success success-license" v-if="vehicleData[scope.$index]['update_carrier_type'] !== 1"></i>
+              <i class="el-icon-warning declined-license" v-if="vehicleData[scope.$index]['update_carrier_type'] === 1"></i>
             </template>
           </el-table-column>
           <el-table-column width="400">
             <template slot-scope="scope">
               <div class="performance--outer-overlay">
                 <div class="rider--info bike-status-rider-label">
-                  <p class="rider--name">{{ bikeData[scope.$index]['vendor_disp_name'] }} {{ bikeData[scope.$index]['number_plate'] }}</p>
+                  <p class="rider--name">{{ vehicleData[scope.$index]['vendor_disp_name'] }} {{ vehicleData[scope.$index]['number_plate'] }}</p>
                 </div>
               </div>
             </template>
           </el-table-column>
           <el-table-column width="700">
             <template slot-scope="scope">
-              <div v-if="bikeData[scope.$index]['update_carrier_type'] === 1">
+              <div v-if="vehicleData[scope.$index]['update_carrier_type'] === 1">
                 <span class="highlight-bike-status"> Update details </span>
               </div>
               <div v-else>
-                {{ bikeStatus(bikeData[scope.$index]) }}
+                {{ vehicleStatus(vehicleData[scope.$index]) }}
               </div>
             </template>
           </el-table-column>
           <el-table-column>
             <template slot-scope="scope">
-              <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(bikeData[scope.$index])" :class="{ disableUpdateBtn: bikeData[scope.$index]['update_carrier_type'] !== 1 }">
+              <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(vehicleData[scope.$index])" :class="{ disableUpdateBtn: vehicleData[scope.$index]['update_carrier_type'] !== 1 }">
                 Update
               </el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <el-dialog :title="dialogTitle()" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
+      <el-dialog :title="dialogTitle(vehicleDialogData.vendor_disp_name)" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
         <div class="inner-dialog">
           <div class="drag-image">
-            <div v-if="bikeDialogData.update_carrier_type === 1">
-              <p class="dialog-inner-label">What is the type of your bike?</p>
+            <div v-if="vehicleDialogData.update_carrier_type === 1">
+              <p class="dialog-inner-label">What is the type of your {{ vehicleDialogData.vendor_disp_name }}?</p>
               <div class="carrier-upper-padding">
                 <div class="vendors-final-outerline">
-                  <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'box' }" @click="selectCard('box', 1)">
-                    <img class="vendor-types-final" :src="getVendorIcon(1)" alt="" />
-                    <p class="vendor-label">Bike with a Box</p>
-                  </div>
                   <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'no-box' }" @click="selectCard('no-box', 0)">
-                    <img class="vendor-types-final" :src="getVendorIcon(0)" alt="" />
-                    <p class="vendor-label">Bike without Box</p>
+                    <img class="vendor-types-final" :src="getVendorIcon(0, vehicleDialogData.vendor_type)" alt="" />
+                    <p v-if="vehicleDialogData.vendor_type === 1" class="vendor-label">Bike without Box</p>
+                    <p v-else class="vendor-label">Open {{ vehicleDialogData.vendor_disp_name }}</p>
+                  </div>
+                  <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'box' }" @click="selectCard('box', 1)">
+                    <img class="vendor-types-final" :src="getVendorIcon(1, vehicleDialogData.vendor_type)" alt="" />
+                    <p v-if="vehicleDialogData.vendor_type === 1" class="vendor-label">Bike with a Box</p>
+                    <p v-else class="vendor-label">Closed {{ vehicleDialogData.vendor_disp_name }}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div class="">
-              <p class="dialog-inner-label">Upload image of your bike</p>
+              <p class="dialog-inner-label">Upload image of your {{ vehicleDialogData.vendor_disp_name }}</p>
               <div class="bike-image">
                 <div class="download-refund-img">
                   <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
@@ -78,7 +80,7 @@
           </div>
           <span slot="footer" class="dialog-footer submit-dialog-footer">
             <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-            <el-button type="primary" @click="initiateBikeUpdate()" class="confirm-refund">Update</el-button>
+            <el-button type="primary" @click="initiateVehicleUpdate()" class="confirm-refund">Update</el-button>
           </span>
         </div></el-dialog>
       <notify />
@@ -98,7 +100,7 @@ import errorHandler from '../components/errorHandler';
 let s3 = '';
 
 export default {
-  name: 'bikeStatus',
+  name: 'vehicleStatus',
   components: { documentsLoading, notify, errorHandler },
   data() {
     return {
@@ -114,19 +116,19 @@ export default {
       radio: '',
       carrier_type: '',
       dialogVisible: false,
-      bikeData: [],
-      bikeDialogData: {},
+      vehicleData: [],
+      vehicleDialogData: {},
       errorObj: '',
       uploading_text: 'Change',
       fileName: '',
-      bikeStatusData: {},
+      vehicleStatusData: {},
       rider: '',
     };
   },
   created() {
     this.initiateS3();
     setTimeout(() => {
-      this.getBikeData();
+      this.getVehicleData();
     }, 5000);
   },
   methods: {
@@ -153,7 +155,7 @@ export default {
 
       document.head.appendChild(script);
     },
-    getBikeData() {
+    getVehicleData() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const payload = {
         ownerId: sessionInfo.id,
@@ -163,17 +165,17 @@ export default {
         .then(res => {
           this.show_loading = false;
           const result = res.data.data;
-          this.bikeData = result.filter(obj => obj.vendor_type === 1);
+          this.vehicleData = result.filter(obj => obj.vendor_type === 1 || obj.vendor_type === 2);
         })
         .catch(error => {
           this.errorObj = error.response;
           this.show_loading = false;
-          this.bikeData = [];
+          this.vehicleData = [];
         });
     },
     openUpdateDialog(data) {
       this.carrier_type = '';
-      this.bikeDialogData = data;
+      this.vehicleDialogData = data;
       this.rider = data.rider_id;
       if (data.update_carrier_type !== 1) {
         this.carrier_type = data.carrier_type;
@@ -182,13 +184,13 @@ export default {
     },
     closeDialog() {
       this.dialogVisible = false;
-      this.bikeDialogData = {};
+      this.vehicleDialogData = {};
       this.fileName = '';
-      this.bikeStatusData = {};
+      this.vehicleStatusData = {};
       this.uploading_text = 'Change';
     },
-    dialogTitle() {
-      return 'Type of bike & CBD status';
+    dialogTitle(vendor) {
+      return `Update type of ${vendor}`;
     },
     handleClose(done) {
       this.$confirm('Are you sure to close this dialog?')
@@ -202,24 +204,27 @@ export default {
       this.activeTab = tab;
       this.carrier_type = code;
     },
-    getVendorIcon(id) {
-      return `https://images.sendyit.com/web_platform/vendor_type/side/v2/${id}.svg`;
+    getVendorIcon(id, vendor) {
+      if (id === 0) {
+        return `https://images.sendyit.com/web_platform/vendor_type/side/v2/open/${vendor}.svg`;
+      }
+      return `https://images.sendyit.com/web_platform/vendor_type/side/v2/closed/${vendor}.svg`;
     },
-    bikeStatus(data) {
-      let carrier_name = 'Bike without a box';
+    vehicleStatus(data) {
+      let carrier_name = data.vendor_type === 1 ? 'Bike without a box' : `Open ${data.vendor_disp_name}`;
       if (data.carrier_type === 1) {
-        carrier_name = 'Bike with a box';
+        carrier_name = data.vendor_type === 1 ? 'Bike with a box' : `Closed ${data.vendor_disp_name}`;
       }
 
       return carrier_name;
     },
-    initiateBikeUpdate() {
-      if (this.carrier_type === '' || Object.keys(this.bikeStatusData).length === 0) {
+    initiateVehicleUpdate() {
+      if (this.carrier_type === '' || Object.keys(this.vehicleStatusData).length === 0) {
         this.notify(3, 0, 'Kindly provide all values');
       } else {
         const payload = {
-          sim_card_sn: this.bikeDialogData.sim_card_sn,
-          rider_phone: this.bikeDialogData.rider_phone,
+          sim_card_sn: this.vehicleDialogData.sim_card_sn,
+          rider_phone: this.vehicleDialogData.rider_phone,
           carrier_type: parseInt(this.carrier_type, 10),
           carrier_type_docs: [`https://s3-eu-west-1.amazonaws.com/sendy-partner-docs/${this.fileName}`],
         };
@@ -228,12 +233,12 @@ export default {
           .then(res => {
             this.dialogVisible = false;
             this.show_loading = true;
-            this.getBikeData();
+            this.getVehicleData();
             this.closeDialog();
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, 'Bike Status Update Error . Try again');
+            this.notify(3, 0, `${this.vehicleDialogData.vendor_disp_name} Status Update Error . Try again`);
           });
       }
     },
@@ -241,20 +246,20 @@ export default {
       this.$root.$emit('Notification', status, type, message);
     },
     handlePictureCardPreview(file) {
-      this.bikeStatusData = file;
-      this.uploadBikeData();
+      this.vehicleStatusData = file;
+      this.uploadVehicleData();
     },
     handleRemove(file, fileList) {
       this.fileName = '';
-      this.bikeStatusData = {};
+      this.vehicleStatusData = {};
       this.uploading_text = 'Change';
     },
-    uploadBikeData() {
-      if (Object.keys(this.bikeStatusData).length === 0) {
+    uploadVehicleData() {
+      if (Object.keys(this.vehicleStatusData).length === 0) {
         this.notify(3, 0, 'Kindly upload bike image ');
       } else {
         this.uploading_text = 'Loading Preview ...';
-        const file = this.bikeStatusData.file;
+        const file = this.vehicleStatusData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
         const rider = parseInt(this.rider, 10);
@@ -285,7 +290,7 @@ export default {
       }
     },
     sanitizeFilename(name) {
-      const temp_name = `bike_img_${new Date().getTime()}.${name.split('.').pop()}`;
+      const temp_name = `${this.vehicleDialogData.vendor_disp_name.toLowerCase().replace(' ', '_')}_img_${new Date().getTime()}.${name.split('.').pop()}`;
       return temp_name;
     },
   },
