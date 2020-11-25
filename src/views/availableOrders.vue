@@ -948,7 +948,7 @@ export default {
       const vendorname = row.vendor_disp_name;
       const fixedcost = row.fixed_cost;
       const takehome = row.take_home;
-      const orderDetails = row.order_details;
+      const orderDetails = row.order_details.values;
       if (row.order_notes.length > 0) {
         orderDetails.orderNotes = row.order_notes[0].msg;
       }
