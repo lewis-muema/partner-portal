@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM sendy-docker-local.jfrog.io/nginx:latest
 
 RUN apt-get update && \
         apt-get install -y sudo curl bzip2 wget git vim gnupg
