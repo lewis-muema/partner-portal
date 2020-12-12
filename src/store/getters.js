@@ -17,4 +17,10 @@ export default {
   getSelectedPartner(state) {
     return state.selected_partner;
   },
+  getFlow(state) {
+    return state.flow;
+  },
+  getFreightOrders(state) {
+    return state.freight_orders;
+  },
 };

@@ -15,6 +15,8 @@ const state = {
   owner_id: '',
   sessionInfo: '',
   selected_partner: [],
+  flow: 'logistics',
+  freight_orders: [],
 };
 
 export default {

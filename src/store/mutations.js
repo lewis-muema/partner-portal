@@ -17,4 +17,10 @@ export default {
   setSelectedPartner(state, vendor) {
     state.selected_partner = vendor;
   },
+  setFlow(state, flow) {
+    state.flow = flow;
+  },
+  setFreightOrders(state, freight_orders) {
+    state.freight_orders = freight_orders;
+  },
 };

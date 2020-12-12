@@ -43,6 +43,30 @@ body {
   -ms-flex-direction: row;
 }
 
+.inner-left-toggles {
+  height: -webkit-fill-available;
+  margin: 0px 70px;
+  display: flex;
+}
+
+.inner-left-toggle-links {
+  height: -webkit-fill-available;
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+ }
+
+.inner-left-toggle-links-active {
+  border-bottom: 5px solid white;
+}
+
+.inner-left-toggle-links-inactive {
+  border-bottom: 5px solid #f57f1f;
+}
+
 .inner-left {
   align-items: center;
   display: flex;
