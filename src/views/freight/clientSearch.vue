@@ -52,7 +52,7 @@ export default {
   computed: {
     query_string() {
       localStorage.setItem('query', this.query);
-      return this.query.trim();
+      return this.query.replace(/ /g, '');
     },
     solarBase() {
       return process.env.PEER_COP_SEARCH;
@@ -61,7 +61,7 @@ export default {
       return process.env.SOLR_JWT;
     },
     src() {
-      return `${this.solarBase}select?q=(phone:*${this.query_string}*+OR+name:*${this.query_string}*+OR+email:*${this.query_string}*+OR+id:*${this.query_string}*)&wt=json&indent=true&row=10&sort=name%20desc&jwt=${this.solarToken}`;
+      return `${this.solarBase}select?q=(phone:*${this.query_string}*+OR+name:*${this.query_string}*+OR+email:*${this.query_string}*)&wt=json&indent=true&row=10&sort=id%20desc&jwt=${this.solarToken}`;
     },
   },
   methods: {
@@ -69,7 +69,7 @@ export default {
       this.isActive = false;
       this.query = item.name;
       this.$store.commit('setUserId', item.type === 'peer' ? item.id : null);
-      this.$store.commit('setCopId', this.type === 'biz' ? item.id : null);
+      this.$store.commit('setCopId', item.type === 'cop' ? item.id : null);
     },
     prepareResponseData(data) {
       return data.response.docs;
