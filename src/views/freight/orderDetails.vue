@@ -95,6 +95,12 @@
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.fuel_station_name }} ({{ advance.fuel_station_address }}) <br />{{ advance.fuel_type }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.status }}</span>
             </div>
+            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.cash_advances" :key="index">
+              <span class="partner-documents-upload-columns partner-documents-fourth-row">Cash</span>
+              <span class="partner-documents-upload-columns partner-documents-third-row">{{ data.currency }} {{ advance.amount }}</span>
+              <span class="partner-documents-upload-columns partner-documents-fourth-row"></span>
+              <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.status }}</span>
+            </div>
             </div>
             <div class="partner-documents-upload-empty" v-else>
               No fuel and cash advance request at the moment
@@ -202,7 +208,10 @@
                   >{{ fuel.name }}</el-option>
                 </el-select>
               </div>
-              <button :class="fuelSubmitStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitFuelRequest">Request fuel advance</button>
+              <button :class="fuelSubmitStatus && !requestLoadingStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitFuelRequest">
+                <i class="el-icon-loading" v-if="requestLoadingStatus"></i>
+                Request fuel advance
+              </button>
             </div>
           </modal>
           <modal name="request-cash-advance" :height="250" :width="400" transition="slide" :pivot-y="0.5">
@@ -224,7 +233,10 @@
                   </template>
                 </el-input>
               </div>
-              <button :class="sendStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button">Request cash advance</button>
+              <button :class="cashSubmitStatus && !requestLoadingStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitCashRequest">
+                <i class="el-icon-loading" v-if="requestLoadingStatus"></i>
+                Request cash advance
+              </button>
             </div>
           </modal>
           <modal name="preview-documents" :height="600" :width="800" transition="slide" :pivot-y="0.5">
@@ -295,6 +307,7 @@ export default {
       uploadStatus: false,
       uploadProgress: false,
       requestStatus: true,
+      requestLoadingStatus: false,
       sendStatus: false,
       documentPreview: '',
       activeDoc: {},
@@ -315,6 +328,9 @@ export default {
     },
     fuelSubmitStatus() {
       return (this.amount && this.fuel && this.address);
+    },
+    cashSubmitStatus() {
+      return this.amount !== '';
     },
   },
   watch: {
@@ -474,6 +490,7 @@ export default {
         });
     },
     submitFuelRequest() {
+      this.requestLoadingStatus = true;
       const payload = {
         order_id: this.data.order_id,
         fuel_type_id: this.fuel,
@@ -490,11 +507,38 @@ export default {
               this.amount = '';
               this.address = '';
               this.fetchOrder();
+              this.requestLoadingStatus = false;
               resolve(response);
             })
             .catch(error => {
               this.notify(3, 0, `There was an error submitting your advance: ${error.response.data.message}`);
               this.errorObj = error.response;
+              this.requestLoadingStatus = false;
+              resolve(error);
+            });
+        });
+    },
+    submitCashRequest() {
+      this.requestLoadingStatus = true;
+      const payload = {
+        order_id: this.data.order_id,
+        amount: this.amount,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+            .post(`${this.auth}orders/v2/freight/cash_advance`, payload, this.config)
+            .then(response => {
+              this.notify(3, 1, `${response.data.message}`);
+              this.$modal.hide('request-cash-advance');
+              this.amount = '';
+              this.fetchOrder();
+              this.requestLoadingStatus = false;
+              resolve(response);
+            })
+            .catch(error => {
+              this.notify(3, 0, `There was an error submitting your advance: ${error.response.data.message}`);
+              this.errorObj = error.response;
+              this.requestLoadingStatus = false;
               resolve(error);
             });
         });
