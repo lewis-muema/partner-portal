@@ -17,6 +17,11 @@ const state = {
   selected_partner: [],
   flow: 'logistics',
   freight_orders: [],
+  user_id: null,
+  cop_id: null,
+  cop_user_id: null,
+  create_order: false,
+  freight_status: '',
 };
 
 export default {

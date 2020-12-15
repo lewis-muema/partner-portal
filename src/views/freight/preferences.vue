@@ -1,5 +1,7 @@
 <template>
   <div class="preferences-container">
+    <verifier />
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="preferences-container-sections">
       <p class="request-advance-input-labels">Locations that you dont want to service</p>
       <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('location')">Add locations</button>
@@ -42,20 +44,46 @@
         </div>
         <div>
           <p class="request-advance-input-labels">Select {{ type }}</p>
-          <el-select v-model="preference" class="request-advance-inputs">
+          <el-select v-model="preference" class="request-advance-inputs" v-if="type === 'location'">
             <el-option :value="item.id" :label="item.name" v-for="(item, index) in preferences" :key="index"></el-option>
+          </el-select>
+          <el-select v-model="preference" class="request-advance-inputs" v-if="type === 'load'">
+            <el-option :value="item.id" :label="item.cargo_type" v-for="(item, index) in cargo_types" :key="index"></el-option>
           </el-select>
         </div>
         <button :class="sendStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button">Add {{ type }}</button>
       </div>
     </modal>
+    <notify />
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import timezone from '../../mixins/timezone';
+import notify from '../../components/notification';
+import verifier from '../../components/verifier';
+import errorHandler from '../../components/errorHandler';
+
 export default {
+  title: 'Partner Portal - Freight Preferences',
+  components: {
+    verifier,
+    errorHandler,
+    notify,
+  },
   data() {
     return {
+      auth: process.env.VUE_APP_AUTH,
+      loadingStatus: true,
+      sessionInfo: '',
+      config: {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.token,
+        },
+      },
+      errorObj: '',
       locations: [
         {
           name: 'Nairobi',
@@ -84,20 +112,53 @@ export default {
           id: 3,
         },
       ],
+      cargo_types: [],
       preferences: [],
-      preference: [],
+      preference: '',
       type: '',
       sendStatus: false,
     };
   },
+  watch: {
+    preference(val) {
+      if (val && this.type) {
+        this.sendStatus = true;
+      } else {
+        this.sendStatus = false;
+      }
+    },
+    type(val) {
+      this.preference = '';
+    },
+  },
+  created() {
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      this.fetchCargoTypes();
+    }
+  },
   methods: {
     addPreference(type) {
       this.type = type;
-      this.preferences = type === 'location' ? this.locations : this.loads;
       this.$modal.show('add-preference');
     },
     deleteLocation(id) {
       console.log(id);
+    },
+    fetchCargoTypes() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${this.auth}/orders/v2/freight/cargo_types`, this.config)
+          .then(response => {
+            this.cargo_types = response.data.cargo_types;
+            resolve(response);
+          })
+          .catch(error => {
+            this.cargo_types = [];
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
   },
 };

@@ -46,6 +46,7 @@
     "vue-router": "^3.1.2",
     "vue-signature-pad": "^2.0.0",
     "vue-tel-input": "^2.2.2",
+    "vue-typeahead": "^2.3.2",
     "vue2-google-maps": "^0.10.7",
     "vuejs-datatable": "^1.7.0",
     "vuejs-datepicker": "^1.6.2",

@@ -23,4 +23,19 @@ export default {
   getFreightOrders(state) {
     return state.freight_orders;
   },
+  getUserId(state) {
+    return state.user_id;
+  },
+  getCopId(state) {
+    return state.cop_id;
+  },
+  getCopUserId(state) {
+    return state.cop_user_id;
+  },
+  getCreateOrderStatus(state) {
+    return state.create_order;
+  },
+  getFreightStatus(state) {
+    return state.freight_status;
+  },
 };

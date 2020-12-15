@@ -6,7 +6,7 @@
         <div class="primary-inner">
           <div class="inner-left">
             <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/Sendy_logo_whitewhite.png" @click="location.href = 'https://sendyit.com/'" />
-            <div class="inner-left-toggles">
+            <div class="inner-left-toggles" v-if="$store.getters.getFreightStatus === 1">
               <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')">Logistics orders</span>
               <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')">Freight orders</span>
             </div>
@@ -128,13 +128,37 @@ export default {
   },
   watch: {
     $route(to, from) {
-      if (to.path.includes('freight')) {
+      this.checkFlow(to.path);
+    },
+    getFlow(val) {
+      this.routeFlow(val);
+    },
+  },
+  created() {
+    if (localStorage.sessionData) {
+      this.$store.commit('setSessionInfo', JSON.parse(localStorage.sessionData).payload);
+      this.$store.commit('setOwnerId', JSON.parse(localStorage.sessionData).payload.id);
+      this.getFreightStatus();
+      this.fetchBikeDrivers();
+      this.npsEligibility();
+      this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
+      this.checkPerformanceStatus();
+    }
+  },
+  methods: {
+    toggleDropUp() {
+      setTimeout(() => {
+        this.dropdown = false;
+      }, this.timeout);
+    },
+    checkFlow(route) {
+      if (route.includes('freight') && this.$store.getters.getFreightStatus === 1) {
         this.setFlow('freight');
       } else {
         this.setFlow('logistics');
       }
     },
-    getFlow(val) {
+    routeFlow(val) {
       if (val === 'logistics') {
         if (this.$route.path.includes('freight')) {
           this.$router.push({ path: '/' });
@@ -144,28 +168,6 @@ export default {
           this.$router.push({ path: '/freight/orders' });
         }
       }
-    },
-  },
-  created() {
-    if (localStorage.sessionData) {
-      this.$store.commit('setSessionInfo', JSON.parse(localStorage.sessionData).payload);
-      this.$store.commit('setOwnerId', JSON.parse(localStorage.sessionData).payload.id);
-      this.fetchBikeDrivers();
-      this.npsEligibility();
-      this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
-      this.checkPerformanceStatus();
-      if (this.$route.path.includes('freight')) {
-        this.setFlow('freight');
-      } else {
-        this.setFlow('logistics');
-      }
-    }
-  },
-  methods: {
-    toggleDropUp() {
-      setTimeout(() => {
-        this.dropdown = false;
-      }, this.timeout);
     },
     toggleDropdown() {
       this.dropdown = true;
@@ -254,6 +256,24 @@ export default {
         })
         .catch(error => {
           this.errorObj = error.response;
+        });
+    },
+    getFreightStatus() {
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      return new Promise((resolve, reject) => {
+        axios
+            .get(`${process.env.ADONIS_PARTNER_API}parcel/owner/freight-status/${sessionInfo.id}`, this.config)
+            .then(response => {
+              this.$store.commit('setFreightStatus', response.data.freightStatus);
+              this.checkFlow(this.$route.path);
+              this.routeFlow(this.getFlow);
+            resolve(response);
+            })
+            .catch(error => {
+              this.$store.commit('setFreightStatus', '');
+              this.errorObj = error.response;
+            resolve(error);
+            });
         });
     },
     checkPerformanceStatus() {

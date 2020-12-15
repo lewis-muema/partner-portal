@@ -3,7 +3,8 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="truckflow__container-tab">
-      <div class="truckflow__container-outer">
+      <div class="loading" v-if="loadingStatus"></div>
+      <div class="truckflow__container-outer" v-else>
         <div class="partner-order-container" :class="'row-' + data.id" v-if="Object.keys(data).length > 0">
           <div class="map-details--go-back-freight" @click="$router.push('/freight/orders')">
             <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
@@ -16,11 +17,11 @@
             <div class="order__column-freight">
               <div class="map-details-row">
                 <p class="map__details-pickup heading-freight uppercase">pickup location</p>
-                <p class="map__details-pickup par">{{ data.pickup }}</p>
+                <p class="map__details-pickup par">{{ data.pick_up_name }}</p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-dest heading-freight uppercase">destination</p>
-                <p class="map__details-dest par">{{ data.destination }}</p>
+                <p class="map__details-dest par">{{ data.destination_name }}</p>
               </div>
               <div class="map-details-row">
                 <p class="order__amount heading-freight uppercase">order amount</p>
@@ -30,25 +31,25 @@
             <div class="order__column-freight">
               <div class="map-details-row">
                 <p class="map__details-distance heading-freight uppercase">client</p>
-                <p class="map__details-distance par">{{ data.client }}</p>
+                <p class="map__details-distance par">{{ data.client_name }}</p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">pickup time</p>
-                <p class="map__details-date par">{{ timeFormat() }}</p>
+                <p class="map__details-date par">{{ timeFormat(data.pick_up_time) }}</p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">type of truck needed</p>
-                <p class="map__details-date par">{{ data.truck }}</p>
+                <p class="map__details-date par">{{ data.carrier_type }}</p>
               </div>
             </div>
             <div class="order__column-freight">
               <div class="map-details-row">
                 <p class="map__details-distance heading-freight uppercase">weight of the load</p>
-                <p class="map__details-distance par">{{ data.load_weight }}</p>
+                <p class="map__details-distance par">{{ data.load_weight }} Tonnes</p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">type of load</p>
-                <p class="map__details-date par">{{ data.load_type }}</p>
+                <p class="map__details-date par">{{ data.load_type ? data.load_type : 'N/A' }}</p>
               </div>
             </div>
           </div>
@@ -62,14 +63,14 @@
               <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
             </div>
             <div class="partner-documents-upload-rows" v-for="(document, index) in data.documents" :key="index">
-              <span class="partner-documents-upload-columns partner-documents-third-row">{{ document.name }}</span>
-              <span class="partner-documents-upload-columns partner-documents-third-row">{{ document.date_uploaded }}</span>
-              <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.document_url)">View document ></span>
-              <span class="partner-documents-upload-columns partner-documents-fourth-row" v-if="document.approval_status === 'Pending'">
-                <button class="partner-documents-approve-button">Approve</button>
-                <button class="partner-documents-decline-button" @click="$modal.show('reject-documents')">Decline</button>
+              <span class="partner-documents-upload-columns partner-documents-third-row">{{ document.document_name }}</span>
+              <span class="partner-documents-upload-columns partner-documents-third-row">{{ timeFormat(document.date_created) }}</span>
+              <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.url)">View document ></span>
+              <span class="partner-documents-upload-columns partner-documents-fourth-row" v-if="document.status === 'PENDING' && document.actionable">
+                <button class="partner-documents-approve-button" @click="triggerAction(2, document)">Approve</button>
+                <button class="partner-documents-decline-button" @click="triggerAction(3, document)">Decline</button>
               </span>
-              <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ document.approval_status }}<br /><span class="reject-documents-reason">{{ document.approval_status === 'Declined' ? `Reason: ${document.reason}` : '' }}</span></span>
+              <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ documentStatuses(document.status) }}<br /><span class="reject-documents-reason" v-if="document.status === 'DECLINED'">Reason: {{ document.reason }}</span></span>
             </div>
             <div class="partner-documents-upload-empty" v-if="data.documents.length === 0">
               No uploaded documents at the time
@@ -81,20 +82,21 @@
               <button :class="requestStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
               <button :class="requestStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">Request cash advance</button>
             </div>
-            <div class="partner-documents-upload-rows" v-if="data.advances.length > 0">
+            <div v-if="data.fuel_advances.length > 0">
+            <div class="partner-documents-upload-rows">
               <span class="partner-documents-upload-header partner-documents-fourth-row">Type of request</span>
-              <span class="partner-documents-upload-header partner-documents-fourth-row">Amount</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">Amount</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">Details</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
             </div>
-            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.advances" :key="index">
-              <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.type }}</span>
-              <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.currency }} {{ advance.amount }}</span>
-              <span class="partner-documents-upload-columns partner-documents-fourth-row" v-if="advance.type === 'Fuel'">{{ advance.station_name }}({{ advance.station_address }}) <br />{{ advance.fuel_type }}</span>
-              <span class="partner-documents-upload-columns partner-documents-fourth-row" v-else></span>
+            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.fuel_advances" :key="index">
+              <span class="partner-documents-upload-columns partner-documents-fourth-row">Fuel</span>
+              <span class="partner-documents-upload-columns partner-documents-third-row">{{ data.currency }} {{ advance.amount }}</span>
+              <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.fuel_station_name }} ({{ advance.fuel_station_address }}) <br />{{ advance.fuel_type }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.status }}</span>
             </div>
-            <div class="partner-documents-upload-empty" v-if="data.advances.length === 0">
+            </div>
+            <div class="partner-documents-upload-empty" v-else>
               No fuel and cash advance request at the moment
             </div>
           </div>
@@ -106,8 +108,8 @@
               </div>
               <p class="upload-documents-modal-top-input-labels">Select type of document</p>
               <select name="" id="" class="upload-documents-modal-top-inputs" v-model="documentType">
-                <option v-for="(document, index) in documents" :key="index" :value="document.name">
-                  {{ document.name }}
+                <option v-for="(document, index) in documents" :key="index" :value="document.document_name">
+                  {{ document.document_name }}
                 </option>
               </select>
               <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">Name of the document</p>
@@ -200,7 +202,7 @@
                   >{{ fuel.name }}</el-option>
                 </el-select>
               </div>
-              <button :class="sendStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button">Request fuel advance</button>
+              <button :class="fuelSubmitStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitFuelRequest">Request fuel advance</button>
             </div>
           </modal>
           <modal name="request-cash-advance" :height="250" :width="400" transition="slide" :pivot-y="0.5">
@@ -225,7 +227,7 @@
               <button :class="sendStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button">Request cash advance</button>
             </div>
           </modal>
-          <modal name="preview-documents" :height="600" :width="400" transition="slide" :pivot-y="0.5">
+          <modal name="preview-documents" :height="600" :width="800" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
                 <p class="upload-documents-modal-top-row-title">Preview document</p>
@@ -240,9 +242,9 @@
                 <p class="upload-documents-modal-top-row-title">Decline document</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('reject-documents')"></i>
               </div>
-            <textarea name="" id="" cols="30" rows="10" placeholder="Please write a reason why you want to decline this document" class="reject-documents-textarea"></textarea>
+            <textarea name="" id="" cols="30" rows="10" placeholder="Please write a reason why you want to decline this document" class="reject-documents-textarea" v-model="declineReason"></textarea>
             <div class="reject-documents-buttons">
-              <button class="partner-documents-approve-button">Decline</button>
+              <button class="partner-documents-approve-button" @click="actionDocument(3)">Decline</button>
               <button class="partner-documents-decline-button" @click="$modal.hide('reject-documents')">Cancel</button>
             </div>
             </div>
@@ -266,7 +268,7 @@ import errorHandler from '../../components/errorHandler';
 let s3 = '';
 
 export default {
-  title: 'Partner Portal - My Orders',
+  title: 'Partner Portal - Freight Order Details',
   components: {
     verifier,
     errorHandler,
@@ -286,28 +288,7 @@ export default {
       },
       errorObj: '',
       data: {},
-      documents: [
-        {
-          name: 'Invoice',
-          id: 1,
-        },
-        {
-          name: 'Signed goods received note',
-          id: 2,
-        },
-        {
-          name: 'Signed client’s delivery note',
-          id: 3,
-        },
-        {
-          name: 'Original interchange',
-          id: 4,
-        },
-        {
-          name: 'Other',
-          id: 5,
-        },
-      ],
+      documents: [],
       documentType: 'Invoice',
       documentName: '',
       uploadFileName: '',
@@ -316,6 +297,8 @@ export default {
       requestStatus: true,
       sendStatus: false,
       documentPreview: '',
+      activeDoc: {},
+      declineReason: '',
       fuel_types: [],
       addresses: [],
       stations: [],
@@ -325,7 +308,15 @@ export default {
       address: '',
     };
   },
-  computed: {},
+  computed: {
+    document_type() {
+      const document = this.documents.filter(obj => obj.document_name === this.documentType);
+      return document[0].document_type;
+    },
+    fuelSubmitStatus() {
+      return (this.amount && this.fuel && this.address);
+    },
+  },
   watch: {
     station(val) {
       if (val !== '') {
@@ -336,7 +327,8 @@ export default {
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.fetchOrders();
+      this.fetchOrder();
+      this.fetchDocumentTypes();
       this.getFuelStations();
       this.getFuelTypes();
       const script = document.createElement('script');
@@ -365,17 +357,16 @@ export default {
     },
     createStaticMapUrl(path) {
       const google_key = process.env.GOOGLE_API_KEY;
-      const from_cordinates = path.pickup_coordinates;
-      const to_cordinates = path.destination_coordinates;
+      const from_cordinates = path.path[0].coordinates;
+      const to_cordinates = path.path[1].coordinates;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=300x250&markers=color:0xF17F3A%7Clabel:P%7C
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
-    timeFormat() {
-      const orderTime = this.data.pickup_date;
-      return this.formatedTime(orderTime);
+    timeFormat(date) {
+      return this.formatedTime(date);
     },
     currencyFormat(id) {
-      const amount = this.data.price;
+      const amount = this.data.amount;
       return amount
         .toString()
         .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
@@ -384,6 +375,14 @@ export default {
     showPreview(url) {
       this.$modal.show('preview-documents');
       this.documentPreview = url;
+    },
+    documentStatuses(status) {
+      if (status === 'PENDING') {
+        return 'Pending client approval';
+      } else if (status === 'APPROVED') {
+        return 'Client approved';
+      }
+      return 'Client rejected';
     },
     activateUpload() {
       const files = document.getElementById('upload-doc')['files'];
@@ -419,15 +418,23 @@ export default {
           document.getElementById('upload-doc').value = '';
           this.uploadProgress = false;
           if (err) {
-            this.notify(3, 0, `There was an error uploading your photo: ${err.message}`);
+            this.notify(3, 0, `There was an error uploading your document: ${err.message}`);
           } else {
-            this.notify(3, 1, 'Successfully uploaded document.');
+            this.uploadDocuments(photoKey);
             this.uploadStatus = false;
             this.uploadFileName = '';
           }
           // eslint-disable-next-line comma-dangle
         }
       );
+    },
+    triggerAction(status, doc) {
+      this.activeDoc = doc;
+      if (status === 3) {
+        this.$modal.show('reject-documents');
+      } else {
+        this.actionDocument(status);
+      }
     },
     getStationAddresses(station) {
       this.addresses = this.stations.find(stn => (
@@ -466,6 +473,32 @@ export default {
             });
         });
     },
+    submitFuelRequest() {
+      const payload = {
+        order_id: this.data.order_id,
+        fuel_type_id: this.fuel,
+        fuel_station_id: this.address,
+        amount: this.amount,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+            .post(`${this.auth}orders/v2/freight/fuel_advance`, payload, this.config)
+            .then(response => {
+              this.notify(3, 1, `${response.data.message}`);
+              this.$modal.hide('request-fuel-advance');
+              this.fuel = '';
+              this.amount = '';
+              this.address = '';
+              this.fetchOrder();
+              resolve(response);
+            })
+            .catch(error => {
+              this.notify(3, 0, `There was an error submitting your advance: ${error.response.data.message}`);
+              this.errorObj = error.response;
+              resolve(error);
+            });
+        });
+    },
     sanitizeFilename(name, type) {
       const temp_name = `${type}_${this.sessionInfo.id}_${new Date().getTime()}.${name.split('.').pop()}`;
       return temp_name;
@@ -473,14 +506,102 @@ export default {
     transfer(id) {
       document.getElementById(id).click();
     },
-    fetchOrders() {
-      const orderData = this.$store.getters.getFreightOrders.filter(obj => obj.order_no === this.$route.params.order);
-      if (orderData.length > 0) {
-        this.data = orderData[0];
-      } else {
-        this.$router.push('/freight/orders');
+    fetchOrder() {
+      const payload = {
+        order_id: this.$route.params.order,
+        user_type: 2,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${this.auth}orders/v2/freight/order/details`, payload, this.config)
+          .then(response => {
+            this.data = response.data.order;
+            this.loadingStatus = false;
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, `${error.response.message}`);
+            this.data = {};
+            this.loadingStatus = false;
+            this.$router.push('/freight/orders');
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    fetchDocumentTypes() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${this.auth}orders/v2/freight/documents`, this.config)
+          .then(response => {
+            this.documents = response.data.documents;
+            resolve(response);
+          })
+          .catch(error => {
+            this.documents = [];
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    uploadDocuments(url) {
+      const payload = {
+        order_id: this.data.order_id,
+        document_type: this.document_type,
+        document_name: this.document_type === 1 ? this.documentName : this.documentType,
+        url: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${url}`,
+        cop_id: this.data.cop_id ? this.data.cop_id : null,
+        cop_user_id: this.data.cop_user_id ? this.data.cop_user_id : null,
+        peer_id: this.data.peer_id ? this.data.peer_id : null,
+        owner_id: this.data.owner_id,
+        created_by: 2,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${this.auth}orders/v2/freight/order/documents`, payload, this.config)
+          .then(response => {
+            this.notify(3, 1, 'Successfully uploaded document.');
+            this.$modal.hide('upload-documents');
+            this.fetchOrder();
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, `There was an error uploading your document: ${error.response.data.reason}`);
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    actionDocument(status) {
+      const payload = {
+        order_id: this.data.order_id,
+        document_id: this.activeDoc.document_id,
+        cop_id: this.data.cop_id ? this.data.cop_id : null,
+        cop_user_id: this.data.cop_user_id ? this.data.cop_user_id : null,
+        peer_id: this.data.peer_id ? this.data.peer_id : null,
+        owner_id: this.data.owner_id,
+        created_by: 2,
+        status,
+      };
+      if (status === 3) {
+        payload.reason = this.declineReason;
       }
-      this.loadingStatus = false;
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${this.auth}orders/v2/freight/order/documents`, payload, this.config)
+          .then(response => {
+            this.notify(3, 1, `Successfully ${status === 3 ? 'rejected' : 'approved'} document.`);
+            this.$modal.hide('reject-documents');
+            this.declineReason = '';
+            this.fetchOrder();
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, `There was an error ${status === 3 ? 'rejecting' : 'approving'} the document`);
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
   },
 };

@@ -13,7 +13,7 @@
               <input type="text" onfocus="value = ''" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
             </span>
           </div>
-          <button class="partner-request-advance-button-active" @click="createOrderStatus = true">
+          <button class="partner-request-advance-button-active" @click="$store.commit('setCreateOrderStatus', true)">
             Create order
           </button>
         </div>
@@ -28,11 +28,11 @@
               <div class="orders__col-head price-align-freight uppercase">price</div>
               <div class="orders__col-head center-action-freight uppercase"></div>
             </div>
-            <div class="loading" v-if="loadingStatus"></div>
-            <div class="no-records" v-if="!loadingStatus && data.length === 0">
+            <div class="loading" v-if="loadingStatus && orders.length === 0"></div>
+            <div class="no-records" v-if="!loadingStatus && orders.length === 0">
               <p class="no-records-par">{{ loaderMessage }}</p>
             </div>
-            <template v-for="order in data">
+            <template v-for="(order, index) in orders">
               <div
                 class="orders__list-row"
                 @click="openOrder(order)"
@@ -40,29 +40,29 @@
               >
                 <div class="orders__list-col pickup-freight">
                   <p class="orders__mobile-col">Pickup</p>
-                  <p class="row1" @mouseover="showFromTooltip(order.id)" @mouseout="hideFromTooltip(order.id)">{{ order.pickup }}</p>
-                  <span :class="`tooltiptext sp${order.id}`">{{ order.pickup }}</span>
+                  <p class="row1" @mouseover="showFromTooltip(index)" @mouseout="hideFromTooltip(index)">{{ order.pick_up_name }}</p>
+                  <span :class="`tooltiptext sp${index}`">{{ order.pick_up_name }}</span>
                 </div>
                 <div class="orders__list-col destination-freight">
                   <p class="orders__mobile-col">Destination</p>
-                  <p class="row2" @mouseover="showToTooltip(order.id)" @mouseout="hideToTooltip(order.id)">{{ order.destination }}</p>
-                  <span :class="`tooltiptext sps${order.id}`">{{ order.destination }}</span>
+                  <p class="row2" @mouseover="showToTooltip(index)" @mouseout="hideToTooltip(index)">{{ order.destination_name }}</p>
+                  <span :class="`tooltiptext sps${index}`">{{ order.destination_name }}</span>
                 </div>
                 <div class="orders__list-col pick-date-freight">
                   <p class="orders__mobile-col">Date</p>
-                  <p>{{ timeFormat(order.id) }}</p>
+                  <p>{{ timeFormat(index) }}</p>
                 </div>
                 <div class="orders__list-col truck-freight">
                   <p class="orders__mobile-col">Truck</p>
-                  <p class="row3">{{ order.truck }}</p>
+                  <p class="row3">{{ order.carrier_type }}</p>
                 </div>
                 <div class="orders__list-col client-freight">
                   <p class="orders__mobile-col">client</p>
-                  <p>{{ order.client }}</p>
+                  <p>{{ order.client_name }}</p>
                 </div>
                 <div class="orders__list-col price-align-freight">
                   <p class="orders__mobile-col">Price</p>
-                  <p>{{ order.currency }} {{ currencyFormat(order.id) }}</p>
+                  <p>{{ order.currency }} {{ currencyFormat(index) }}</p>
                 </div>
                 <div class="orders__list-col center-action-freight">
                   <P class="orders__mobile-col uppercase">action</P>
@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="freight-create-order-container" v-else>
-      <div class="map-details--go-back-freight" @click="createOrderStatus = false">
+      <div class="map-details--go-back-freight" @click="$store.commit('setCreateOrderStatus', false)">
         <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
         <span class="map-details-go-back--span">Back</span>
       </div>
@@ -98,7 +98,7 @@ import errorHandler from '../../components/errorHandler';
 import orderCreation from './orderCreation';
 
 export default {
-  title: 'Partner Portal - My Orders',
+  title: 'Partner Portal - Freight Orders',
   components: {
     verifier,
     errorHandler,
@@ -119,11 +119,23 @@ export default {
       },
       errorObj: '',
       loaderMessage: 'There are no orders',
-      data: [],
-      createOrderStatus: false,
     };
   },
-  computed: {},
+  computed: {
+    orders() {
+      return this.$store.getters.getFreightOrders;
+    },
+    createOrderStatus() {
+      return this.$store.getters.getCreateOrderStatus;
+    },
+  },
+  watch: {
+    createOrderStatus(val) {
+      if (!val) {
+        this.fetchOrders();
+      }
+    },
+  },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
@@ -151,18 +163,18 @@ export default {
       tooltiprow.style.display = 'none';
     },
     timeFormat(id) {
-      const orderTime = this.data[id].pickup_date;
+      const orderTime = this.orders[id].pick_up_time;
       return this.formatedTime(orderTime);
     },
     currencyFormat(id) {
-      const amount = this.data[id].price;
+      const amount = this.orders[id].amount;
       return amount
         .toString()
         .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
         .split('.')[0];
     },
     openOrder(order) {
-      this.$router.push(`/freight/orders/${order.order_no}`);
+      this.$router.push(`/freight/orders/${order.order_id}`);
     },
     filterPickup() {
       const input = document.getElementById('inp').value.toLowerCase();
@@ -211,91 +223,25 @@ export default {
       });
     },
     fetchOrders() {
-      this.data = [
-        {
-          id: 0,
-          pickup: 'Mombasa',
-          pickup_coordinates: '-1.3000089,36.77288960',
-          destination: 'Nairobi',
-          destination_coordinates: '-1.2497208,36.6842422',
-          pickup_date: '2020-12-11T09:00:00.000Z',
-          order_no: 'AEX12FG34-S23',
-          truck: 'Flatbed',
-          client: 'Bidco',
-          price: 70000,
-          currency: 'KES',
-          load_weight: '20 Tonnes',
-          load_type: 'Rice',
-          documents: [
-            {
-              name: 'LPO',
-              date_uploaded: '12/12/2020',
-              document_url: 'https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/freight_docs/Signed-goods-received-note_3_1607596577906.pdf',
-              approval_status: 'Pending',
-              document_id: 1,
-            },
-            {
-              name: 'Invoice',
-              date_uploaded: '12/12/2020',
-              document_url: 'https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/freight_docs/Signed-goods-received-note_3_1607596577906.pdf',
-              approval_status: 'Approved',
-              document_id: 2,
-            },
-          ],
-          advances: [
-            {
-              type: 'Cash Advance',
-              amount: 20000,
-              currency: 'KES',
-              status: 'Pending',
-            },
-            {
-              type: 'Fuel',
-              amount: 20000,
-              currency: 'KES',
-              status: 'Pending',
-              station_name: 'Shell',
-              station_address: 'Maanzoni',
-              fuel_type: 'Petrol',
-            },
-          ],
-        },
-        {
-          id: 1,
-          pickup: 'Mombasa',
-          pickup_coordinates: '-1.3000089,36.77288960',
-          destination: 'Nairobi',
-          destination_coordinates: '-1.2497208,36.6842422',
-          pickup_date: '2020-12-11T09:00:00.000Z',
-          order_no: 'AEX12FG34-S24',
-          truck: 'Flatbed',
-          client: 'Bidco',
-          price: 70000,
-          currency: 'KES',
-          load_weight: '20 Tonnes',
-          load_type: 'Rice',
-          documents: [
-            {
-              name: 'LPO',
-              date_uploaded: '12/12/2020',
-              document_url: 'https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/freight_docs/Signed-goods-received-note_3_1607596577906.pdf',
-              approval_status: 'Declined',
-              reason: 'This is not the correct document',
-              document_id: 1,
-            },
-            {
-              name: 'Invoice',
-              date_uploaded: '12/12/2020',
-              document_url: 'https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/freight_docs/Signed-goods-received-note_3_1607596577906.pdf',
-              approval_status: 'Approved',
-              document_id: 2,
-            },
-          ],
-          advances: [],
-        },
-      ];
-      this.$store.commit('setFreightOrders', this.data);
-      this.loadingStatus = false;
+      const payload = {
+        user_id: this.sessionInfo.id,
+        user_type: 2,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${this.auth}orders/v2/freight/list`, payload, this.config)
+          .then(response => {
+            this.$store.commit('setFreightOrders', response.data.orders);
+            this.loadingStatus = false;
+            resolve(response);
+          })
+          .catch(error => {
+            this.$store.commit('setFreightOrders', []);
+            this.loadingStatus = false;
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
   },
 };
