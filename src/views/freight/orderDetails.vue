@@ -62,7 +62,7 @@
               <span class="partner-documents-upload-header partner-documents-third-row">Actions</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
             </div>
-            <div class="partner-documents-upload-rows" v-for="(document, index) in data.documents" :key="index">
+            <div class="partner-documents-upload-rows" v-for="(document, index) in data.documents" :key="`${document.document_name}-${index}`">
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ document.document_name }}</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ timeFormat(document.date_created) }}</span>
               <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.url)">View document ></span>
@@ -79,23 +79,23 @@
           <div class="partner-documents-container">
             <p class="partner-documents-upload-title">Auxillary Services</p>
             <div>
-              <button :class="requestStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
-              <button :class="requestStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">Request cash advance</button>
+              <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
+              <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">Request cash advance</button>
             </div>
-            <div v-if="data.fuel_advances.length > 0">
+            <div v-if="data.fuel_advances.length > 0 || data.cash_advances.length > 0">
             <div class="partner-documents-upload-rows">
               <span class="partner-documents-upload-header partner-documents-fourth-row">Type of request</span>
               <span class="partner-documents-upload-header partner-documents-third-row">Amount</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">Details</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
             </div>
-            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.fuel_advances" :key="index">
+            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.fuel_advances" :key="`fuel-${index}`">
               <span class="partner-documents-upload-columns partner-documents-fourth-row">Fuel</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ data.currency }} {{ advance.amount }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.fuel_station_name }} ({{ advance.fuel_station_address }}) <br />{{ advance.fuel_type }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.status }}</span>
             </div>
-            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.cash_advances" :key="index">
+            <div class="partner-documents-upload-rows" v-for="(advance, index) in data.cash_advances" :key="`cash-${index}`">
               <span class="partner-documents-upload-columns partner-documents-fourth-row">Cash</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ data.currency }} {{ advance.amount }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row"></span>
@@ -331,6 +331,14 @@ export default {
     },
     cashSubmitStatus() {
       return this.amount !== '';
+    },
+    fuelActiveStatus() {
+      const fuelData = this.data.aux_services.filter(obj => obj.id === 1);
+      return fuelData.length > 0 ? fuelData[0].active : false;
+    },
+    cashActiveStatus() {
+      const cashData = this.data.aux_services.filter(obj => obj.id === 2);
+      return cashData.length > 0 ? cashData[0].active : false;
     },
   },
   watch: {
