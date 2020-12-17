@@ -118,7 +118,6 @@ export default {
       this.$router.push(`/freight/orders/${order}`);
     },
     formatTime(time) {
-      console.log(time);
       return this.dashboardTimer(time);
     },
     approve(data, status) {
