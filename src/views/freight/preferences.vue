@@ -11,7 +11,7 @@
           <div class="preferences-table-column preferences-header">Actions</div>
         </div>
         <div v-for="(location, index) in locationData" class="preferences-table-row" :key="index">
-          <div class="preferences-table-column preferences-body">{{ location.location[0].long_name }}</div>
+          <div class="preferences-table-column preferences-body">{{ location.location_name }}</div>
           <div class="preferences-table-column preferences-link" @click="deletePreference(location.id)">Delete</div>
         </div>
       </div>
@@ -164,6 +164,7 @@ export default {
       this.location = {
         owner_id: parseInt(this.sessionInfo.id, 10),
         address_components: place.address_components,
+        location_name: place.name,
       };
     },
     addPreference(type) {
@@ -213,7 +214,7 @@ export default {
           .post(`${this.auth}orders/v2/freight/owner_preferences`, payload, this.config)
           .then(response => {
             this.notify(3, 1, 'Preference added successfully');
-            this.fetchOwnerCargoTypes();
+            this.fetchOwnerPreferences();
             this.preference = '';
             this.location = '';
             this.$modal.hide('add-preference');
@@ -240,7 +241,7 @@ export default {
           })
           .then(response => {
             this.notify(3, 1, 'Preference deleted successfully');
-            this.fetchOwnerCargoTypes();
+            this.fetchOwnerPreferences();
             resolve(response);
           })
           .catch(error => {

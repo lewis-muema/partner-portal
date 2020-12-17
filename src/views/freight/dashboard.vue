@@ -154,7 +154,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, `There was an error ${this.status === 3 ? 'rejecting' : 'approving'} the document`);
+            this.notify(3, 0, `There was an error ${this.status === 3 ? 'rejecting' : 'approving'} the document: ${error.response.data.reason}`);
             this.errorObj = error.response;
             resolve(error);
           });
