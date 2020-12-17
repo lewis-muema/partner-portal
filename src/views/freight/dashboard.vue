@@ -14,7 +14,7 @@
         <button class="partner-documents-approve-button" @click="approve(time.data, 2)">Approve</button>
         <button class="partner-documents-decline-button" @click="decline(time.data, 3)">Reject</button>
       </div>
-      <p class="freight-dashboard-time">{{ formatTime(time.data.date_created) }}</p>
+      <p class="freight-dashboard-time">{{ formatTime(time.date_time) }}</p>
     </div>
     <div class="freight-dashboard-empty-row" v-if="!loadingStatus && timeline.length === 0">
       There are no documents on your timeline
@@ -118,6 +118,7 @@ export default {
       this.$router.push(`/freight/orders/${order}`);
     },
     formatTime(time) {
+      console.log(time);
       return this.dashboardTimer(time);
     },
     approve(data, status) {
