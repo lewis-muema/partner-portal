@@ -25,7 +25,9 @@ const timezone = {
       },
       dashboardTimer(orderTime) {
         const localTime = this.convertToLocalTime(orderTime);
-        const timer = moment(localTime).toDate();
+        const offset = Math.abs(new Date().getTimezoneOffset() / 60);
+        let timer = moment(localTime).toDate();
+        timer = moment(timer).add(offset, 'hours');
         const now = moment(new Date());
         if (moment.duration(now.diff(timer)).asHours() <= 24) {
           const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
