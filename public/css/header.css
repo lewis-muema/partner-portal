@@ -317,12 +317,21 @@ body {
   .header-primary,
   .header-secondary,
   .secondary-inner {
-    min-width: inherit;
+    min-width: -webkit-fill-available;
     padding: 0px;
+    height: -webkit-fill-available;
   }
 
   .inner-right {
     padding-right: 10px;
+  }
+
+  .inner-left {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-secondary-freight {
+    height: -webkit-fill-available !important;
   }
 }
 @media only screen and (max-width: 425px) {
