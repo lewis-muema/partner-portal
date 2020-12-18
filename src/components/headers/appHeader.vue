@@ -73,7 +73,7 @@
           </div>
         </div>
       </div>
-      <div class="header-secondary" id="header-secondary" v-if="getFlow === 'freight'">
+      <div class="header-secondary header-secondary-freight" id="header-secondary" v-if="getFlow === 'freight'">
         <div class="secondary-inner">
           <div class="secnav-container">
             <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">Dashboard</router-link>

@@ -1409,4 +1409,24 @@ button {
   .truckflow__container-search {
     display: none;
   }
+  .map__column-freight {
+    grid-column: span 12;
+  }
+  .order__column-freight {
+    grid-column: span 6;
+  }
+  .partner-documents-upload-rows {
+    height: 100px;
+  }
+  .partner-documents-approve-button,
+  .partner-documents-decline-button {
+    font-size: 10px !important;
+    padding: 10px !important;
+    width: 100%;
+    margin: 2px 1%;
+  }
+  .freight-dashboard-buttons {
+    width: -webkit-fill-available;
+    height: -webkit-fill-available;
+  }
 }
