@@ -1,10 +1,15 @@
 <template>
   <div>
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="header">
       <div class="header-primary">
         <div class="primary-inner">
           <div class="inner-left">
             <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/Sendy_logo_whitewhite.png" @click="location.href = 'https://sendyit.com/'" />
+            <div class="inner-left-toggles" v-if="$store.getters.getFreightStatus === 2">
+              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')">Transporters orders</span>
+              <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')">Freight orders</span>
+            </div>
           </div>
           <div class="inner-right">
             <div class="navitem">
@@ -55,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath">
+      <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath && getFlow === 'logistics'">
         <div class="secondary-inner">
           <div class="secnav-container">
             <router-link to="/dashboard" class="secnav-page" :class="showActiveDashboard()">Dashboard</router-link>
@@ -68,6 +73,15 @@
           </div>
         </div>
       </div>
+      <div class="header-secondary header-secondary-freight" id="header-secondary" v-if="getFlow === 'freight'">
+        <div class="secondary-inner">
+          <div class="secnav-container">
+            <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">Dashboard</router-link>
+            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">Orders</router-link>
+            <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()">Preferences</router-link>
+          </div>
+        </div>
+      </div>
     </div>
     <surveyFooter v-if="this.nps_eligibility" />
   </div>
@@ -75,10 +89,12 @@
 <script>
 import axios from 'axios';
 import surveyFooter from './footer.vue';
+import errorHandler from '../errorHandler';
 
 export default {
   components: {
     surveyFooter,
+    errorHandler,
   },
   data() {
     return {
@@ -94,6 +110,8 @@ export default {
       super_user: false,
       nps_eligibility: null,
       show_performance: false,
+      errorObj: '',
+      flow: 'logistics',
     };
   },
   computed: {
@@ -104,11 +122,23 @@ export default {
       }
       return state;
     },
+    getFlow() {
+      return this.$store.getters.getFlow;
+    },
+  },
+  watch: {
+    $route(to, from) {
+      this.checkFlow(to.path);
+    },
+    getFlow(val) {
+      this.routeFlow(val);
+    },
   },
   created() {
     if (localStorage.sessionData) {
       this.$store.commit('setSessionInfo', JSON.parse(localStorage.sessionData).payload);
       this.$store.commit('setOwnerId', JSON.parse(localStorage.sessionData).payload.id);
+      this.getFreightStatus();
       this.fetchBikeDrivers();
       this.npsEligibility();
       this.super_user = JSON.parse(localStorage.sessionData).payload.super_user;
@@ -120,6 +150,24 @@ export default {
       setTimeout(() => {
         this.dropdown = false;
       }, this.timeout);
+    },
+    checkFlow(route) {
+      if (route.includes('freight') && this.$store.getters.getFreightStatus === 2) {
+        this.setFlow('freight');
+      } else {
+        this.setFlow('logistics');
+      }
+    },
+    routeFlow(val) {
+      if (val === 'logistics') {
+        if (this.$route.path.includes('freight')) {
+          this.$router.push({ path: '/' });
+        }
+      } else {
+        if (!this.$route.path.includes('freight')) {
+          this.$router.push({ path: '/freight/orders' });
+        }
+      }
     },
     toggleDropdown() {
       this.dropdown = true;
@@ -156,6 +204,21 @@ export default {
         return 'active';
       }
     },
+    showActiveFreightDashboard() {
+      if (this.$route.path === '/freight/dashboard') {
+        return 'active';
+      }
+    },
+    showActiveFreightOrders() {
+      if (this.$route.path.includes('/freight/orders')) {
+        return 'active';
+      }
+    },
+    showActiveFreightPreferences() {
+      if (this.$route.path === '/freight/preferences') {
+        return 'active';
+      }
+    },
     trainingRedirect() {
       window.open('http://support.sendyit.com/collection/1-sendy-partner-training-manual', '_blank');
     },
@@ -174,6 +237,7 @@ export default {
           this.$store.commit('setBikeRiders', res.data.riders);
         })
         .catch(error => {
+          this.errorObj = error.response;
           this.$store.commit('setBikeAvailability', false);
           this.$store.commit('setBikeRiders', []);
           this.performance_status = false;
@@ -190,7 +254,27 @@ export default {
         .then(res => {
           this.nps_eligibility = res.data.valid;
         })
-        .catch(error => error);
+        .catch(error => {
+          this.errorObj = error.response;
+        });
+    },
+    getFreightStatus() {
+      const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+      return new Promise((resolve, reject) => {
+        axios
+            .get(`${process.env.ADONIS_PARTNER_API}parcel/owner/freight-status/${sessionInfo.id}`, this.config)
+            .then(response => {
+              this.$store.commit('setFreightStatus', response.data.freightStatus);
+              this.checkFlow(this.$route.path);
+              this.routeFlow(this.getFlow);
+            resolve(response);
+            })
+            .catch(error => {
+              this.$store.commit('setFreightStatus', '');
+              this.errorObj = error.response;
+            resolve(error);
+            });
+        });
     },
     checkPerformanceStatus() {
       this.show_performance = false;
@@ -203,7 +287,12 @@ export default {
         .then(res => {
           this.show_performance = res.data.performance_status;
         })
-        .catch(error => error);
+        .catch(error => {
+          this.errorObj = error.response;
+        });
+    },
+    setFlow(value) {
+      this.$store.commit('setFlow', value);
     },
   },
 };

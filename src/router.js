@@ -19,6 +19,11 @@ import PerformanceStats from './views/performanceLoader.vue';
 import ExternalLogin from './views/externalLogin.vue';
 import Signature from './views/signature.vue';
 import auxilliaryServices from './views/auxilliary/auxilliaryServices.vue';
+import freight from './views/freight/freight.vue';
+import freightDashboard from './views/freight/dashboard.vue';
+import freightOrders from './views/freight/orders.vue';
+import freightOrderDetails from './views/freight/orderDetails.vue';
+import freightPreferences from './views/freight/preferences.vue';
 
 Vue.use(Router);
 
@@ -140,6 +145,29 @@ export default new Router({
       path: '/auxilliary',
       name: 'auxilliary',
       component: auxilliaryServices,
+    },
+    {
+      path: '/freight',
+      name: 'freight',
+      component: freight,
+      children: [
+        {
+          path: 'dashboard',
+          component: freightDashboard,
+        },
+        {
+          path: 'orders',
+          component: freightOrders,
+        },
+        {
+          path: 'orders/:order',
+          component: freightOrderDetails,
+        },
+        {
+          path: 'preferences',
+          component: freightPreferences,
+        },
+      ],
     },
   ],
 });
