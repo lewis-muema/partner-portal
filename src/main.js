@@ -15,6 +15,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, Input, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, RadioButton } from 'element-ui';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import VueSignaturePad from 'vue-signature-pad';
+import * as VueGoogleMaps from 'vue2-google-maps';
 import App from './App.vue';
 import router from './router';
 import store from './store';
@@ -31,6 +32,12 @@ Vue.use(ApmVuePlugin, {
     serviceVersion: process.env.ELASTIC_APM_SERVICE_VERSION,
     environment: process.env.DOCKER_ENV,
     distributedTracingOrigins: [process.env.VUE_APP_AUTH],
+  },
+});
+Vue.use(VueGoogleMaps, {
+  load: {
+    libraries: ['places'],
+    key: process.env.GOOGLE_API_KEY,
   },
 });
 Vue.use(VueMask);

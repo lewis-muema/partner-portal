@@ -19,6 +19,8 @@ export default {
           } else {
             this.$router.push({ path: '/login' });
           }
+        }).catch(error => {
+          this.$router.push({ path: '/login' });
         });
     }
   },
