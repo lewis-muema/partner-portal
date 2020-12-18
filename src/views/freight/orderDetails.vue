@@ -80,8 +80,10 @@
             <p class="partner-documents-upload-title">Auxillary Services</p>
             <div class="request-advances-info">
               <i class="el-icon-info request-advances-info-icon"></i>
-                To request for fuel advance, the terms of delivery and bill of lading documents should uploaded and approved by both parties. <br />
-                For cash advance, the terms of delivery, bill of ladding and Invoice documents should be uploaded and approved by both parties.
+              <div>
+                <div>To request for <b>fuel advance</b>, the purchase order and bill of lading documents should uploaded and approved by both parties. <br /></div>
+                <div>For <b>cash advance</b>, the terms of delivery, bill of lading and Invoice documents should be uploaded and approved by both parties.</div>
+              </div>
             </div>
             <div>
               <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
