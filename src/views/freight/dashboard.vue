@@ -135,6 +135,9 @@ export default {
         order_id: this.document.order_id,
         document_id: this.document.document_id,
         owner_id: parseInt(this.sessionInfo.id, 10),
+        cop_id: this.document.cop_id ? this.document.cop_id : null,
+        cop_user_id: this.document.cop_user_id ? this.document.cop_user_id : null,
+        peer_id: this.document.peer_id ? this.document.peer_id : null,
         created_by: 2,
         status: this.status,
       };
