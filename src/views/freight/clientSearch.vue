@@ -16,7 +16,7 @@
       />
       <ul v-show="hasItems" :class="[!isActive ? 'inactiveClass' : '']">
         <li
-          v-for="(item, $item) in items"
+          v-for="(item, $item) in filteredItems(items)"
           :class="activeClass($item)"
           class="search-results-container"
           @mousedown="hit"
@@ -76,6 +76,15 @@ export default {
     },
     clear() {
       this.isActive = true;
+    },
+    filteredItems(items) {
+      const activeClients = [];
+      items.forEach(row => {
+        if (row.freight_status === '2') {
+          activeClients.push(row);
+        }
+      });
+      return activeClients;
     },
   },
 };

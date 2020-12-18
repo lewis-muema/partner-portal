@@ -300,6 +300,34 @@
   font-weight: 600;
   margin: 10px 0px;
 }
+.request-payment-info {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  background: #FDEDD3;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 15px;
+  border-radius: 5px;
+}
+.request-payment-info-icon {
+  margin-right: 15px;
+}
+.request-advances-info {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  border-radius: 5px;
+  background: #FFFBF5;
+  border: 1px solid rgba(234, 113, 37, 0.35);
+  padding: 15px;
+  margin: 10px 0px;
+}
+.request-advances-info-icon {
+  margin-right: 30px;
+  color: #EA7125;
+  font-size: 20px;
+}
 .upload-documents-add-trigger-icon {
   margin: 20px 5px 20px 0px;
 }

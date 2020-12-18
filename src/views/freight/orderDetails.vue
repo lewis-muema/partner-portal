@@ -78,6 +78,11 @@
           </div>
           <div class="partner-documents-container">
             <p class="partner-documents-upload-title">Auxillary Services</p>
+            <div class="request-advances-info">
+              <i class="el-icon-info request-advances-info-icon"></i>
+                To request for fuel advance, the terms of delivery and bill of lading documents should uploaded and approved by both parties. <br />
+                For cash advance, the terms of delivery, bill of ladding and Invoice documents should be uploaded and approved by both parties.
+            </div>
             <div>
               <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
               <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">Request cash advance</button>
@@ -142,13 +147,17 @@
               </button>
             </div>
           </modal>
-          <modal name="request-fuel-advance" :height="500" :width="400" transition="slide" :pivot-y="0.5">
+          <modal name="request-fuel-advance" :height="550" :width="400" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
                 <p class="upload-documents-modal-top-row-title">Request fuel payment</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('request-fuel-advance')"></i>
               </div>
               <div>
+                <div class="request-payment-info">
+                  <i class="el-icon-info request-payment-info-icon"></i>
+                  You can request a maximum of {{ data.currency }} {{ data.advance_limit }}
+                </div>
                 <p class="request-advance-input-labels">Enter amount</p>
                 <el-input
                   type="text"
@@ -214,13 +223,17 @@
               </button>
             </div>
           </modal>
-          <modal name="request-cash-advance" :height="250" :width="400" transition="slide" :pivot-y="0.5">
+          <modal name="request-cash-advance" :height="300" :width="400" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
                 <p class="upload-documents-modal-top-row-title">Request advance cash payment</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('request-cash-advance')"></i>
               </div>
               <div>
+                <div class="request-payment-info">
+                  <i class="el-icon-info request-payment-info-icon"></i>
+                  You can request a maximum of {{ data.currency }} {{ data.advance_limit }}
+                </div>
                 <p class="request-advance-input-labels">Enter amount</p>
                 <el-input
                   type="text"
@@ -346,6 +359,11 @@ export default {
       if (val !== '') {
         this.getStationAddresses(val);
       }
+    },
+    amount(val) {
+      setTimeout(() => {
+        this.amount = val > parseInt(this.data.advance_limit, 10) ? parseInt(this.data.advance_limit, 10) : val;
+      }, 100);
     },
   },
   created() {
