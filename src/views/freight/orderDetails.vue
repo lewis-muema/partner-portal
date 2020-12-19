@@ -82,7 +82,7 @@
               <i class="el-icon-info request-advances-info-icon"></i>
               <div>
                 <div>To request for <b>fuel advance</b>, the purchase order and bill of lading documents should uploaded and approved by both parties. <br /></div>
-                <div>For <b>cash advance</b>, the terms of delivery, bill of lading and Invoice documents should be uploaded and approved by both parties.</div>
+                <div>For <b>cash advance</b>, the interchange document (for return container orders), clients delivery notes and invoice documents should be uploaded and approved by both parties.</div>
               </div>
             </div>
             <div>
