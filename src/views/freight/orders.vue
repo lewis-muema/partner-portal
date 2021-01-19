@@ -14,7 +14,7 @@
             </span>
           </div>
           <button class="partner-request-advance-button-active" @click="$store.commit('setCreateOrderStatus', true)">
-            Create order
+            Place Order
           </button>
         </div>
         <div class="bids">
