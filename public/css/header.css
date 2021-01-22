@@ -53,10 +53,11 @@ body {
   height: -webkit-fill-available;
   display: flex;
   align-items: center;
-  padding: 0px 10px;
+  padding: 0px 25px;
   color: white;
-  font-weight: 600;
+  font-weight: 900;
   cursor: pointer;
+  font-size: 15px;
  }
 
 .inner-left-toggle-links-active {
