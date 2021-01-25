@@ -1,23 +1,26 @@
 <template>
-  <div class="freight-dashboard">
+  <div>
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
-    <div class="freight-dashboard-top-row">
-      <p class="freight-dashboard-title">Recent activity</p>
-    </div>
-    <div class="loading" v-if="loadingStatus && timeline.length === 0"></div>
-    <div class="freight-dashboard-row freight-dashboard-timeline-rows" v-for="(time, index) in timeline" :key="index">
-      <p>{{ time.message }}</p>
-      <p @click="showDocument(time.data.url)" v-if="time.actionable" class="freight-dashboard-links">View document <i class="el-icon-arrow-right"></i></p>
-      <p @click="showOrder(time.data.order_id)" class="freight-dashboard-links" v-else>View order <i class="el-icon-arrow-right"></i></p>
-      <div v-if="time.actionable" class="freight-dashboard-buttons">
-        <button class="partner-documents-approve-button" @click="approve(time.data, 2)">Approve</button>
-        <button class="partner-documents-decline-button" @click="decline(time.data, 3)">Reject</button>
-      </div>
-      <p class="freight-dashboard-time">{{ formatTime(time.date_time) }}</p>
-    </div>
     <div class="freight-dashboard-empty-row" v-if="!loadingStatus && timeline.length === 0">
-      There are no documents on your timeline
+      <img src="https://s3-eu-west-1.amazonaws.com/images.sendyit.com/partner_portal/images/log.png" class="freight-log-img" alt="log">
+      <div>There are no documents on your timeline</div>
+    </div>
+    <div class="freight-dashboard" v-else>
+      <div class="freight-dashboard-top-row">
+        <p class="freight-dashboard-title">Recent activity</p>
+      </div>
+      <div class="loading" v-if="loadingStatus && timeline.length === 0"></div>
+      <div class="freight-dashboard-row freight-dashboard-timeline-rows" v-for="(time, index) in timeline" :key="index">
+        <p>{{ time.message }}</p>
+        <p @click="showDocument(time.data.url)" v-if="time.actionable" class="freight-dashboard-links">View document <i class="el-icon-arrow-right"></i></p>
+        <p @click="showOrder(time.data.order_id)" class="freight-dashboard-links" v-else>View order <i class="el-icon-arrow-right"></i></p>
+        <div v-if="time.actionable" class="freight-dashboard-buttons">
+          <button class="partner-documents-approve-button" @click="approve(time.data, 2)">Approve</button>
+          <button class="partner-documents-decline-button" @click="decline(time.data, 3)">Reject</button>
+        </div>
+        <p class="freight-dashboard-time">{{ formatTime(time.date_time) }}</p>
+      </div>
     </div>
     <modal name="preview-documents" :height="600" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-documents-modal">
