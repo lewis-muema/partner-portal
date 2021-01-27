@@ -7,8 +7,8 @@
           <div class="inner-left">
             <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/Sendy_logo_whitewhite.png" @click="location.href = 'https://sendyit.com/'" />
             <div class="inner-left-toggles" v-if="$store.getters.getFreightStatus === 2">
-              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')">Transportation orders</span>
-              <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')">Freight orders</span>
+              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')">TRANSPORTATION</span>
+              <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')">FREIGHT</span>
             </div>
           </div>
           <div class="inner-right">
