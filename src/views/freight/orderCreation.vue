@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="order-creation-title">Create Order</p>
+    <p class="order-creation-title">Place Order</p>
     <div>
       <p class="request-advance-input-labels">Pick up location</p>
       <gmap-autocomplete
@@ -192,7 +192,7 @@
     <div>
       <button class="order-creation-button" :class="submitStatus && !uploadProgress ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="submitRequest">
         <i class="el-icon-loading" v-if="uploadProgress"></i>
-        Create order
+        Place Order
       </button>
     </div>
     <notify />
