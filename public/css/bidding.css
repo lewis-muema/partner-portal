@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.bid {
+  width: 90%;
+  margin: auto;
+}
+.bid-heading {
+  font-size: 18px;
+}
+.bid-details-subheading {
+  font-size: 16px;
+  color: #6f6a6a;
+}
+.bid-details-content {
+  font-size: 18px;
+  color: #303133;
+}
+.dark {
+  color: #3d3e40, 100%;
+}
+.black {
+  color: #000;
+  font-weight: 600;
+}
+.bid-details-heading {
+  font-size: 20px;
+  color: #ff7900;
+  padding-bottom: 10px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+.bidding-form-trucks {
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 20px;
+}
+.bidding-form-trucks-button {
+  border: 0.7px solid #b6b5b4;
+  padding: 10px 14px;
+  background: transparent;
+}
+.border-radius__right {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+.border-radius__left {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+.bidding-form-trucks-button i {
+  color: #ff7900;
+}
+input {
+  font-size: 18px;
+  font-weight: 600;
+  border: 0.7px solid #b6b5b4;
+}
+.bidding-form-trucks-input {
+  width: 14%;
+}
+.bidding-amount {
+  padding-bottom: 20px;
+}
+.bidding-amount-currency-section {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  /* align-items: center; */
+}
+.bidding-amount-currency {
+  width: 30%;
+  height: 50px;
+  padding: 10px;
+  font-weight: 600;
+  border: none;
+  text-align-last: center;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+.bidding-amount-input {
+  height: 50px;
+  width: 70%;
+}
+.bidding-form-btn {
+  background: #ff7900;
+  color: #fff;
+  padding: 16px 0px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+}
