@@ -24,6 +24,7 @@ import freightDashboard from './views/freight/dashboard.vue';
 import freightOrders from './views/freight/orders.vue';
 import freightOrderDetails from './views/freight/orderDetails.vue';
 import freightPreferences from './views/freight/preferences.vue';
+import bidding from './views/bidding/biddingWebForm';
 
 Vue.use(Router);
 
@@ -145,6 +146,11 @@ export default new Router({
       path: '/auxilliary',
       name: 'auxilliary',
       component: auxilliaryServices,
+    },
+    {
+      path: '/bidding',
+      name: 'bidding',
+      component: bidding,
     },
     {
       path: '/freight',
