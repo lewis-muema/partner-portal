@@ -217,7 +217,8 @@ input {
     font-size: 24px;
     padding: 20px 0px;
   }
-  .bid-section {
+
+  form {
     width: 50%;
   }
 }
