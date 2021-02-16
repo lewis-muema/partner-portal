@@ -3,19 +3,44 @@
   padding: 0;
   box-sizing: border-box;
 }
-.bid {
+.bid-web-form {
   width: 90%;
   margin: auto;
   padding-bottom: 50px;
+}
+.bid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.bid-header {
+  width: 50%;
+  /* min-width: 300px; */
 }
 .bid-heading {
   font-size: 18px;
   /* padding-top: 6px; */
 }
 .bid-map {
-  width: 100%;
-  max-width: 500px;
-  margin: 10px 0px;
+  max-width: 600px;
+  min-width: 330px;
+  align-self: center;
+}
+.bid-map img {
+  height: 300px;
+  border-radius: 4px;
+}
+.bid-details {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.bid-details-shipment {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .bid-details-subheading {
   font-size: 16px;
@@ -38,6 +63,7 @@
   color: #ff7900;
   padding-bottom: 10px;
 }
+
 form {
   display: flex;
   flex-direction: column;
@@ -66,6 +92,7 @@ form {
 input {
   font-size: 18px;
   font-weight: 600;
+  /* text-align: center; */
   border: 0.7px solid #b6b5b4;
 }
 .bidding-form-trucks-input {
@@ -168,6 +195,29 @@ input {
   font-size: 18px;
   font-weight: 500;
   color: #ff7900;
-  padding: 0px 10px;
+  /* padding: 0px 10px; */
   align-self: center;
+}
+.bid-details-modal {
+  height: 100%;
+  width: 100%;
+}
+@media only screen and (min-width: 653px) {
+  .bid-details {
+    width: 50%;
+  }
+  .bid-details-modal {
+    width: 100%;
+  }
+  .success-card {
+    width: 30%;
+  }
+  .bid-heading {
+    /* font-weight: 600; */
+    font-size: 24px;
+    padding: 20px 0px;
+  }
+  .bid-section {
+    width: 50%;
+  }
 }
