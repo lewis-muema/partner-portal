@@ -1,7 +1,8 @@
   <template >
   <div id="bidding">
+    <!-- CONFIRMATION MODAL -->
     <div class="modal-container">
-      <modal name="bid-details-modal" :height="500" :width="318" transition="slide" :pivot-y="0">
+      <modal name="bid-details-modal" class="bid-details-modal" :height="500" transition="slide" :pivot-y="0">
         <div class="card">
           <div class="card-head">
             <h1 class="card-heading">Confirm Offer</h1>
@@ -39,90 +40,104 @@
         </div>
       </modal>
     </div>
-    <!-- Bidding forms/pages -->
-    <div class="bid">
+    <!-- BID SUCCESS MESSAGE -->
+    <div class="bid-web-form">
       <div v-show="success" class="success-card">
         <i class="far fa-check-circle"></i>
-        <p class="success-message">Congrats! you have accepted the offer</p>
+        <span class="success-message">Congrats! you have accepted the offer</span>
         <span @click="success = false"> <i class="fas fa-times"></i> </span>
       </div>
+      <!-- BID DETAILS -->
       <h1 class="bid-heading">Shipment Details</h1>
-      <div class="bid-map">
-        <img :src="createStaticMapUrl()" class="map" />
-      </div>
+      <div class="bid">
+        <div class="bid-header">
+          <div class="bid-map">
+            <img :src="createStaticMapUrl()" class="map" />
+          </div>
+        </div>
 
-      <div class="bid-details">
-        <h2 class="bid-details-subheading">Pick up</h2>
-        <p class="bid-details-content">{{ formData.pick_up }}</p>
-        <p class="bid-details-content dark">The load will be picked at {{ formData.load_pick_up_point }}</p>
-        <h2 class="bid-details-subheading">Destination</h2>
-        <p class="bid-details-content">{{ formData.destination }}</p>
-        <h2 class="bid-details-subheading">Type of load</h2>
-        <p class="bid-details-content">{{ formData.load_type }}</p>
-        <h2 class="bid-details-subheading">Date of Pick up</h2>
-        <p class="bid-details-content">{{ formData.pick_up_date }}</p>
-        <hr />
-        <h2 class="bid-details-subheading">Number of Trucks wanted</h2>
-        <p class="bid-details-content">{{ formData.no_of_trucks }} Trucks</p>
-        <h2 class="bid-details-subheading">Type of Truck</h2>
-        <p class="bid-details-content">{{ formData.type_of_truck }}</p>
-        <h2 class="bid-details-subheading">Weight of truck</h2>
-        <p class="bid-details-content">{{ formData.weight_of_truck }}</p>
-        <h2 class="bid-details-subheading">Return container?</h2>
-        <p class="bid-details-content">{{ formData.return_container }}</p>
-      </div>
-
-      <hr />
-      <!-- Bidding section -->
-      <div v-if="!submitted">
-        <div v-if="bid" class="bid-section">
-          <h2 class="bid-details-heading">Enter your bid</h2>
-          <form class="bidding-form">
-            <h2 class="bid-details-content">How many trucks do you have available for this order?</h2>
-            <div class="bidding-form-trucks">
-              <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
-              <input class="bidding-form-trucks-input" type="text" :value="bidDetails.available_trucks" placeholder="0" />
-              <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+        <div class="bid-details">
+          <div class="bid-details-shipment">
+            <div class="bid-information">
+              <h2 class="bid-details-subheading">Pick up</h2>
+              <p class="bid-details-content">{{ formData2.data.pickup.name }}</p>
+              <p class="bid-details-content dark">The load will be picked at {{ formData2.data.pickup_facility }}</p>
+              <h2 class="bid-details-subheading">Destination</h2>
+              <p class="bid-details-content">{{ formData2.data.destination.name }}</p>
+              <h2 class="bid-details-subheading">Type of load</h2>
+              <p class="bid-details-content">{{ formData2.data.carrier_type }}</p>
+              <h2 class="bid-details-subheading">Date of Pick up</h2>
+              <p class="bid-details-content">{{ formData2.data.pickup_time }}</p>
             </div>
-            <div class="bidding-amount">
-              <h2 class="bid-details-content">What is your bid amount per truck?</h2>
-              <div class="bidding-amount-currency-section">
-                <select class="bidding-amount-currency border-radius__left" name="currency" id="currency">
-                  <option :value="formData.currency">{{ formData.currency }}</option>
-                </select>
-                <input type="number" v-model="bidDetails.amount_per_truck" class="bidding-amount-input border-radius__right" />
+            <div class="bid-details-truck">
+              <h2 class="bid-details-subheading">Number of Trucks wanted</h2>
+              <p class="bid-details-content">{{ formData.no_of_trucks }} Trucks</p>
+              <h2 class="bid-details-subheading">Type of Truck</h2>
+              <p class="bid-details-content">{{ formData.type_of_truck }}</p>
+              <h2 class="bid-details-subheading">Weight of truck</h2>
+              <p class="bid-details-content">{{ formData.weight_of_truck }}</p>
+              <h2 class="bid-details-subheading">Return container?</h2>
+              <p class="bid-details-content">{{ formData.return_container }}</p>
+              <div v-if="negotiable">
+                <h2 class="bid-details-subheading">The client's price offer</h2>
+                <p class="bid-details-content">{{ formData.currency }} {{ formData.client_price }}</p>
               </div>
             </div>
-            <input type="submit" :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Submit Bid" class="submit-btn" @click.prevent="show" />
-          </form>
-        </div>
+          </div>
 
-        <!-- Bid offer section -->
-        <div v-else>
-          <h2 class="bid-details-heading">Offer</h2>
-          <p class="bid-details-content">The client’s price offer</p>
-          <form>
-            <p class="bid-details-content black">{{ formData.currency }} {{ formData.client_price }} Per Truck</p>
-            <div class="bidding-form-trucks">
-              <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
-              <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
-              <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+          <hr />
+          <!-- Bidding section -->
+          <div v-if="!submitted">
+            <div v-if="bid" class="bid-section">
+              <h2 class="bid-details-heading">Enter your bid</h2>
+              <form class="bidding-form">
+                <h2 class="bid-details-content">How many trucks do you have available for this order?</h2>
+                <div class="bidding-form-trucks">
+                  <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
+                  <input class="bidding-form-trucks-input" type="text" :value="bidDetails.available_trucks" placeholder="0" />
+                  <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="bidding-amount">
+                  <h2 class="bid-details-content">What is your bid amount per truck?</h2>
+                  <div class="bidding-amount-currency-section">
+                    <select class="bidding-amount-currency border-radius__left" name="currency" id="currency">
+                      <option :value="formData.currency">{{ formData.currency }}</option>
+                    </select>
+                    <input type="number" v-model="bidDetails.amount_per_truck" class="bidding-amount-input border-radius__right" />
+                  </div>
+                </div>
+                <input type="submit" :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Submit Bid" class="submit-btn" @click.prevent="show" />
+              </form>
             </div>
-            <input :disables="bidDetails.available_trucks === 0" type="submit" value="Accept Offer" class="submit-btn" @click.prevent="show" />
-          </form>
+
+            <!-- Bid offer section -->
+            <div v-else>
+              <h2 class="bid-details-heading">Offer</h2>
+              <p class="bid-details-content">The client’s price offer</p>
+              <form>
+                <p class="bid-details-content black">{{ formData.currency }} {{ formData.client_price }} Per Truck</p>
+                <div class="bidding-form-trucks">
+                  <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
+                  <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
+                  <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+                </div>
+                <input :disables="bidDetails.available_trucks === 0" type="submit" value="Accept Offer" class="submit-btn" @click.prevent="show" />
+              </form>
+            </div>
+          </div>
+          <div v-else>
+            <h2 class="bid-details-heading">Your bid</h2>
+            <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
+            <p class="bid-details-content">{{ bidDetails.available_trucks }} Trucks</p>
+            <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
+            <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck }}</p>
+            <h2 class="bid-details-subheading">Your total bid amount</h2>
+            <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck * bidDetails.available_trucks }}</p>
+            <i>
+              <p class="timestamp">Bid submitted on {{ date }}</p>
+            </i>
+          </div>
         </div>
-      </div>
-      <div v-else>
-        <h2 class="bid-details-heading">Your bid</h2>
-        <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
-        <p class="bid-details-content">{{ bidDetails.available_trucks }} Trucks</p>
-        <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-        <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck }}</p>
-        <h2 class="bid-details-subheading">Your total bid amount</h2>
-        <p class="bid-details-content">{{ bidDetails.amount_per_truck * bidDetails.available_trucks }} Trucks</p>
-        <i>
-          <p class="timestamp">Bid submitted on {{ date }}</p>
-        </i>
       </div>
     </div>
   </div>
@@ -134,6 +149,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
+      negotiable: true,
       bidDetails: {
         amount_per_truck: null,
         available_trucks: 0,
@@ -172,10 +188,105 @@ export default {
         bid_no_of_trucks: 3, // Only sent if bid status is accepted
         date_submitted: '14:05:00 2/2/2021', // Only sent if bid status is accepted
       },
+      formData2: {
+        status: true,
+        code: 200,
+        message: 'Success',
+        data: {
+          quotation: {
+            quotation_id: 39,
+            shipment_id: 76,
+            transporter_id: 549,
+            name: null,
+            trucks_available: 4,
+            price_per_truck: 35000,
+            status: 2,
+            bid_status: 'Bid Awarded',
+            date_created: null,
+          },
+          negotiable: null,
+          id: 76,
+          peer_id: 1081,
+          cop_user_id: null,
+          cop_id: null,
+          pickup: {
+            name: 'Nairobi',
+            coordinates: '-1.2920659,36.8219462',
+            country_code: 'KE',
+            type: 'coordinates',
+            more: {
+              Estate: '',
+              FlatName: '',
+              place_idcustom: 'ChIJp0lN2HIRLxgRTJKXslQCz_c',
+              Label: '',
+              HouseDoor: '',
+              Otherdescription: '',
+              Typed: '',
+              Vicinity: 'Not Indicated',
+              Address: 'Nairobi, Kenya',
+              landmark: '',
+              viewport: {
+                northeast: {
+                  lat: 0.0,
+                  lng: 0.0,
+                },
+                southwest: {
+                  lat: 0.0,
+                  lng: 0.0,
+                },
+              },
+              Road: '',
+            },
+          },
+          pickup_facility: 'Facility ZV next to Ferry Road',
+          pickup_time: '02-15-2021 04:25:54',
+          destination: {
+            name: 'Nairobi',
+            coordinates: '-1.2920659,36.8219462',
+            country_code: 'KE',
+            type: 'coordinates',
+            more: {
+              Estate: '',
+              FlatName: '',
+              place_idcustom: 'ChIJp0lN2HIRLxgRTJKXslQCz_c',
+              Label: '',
+              HouseDoor: '',
+              Otherdescription: '',
+              Typed: '',
+              Vicinity: 'Not Indicated',
+              Address: 'Nairobi, Kenya',
+              landmark: '',
+              viewport: {
+                northeast: {
+                  lat: 0.0,
+                  lng: 0.0,
+                },
+                southwest: {
+                  lat: 0.0,
+                  lng: 0.0,
+                },
+              },
+              Road: '',
+            },
+          },
+          carrier_type: 'Cotton',
+          cargo_type: 'Highside',
+          is_return: false,
+          total_trucks: 20,
+          available_trucks: 4,
+          tonnes_per_truck: 23,
+          offer_amount: null,
+          is_negotiable: null,
+          bidding_deadline: null,
+          status: 0,
+          quotations: null,
+          awarded_bids: null,
+        },
+      },
     };
   },
   mounted() {
-    // getBid();
+    this.getBid();
   },
   methods: {
     show() {
@@ -216,7 +327,7 @@ export default {
         .catch((error) => console.log(error));
     },
     getBid() {
-      axios.get('https://freight-service-dev.sendyit.com/freight-service/shipments/4').then((res) => {
+      axios.get('https://authtest.sendyit.com/freight-service/shipments/quotations/16/581?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm86').then((res) => {
         console.log(res);
       });
     },
