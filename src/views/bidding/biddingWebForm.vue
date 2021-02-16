@@ -162,6 +162,7 @@ export default {
       confirmed: false,
       success: false,
       date: '',
+      errObj: '',
       formData: {},
       config: {
         headers: {
@@ -192,8 +193,6 @@ export default {
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
     bidOffer() {
-      this.submitted = true;
-      this.success = true;
       this.hide('bid-details-modal');
       this.date = new Date().toLocaleString();
 
@@ -206,12 +205,15 @@ export default {
       const payload = JSON.stringify(bidInfo);
       console.log(payload);
       axios
-        .patch('https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8', payload)
+        .patch('https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8', payload, this.config)
         .then((res) => {
-          console.log(res.code);
+          if (res.status === 200) {
+            this.submitted = true;
+            this.success = true;
+          }
         })
         .catch((err) => {
-          console.log(err.response);
+          this.errObj = err;
         });
     },
     async getBid() {
@@ -219,11 +221,11 @@ export default {
         .get('https://authtest.sendyit.com/freight-service/shipments/quotations/16/581?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8')
         .then((res) => {
           this.formData = res.data.data;
+
           if (this.formData.offer_amount > 0 && formData.is_negotiable === true) {
             this.bid = true;
             this.negotiable = true;
           }
-          console.log(this.formData);
         })
         .catch((error) => {
           console.log(error);
