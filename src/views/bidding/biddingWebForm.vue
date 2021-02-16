@@ -205,7 +205,7 @@ export default {
       const payload = JSON.stringify(bidInfo);
       console.log(payload);
       axios
-        .patch('https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8', payload, this.config)
+        .patch(`https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then((res) => {
           if (res.status === 200) {
             this.submitted = true;
@@ -218,10 +218,10 @@ export default {
     },
     async getBid() {
       axios
-        .get('https://authtest.sendyit.com/freight-service/shipments/quotations/16/581?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8')
+        .get(`https://authtest.sendyit.com/freight-service/shipments/quotations/16/581?authkey=${process.env.BIDDING_API_KEY}`)
         .then((res) => {
           this.formData = res.data.data;
-
+          console.log(this.formData);
           if (this.formData.offer_amount > 0 && formData.is_negotiable === true) {
             this.bid = true;
             this.negotiable = true;
