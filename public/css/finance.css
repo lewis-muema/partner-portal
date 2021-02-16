@@ -16,7 +16,7 @@ body.dt-print-view {
 }
 
 .btn-primary:hover {
-  background-color: #f57f20;
+  background-color: #EE7D00;
   color: #1782c5;
 }
 .snap-error {
@@ -28,7 +28,7 @@ body.dt-print-view {
 }
 .add-driver,
 .reassign-driver {
-  color: #f57f20;
+  color: #EE7D00;
   cursor: pointer;
 }
 .cancel-allocation {
@@ -57,8 +57,8 @@ body.dt-print-view {
   border-color: #ff4949 !important;
 }
 .page-item.active .page-link {
-  background-color: #f57f20;
-  border-color: #f57f20;
+  background-color: #EE7D00;
+  border-color: #EE7D00;
 }
 .assign-driver-input {
   background: #ffffff;
@@ -406,7 +406,7 @@ label {
 
 .fil-sub {
   color: #fff !important;
-  background-color: #f57f20 !important;
+  background-color: #EE7D00 !important;
   font-size: 14px;
   width: 135px;
   padding: 8px !important;
@@ -470,7 +470,7 @@ label {
   border: 0;
 }
 .vehicles__documents-error {
-  color: #f57f20;
+  color: #EE7D00;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -493,7 +493,7 @@ label {
 }
 
 .statement__box-icon-orange {
-  background-color: #f57f20;
+  background-color: #EE7D00;
 }
 
 .vehicles__addc-title {
@@ -576,7 +576,7 @@ input:-ms-input-placeholder {
 
 .search-error {
   text-align: center;
-  color: #f57f20;
+  color: #EE7D00;
   padding-bottom: 10px;
   font-size: 15px;
 }
@@ -611,7 +611,7 @@ input:-ms-input-placeholder {
 }
 
 .fab-action-button {
-  background-color: #f57f20;
+  background-color: #EE7D00;
   color: white;
   width: 60px;
   height: 60px;
@@ -697,13 +697,13 @@ input:-ms-input-placeholder {
 
 .fab-act:hover {
   border-style: solid;
-  border-color: #f57f20;
+  border-color: #EE7D00;
   border-width: 5px 0px 5px 0px;
 }
 
 .modal-header {
   color: #fff;
-  background-color: #f57f20;
+  background-color: #EE7D00;
   border-bottom: 0;
 }
 
@@ -724,8 +724,8 @@ input:-ms-input-placeholder {
 }
 
 .btn-primary {
-  background-color: #f57f20 !important;
-  border-color: #f57f20 !important;
+  background-color: #EE7D00 !important;
+  border-color: #EE7D00 !important;
 }
 
 .btn-secondary {
@@ -895,7 +895,7 @@ table.dataTable tfoot > tr > th {
 }
 
 .mdshow {
-  color: #f57f20;
+  color: #EE7D00;
 }
 
 .mcshow {
@@ -917,7 +917,7 @@ table.dataTable tfoot > tr > th {
 }
 
 .statement__txt-orange {
-  color: #f57f20;
+  color: #EE7D00;
 }
 
 .statement__txt-blue {
@@ -1061,11 +1061,11 @@ ul {
 }
 
 .fab-orange {
-  background-color: #f57f20;
+  background-color: #EE7D00;
 }
 
 .mdshow {
-  color: #f57f20;
+  color: #EE7D00;
 }
 
 .vehicles__doccard-error {
@@ -1114,8 +1114,8 @@ ul {
 }
 
 .btn-outline-primary {
-  border-color: #f57f20;
-  color: #f57f20;
+  border-color: #EE7D00;
+  color: #EE7D00;
 }
 
 .btn-floating:hover {
@@ -1392,12 +1392,12 @@ button.btn-floating {
 }
 
 .vehicles__driver-error {
-  color: #f17f3a;
+  color: #EE7D00;
   position: absolute;
   top: 15px;
 }
 .statement__withdraw-button {
-  background-color: #f17f3a;
+  background-color: #EE7D00;
   color: white;
 }
 .statement__add-bank-tab {
@@ -1477,7 +1477,7 @@ button.btn-floating {
   background-color: red;
 }
 .pop-up-sending {
-  background-color: #f78114;
+  background-color: #EE7D00;
 }
 .message-box {
   display: none;
@@ -1485,7 +1485,7 @@ button.btn-floating {
 }
 .loader {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #f78114;
+  border-top: 4px solid #EE7D00;
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -1498,7 +1498,7 @@ button.btn-floating {
 }
 .loading-icon {
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #f78114;
+  border-top: 3px solid #EE7D00;
   border-radius: 50%;
   width: 20px;
   height: 20px;

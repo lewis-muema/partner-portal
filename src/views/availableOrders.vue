@@ -999,7 +999,7 @@ a {
 }
 
 .validation-error--message {
-  color: #f17f3a;
+  color: #EE7D00;
 }
 .capitalize-text {
   text-transform: capitalize;

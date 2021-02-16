@@ -24,8 +24,14 @@ export default {
   font-weight: 400;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Nunito';
+  src: url('../src/assets/fonts/Nunito-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 #app {
-  font-family: 'HelveticaNeue';
+  font-family: 'Nunito';
   height: 100%;
 }
 #nav {

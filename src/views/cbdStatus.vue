@@ -96,7 +96,7 @@ export default {
   data() {
     return {
       show_loading: true,
-      colors: '#F57E20',
+      colors: '#EE7D00',
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -295,8 +295,8 @@ export default {
 <style scoped>
 @import '../assets/css/performance_section.css?v=1';
 .action-button--active {
-  background-color: #f57f20;
-  border-color: #f57f20;
+  background-color: #EE7D00;
+  border-color: #EE7D00;
   color: #fff;
 }
 .action-button--disable {
@@ -310,6 +310,6 @@ export default {
   cursor: not-allowed;
 }
 .highlight-bike-status {
-  color: #f57f20;
+  color: #EE7D00;
 }
 </style>

@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
+        <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0" :key="refKey">
           <div class="divider-top"></div>
           <datatable
             :columns="columns"
@@ -143,6 +143,7 @@ export default {
       windowWidth: '',
       monthPeriod: '',
       errorObj: '',
+      refKey: 1,
     };
   },
   created() {
@@ -242,6 +243,7 @@ export default {
       });
       this.removeFetchingStatus();
       this.rows = record;
+      this.refKey += 1;
     },
     displayFetchingStatus(message, time) {
       setTimeout(() => {
