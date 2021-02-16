@@ -4764,8 +4764,8 @@ html {
     z-index: 3;
     color: #fff;
     cursor: default;
-    background-color: #f57f20 !important;
-    border-color: #f57f20 !important;
+    background-color: #EE7D00 !important;
+    border-color: #EE7D00 !important;
   }
   .pagination > .disabled > span,
   .pagination > .disabled > span:hover,

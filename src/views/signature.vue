@@ -220,14 +220,14 @@ export default {
   padding-left: 10px;
 }
 .doc-title {
-  color: #f57f20;
+  color: #EE7D00;
   font-weight: 600;
 }
 .accept-button {
-  background: #f58123;
+  background: #EE7D00;
   color: white;
   float: right;
-  border: 1px solid #f58123;
+  border: 1px solid #EE7D00;
 }
 .accept-button-inactive {
   background: rgb(154, 172, 192);
@@ -238,8 +238,8 @@ export default {
 }
 .decline-button {
   background: white;
-  color: #f58123;
-  border: 1px solid #f58123;
+  color: #EE7D00;
+  border: 1px solid #EE7D00;
 }
 .interaction-buttons {
   border-radius: 5px;

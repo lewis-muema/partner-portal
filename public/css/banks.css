@@ -157,9 +157,9 @@
 }
 .banks__add-account-button {
   margin-bottom: 35px;
-  background-color: #f78114;
+  background-color: #EE7D00;
   color: white;
-  border-color: #f78114;
+  border-color: #EE7D00;
   width: 200px;
   height: 49px;
 }
@@ -172,7 +172,7 @@
 }
 .banks__edit-bank-details--mobi {
   cursor: pointer;
-  color: #f78114;
+  color: #EE7D00;
 }
 .banks__no-edit-bank-details {
   cursor: not-allowed;
@@ -231,15 +231,15 @@
   background-color: red;
 }
 .pop-up-sending {
-  background-color: #f78114;
+  background-color: #EE7D00;
 }
 .resend-code {
   cursor: pointer;
-  color: #f78114;
+  color: #EE7D00;
 }
 .loader {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #f78114;
+  border-top: 4px solid #EE7D00;
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -252,7 +252,7 @@
 }
 .banks__loader {
   border: 10px solid #f3f3f3;
-  border-top: 10px solid #f78114;
+  border-top: 10px solid #EE7D00;
   border-radius: 50%;
   width: 80px;
   height: 80px;
@@ -282,9 +282,9 @@
 }
 .banks__active-buttons {
   height: 40px;
-  background-color: #f8871c;
+  background-color: #EE7D00;
   color: #fefffe;
-  border-color: #fb8f15;
+  border-color: #EE7D00;
   border-radius: 3px;
 }
 .banks__no-banks-par {

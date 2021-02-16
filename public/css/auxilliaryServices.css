@@ -2,7 +2,7 @@
   padding: 30px 45px 0px 45px;
 }
 .fuel-advance-heading {
-  color: #EA7125;
+  color: #EE7D00;
   font-size: 14px;
   font-weight: 600;
   padding: 0px 0px 10px 0px;
@@ -23,7 +23,7 @@
 }
 .fuel-advance-menu-tabs-active {
   color: white;
-  background: #EA7125;
+  background: #EE7D00;
 }
 .pending-requests-containers,
 .approved-requests-containers,
@@ -61,7 +61,7 @@
   align-items: center;
 }
 .pending-requests-driver-details {
-  border-left: 5px solid #ea7125;
+  border-left: 5px solid #EE7D00;
 }
 .approved-requests-driver-details {
   border-left: 5px solid #1E7D11;
@@ -97,7 +97,7 @@
 }
 .active-actions-menu-item {
   text-decoration: underline;
-  color: #ea7125 !important;
+  color: #EE7D00 !important;
 }
 .pending-requests-actions-table-header,
 .pending-requests-actions-table-body,
@@ -137,7 +137,7 @@
 .declined-requests-actions-table-header {
   border-bottom: 1px solid #dcdfe6;
   height: 30px;
-  color: #1871ac;
+  color: #007FFF;
   font-size: 14px;
   align-items: center;
 }
@@ -169,7 +169,7 @@
   height: 7px;
   margin-right: 10px;
   border-radius: 10px;
-  background: #ea7125;
+  background: #EE7D00;
 }
 .pending-requests-destination-indicator,
 .approved-requests-destination-indicator,
@@ -178,7 +178,7 @@
   height: 7px;
   margin-right: 10px;
   border-radius: 10px;
-  background: #1871ac;
+  background: #007FFF;
 }
 .pending-requests-edit-inputs,
 .approved-requests-edit-inputs,
@@ -195,7 +195,7 @@
 .pending-requests-update-button,
 .approved-requests-update-button,
 .declined-requests-update-button {
-  background: #ea7125;
+  background: #EE7D00;
   border: 1px solid #dcdfe6;
   box-sizing: border-box;
   border-radius: 5px;
@@ -229,7 +229,7 @@
   margin: 5px;
   font-weight: 500;
   font-size: 14px;
-  color: #1871ac;
+  color: #007FFF;
 }
 .pending-requests-filler,
 .approved-requests-filler,
@@ -256,7 +256,7 @@
 .pending-requests-popover,
 .approved-requests-popover,
 .declined-requests-popover {
-  background: #1871ac;
+  background: #007FFF;
   color: white;
 }
 .pending-requests-owner-container,
@@ -296,7 +296,7 @@
 }
 .approved-question-override,
 .declined-question-override {
-  color: #ea7125;
+  color: #EE7D00;
 }
 .approved-input-override,
 .declined-input-override {
@@ -325,7 +325,7 @@
 }
 .approved-requests-section-header,
 .declined-requests-section-header {
-  color: #ea7125;
+  color: #EE7D00;
   font-weight: 600;
   font-size: 14px;
 }
@@ -425,8 +425,8 @@
   width: 100px;
   height: 40px;
   border-radius: 5px;
-  background: #F28226;
-  border: 1px solid #F28226;
+  background: #EE7D00;
+  border: 1px solid #EE7D00;
   color: white;
 }
 .fuel-request-close-icon {
@@ -446,7 +446,7 @@
   font-weight: 600;
 }
 .edit-action-input {
-  color: #F28226;
+  color: #EE7D00;
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;

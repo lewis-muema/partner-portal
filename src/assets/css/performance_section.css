@@ -24,7 +24,7 @@
 .completed--checker{
   width: 10px;
   height: 10px;
-  background: #F57E20;
+  background: #EE7D00;
   margin: 3%;
 }
 .uncompleted--checker{
@@ -99,7 +99,7 @@
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid #F57E20;
+  border-top: 1.1em solid #EE7D00;
   border-right: 1.1em solid #f3f3f3;
   border-bottom: 1.1em solid #f3f3f3;
   border-left: 1.1em solid #f3f3f3;
@@ -130,7 +130,7 @@
   }
 }
 .active-target-hours{
-  color: #1B7FC3;
+  color: #007FFF;
 }
 .checked-daily-target{
   color:#00b800 ;
@@ -141,8 +141,8 @@
   font-size: 11px;
   display: inline-block;
   line-height: 1;
-  background: #F57E20;
-  border: 1px solid #F57E20;
+  background: #EE7D00;
+  border: 1px solid #EE7D00;
   color: #FFFFFF !important;
 }
 .online-time--outer{
@@ -176,7 +176,7 @@
 .success-license {
   font-size: 26px;
   margin-top: 30%;
-  color: #1b7fc3;
+  color: #007FFF;
 }
 .update-license {
   background-color: #635c5c;
@@ -188,18 +188,18 @@
   color: #ff0000;
 }
 .pending-highlight {
-  color: #ff7100;
+  color: #EE7D00;
 }
 .approved-highlight {
-  color: #1b7fc3;
+  color: #007FFF;
 }
 .request-refund--section {
   margin-left: 2%;
   margin-bottom: 2%;
 }
 .request-refund-btn {
-  background-color: #ff7900;
-  border-color: #ff7900;
+  background-color: #EE7D00;
+  border-color: #EE7D00;
   color: #fff;
   height: 48px !important;
   width: 14% !important;
@@ -249,7 +249,7 @@
 .reward-upload-label {
   font-style: italic;
   font-size: 14px;
-  color: #f18327;
+  color: #EE7D00;
   font-weight: 700;
   cursor: pointer;
 }
@@ -267,8 +267,8 @@
 .request-refund-btn:focus,
 .request-refund-btn:hover {
   color: #fff;
-  background-color: #ff7900;
-  border-color: #ff7900;
+  background-color: #EE7D00;
+  border-color: #EE7D00;
   outline: inherit;
 }
 .el-button:focus,
@@ -302,7 +302,7 @@
 }
 .vendor_active_final {
   background: #d0ecfd;
-  border: 2px solid #1b7fc3;
+  border: 2px solid #007FFF;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
   animation: flip-scale-down-diag-2 0.5s linear;
 }
@@ -369,13 +369,13 @@ button:focus {
 .declined-license {
   font-size: 26px;
   margin-top: 30%;
-  color: #FF7100;
+  color: #EE7D00;
 }
 .driver-info {
   padding-top: 5%;
 }
 .pending-license {
-  color: #ff7100;
+  color: #EE7D00;
 }
 .upload_image {
   width: 100%;

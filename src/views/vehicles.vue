@@ -1101,7 +1101,7 @@ export default {
       $(`#${id}`).html('Click here to change image');
       $(`#${button}`)
         .prop('disabled', false)
-        .css('background-color', '#f57f20');
+        .css('background-color', '#EE7D00');
       $(`#${id}`).prop('disabled', false);
     },
     failedLabelReset(id, button) {
