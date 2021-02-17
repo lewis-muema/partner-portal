@@ -148,7 +148,7 @@ export default new Router({
       component: auxilliaryServices,
     },
     {
-      path: '/bidding',
+      path: '/bidding/:shipment_id/:owner_id/',
       name: 'bidding',
       component: bidding,
     },
