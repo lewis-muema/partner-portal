@@ -1,5 +1,6 @@
   <template >
   <div id="bidding">
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <!-- CONFIRMATION MODAL -->
     <div class="modal-container">
       <modal name="bid-details-modal" class="bid-details-modal" :height="500" transition="slide" :pivot-y="0">
@@ -49,7 +50,7 @@
       </div>
       <!-- BID DETAILS -->
       <h1 class="bid-heading">Shipment Details</h1>
-      <div class="bid">
+      <div class="bid" v-if="Object.keys(formData).length > 0">
         <div class="bid-header">
           <div class="bid-map">
             <img :src="createStaticMapUrl()" class="map" />
@@ -140,13 +141,23 @@
         </div>
       </div>
     </div>
+    <notify />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import timezone from '../../mixins/timezone';
+import notify from '../../components/notification';
+import verifier from '../../components/verifier';
+import errorHandler from '../../components/errorHandler';
 
 export default {
+  title: 'Partner Portal - Freight Bidding Webform',
+  components: {
+    errorHandler,
+    notify,
+  },
   data() {
     return {
       negotiable: false,
@@ -170,12 +181,18 @@ export default {
           Authorization: localStorage.token,
         },
       },
+      errorObj: '',
     };
   },
   mounted() {
-    this.getBid();
+    if (this.$route.params.shipment_id !== undefined && this.$route.params.owner_id !== undefined) {
+      this.getBid();
+    }
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     show() {
       this.$modal.show('bid-details-modal');
     },
@@ -203,7 +220,6 @@ export default {
       };
 
       const payload = JSON.stringify(bidInfo);
-      console.log(payload);
       axios
         .patch(`https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then((res) => {
@@ -218,17 +234,16 @@ export default {
     },
     async getBid() {
       axios
-        .get(`https://authtest.sendyit.com/freight-service/shipments/quotations/16/581?authkey=${process.env.BIDDING_API_KEY}`)
+        .get(`https://authtest.sendyit.com/freight-service/shipments/quotations/${this.$route.params.shipment_id}/${this.$route.params.owner_id}?authkey=${process.env.BIDDING_API_KEY}`)
         .then((res) => {
           this.formData = res.data.data;
-          console.log(this.formData);
           if (this.formData.offer_amount > 0 && formData.is_negotiable === true) {
             this.bid = true;
             this.negotiable = true;
           }
         })
         .catch((error) => {
-          console.log(error);
+          this.errObj = error;
         });
     },
   },
