@@ -198,11 +198,24 @@ input {
   height: 100%;
   width: 100%;
 }
+.bid-status {
+  width: 70%;
+  margin: auto;
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .bid-status h1 {
-  padding: 10px;
-  font-size: 18px;
-  text-align: center;
+  font-size: 16px;
   color: #606266;
+  text-align: center;
+  font-weight: 500;
+  padding-top: 16px;
+}
+.bid-status i {
+  color: #f78d30;
 }
 @media only screen and (min-width: 653px) {
   .bid-details {
@@ -222,5 +235,15 @@ input {
 
   form {
     width: 50%;
+  }
+  .bid-status {
+    max-width: 50%;
+  }
+  .bid-status h1 {
+    font-size: 22px;
+    color: #606266;
+    text-align: center;
+    font-weight: 500;
+    padding-top: 20px;
   }
 }

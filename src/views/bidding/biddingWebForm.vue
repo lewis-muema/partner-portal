@@ -143,9 +143,18 @@
         </div>
       </div>
     </div>
-    <div v-if="status === 1" class="bid-status"><h1>Your bid was been placed successfully and is being reviewed</h1></div>
-    <div v-if="status === 2" class="bid-status"><h1>Contratulations!you have been awarded the bid</h1></div>
-    <div v-if="status === -1" class="bid-status"><h1>Unfortunately,your bid has been rejected</h1></div>
+    <div v-if="status === 1" class="bid-status">
+      <i class="far fa-clock fa-6x"></i>
+      <h1>Bid placed successfully and is being reviewed</h1>
+    </div>
+    <div v-if="status === 2" class="bid-status">
+      <i class="far fa-check-circle fa-6x"></i>
+      <h1>Congratulations, you have been awarded the shipment</h1>
+    </div>
+    <div v-if="status === -1" class="bid-status">
+      <i class="far fa-times-circle fa-6x"></i>
+      <h1>Unfortunately your bid offer was not selected</h1>
+    </div>
     <notify />
   </div>
 </template>
