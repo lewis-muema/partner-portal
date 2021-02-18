@@ -15,11 +15,10 @@
 }
 .bid-header {
   width: 50%;
-  /* min-width: 300px; */
 }
 .bid-heading {
   font-size: 18px;
-  /* padding-top: 6px; */
+  padding-top: 10px;
 }
 .bid-map {
   max-width: 600px;
@@ -92,7 +91,6 @@ form {
 input {
   font-size: 18px;
   font-weight: 600;
-  /* text-align: center; */
   border: 0.7px solid #b6b5b4;
 }
 .bidding-form-trucks-input {
@@ -104,8 +102,6 @@ input {
 .bidding-amount-currency-section {
   display: flex;
   flex-direction: row;
-  /* justify-content: center; */
-  /* align-items: center; */
 }
 .bidding-amount-currency {
   width: 30%;
@@ -201,6 +197,12 @@ input {
 .bid-details-modal {
   height: 100%;
   width: 100%;
+}
+.bid-status h1 {
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  color: #606266;
 }
 @media only screen and (min-width: 653px) {
   .bid-details {
