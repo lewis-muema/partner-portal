@@ -42,105 +42,110 @@
       </modal>
     </div>
     <!-- BID SUCCESS MESSAGE -->
-    <div class="bid-web-form">
-      <div v-show="success" class="success-card">
-        <i class="far fa-check-circle"></i>
-        <span class="success-message">Congrats! you have accepted the offer</span>
-        <span @click="success = false"> <i class="fas fa-times"></i> </span>
-      </div>
-      <!-- BID DETAILS -->
-      <h1 class="bid-heading">Shipment Details</h1>
-      <div class="bid" v-if="Object.keys(formData).length > 0">
-        <div class="bid-header">
-          <div class="bid-map">
-            <img :src="createStaticMapUrl()" class="map" />
-          </div>
+    <div v-if="status === 0" class="bid-status-ok">
+      <div class="bid-web-form">
+        <div v-show="success" class="success-card">
+          <i class="far fa-check-circle"></i>
+          <span class="success-message">Congrats! you have accepted the offer</span>
+          <span @click="success = false"> <i class="fas fa-times"></i> </span>
         </div>
-
-        <div class="bid-details">
-          <div class="bid-details-shipment">
-            <div class="bid-information">
-              <h2 class="bid-details-subheading">Pick up</h2>
-              <p class="bid-details-content">{{ formData.pickup.name }}</p>
-              <p class="bid-details-content dark">The load will be picked at {{ formData.pickup.more.Vicinity }}</p>
-              <h2 class="bid-details-subheading">Destination</h2>
-              <p class="bid-details-content">{{ formData.destination.name }}</p>
-              <h2 class="bid-details-subheading">Type of load</h2>
-              <p class="bid-details-content">{{ formData.carrier_type }}</p>
-              <h2 class="bid-details-subheading">Date of Pick up</h2>
-              <p class="bid-details-content">{{ formData.pickup_time }}</p>
+        <!-- BID DETAILS -->
+        <h1 class="bid-heading">Shipment Details</h1>
+        <div class="bid" v-if="Object.keys(formData).length > 0">
+          <div class="bid-header">
+            <div class="bid-map">
+              <img :src="createStaticMapUrl()" class="map" />
             </div>
-            <div class="bid-details-truck">
-              <h2 class="bid-details-subheading">Number of Trucks wanted</h2>
-              <p class="bid-details-content">{{ formData.total_trucks }} Trucks</p>
-              <h2 class="bid-details-subheading">Type of Truck</h2>
-              <p class="bid-details-content">{{ formData.cargo_type }}</p>
-              <h2 class="bid-details-subheading">Weight of truck</h2>
-              <p class="bid-details-content">{{ formData.tonnes_per_truck }}</p>
-              <h2 class="bid-details-subheading">Return container?</h2>
-              <p class="bid-details-content">{{ formData.is_return ? 'Yes, containers will be returned' : 'No, containers will not be returned' }}</p>
-              <div v-if="negotiable">
-                <h2 class="bid-details-subheading">The client's price offer</h2>
-                <p class="bid-details-content">USD {{ formData.offer_amount }}</p>
+          </div>
+
+          <div class="bid-details">
+            <div class="bid-details-shipment">
+              <div class="bid-information">
+                <h2 class="bid-details-subheading">Pick up</h2>
+                <p class="bid-details-content">{{ formData.pickup.name }}</p>
+                <p class="bid-details-content dark">The load will be picked at {{ formData.pickup_facility }}</p>
+                <h2 class="bid-details-subheading">Destination</h2>
+                <p class="bid-details-content">{{ formData.destination.name }}</p>
+                <h2 class="bid-details-subheading">Type of load</h2>
+                <p class="bid-details-content">{{ formData.carrier_type }}</p>
+                <h2 class="bid-details-subheading">Date of Pick up</h2>
+                <p class="bid-details-content">{{ formData.pickup_time }}</p>
+              </div>
+              <div class="bid-details-truck">
+                <h2 class="bid-details-subheading">Number of Trucks wanted</h2>
+                <p class="bid-details-content">{{ formData.total_trucks }} Trucks</p>
+                <h2 class="bid-details-subheading">Type of Truck</h2>
+                <p class="bid-details-content">{{ formData.cargo_type }}</p>
+                <h2 class="bid-details-subheading">Weight of truck</h2>
+                <p class="bid-details-content">{{ formData.tonnes_per_truck }}</p>
+                <h2 class="bid-details-subheading">Return container?</h2>
+                <p class="bid-details-content">{{ formData.is_return ? 'Yes, containers will be returned' : 'No, containers will not be returned' }}</p>
+                <div v-if="formData.is_negotiable">
+                  <h2 class="bid-details-subheading">The client's price offer</h2>
+                  <p class="bid-details-content">{{ formData.currency }} {{ formData.offer_amount }}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <hr />
-          <!-- Bidding section -->
-          <div v-if="!submitted">
-            <div v-if="bid" class="bid-section">
-              <h2 class="bid-details-heading">Enter your bid</h2>
-              <form class="bidding-form">
-                <h2 class="bid-details-content">How many trucks do you have available for this order?</h2>
-                <div class="bidding-form-trucks">
-                  <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
-                  <input class="bidding-form-trucks-input" type="text" :value="bidDetails.available_trucks" placeholder="0" />
-                  <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
-                </div>
-                <div class="bidding-amount">
-                  <h2 class="bid-details-content">What is your bid amount per truck?</h2>
-                  <div class="bidding-amount-currency-section">
-                    <select class="bidding-amount-currency border-radius__left" name="currency" id="currency">
-                      <option value="USD">USD</option>
-                    </select>
-                    <input type="number" v-model="bidDetails.amount_per_truck" class="bidding-amount-input border-radius__right" />
+            <hr />
+            <!-- Bidding section -->
+            <div v-if="!submitted">
+              <div v-if="bid" class="bid-section">
+                <h2 class="bid-details-heading">Enter your bid</h2>
+                <form class="bidding-form">
+                  <h2 class="bid-details-content">How many trucks do you have available for this order?</h2>
+                  <div class="bidding-form-trucks">
+                    <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
+                    <input class="bidding-form-trucks-input" type="text" :value="bidDetails.available_trucks" placeholder="0" />
+                    <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
                   </div>
-                </div>
-                <input type="submit" :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Submit Bid" class="submit-btn" @click.prevent="show" />
-              </form>
-            </div>
+                  <div class="bidding-amount">
+                    <h2 class="bid-details-content">What is your bid amount per truck?</h2>
+                    <div class="bidding-amount-currency-section">
+                      <select class="bidding-amount-currency border-radius__left" name="currency" id="currency">
+                        <option :value="formData.currency">{{ formData.currency }}</option>
+                      </select>
+                      <input type="number" v-model="bidDetails.amount_per_truck" class="bidding-amount-input border-radius__right" />
+                    </div>
+                  </div>
+                  <input type="submit" :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Submit Bid" class="submit-btn" @click.prevent="show" />
+                </form>
+              </div>
 
-            <!-- Bid offer section -->
-            <div v-else>
-              <h2 class="bid-details-heading">Offer</h2>
-              <p class="bid-details-content">The client’s price offer</p>
-              <form>
-                <p class="bid-details-content black">USD {{ formData.offer_amount }} Per Truck</p>
-                <div class="bidding-form-trucks">
-                  <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
-                  <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
-                  <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
-                </div>
-                <input :disables="bidDetails.available_trucks === 0" type="submit" value="Accept Offer" class="submit-btn" @click.prevent="show" />
-              </form>
+              <!-- Bid offer section -->
+              <div v-else>
+                <h2 class="bid-details-heading">Offer</h2>
+                <p class="bid-details-content">The client’s price offer</p>
+                <form>
+                  <p class="bid-details-content black">{{ formData.currency }} {{ formData.offer_amount }} Per Truck</p>
+                  <div class="bidding-form-trucks">
+                    <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="bidDetails.available_trucks--" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
+                    <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
+                    <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+                  </div>
+                  <input :disables="bidDetails.available_trucks === 0" type="submit" value="Accept Offer" class="submit-btn" @click.prevent="show" />
+                </form>
+              </div>
             </div>
-          </div>
-          <div v-else>
-            <h2 class="bid-details-heading">Your bid</h2>
-            <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
-            <p class="bid-details-content">{{ bidDetails.available_trucks }} Trucks</p>
-            <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-            <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck }}</p>
-            <h2 class="bid-details-subheading">Your total bid amount</h2>
-            <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck * bidDetails.available_trucks }}</p>
-            <i>
-              <p class="timestamp">Bid submitted on {{ date }}</p>
-            </i>
+            <div v-else>
+              <h2 class="bid-details-heading">Your bid</h2>
+              <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
+              <p class="bid-details-content">{{ bidDetails.available_trucks }} Trucks</p>
+              <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
+              <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck }}</p>
+              <h2 class="bid-details-subheading">Your total bid amount</h2>
+              <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck * bidDetails.available_trucks }}</p>
+              <i>
+                <p class="timestamp">Bid submitted on {{ date }}</p>
+              </i>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <div v-if="status === 1" class="bid-status"><h1>Your bid was been placed successfully and is being reviewed</h1></div>
+    <div v-if="status === 2" class="bid-status"><h1>Contratulations!you have been awarded the bid</h1></div>
+    <div v-if="status === -1" class="bid-status"><h1>Unfortunately,your bid has been rejected</h1></div>
     <notify />
   </div>
 </template>
@@ -170,6 +175,7 @@ export default {
       bid_amount: null,
       total_amount: 0,
       bid: true,
+      status: null,
       confirmed: false,
       success: false,
       date: '',
@@ -215,6 +221,7 @@ export default {
 
       const bidInfo = {
         quotation_id: this.formData.quotation.quotation_id,
+        transporter_id: this.$route.params.owner_id,
         amount_per_truck: parseInt(this.bidDetails.amount_per_truck, 0),
         available_trucks: this.bidDetails.available_trucks,
       };
@@ -236,11 +243,13 @@ export default {
       axios
         .get(`https://authtest.sendyit.com/freight-service/shipments/quotations/${this.$route.params.shipment_id}/${this.$route.params.owner_id}?authkey=${process.env.BIDDING_API_KEY}`)
         .then((res) => {
+          console.log(res.data);
           this.formData = res.data.data;
-          if (this.formData.offer_amount > 0 && formData.is_negotiable === true) {
-            this.bid = true;
-            this.negotiable = true;
-          }
+          this.status = this.formData.status;
+          // if (this.formData.offer_amount > 0 && formData.is_negotiable === true) {
+          //   this.bid = true;
+          //   this.negotiable = true;
+          // }
         })
         .catch((error) => {
           this.errObj = error;
