@@ -202,6 +202,12 @@ input {
   height: 100%;
   width: 100%;
 }
+.bid-status h1 {
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  color: #606266;
+}
 @media only screen and (min-width: 653px) {
   .bid-details {
     width: 50%;
