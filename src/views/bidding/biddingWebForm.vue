@@ -243,7 +243,6 @@ export default {
       axios
         .get(`https://authtest.sendyit.com/freight-service/shipments/quotations/${this.$route.params.shipment_id}/${this.$route.params.owner_id}?authkey=${process.env.BIDDING_API_KEY}`)
         .then((res) => {
-          console.log(res.data);
           this.formData = res.data.data;
           this.status = this.formData.status;
           if (this.formData.offer_amount > 0) {
