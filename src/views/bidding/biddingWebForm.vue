@@ -246,10 +246,9 @@ export default {
           console.log(res.data);
           this.formData = res.data.data;
           this.status = this.formData.status;
-          // if (this.formData.offer_amount > 0 && formData.is_negotiable === true) {
-          //   this.bid = true;
-          //   this.negotiable = true;
-          // }
+          if (this.formData.offer_amount > 0) {
+            this.bid = true;
+          }
         })
         .catch((error) => {
           this.errObj = error;
