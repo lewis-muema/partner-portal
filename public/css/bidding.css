@@ -173,6 +173,9 @@ input {
   font-size: 22px;
   font-weight: 600;
 }
+.modal-container {
+  max-height: 200px;
+}
 .icon {
   font-size: 34px;
   color: #1a1b1b;
