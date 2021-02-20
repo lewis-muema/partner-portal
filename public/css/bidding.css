@@ -22,12 +22,12 @@
 }
 
 .bid-map {
-  max-width: 600px;
+  max-width: 400px;
   min-width: 330px;
   align-self: center;
 }
 .bid-map img {
-  height: 300px;
+  height: 250px;
   border-radius: 4px;
 }
 .bid-details {
@@ -153,7 +153,6 @@ input {
   width: 100%;
   text-align: center;
 }
-
 /* Modal styles */
 .card {
   display: flex;
@@ -265,7 +264,17 @@ input {
 .bid-status i {
   color: #f78d30;
 }
+.truck-validate {
+  color: #f78d30;
+  font-size: 14px;
+  padding: 0px 0px 10px 0px;
+  transition: ease-in-out 3s;
+}
 @media only screen and (min-width: 653px) {
+  #bidding {
+    width: 80%;
+    margin: auto;
+  }
   .bid-details {
     width: 50%;
   }
