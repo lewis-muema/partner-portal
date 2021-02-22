@@ -32,7 +32,7 @@
           </div>
           <h2 class="card-subheading">How many trucks do you want to avail for this order?</h2>
           <p class="card-content">{{ bidDetails.available_trucks }} Trucks</p>
-          <div v-if="formData.offer_amount">
+          <div v-if="!formData.is_negotiable">
             <h2 class="card-subheading">The client’s price offer per truck</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
@@ -293,12 +293,11 @@ export default {
       this.hide('bid-details-modal');
       this.date = new Date().toLocaleString();
       let bidStatus = null;
-      if (this.rejected) {
+      if (this.formData.is_negotiable === false && this.rejected) {
         bidStatus = -1;
-      } else if (!this.rejected) {
+      } else if (this.formData.is_negotiable === false && !this.rejected) {
         bidStatus = 1;
-      }
-      if (this.formData.offer_amount === 0 || this.formData.offer_amount === null) {
+      } else {
         bidStatus = 0;
       }
 
@@ -311,7 +310,7 @@ export default {
       };
 
       const payload = JSON.stringify(bidInfo);
-
+      console.log(payload);
       axios
         .patch(`https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then((res) => {
