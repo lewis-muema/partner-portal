@@ -3,7 +3,7 @@
     <errorHandler :error="errorObj" v-if="errorObj" />
     <!-- CONFIRMATION MODAL -->
     <div class="modal-container">
-      <modal v-if="rejected" name="bid-details-modal" class="bid-details-modal" :height="270" transition="slide" :pivot-y="0.3" :pivot-x="0.65">
+      <modal v-if="rejected" name="bid-details-modal" class="bid-details-modal" transition="slide" :pivot-y="0.3" :pivot-x="0.6">
         <div class="card">
           <div class="card-head">
             <h1 class="card-heading">Reject Offer</h1>
@@ -61,9 +61,9 @@
       </modal>
     </div>
     <!-- BID SUCCESS MESSAGE -->
-    <div v-if="!rejected" class="bid-status-ok">
+    <div class="bid-status-ok">
       <div class="bid-web-form">
-        <div v-show="success" class="success-card">
+        <div v-if="!rejected" v-show="success" class="success-card">
           <span class="success-message">Offer successfully accepted! Please wait to hear from the customer</span>
           <span @click="success = false"> <i class="fas fa-times"></i> </span>
         </div>
@@ -79,14 +79,14 @@
           <div class="bid-details">
             <div class="bid-details-shipment">
               <div class="bid-information">
-                <div class="bid-status-indicator" v-if="status >= 0">
+                <!-- <div class="bid-status-indicator" v-if="status >= 0">
                   <h2 class="bid-details-subheading">Bid Status</h2>
                   <div v-if="(status = 1)"><p class="success-status pending">Under Review</p></div>
                   <div v-else-if="(status = 2)">
                     <p class="success-status awarded">Awarded</p>
                   </div>
                   <div v-else-if="(status = -1)"><p class="success-status failed">Failed</p></div>
-                </div>
+                </div> -->
                 <h2 class="bid-details-subheading">Pick up</h2>
                 <p class="bid-details-content">{{ formData.pickup.name }}</p>
                 <h2 class="bid-details-content">The load will be picked at {{ formData.pickup_facility }}</h2>
@@ -150,9 +150,9 @@
                     <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
                     <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
                   </div>
-                  <input :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Accept Offer" class="submit-btn" @click="acceptOffer" />
+                  <input type="button" :disabled="bidDetails.available_trucks <= 0" value="Accept Offer" class="submit-btn" @click="acceptOffer" />
                   <p class="bid-ultimatum">OR</p>
-                  <input :disables="bidDetails.available_trucks === 0" value="Reject Offer" class="reject-btn" @click="rejectedOffer" />
+                  <input type="button" :disables="bidDetails.available_trucks === 0" value="Reject Offer" class="reject-btn" @click="rejectedOffer" />
                 </form>
               </div>
             </div>
@@ -178,20 +178,6 @@
         </div>
       </div>
     </div>
-    <!-- AFTER BID HAS BEEN SUBMITTED -->
-
-    <!-- <div v-if="formData.status === 1" class="bid-status">
-      <i class="far fa-clock fa-6x"></i>
-      <h1>Bid placed successfully and is being reviewed</h1>
-    </div>
-    <div v-if="formData.status === 2" class="bid-status">
-      <i class="far fa-check-circle fa-6x"></i>
-      <h1>Congratulations, you have been awarded the shipment</h1>
-    </div>
-    <div v-if="formData.status === -1" class="bid-status">
-      <i class="far fa-times-circle fa-6x"></i>
-      <h1>Unfortunately your bid offer was not selected</h1>
-    </div> -->
     <notify />
   </div>
 </template>
