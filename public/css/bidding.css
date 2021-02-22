@@ -42,9 +42,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.bid-information {
-  border-bottom: 1px solid rgba(112, 112, 112, 0.28);
-}
+
 .bid-details-subheading {
   font-size: 16px;
   color: #6f6a6a;
@@ -86,6 +84,9 @@ form {
   border: 0.7px solid #b6b5b4;
   padding: 10px 14px;
   background: transparent;
+}
+.bidding-form-trucks-button:hover {
+  background: rgb(233, 230, 230);
 }
 .border-radius__right {
   border-top-right-radius: 3px;
