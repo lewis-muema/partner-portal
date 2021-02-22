@@ -330,7 +330,6 @@ export default {
           this.requests = res;
           this.formData = res.data.data;
           this.status = this.formData.status;
-          console.log(formData);
         })
         .catch((error) => {
           this.errObj = error;
