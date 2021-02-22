@@ -32,7 +32,7 @@
           </div>
           <h2 class="card-subheading">How many trucks do you want to avail for this order?</h2>
           <p class="card-content">{{ bidDetails.available_trucks }} Trucks</p>
-          <div v-if="!formData.is_negotiable">
+          <div v-if="formData.is_negotiable === false">
             <h2 class="card-subheading">The client’s price offer per truck</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
@@ -43,7 +43,7 @@
             </p>
           </div>
           <div v-else>
-            <h2 class="card-subheading">What is your bid amount per truck?</h2>
+            <h2 class="card-subheading">What is your bid amount per tru5ck?</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ bidDetails.amount_per_truck }}
             </p>
@@ -330,6 +330,7 @@ export default {
           this.requests = res;
           this.formData = res.data.data;
           this.status = this.formData.status;
+          console.log(formData);
         })
         .catch((error) => {
           this.errObj = error;
