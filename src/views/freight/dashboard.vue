@@ -93,15 +93,11 @@ export default {
       this.$root.$emit('Notification', status, type, message);
     },
     fetchTimeline() {
-      const payload = {
-        user_id: parseInt(this.sessionInfo.id, 10),
-        user_type: 2,
-      };
       return new Promise((resolve, reject) => {
         axios
-          .post(`${this.auth}orders/v2/freight/activity_log`, payload, this.config)
+          .get(`${this.auth}freight-service/activity_log/${this.sessionInfo.id}/2`, this.config)
           .then(response => {
-            this.timeline = response.data.log;
+            this.timeline = response.data.data;
             this.loadingStatus = false;
             resolve(response);
           })
@@ -135,21 +131,16 @@ export default {
     },
     actionDocument() {
       const payload = {
-        order_id: this.document.order_id,
         document_id: this.document.document_id,
-        owner_id: parseInt(this.sessionInfo.id, 10),
-        cop_id: this.document.cop_id ? this.document.cop_id : null,
-        cop_user_id: this.document.cop_user_id ? this.document.cop_user_id : null,
-        peer_id: this.document.peer_id ? this.document.peer_id : null,
-        created_by: 2,
-        status: this.status,
+        transporter_id: this.sessionInfo.id,
+        status: this.status === 2 ? 1 : -1,
       };
       if (this.status === 3) {
         payload.reason = this.declineReason;
       }
       return new Promise((resolve, reject) => {
         axios
-          .patch(`${this.auth}orders/v2/freight/order/documents`, payload, this.config)
+          .put(`${this.auth}freight-service/shipments/quotations/documents/`, payload, this.config)
           .then(response => {
             this.notify(3, 1, `Successfully ${this.status === 3 ? 'rejected' : 'approved'} document.`);
             this.$modal.hide('reject-documents');
