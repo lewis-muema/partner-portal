@@ -32,7 +32,7 @@
           </div>
           <h2 class="card-subheading">How many trucks do you want to avail for this order?</h2>
           <p class="card-content">{{ bidDetails.available_trucks }} Trucks</p>
-          <div v-if="formData.offer_amount">
+          <div v-if="formData.is_negotiable === false">
             <h2 class="card-subheading">The client’s price offer per truck</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
@@ -89,7 +89,8 @@
                 <h2 class="bid-details-subheading">Date of Pick up</h2>
                 <p class="bid-details-content">{{ formData.pickup_time }}</p>
               </div>
-              <hr>
+              <hr />
+
               <div class="bid-details-truck">
                 <h2 class="bid-details-subheading">Number of Trucks wanted</h2>
                 <p class="bid-details-content">{{ formData.total_trucks }} Trucks</p>
@@ -164,9 +165,13 @@
 
                 <div v-if="formData.is_negotiable === false">
                   <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-                  <p class="bid-details-content">{{ formData.currency }} {{ formData.offer_amount }}</p>
+                  <p class="bid-details-content">
+                    <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
+                  </p>
                   <h2 class="bid-details-subheading">Your total bid amount</h2>
-                  <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.available_trucks * formData.offer_amount }}</p>
+                  <p class="bid-details-content">
+                    <b>{{ formData.currency }}</b> {{ bidDetails.available_trucks * formData.offer_amount }}
+                  </p>
                 </div>
                 <div v-else>
                   <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
@@ -288,12 +293,11 @@ export default {
       this.hide('bid-details-modal');
       this.date = new Date().toLocaleString();
       let bidStatus = null;
-      if (this.rejected) {
+      if (this.formData.is_negotiable === false && this.rejected) {
         bidStatus = -1;
-      } else if (!this.rejected) {
+      } else if (this.formData.is_negotiable === false && !this.rejected) {
         bidStatus = 1;
-      }
-      if (this.formData.offer_amount === 0 || this.formData.offer_amount === null) {
+      } else {
         bidStatus = 0;
       }
 
@@ -306,8 +310,6 @@ export default {
       };
 
       const payload = JSON.stringify(bidInfo);
-      console.log(payload);
-      console.log(bidInfo);
       axios
         .patch(`https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then((res) => {
@@ -328,7 +330,6 @@ export default {
           this.requests = res;
           this.formData = res.data.data;
           this.status = this.formData.status;
-          console.log(res);
         })
         .catch((error) => {
           this.errObj = error;
