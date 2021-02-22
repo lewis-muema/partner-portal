@@ -174,9 +174,9 @@ export default {
     fetchCargoTypes() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}/orders/v2/freight/cargo_types`, this.config)
+          .get(`${this.auth}freight-service/cargo_types`, this.config)
           .then(response => {
-            this.cargo_types = response.data.cargo_types;
+            this.cargo_types = response.data.data;
             resolve(response);
           })
           .catch(error => {
@@ -189,7 +189,7 @@ export default {
     fetchOwnerPreferences() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}orders/v2/freight/owner_preferences/${this.sessionInfo.id}`, this.config)
+          .get(`${this.auth}partners/transporter_pref_list?owner_id=${this.sessionInfo.id}`, this.config)
           .then(response => {
             this.preferences = response.data.owner_preferences;
             this.loadingStatus = false;
@@ -211,7 +211,7 @@ export default {
       : this.location;
       return new Promise((resolve, reject) => {
         axios
-          .post(`${this.auth}orders/v2/freight/owner_preferences`, payload, this.config)
+          .post(`${this.auth}partners/transporter_preferences`, payload, this.config)
           .then(response => {
             this.notify(3, 1, 'Preference added successfully');
             this.fetchOwnerPreferences();
@@ -235,7 +235,7 @@ export default {
       };
       return new Promise((resolve, reject) => {
         axios
-          .delete(`${this.auth}orders/v2/freight/owner_preferences`, {
+          .delete(`${this.auth}partners/transporter_preferences`, {
             headers: this.config.headers,
             data: payload,
           })
