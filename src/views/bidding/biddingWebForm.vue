@@ -310,7 +310,6 @@ export default {
       };
 
       const payload = JSON.stringify(bidInfo);
-      console.log(payload);
       axios
         .patch(`https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then((res) => {
