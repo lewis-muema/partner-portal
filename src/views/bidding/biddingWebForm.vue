@@ -43,7 +43,7 @@
             </p>
           </div>
           <div v-else>
-            <h2 class="card-subheading">What is your bid amount per tru5ck?</h2>
+            <h2 class="card-subheading">What is your bid amount per truck?</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ bidDetails.amount_per_truck }}
             </p>
