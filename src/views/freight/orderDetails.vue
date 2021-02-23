@@ -17,11 +17,11 @@
             <div class="order__column-freight">
               <div class="map-details-row">
                 <p class="map__details-pickup heading-freight uppercase">pickup location</p>
-                <p class="map__details-pickup par">{{ data.pick_up_name }}</p>
+                <p class="map__details-pickup par">{{ data.pickup.name }}</p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-dest heading-freight uppercase">destination</p>
-                <p class="map__details-dest par">{{ data.destination_name }}</p>
+                <p class="map__details-dest par">{{ data.destination.name }}</p>
               </div>
               <div class="map-details-row">
                 <p class="order__amount heading-freight uppercase">order amount</p>
@@ -45,7 +45,7 @@
             <div class="order__column-freight">
               <div class="map-details-row">
                 <p class="map__details-distance heading-freight uppercase">weight of the load</p>
-                <p class="map__details-distance par">{{ data.load_weight }} Tonnes</p>
+                <p class="map__details-distance par">{{ data.tonnes_per_truck }} Tonnes per truck </p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">type of load</p>
@@ -56,23 +56,23 @@
           <div class="partner-documents-container">
             <p class="partner-documents-upload-title">Documents</p>
             <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">Upload document</button>
-            <div class="partner-documents-upload-rows" v-if="data.documents.length > 0">
+            <div class="partner-documents-upload-rows" v-if="data.quotation.documents.length">
               <span class="partner-documents-upload-header partner-documents-third-row">Type of document</span>
               <span class="partner-documents-upload-header partner-documents-third-row">Date</span>
               <span class="partner-documents-upload-header partner-documents-third-row">Actions</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
             </div>
-            <div class="partner-documents-upload-rows" v-for="(document, index) in data.documents" :key="`${document.document_name}-${index}`">
+            <div class="partner-documents-upload-rows" v-for="(document, index) in data.quotation.documents" :key="`${document.document_name}-${index}`">
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ document.document_name }}</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ timeFormat(document.date_created) }}</span>
-              <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.url)">View document ></span>
+              <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.document_url)">View document ></span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row" v-if="document.status === 'PENDING' && document.actionable">
                 <button class="partner-documents-approve-button" @click="triggerAction(2, document)">Approve</button>
                 <button class="partner-documents-decline-button" @click="triggerAction(3, document)">Decline</button>
               </span>
               <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ document.message }}<br /><span class="reject-documents-reason" v-if="document.status === 'DECLINED'">Reason: {{ document.reason }}</span></span>
             </div>
-            <div class="partner-documents-upload-empty" v-if="data.documents.length === 0">
+            <div class="partner-documents-upload-empty" v-if="data.quotation.documents.length === 0">
               No uploaded documents at the time
             </div>
           </div>
@@ -89,7 +89,7 @@
               <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
               <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">Request cash advance</button>
             </div>
-            <div v-if="data.fuel_advances.length > 0 || data.cash_advances.length > 0">
+            <div v-if="(data.fuel_advances && data.fuel_advances.length > 0) || (data.cash_advances && data.cash_advances.length > 0)">
             <div class="partner-documents-upload-rows">
               <span class="partner-documents-upload-header partner-documents-fourth-row">Type of request</span>
               <span class="partner-documents-upload-header partner-documents-third-row">Amount</span>
@@ -121,8 +121,8 @@
               </div>
               <p class="upload-documents-modal-top-input-labels">Select type of document</p>
               <select name="" id="" class="upload-documents-modal-top-inputs" v-model="documentType">
-                <option v-for="(document, index) in documents" :key="index" :value="document.document_name">
-                  {{ document.document_name }}
+                <option v-for="(document, index) in documents" :key="index" :value="document.documentType">
+                  {{ document.documentType }}
                 </option>
               </select>
               <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">Name of the document</p>
@@ -338,8 +338,8 @@ export default {
   },
   computed: {
     document_type() {
-      const document = this.documents.filter(obj => obj.document_name === this.documentType);
-      return document[0].document_type;
+      const document = this.documents.filter(obj => obj.documentType === this.documentType);
+      return document[0].id;
     },
     fuelSubmitStatus() {
       return (this.amount && this.fuel && this.address);
@@ -348,11 +348,11 @@ export default {
       return this.amount !== '';
     },
     fuelActiveStatus() {
-      const fuelData = this.data.aux_services.filter(obj => obj.id === 1);
+      const fuelData = this.data.aux_services ? this.data.aux_services.filter(obj => obj.id === 1) : [];
       return fuelData.length > 0 ? fuelData[0].active : false;
     },
     cashActiveStatus() {
-      const cashData = this.data.aux_services.filter(obj => obj.id === 2);
+      const cashData = this.data.aux_services ? this.data.aux_services.filter(obj => obj.id === 2) : [];
       return cashData.length > 0 ? cashData[0].active : false;
     },
   },
@@ -401,8 +401,8 @@ export default {
     },
     createStaticMapUrl(path) {
       const google_key = process.env.GOOGLE_API_KEY;
-      const from_cordinates = path.path[0].coordinates;
-      const to_cordinates = path.path[1].coordinates;
+      const from_cordinates = path.pickup.coordinates;
+      const to_cordinates = path.destination.coordinates;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=300x250&markers=color:0xF17F3A%7Clabel:P%7C
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
@@ -410,11 +410,11 @@ export default {
       return this.formatedTime(date);
     },
     currencyFormat(id) {
-      const amount = this.data.amount;
-      return amount
+      const amount = this.data.offer_amount;
+      return amount ? amount
         .toString()
         .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
-        .split('.')[0];
+        .split('.')[0] : 'N/A';
     },
     showPreview(url) {
       this.$modal.show('preview-documents');
@@ -512,14 +512,14 @@ export default {
     submitFuelRequest() {
       this.requestLoadingStatus = true;
       const payload = {
-        order_id: this.data.order_id,
+        quotation_id: this.data.quotation.quotation_id,
         fuel_type_id: this.fuel,
         fuel_station_id: this.address,
         amount: this.amount,
       };
       return new Promise((resolve, reject) => {
         axios
-            .post(`${this.auth}orders/v2/freight/fuel_advance`, payload, this.config)
+            .post(`${this.auth}freight-service/fuel_advance`, payload, this.config)
             .then(response => {
               this.notify(3, 1, `${response.data.message}`);
               this.$modal.hide('request-fuel-advance');
@@ -541,12 +541,12 @@ export default {
     submitCashRequest() {
       this.requestLoadingStatus = true;
       const payload = {
-        order_id: this.data.order_id,
+        quotation_id: this.data.quotation.quotation_id,
         amount: this.amount,
       };
       return new Promise((resolve, reject) => {
         axios
-            .post(`${this.auth}orders/v2/freight/cash_advance`, payload, this.config)
+            .post(`${this.auth}freight-service/cash_advance`, payload, this.config)
             .then(response => {
               this.notify(3, 1, `${response.data.message}`);
               this.$modal.hide('request-cash-advance');
@@ -571,16 +571,13 @@ export default {
       document.getElementById(id).click();
     },
     fetchOrder() {
-      const payload = {
-        order_id: this.$route.params.order,
-        user_type: 2,
-      };
       return new Promise((resolve, reject) => {
         axios
-          .post(`${this.auth}orders/v2/freight/order/details`, payload, this.config)
+          .get(`${this.auth}freight-service/shipments/quotations/${this.$route.params.order}/${this.sessionInfo.id}`, this.config)
           .then(response => {
-            this.data = response.data.order;
+            this.data = response.data.data;
             this.loadingStatus = false;
+            this.fetchAuxiliaryServices();
             resolve(response);
           })
           .catch(error => {
@@ -593,12 +590,28 @@ export default {
           });
       });
     },
+    fetchAuxiliaryServices() {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`${this.auth}freight-service/shipments/quotation/advances/${this.$route.params.order}`, this.config)
+          .then(response => {
+            this.data.cash_advances = response.data.data.cash_advances;
+            this.data.fuel_advances = response.data.data.fuel_advances;
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, `${error.response.message}`);
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
     fetchDocumentTypes() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}orders/v2/freight/documents`, this.config)
+          .get(`${this.auth}freight-service/document_types`, this.config)
           .then(response => {
-            this.documents = response.data.documents;
+            this.documents = response.data.data;
             resolve(response);
           })
           .catch(error => {
@@ -610,19 +623,15 @@ export default {
     },
     uploadDocuments(url) {
       const payload = {
-        order_id: this.data.order_id,
+        quotation_id: this.data.quotation.quotation_id,
         document_type: this.document_type,
         document_name: this.document_type === 1 ? this.documentName : this.documentType,
         url: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${url}`,
-        cop_id: this.data.cop_id ? this.data.cop_id : null,
-        cop_user_id: this.data.cop_user_id ? this.data.cop_user_id : null,
-        peer_id: this.data.peer_id ? this.data.peer_id : null,
-        owner_id: this.data.owner_id,
-        created_by: 2,
-      };
+        transporter_id: this.sessionInfo.id,
+       };
       return new Promise((resolve, reject) => {
         axios
-          .post(`${this.auth}orders/v2/freight/order/documents`, payload, this.config)
+          .post(`${this.auth}freight-service/shipments/quotations/documents`, payload, this.config)
           .then(response => {
             this.notify(3, 1, 'Successfully uploaded document.');
             this.$modal.hide('upload-documents');
@@ -638,21 +647,16 @@ export default {
     },
     actionDocument(status) {
       const payload = {
-        order_id: this.data.order_id,
         document_id: this.activeDoc.document_id,
-        cop_id: this.data.cop_id ? this.data.cop_id : null,
-        cop_user_id: this.data.cop_user_id ? this.data.cop_user_id : null,
-        peer_id: this.data.peer_id ? this.data.peer_id : null,
-        owner_id: this.data.owner_id,
-        created_by: 2,
-        status,
+        transporter_id: this.sessionInfo.id,
+        status: status === 2 ? 1 : -1,
       };
       if (status === 3) {
         payload.reason = this.declineReason;
       }
       return new Promise((resolve, reject) => {
         axios
-          .patch(`${this.auth}orders/v2/freight/order/documents`, payload, this.config)
+          .put(`${this.auth}freight-service/shipments/quotations/documents/`, payload, this.config)
           .then(response => {
             this.notify(3, 1, `Successfully ${status === 3 ? 'rejected' : 'approved'} document.`);
             this.$modal.hide('reject-documents');
