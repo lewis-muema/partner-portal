@@ -15,7 +15,7 @@
         <p>{{ time.message }}</p>
         <p @click="showDocument(time.data.url)" v-if="time.actionable" class="freight-dashboard-links">View document <i class="el-icon-arrow-right"></i></p>
         <p @click="showOrder(time.data.order_id)" class="freight-dashboard-links" v-else>View order <i class="el-icon-arrow-right"></i></p>
-        <div v-if="time.actionable" class="freight-dashboard-buttons">
+        <div v-if="time.actionable && time.data.created_by !== 'OWNER'" class="freight-dashboard-buttons">
           <button class="partner-documents-approve-button" @click="approve(time.data, 2)">Approve</button>
           <button class="partner-documents-decline-button" @click="decline(time.data, 3)">Reject</button>
         </div>

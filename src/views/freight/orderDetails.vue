@@ -627,7 +627,7 @@ export default {
         document_type: this.document_type,
         document_name: this.document_type === 1 ? this.documentName : this.documentType,
         url: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${url}`,
-        transporter_id: this.data.owner_id,
+        transporter_id: this.sessionInfo.id,
        };
       return new Promise((resolve, reject) => {
         axios
