@@ -174,7 +174,8 @@ export default {
   },
   data() {
     return {
-      negotiable: false,
+      auth: process.env.VUE_APP_AUTH,
+      negotiable: true,
       bidDetails: {
         amount_per_truck: null,
         available_trucks: 0,
@@ -237,7 +238,7 @@ export default {
 
       const payload = JSON.stringify(bidInfo);
       axios
-        .patch(`https://authtest.sendyit.com/freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
+        .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then((res) => {
           if (res.status === 200) {
             this.submitted = true;
@@ -250,7 +251,7 @@ export default {
     },
     async getBid() {
       axios
-        .get(`https://authtest.sendyit.com/freight-service/shipments/quotations/${this.$route.params.shipment_id}/${this.$route.params.owner_id}?authkey=${process.env.BIDDING_API_KEY}`)
+        .get(`${this.auth}freight-service/shipments/quotations/${this.$route.params.shipment_id}/${this.$route.params.owner_id}?authkey=${process.env.BIDDING_API_KEY}`)
         .then((res) => {
           this.formData = res.data.data;
           this.status = this.formData.status;
