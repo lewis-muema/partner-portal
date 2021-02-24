@@ -13,9 +13,9 @@
               <input type="text" onfocus="value = ''" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
             </span>
           </div>
-          <button class="partner-request-advance-button-active" @click="$store.commit('setCreateOrderStatus', true)">
+          <!-- <button class="partner-request-advance-button-active" @click="$store.commit('setCreateOrderStatus', true)">
             Place Order
-          </button>
+          </button> -->
         </div>
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
@@ -25,7 +25,7 @@
               <div class="orders__col-head pick-date-freight uppercase">pickup date</div>
               <div class="orders__col-head truck-freight uppercase">truck</div>
               <div class="orders__col-head client-freight">client</div>
-              <div class="orders__col-head price-align-freight uppercase">price</div>
+              <div class="orders__col-head price-align-freight uppercase">No of trucks</div>
               <div class="orders__col-head center-action-freight uppercase"></div>
             </div>
             <div class="loading" v-if="loadingStatus && orders.length === 0"></div>
@@ -40,13 +40,13 @@
               >
                 <div class="orders__list-col pickup-freight">
                   <p class="orders__mobile-col">Pickup</p>
-                  <p class="row1" @mouseover="showFromTooltip(index)" @mouseout="hideFromTooltip(index)">{{ order.pick_up_name }}</p>
-                  <span :class="`tooltiptext sp${index}`">{{ order.pick_up_name }}</span>
+                  <p class="row1" @mouseover="showFromTooltip(index)" @mouseout="hideFromTooltip(index)">{{ order.pickup }}</p>
+                  <span :class="`tooltiptext sp${index}`">{{ order.pickup }}</span>
                 </div>
                 <div class="orders__list-col destination-freight">
                   <p class="orders__mobile-col">Destination</p>
-                  <p class="row2" @mouseover="showToTooltip(index)" @mouseout="hideToTooltip(index)">{{ order.destination_name }}</p>
-                  <span :class="`tooltiptext sps${index}`">{{ order.destination_name }}</span>
+                  <p class="row2" @mouseover="showToTooltip(index)" @mouseout="hideToTooltip(index)">{{ order.destination }}</p>
+                  <span :class="`tooltiptext sps${index}`">{{ order.destination }}</span>
                 </div>
                 <div class="orders__list-col pick-date-freight">
                   <p class="orders__mobile-col">Date</p>
@@ -54,15 +54,15 @@
                 </div>
                 <div class="orders__list-col truck-freight">
                   <p class="orders__mobile-col">Truck</p>
-                  <p class="row3">{{ order.carrier_type }}</p>
+                  <p class="row3">{{ order.cargo_type }}</p>
                 </div>
                 <div class="orders__list-col client-freight">
                   <p class="orders__mobile-col">client</p>
-                  <p>{{ order.client_name }}</p>
+                  <p>{{ order.customer_name }}</p>
                 </div>
                 <div class="orders__list-col price-align-freight">
-                  <p class="orders__mobile-col">Price</p>
-                  <p>{{ order.currency }} {{ currencyFormat(index) }}</p>
+                  <p class="orders__mobile-col">No of trucks</p>
+                  <p>{{ order.total_trucks }} Truck/s</p>
                 </div>
                 <div class="orders__list-col center-action-freight">
                   <P class="orders__mobile-col uppercase">action</P>
@@ -163,18 +163,18 @@ export default {
       tooltiprow.style.display = 'none';
     },
     timeFormat(id) {
-      const orderTime = this.orders[id].pick_up_time;
+      const orderTime = this.orders[id].pickup_time;
       return this.formatedTime(orderTime);
     },
     currencyFormat(id) {
-      const amount = this.orders[id].amount;
+      const amount = this.orders[id].amount ? this.orders[id].amount : 0;
       return amount
         .toString()
         .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
         .split('.')[0];
     },
     openOrder(order) {
-      this.$router.push(`/freight/orders/${order.order_id}`);
+      this.$router.push(`/freight/orders/${order.quotation_id}`);
     },
     filterPickup() {
       const input = document.getElementById('inp').value.toLowerCase();
@@ -223,15 +223,11 @@ export default {
       });
     },
     fetchOrders() {
-      const payload = {
-        user_id: this.sessionInfo.id,
-        user_type: 2,
-      };
       return new Promise((resolve, reject) => {
         axios
-          .post(`${this.auth}orders/v2/freight/list`, payload, this.config)
+          .get(`${this.auth}freight-service/shipments/quotations?transporterId=${this.sessionInfo.id}&status=2`, this.config)
           .then(response => {
-            this.$store.commit('setFreightOrders', response.data.orders);
+            this.$store.commit('setFreightOrders', response.data.data);
             this.loadingStatus = false;
             resolve(response);
           })
