@@ -70,7 +70,7 @@
                 <button class="partner-documents-approve-button" @click="triggerAction(2, document)">Approve</button>
                 <button class="partner-documents-decline-button" @click="triggerAction(3, document)">Decline</button>
               </span>
-              <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ document.message }}<br /><span class="reject-documents-reason" v-if="document.status === 'DECLINED'">Reason: {{ document.reason }}</span></span>
+              <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ document.message }}<br /><span class="reject-documents-reason" v-if="document.status === 'REJECTED'">Reason: {{ document.reason }}</span></span>
             </div>
             <div class="partner-documents-upload-empty" v-if="data.quotation.documents.length === 0">
               No uploaded documents at the time
