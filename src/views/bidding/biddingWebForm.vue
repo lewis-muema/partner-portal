@@ -64,9 +64,13 @@
     <div class="bid-status-ok">
       <div class="bid-web-form">
         <div v-if="!rejected" v-show="success" class="success-card">
-          <span class="success-message">Offer successfully accepted! Please wait to hear from the customer</span>
+          <div>
+            <span @click="success = false"> <i class="fas fa-check-circle"></i> </span>
+            <span class="success-message">Bid successfully submitted !</span>
+          </div>
           <span @click="success = false"> <i class="fas fa-times"></i> </span>
         </div>
+
         <!-- BID DETAILS -->
         <h1 class="bid-heading">Shipment Details</h1>
         <div class="bid" v-if="Object.keys(formData).length > 0">
@@ -79,6 +83,9 @@
           <div class="bid-details">
             <div class="bid-details-shipment">
               <div class="bid-information">
+                <div v-if="formData.quotation.status === 1"><p class="status status-review">Under Review</p></div>
+                <div v-else-if="formData.quotation.status === 2"><p class="status status-awarded">Awarded</p></div>
+                <div v-else-if="formData.quotation.status === -1"><p class="status status-rejected">Failed</p></div>
                 <h2 class="bid-details-subheading">Pick up</h2>
                 <p class="bid-details-content">{{ formData.pickup.name }}</p>
                 <h2 class="bid-details-content">The load will be picked at {{ formData.pickup_facility }}</h2>
@@ -110,78 +117,81 @@
             <hr />
             <!-- Bidding section -->
             <!-- BID IS NEGOTIABLE AND HAS OFFER AMOUNT OR WHEN THERE IS NO OFFER_AMOUNT  -->
-            <div class="bid-details" v-if="formData.status === 0 && !submitted">
-              <div v-if="(formData.is_negotiable && formData.offer_amount > 0) || formData.offer_amount === null" class="bid-section">
-                <h2 class="bid-details-heading">Enter your bid</h2>
-                <div class="bidding-form">
-                  <h2 class="bid-details-content">How many trucks do you have available for this order?</h2>
-                  <small class="truck-validate" v-show="truckValidate">Truck cannot be less than one</small>
-                  <div class="bidding-form-trucks">
-                    <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="truckValidation" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
-                    <input class="bidding-form-trucks-input" type="text" :value="bidDetails.available_trucks" placeholder="0" />
-                    <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+            <div v-if="formData.quotation.status === 0">
+              <div class="bid-details" v-if="formData.status === 0 && !submitted">
+                <div v-if="(formData.is_negotiable && formData.offer_amount > 0) || formData.offer_amount === null" class="bid-section">
+                  <h2 class="bid-details-heading">Enter your bid</h2>
+                  <div class="bidding-form">
+                    <h2 class="bid-details-content">How many trucks do you have available for this order?</h2>
+                    <small class="truck-validate" v-show="truckValidate">Truck cannot be less than one</small>
+                    <div class="bidding-form-trucks">
+                      <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="truckValidation" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
+                      <input class="bidding-form-trucks-input" type="text" :value="bidDetails.available_trucks" placeholder="0" />
+                      <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+                    </div>
                   </div>
+                  <div class="bidding-amount">
+                    <h2 class="bid-details-content">What is your bid amount per truck?</h2>
+                    <div class="bidding-amount-currency-section">
+                      <select class="bidding-amount-currency border-radius__left" name="currency" id="currency">
+                        <option :value="formData.currency">{{ formData.currency }}</option>
+                      </select>
+                      <input type="number" v-model="bidDetails.amount_per_truck" class="bidding-amount-input border-radius__right" />
+                    </div>
+                  </div>
+                  <input type="submit" :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Submit Bid" class="submit-btn" @click.prevent="show" />
                 </div>
-                <div class="bidding-amount">
-                  <h2 class="bid-details-content">What is your bid amount per truck?</h2>
-                  <div class="bidding-amount-currency-section">
-                    <select class="bidding-amount-currency border-radius__left" name="currency" id="currency">
-                      <option :value="formData.currency">{{ formData.currency }}</option>
-                    </select>
-                    <input type="number" v-model="bidDetails.amount_per_truck" class="bidding-amount-input border-radius__right" />
-                  </div>
+
+                <!-- BID WHEN OFFER IS NON-NEGOTIABLE AND HAS AN OFFER AMOUNT -->
+                <div v-if="formData.offer_amount > 0 && !formData.is_negotiable">
+                  <h2 class="bid-details-heading">Offer</h2>
+                  <p class="bid-details-content">The client’s price offer</p>
+                  <form>
+                    <p class="bid-details-content black">{{ formData.currency }} {{ formData.offer_amount }} Per Truck</p>
+                    <span class="truck-validate" v-show="truckValidate">Truck cannot be less than one</span>
+                    <div class="bidding-form-trucks">
+                      <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="truckValidation" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
+                      <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
+                      <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
+                    </div>
+
+                    <input type="button" :disabled="bidDetails.available_trucks <= 0" value="Accept Offer" class="submit-btn" @click="formValidation" />
+                    <p class="bid-ultimatum">OR</p>
+                    <input type="button" :disables="bidDetails.available_trucks === 0" value="Reject Offer" class="reject-btn" @click="rejectedOffer" />
+                  </form>
                 </div>
-                <input type="submit" :disabled="(bidDetails.available_trucks && bidDetails.amount_per_truck === null) || (bidDetails.available_trucks && bidDetails.amount_per_truck === '0')" value="Submit Bid" class="submit-btn" @click.prevent="show" />
-              </div>
-
-              <!-- BID WHEN OFFER IS NON-NEGOTIABLE AND HAS AN OFFER AMOUNT -->
-              <div v-if="formData.offer_amount > 0 && !formData.is_negotiable">
-                <h2 class="bid-details-heading">Offer</h2>
-                <p class="bid-details-content">The client’s price offer</p>
-                <form>
-                  <p class="bid-details-content black">{{ formData.currency }} {{ formData.offer_amount }} Per Truck</p>
-                  <span class="truck-validate" v-show="truckValidate">Truck cannot be less than one</span>
-                  <div class="bidding-form-trucks">
-                    <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="truckValidation" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
-                    <input class="bidding-form-trucks-input" type="number" v-model="bidDetails.available_trucks" />
-                    <button @click.prevent="bidDetails.available_trucks++" class="bidding-form-trucks-button border-radius__right"><i class="fas fa-plus"></i></button>
-                  </div>
-
-                  <input type="button" :disabled="bidDetails.available_trucks <= 0" value="Accept Offer" class="submit-btn" @click="formValidation" />
-                  <p class="bid-ultimatum">OR</p>
-                  <input type="button" :disables="bidDetails.available_trucks === 0" value="Reject Offer" class="reject-btn" @click="rejectedOffer" />
-                </form>
               </div>
             </div>
-
             <div v-else-if="submitted">
               <div v-if="rejected">
                 <p class="bid-details-content">You have successfully rejected the bid</p>
               </div>
               <div v-else>
-                <h2 class="bid-submitted-heading">Your bid</h2>
-                <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
-                <p class="bid-details-content">{{ bidDetails.available_trucks }} Trucks</p>
+                <div v-if="formData.quotation.status === 1 || formData.quotation.status === 2 || formData.quotation.status === -1">
+                  <h2 class="bid-submitted-heading">Your bid</h2>
+                  <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
+                  <p class="bid-details-content">{{ formData.quotation.trucks_available }} Trucks</p>
 
-                <div v-if="formData.is_negotiable === false">
-                  <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-                  <p class="bid-details-content">
-                    <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
-                  </p>
-                  <h2 class="bid-details-subheading">Your total bid amount</h2>
-                  <p class="bid-details-content">
-                    <b>{{ formData.currency }}</b> {{ bidDetails.available_trucks * formData.offer_amount }}
-                  </p>
+                  <div v-if="formData.is_negotiable === false">
+                    <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
+                    <p class="bid-details-content">
+                      <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
+                    </p>
+                    <h2 class="bid-details-subheading">Your total bid amount</h2>
+                    <p class="bid-details-content">
+                      <b>{{ formData.currency }}</b> {{ formData.quotation.trucks_available * formData.offer_amount }}
+                    </p>
+                  </div>
+                  <div v-else>
+                    <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
+                    <p class="bid-details-content">{{ formData.currency }} {{ formData.quotation.price_per_truck }}</p>
+                    <h2 class="bid-details-subheading">Your total bid amount</h2>
+                    <p class="bid-details-content">{{ formData.currency }} {{ formData.quotation.trucks_available * formData.quotation.price_per_truck }}</p>
+                  </div>
+                  <i>
+                    <p class="timestamp">Bid submitted on {{ formData.quotation.date_created }}</p>
+                  </i>
                 </div>
-                <div v-else>
-                  <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-                  <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck }}</p>
-                  <h2 class="bid-details-subheading">Your total bid amount</h2>
-                  <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.available_trucks * bidDetails.amount_per_truck }}</p>
-                </div>
-                <i>
-                  <p class="timestamp">Bid submitted on {{ date }}</p>
-                </i>
               </div>
             </div>
           </div>
@@ -213,12 +223,11 @@ export default {
         amount_per_truck: null,
         available_trucks: 0,
       },
-      submitted: false,
+      submitted: true,
       trucks: 0,
       bid_amount: null,
       total_amount: 0,
       errorMessage: '',
-      status: 0,
       rejected: null,
       confirmed: false,
       truckValidate: false,
@@ -290,6 +299,7 @@ export default {
       this.rejected = true;
       this.status = -1;
     },
+
     bidOffer() {
       this.hide('bid-details-modal');
       this.date = new Date().toLocaleString();
