@@ -16,7 +16,7 @@
               <div class="dropdown" @focus="toggleDropdown" @focusout="toggleDropUp" tabindex="-1">
                 <span class="menu-head">
                   Menu
-                  <i class="material-icons icon">arrow_drop_down</i>
+                  <i class="material-icons">arrow_drop_down</i>
                 </span>
                 <div class="dropdown-menu dropdown-menu-right" v-if="dropdown" @mouseover="timeout = 1000" @mouseleave="timeout = 0">
                   <router-link to="/vehicles" class="dropdown-link">
@@ -77,7 +77,7 @@
         <div class="secondary-inner">
           <div class="secnav-container">
             <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">Activity Log</router-link>
-            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">Orders</router-link>
+            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">Shipments</router-link>
             <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()">Preferences</router-link>
           </div>
         </div>

@@ -625,6 +625,7 @@ button {
 .orders__statuses {
   display: flex;
   font-weight: 800;
+  cursor: pointer;
 }
 .order__bidtimer-duration {
   grid-template-columns: repeat(16, 1fr);
