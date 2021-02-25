@@ -130,7 +130,7 @@
   }
 }
 .active-target-hours{
-  color: #007FFF;
+  color: #1B7FC3;
 }
 .checked-daily-target{
   color:#00b800 ;
@@ -176,7 +176,7 @@
 .success-license {
   font-size: 26px;
   margin-top: 30%;
-  color: #007FFF;
+  color: #1B7FC3;
 }
 .update-license {
   background-color: #635c5c;
@@ -191,7 +191,7 @@
   color: #EE7D00;
 }
 .approved-highlight {
-  color: #007FFF;
+  color: #1B7FC3;
 }
 .request-refund--section {
   margin-left: 2%;
@@ -302,7 +302,7 @@
 }
 .vendor_active_final {
   background: #d0ecfd;
-  border: 2px solid #007FFF;
+  border: 2px solid #1B7FC3;
   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
   animation: flip-scale-down-diag-2 0.5s linear;
 }

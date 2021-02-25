@@ -137,7 +137,7 @@
 .declined-requests-actions-table-header {
   border-bottom: 1px solid #dcdfe6;
   height: 30px;
-  color: #007FFF;
+  color: #1B7FC3;
   font-size: 14px;
   align-items: center;
 }
@@ -178,7 +178,7 @@
   height: 7px;
   margin-right: 10px;
   border-radius: 10px;
-  background: #007FFF;
+  background: #1B7FC3;
 }
 .pending-requests-edit-inputs,
 .approved-requests-edit-inputs,
@@ -229,7 +229,7 @@
   margin: 5px;
   font-weight: 500;
   font-size: 14px;
-  color: #007FFF;
+  color: #1B7FC3;
 }
 .pending-requests-filler,
 .approved-requests-filler,
@@ -256,7 +256,7 @@
 .pending-requests-popover,
 .approved-requests-popover,
 .declined-requests-popover {
-  background: #007FFF;
+  background: #1B7FC3;
   color: white;
 }
 .pending-requests-owner-container,
@@ -459,8 +459,8 @@
   justify-content: center;
   align-items: center;
   display: flex;
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 19px;
+  font-weight: 500;
   color: #ea7224;
 }
 .container-height-override {

@@ -64,7 +64,7 @@
 }
 
 .new-dashboard__box-icon-blue {
-  color: #007FFF !important;
+  color: #1B7FC3 !important;
 }
 
 .new-dashboard__box-icon-blue-highlight {
@@ -399,7 +399,7 @@
   padding: 8px 20px 8px 20px;
   border-radius: 5px;
   border: 0px;
-  background: #007FFF;
+  background: #1B7FC3;
   color: #fff;
   font-weight: 700;
   width: 160px;
