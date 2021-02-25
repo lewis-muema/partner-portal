@@ -39,7 +39,7 @@
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">type of truck needed</p>
-                <p class="map__details-date par">{{ data.carrier_type }}</p>
+                <p class="map__details-date par">{{ data.cargo_type }}</p>
               </div>
             </div>
             <div class="order__column-freight">
@@ -49,7 +49,7 @@
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">type of load</p>
-                <p class="map__details-date par">{{ data.load_type ? data.load_type : 'N/A' }}</p>
+                <p class="map__details-date par">{{ data.carrier_type ? data.carrier_type : 'N/A' }}</p>
               </div>
             </div>
           </div>
@@ -410,7 +410,7 @@ export default {
       return this.formatedTime(date);
     },
     currencyFormat(id) {
-      const amount = this.data.offer_amount;
+      const amount = this.data.quotation.price_per_truck * this.data.quotation.trucks_available;
       return amount ? amount
         .toString()
         .replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,')
