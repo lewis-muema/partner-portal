@@ -1,4 +1,4 @@
-  <template >
+<template >
   <div id="bidding">
     <errorHandler :error="errorObj" v-if="errorObj" />
     <!-- CONFIRMATION MODAL -->
@@ -43,7 +43,7 @@
             </p>
           </div>
           <div v-else>
-            <h2 class="card-subheading">What is your bid amount per tru5ck?</h2>
+            <h2 class="card-subheading">What is your bid amount per truck?</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ bidDetails.amount_per_truck }}
             </p>
@@ -64,7 +64,10 @@
     <div class="bid-status-ok">
       <div class="bid-web-form">
         <div v-if="!rejected" v-show="success" class="success-card">
-          <span class="success-message">Offer successfully accepted! Please wait to hear from the customer</span>
+          <div>
+            <span @click="success = false"> <i class="fas fa-check-circle"></i> </span>
+            <span class="success-message">Bid successfully submitted !</span>
+          </div>
           <span @click="success = false"> <i class="fas fa-times"></i> </span>
         </div>
         <!-- BID DETAILS -->
@@ -207,6 +210,7 @@ export default {
   },
   data() {
     return {
+      auth: process.env.VUE_APP_AUTH,
       negotiable: true,
       bidDetails: {
         amount_per_truck: null,
@@ -289,6 +293,7 @@ export default {
       this.rejected = true;
       this.status = -1;
     },
+
     bidOffer() {
       this.hide('bid-details-modal');
       this.date = new Date().toLocaleString();

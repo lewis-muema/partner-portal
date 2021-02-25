@@ -215,8 +215,9 @@ input {
   border-radius: 4px;
   background: rgba(248, 186, 123, 0.08);
   margin: 20px 0px;
-  padding: 2px 6px;
+  padding: 2px 0px;
   font-size: 20px;
+  text-align: center;
 }
 .success-message {
   font-size: 18px;
@@ -224,12 +225,7 @@ input {
   color: #ff7900;
   align-self: center;
 }
-.success-status {
-  padding: 5px 10px;
-  width: 45%;
-  border-radius: 20px;
-  text-align: center;
-}
+
 .pending {
   color: #527cbd;
   background: #dfeefb;
