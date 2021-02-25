@@ -207,6 +207,7 @@ export default {
   },
   data() {
     return {
+      auth: process.env.VUE_APP_AUTH,
       negotiable: true,
       bidDetails: {
         amount_per_truck: null,
