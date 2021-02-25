@@ -84,6 +84,11 @@ input::-webkit-input-placeholder {
   padding-top: 15px;
   font-size: 14px;
 }
+.login__phone-input input,
+.login__password-input {
+  font-size: 13px;
+  font-weight: 500;
+}
 
 .control-group button[type='submit'] {
   width: 100%;
