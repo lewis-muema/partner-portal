@@ -285,7 +285,7 @@ export default {
         datasets: [
           {
             label: `Amount earned (${this.activeCurrency})`,
-            borderColor: '#F28226',
+            borderColor: '#EE7D00',
             backgroundColor: '#fff',
             data: amountArray,
           },
@@ -307,7 +307,7 @@ export default {
         datasets: [
           {
             label: 'Total Orders',
-            borderColor: '#F28226',
+            borderColor: '#EE7D00',
             backgroundColor: '#fff',
             data: totalOrders,
           },
@@ -329,7 +329,7 @@ export default {
         datasets: [
           {
             label: `Total Fuel Advance (${this.activeCurrency})`,
-            borderColor: '#F28226',
+            borderColor: '#EE7D00',
             backgroundColor: '#fff',
             data: amountArray,
           },
@@ -351,7 +351,7 @@ export default {
         datasets: [
           {
             label: `Amount in ${this.activeCurrency}`,
-            borderColor: '#F28226',
+            borderColor: '#EE7D00',
             backgroundColor: '#fff',
             data: amountArray,
           },

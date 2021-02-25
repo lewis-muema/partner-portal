@@ -118,7 +118,7 @@ export default {
   margin-top: 7% !important;
 }
 .next--link {
-  color: #ff7900;
+  color: #EE7D00;
   cursor: pointer;
 }
 .next--link-inactive {
