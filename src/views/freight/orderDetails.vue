@@ -656,7 +656,7 @@ export default {
       }
       return new Promise((resolve, reject) => {
         axios
-          .put(`${this.auth}freight-service/shipments/quotations/documents/`, payload, this.config)
+          .put(`${this.auth}freight-service/shipments/quotations/documents/${status === 3 ? 'decline' : 'approve'}`, payload, this.config)
           .then(response => {
             this.notify(3, 1, `Successfully ${status === 3 ? 'rejected' : 'approved'} document.`);
             this.$modal.hide('reject-documents');
