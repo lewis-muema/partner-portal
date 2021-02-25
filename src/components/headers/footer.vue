@@ -175,7 +175,7 @@ font-size: 24px;
 line-height: 133%;
 display: inline;
 color:
-#F57F20;
+#EE7D00;
 }
 
 .dismissbtn{
@@ -240,7 +240,7 @@ h5{
     font-weight: 550;
     font-size: 18px;
     text-align: left;
-    color: #F57F20;
+    color: #EE7D00;
 }
 }
 </style>

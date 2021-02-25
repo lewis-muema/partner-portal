@@ -1,5 +1,5 @@
 .login__header {
-  background-color: #f57f20;
+  background-color: #EE7D00;
   display: block;
   padding-top: 9px;
   padding-bottom: 9px;
@@ -13,7 +13,7 @@
 
 .login__forgotPass,
 .login__sign-up {
-  color: #f57f20;
+  color: #EE7D00;
 }
 .sendy--basic-container {
   text-align: center;
@@ -84,16 +84,21 @@ input::-webkit-input-placeholder {
   padding-top: 15px;
   font-size: 14px;
 }
+.login__phone-input input,
+.login__password-input {
+  font-size: 13px;
+  font-weight: 500;
+}
 
 .control-group button[type='submit'] {
   width: 100%;
-  background-color: #f57f20;
+  background-color: #EE7D00;
   color: #fff;
   letter-spacing: 1.1px !important;
   font-weight: inherit;
   padding: 6px;
   height: 42px;
-  border: 1px solid #f57f20;
+  border: 1px solid #EE7D00;
   text-transform: uppercase;
   font-size: medium !important;
   cursor: pointer;

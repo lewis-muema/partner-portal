@@ -134,7 +134,7 @@ export default {
   data() {
     return {
       show_loading: true,
-      colors: '#F57E20',
+      colors: '#EE7D00',
       config: {
         headers: {
           'Content-Type': 'application/json',
