@@ -167,29 +167,31 @@
                 <p class="bid-details-content">You have successfully rejected the bid</p>
               </div>
               <div v-else>
-                <h2 class="bid-submitted-heading">Your bid</h2>
-                <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
-                <p class="bid-details-content">{{ bidDetails.available_trucks }} Trucks</p>
+                <div v-if="formData.quotation.status === 1 || formData.quotation.status === 2 || formData.quotation.status === -1">
+                  <h2 class="bid-submitted-heading">Your bid</h2>
+                  <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
+                  <p class="bid-details-content">{{ formData.quotation.trucks_available }} Trucks</p>
 
-                <div v-if="formData.is_negotiable === false">
-                  <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-                  <p class="bid-details-content">
-                    <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
-                  </p>
-                  <h2 class="bid-details-subheading">Your total bid amount</h2>
-                  <p class="bid-details-content">
-                    <b>{{ formData.currency }}</b> {{ bidDetails.available_trucks * formData.offer_amount }}
-                  </p>
+                  <div v-if="formData.is_negotiable === false">
+                    <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
+                    <p class="bid-details-content">
+                      <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
+                    </p>
+                    <h2 class="bid-details-subheading">Your total bid amount</h2>
+                    <p class="bid-details-content">
+                      <b>{{ formData.currency }}</b> {{ formData.quotation.trucks_available * formData.offer_amount }}
+                    </p>
+                  </div>
+                  <div v-else>
+                    <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
+                    <p class="bid-details-content">{{ formData.currency }} {{ formData.quotation.price_per_truck }}</p>
+                    <h2 class="bid-details-subheading">Your total bid amount</h2>
+                    <p class="bid-details-content">{{ formData.currency }} {{ formData.quotation.trucks_available * formData.quotation.price_per_truck }}</p>
+                  </div>
+                  <i>
+                    <p class="timestamp">Bid submitted on {{ formData.quotation.date_created }}</p>
+                  </i>
                 </div>
-                <div v-else>
-                  <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
-                  <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.amount_per_truck }}</p>
-                  <h2 class="bid-details-subheading">Your total bid amount</h2>
-                  <p class="bid-details-content">{{ formData.currency }} {{ bidDetails.available_trucks * bidDetails.amount_per_truck }}</p>
-                </div>
-                <i>
-                  <p class="timestamp">Bid submitted on {{ date }}</p>
-                </i>
               </div>
             </div>
           </div>
@@ -221,7 +223,7 @@ export default {
         amount_per_truck: null,
         available_trucks: 0,
       },
-      submitted: false,
+      submitted: true,
       trucks: 0,
       bid_amount: null,
       total_amount: 0,
