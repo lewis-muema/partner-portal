@@ -521,6 +521,8 @@ a {
   height: 46px;
   background-color: #fff;
   margin-right: 10px;
+  font-size: 14px;
+  font-weight: 500;
 }
 .container__search-element:disabled {
   color: #c1c0c0;
@@ -599,21 +601,17 @@ button {
   padding-left: 2%;
   padding-right: 2%;
 }
-.orders__bidvehicle-type-input {
-  background: #ffffff;
-  color: #8a8a8a !important;
-  width: 50%;
-  height: 30px;
-  text-align: center;
-  font-weight: 400;
-}
+.orders__bidvehicle-type-input,
 .orders__assigndriver-input {
   background: #ffffff;
   color: #8a8a8a !important;
-  width: 50%;
-  height: 30px;
+  width: 180px;
+  height: max-content;
   text-align: center;
   font-weight: 400;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #F1F1F1;
 }
 .orders__list-toprow,
 .orders__list-row {
@@ -766,7 +764,7 @@ button {
 }
 .confirmed-for-others-button-menu {
   background-color: grey;
-  border-color: grey;
+  border: 1px solid grey;
 }
 .awarded-to-you-button-menu {
   background-color: #ffc800;
@@ -774,19 +772,19 @@ button {
 }
 .orders__confirm-icon {
   background-color: #51a65b;
-  border-color: #51a65b;
+  border: 1px solid #51a65b;
 }
 .orders__confirmed-icon {
   background-color: #ffc800;
-  border-color: #ffc800;
+  border: 1px solid #ffc800;
 }
 .cancelled-button-menu {
   background-color: purple;
-  border-color: purple;
+  border: 1px solid purple;
 }
 .orders__sendquote-icon {
   background-color: #EE7D00;
-  border-color: #EE7D00;
+  border: 1px solid #EE7D00;
 }
 .arrow {
   vertical-align: middle;
@@ -836,25 +834,17 @@ button {
 }
 .orders__addvehicle {
   margin-top: 5px;
-  color: #007FFF;
+  color: #EE7D00;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-  cursor: pointer;
-}
-.send-driver {
-  margin-top: 5px;
-  color: #007FFF;
-  display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 5px;
   cursor: pointer;
 }
 .orders__add-driver {
   margin-top: 5px;
-  color: #007FFF;
+  color: #EE7D00;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 5px;
   cursor: pointer;
 }
@@ -878,11 +868,24 @@ button {
 .icon {
   zoom: 70%;
 }
+.icon-padded {
+  font-size: 20px;
+  margin-right: 10px;
+}
 .orders__bid-input {
   width: 80%;
   height: 35px;
   margin-bottom: 8px;
   padding-left: 7px;
+  border: 1px solid #F1F1F1 !important;
+  border-radius: 5px !important;
+  font-size: 12px;
+  font-weight: 400;
+}
+.orders__bid-input input {
+  padding-left: 7px;
+  font-size: 12px;
+  font-weight: 400;
 }
 .disabled {
   background: #e1e3e8;
@@ -892,7 +895,7 @@ button {
 .orders__disabled-button {
   color: white;
   background-color: #cacaca;
-  border-color: #cacaca;
+  border: 1px solid #cacaca;
   border-radius: 4px;
   height: 39px;
   font-size: 14px;
