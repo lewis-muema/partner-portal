@@ -279,8 +279,8 @@
                           <option class value selected>Select a vehicle</option>
                         </select>
                         <p class="orders__addvehicle link" @click="toggleVehicle(order.id)">
-                          <i class="material-icons icon" v-if="!addVehicleStatus">add</i>
-                          <i class="material-icons icon" v-if="addVehicleStatus">remove</i>&nbsp;&nbsp;Add a vehicle
+                          <i class="material-icons icon-padded" v-if="!addVehicleStatus">add</i>
+                          <i class="material-icons icon-padded" v-if="addVehicleStatus">remove</i>&nbsp;&nbsp;Add a vehicle
                         </p>
                         <div class="orders__addvehicle-form" v-if="addVehicleStatus">
                           <input
@@ -324,8 +324,8 @@
                           <option class value selected>Select a driver</option>
                         </select>
                         <p class="orders__add-driver link" @click="toggleDriver()">
-                          <i class="material-icons icon" v-if="!addDriverStatus">add</i>
-                          <i class="material-icons icon" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
+                          <i class="material-icons icon-padded" v-if="!addDriverStatus">add</i>
+                          <i class="material-icons icon-padded" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
                         </p>
                         <div class="orders__adddriver-form" v-if="addDriverStatus">
                           <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
@@ -1410,7 +1410,7 @@ a {
 }
 
 .validation-error--message {
-  color: #f17f3a;
+  color: #EE7D00;
 }
 .capitalize-text {
   text-transform: capitalize;

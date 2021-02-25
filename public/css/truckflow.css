@@ -99,7 +99,7 @@
   width: 250px;
 }
 .freight-dashboard-links {
-  color: #1B7FC3;
+  color: #007FFF;
   font-weight: 600;
   cursor: pointer;
 }
@@ -171,7 +171,7 @@
 }
 .partner-documents-upload-button {
   color: white;
-  background: #EA7125;
+  background: #EE7D00;
   border: none;
   padding: 10px 30px;
   border-radius: 5px;
@@ -180,7 +180,7 @@
 }
 .partner-documents-approve-button {
   color: white;
-  background: #EA7125;
+  background: #EE7D00;
   border: none;
   padding: 7px 30px;
   border-radius: 5px;
@@ -190,13 +190,13 @@
 }
 .partner-documents-decline-button {
   background: white;
-  color: #EA7125;
+  color: #EE7D00;
   padding: 7px 30px;
   border-radius: 5px;
   font-weight: 700;
   margin: 0px 15px;
   width: 40%;
-  border: 2px solid #EA7125;
+  border: 2px solid #EE7D00;
 }
 .partner-documents-upload-rows {
   border: 1px solid #C5C5C5;
@@ -205,7 +205,7 @@
   align-items: center;
 }
 .partner-document-view-trigger {
-  color: #1B7FC3;
+  color: #007FFF;
   font-weight: 600 !important;
   font-size: 13px !important;
   cursor: pointer;
@@ -241,7 +241,7 @@
 }
 .partner-request-advance-button-active {
   color: white;
-  background: #EA7125;
+  background: #EE7D00;
   border: none;
   padding: 7px 30px;
   border-radius: 5px;
@@ -330,7 +330,7 @@
 }
 .request-advances-info-icon {
   margin-right: 30px;
-  color: #EA7125;
+  color: #EE7D00;
   font-size: 20px;
 }
 .upload-documents-add-trigger-icon {
@@ -339,7 +339,7 @@
 .upload-documents-add-trigger {
   display: flex;
   align-items: center;
-  color: #1B7FC3;
+  color: #007FFF;
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -367,7 +367,7 @@
   font-size: 18px !important;
 }
 .upload-documents-modal-click-text {
-  color: #1B7FC3;
+  color: #007FFF;
   font-size: 15px;
 }
 .upload-documents-modal-button {
@@ -399,13 +399,13 @@ a {
   color: rgb(154, 172, 192);
 }
 .active {
-  color: #f78114;
+  color: #EE7D00;
   text-decoration: none;
 }
 .active-tab {
   border-style: solid;
   border-bottom-width: 4px;
-  border-color: #f78114;
+  border-color: #EE7D00;
   border-left-width: 0px;
   border-right-width: 0px;
   border-top-width: 0px;
@@ -471,9 +471,9 @@ a {
   cursor: pointer;
 }
 .active-currency {
-  background: #F57F20 !important;
+  background: #EE7D00 !important;
   color: white !important;
-  border: 1px solid #F57F20 !important;
+  border: 1px solid #EE7D00 !important;
 }
 .orders__list-cash-filter {
   display: flex;
@@ -521,6 +521,8 @@ a {
   height: 46px;
   background-color: #fff;
   margin-right: 10px;
+  font-size: 14px;
+  font-weight: 500;
 }
 .container__search-element:disabled {
   color: #c1c0c0;
@@ -551,7 +553,7 @@ button {
   font-size: 14px !important;
 }
 .search-btn {
-  background: #1b7fc3;
+  background: #007FFF;
   border-radius: 4px;
   color: white;
   font-weight: 600;
@@ -599,21 +601,17 @@ button {
   padding-left: 2%;
   padding-right: 2%;
 }
-.orders__bidvehicle-type-input {
-  background: #ffffff;
-  color: #8a8a8a !important;
-  width: 50%;
-  height: 30px;
-  text-align: center;
-  font-weight: 400;
-}
+.orders__bidvehicle-type-input,
 .orders__assigndriver-input {
   background: #ffffff;
   color: #8a8a8a !important;
-  width: 50%;
-  height: 30px;
+  width: 180px;
+  height: max-content;
   text-align: center;
   font-weight: 400;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #F1F1F1;
 }
 .orders__list-toprow,
 .orders__list-row {
@@ -625,6 +623,7 @@ button {
 .orders__statuses {
   display: flex;
   font-weight: 800;
+  cursor: pointer;
 }
 .order__bidtimer-duration {
   grid-template-columns: repeat(16, 1fr);
@@ -765,7 +764,7 @@ button {
 }
 .confirmed-for-others-button-menu {
   background-color: grey;
-  border-color: grey;
+  border: 1px solid grey;
 }
 .awarded-to-you-button-menu {
   background-color: #ffc800;
@@ -773,19 +772,19 @@ button {
 }
 .orders__confirm-icon {
   background-color: #51a65b;
-  border-color: #51a65b;
+  border: 1px solid #51a65b;
 }
 .orders__confirmed-icon {
   background-color: #ffc800;
-  border-color: #ffc800;
+  border: 1px solid #ffc800;
 }
 .cancelled-button-menu {
   background-color: purple;
-  border-color: purple;
+  border: 1px solid purple;
 }
 .orders__sendquote-icon {
-  background-color: #f57f20;
-  border-color: #f57f20;
+  background-color: #EE7D00;
+  border: 1px solid #EE7D00;
 }
 .arrow {
   vertical-align: middle;
@@ -835,25 +834,17 @@ button {
 }
 .orders__addvehicle {
   margin-top: 5px;
-  color: #1b7fc3;
+  color: #EE7D00;
   display: flex;
-  align-items: flex-start;
-  margin-bottom: 5px;
-  cursor: pointer;
-}
-.send-driver {
-  margin-top: 5px;
-  color: #1b7fc3;
-  display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 5px;
   cursor: pointer;
 }
 .orders__add-driver {
   margin-top: 5px;
-  color: #1b7fc3;
+  color: #EE7D00;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 5px;
   cursor: pointer;
 }
@@ -877,11 +868,24 @@ button {
 .icon {
   zoom: 70%;
 }
+.icon-padded {
+  font-size: 20px;
+  margin-right: 10px;
+}
 .orders__bid-input {
   width: 80%;
   height: 35px;
   margin-bottom: 8px;
   padding-left: 7px;
+  border: 1px solid #F1F1F1 !important;
+  border-radius: 5px !important;
+  font-size: 12px;
+  font-weight: 400;
+}
+.orders__bid-input input {
+  padding-left: 7px;
+  font-size: 12px;
+  font-weight: 400;
 }
 .disabled {
   background: #e1e3e8;
@@ -891,7 +895,7 @@ button {
 .orders__disabled-button {
   color: white;
   background-color: #cacaca;
-  border-color: #cacaca;
+  border: 1px solid #cacaca;
   border-radius: 4px;
   height: 39px;
   font-size: 14px;
@@ -975,7 +979,7 @@ button {
   background: #bc5000;
 }
 .no {
-  background: #f57f20;
+  background: #EE7D00;
 }
 .message {
   margin-bottom: 0px;
@@ -1008,7 +1012,7 @@ button {
   padding-right: 10%;
 }
 .order__estimate-amount {
-  color: #f78114;
+  color: #EE7D00;
   font-weight: 600;
   font-size: 15px;
 }
@@ -1128,7 +1132,7 @@ button {
   color: #51a65b !important;
 }
 .deliveredButton {
-  color: #1b7fc3 !important;
+  color: #007FFF !important;
 }
 .pendingDnotes {
   color: red !important;
@@ -1142,7 +1146,7 @@ button {
 }
 .loading {
   border: 10px solid #f3f3f3;
-  border-top: 10px solid #f78114;
+  border-top: 10px solid #EE7D00;
   border-radius: 50%;
   width: 80px;
   height: 80px;

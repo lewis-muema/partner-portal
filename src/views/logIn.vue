@@ -268,7 +268,7 @@ p {
 }
 a,
 a:hover {
-  color: #f57f20;
+  color: #EE7D00;
 }
 .login__phone-input .dropdown, .login__phone-input .dropdown .selection {
   padding: 0px !important;

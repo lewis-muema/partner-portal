@@ -5,7 +5,7 @@
       <div class="header-primary">
         <div class="primary-inner">
           <div class="inner-left">
-            <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/Sendy_logo_whitewhite.png" @click="location.href = 'https://sendyit.com/'" />
+            <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/sendy_main_white.png" @click="location.href = 'https://sendyit.com/'" />
             <div class="inner-left-toggles" v-if="$store.getters.getFreightStatus === 2">
               <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')">TRANSPORTATION</span>
               <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')">FREIGHT</span>
@@ -16,7 +16,7 @@
               <div class="dropdown" @focus="toggleDropdown" @focusout="toggleDropUp" tabindex="-1">
                 <span class="menu-head">
                   Menu
-                  <i class="material-icons icon">arrow_drop_down</i>
+                  <i class="material-icons">arrow_drop_down</i>
                 </span>
                 <div class="dropdown-menu dropdown-menu-right" v-if="dropdown" @mouseover="timeout = 1000" @mouseleave="timeout = 0">
                   <router-link to="/vehicles" class="dropdown-link">
@@ -77,7 +77,7 @@
         <div class="secondary-inner">
           <div class="secnav-container">
             <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">Activity Log</router-link>
-            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">Orders</router-link>
+            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">Shipments</router-link>
             <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()">Preferences</router-link>
           </div>
         </div>
