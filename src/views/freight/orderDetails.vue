@@ -35,7 +35,7 @@
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">pickup time</p>
-                <p class="map__details-date par">{{ timeFormat(data.pick_up_time) }}</p>
+                <p class="map__details-date par">{{ timeFormat(data.pickup_time) }}</p>
               </div>
               <div class="map-details-row">
                 <p class="map__details-date heading-freight uppercase">type of truck needed</p>
