@@ -172,7 +172,12 @@
             </div>
             <div v-else>
               <h2 class="bid-submitted-heading">Your bid</h2>
-              <div v-if="(formData.is_negotiable === false && formData.offer_amount === null) || (formData.is_negotiable === null && formData.offer_amount === null)">
+
+              <div v-if="(formData.is_negotiable === false && formData.quotation.status == -1) || (formData.is_negotiable === null && formData.quotation.status == -1)">
+                <p class="bid-details-content">You successfully rejected the bid</p>
+              </div>
+
+              <div v-else-if="(formData.is_negotiable === false && formData.offer_amount === null) || (formData.is_negotiable === null && formData.offer_amount === null)">
                 <h2 class="bid-details-subheading">How many trucks do you have available for this order?</h2>
                 <p class="bid-details-content">{{ formData.quotation.trucks_available }} {{ formData.quotation.trucks_available === 1 ? 'Truck' : 'Trucks' }}</p>
                 <h2 class="bid-details-subheading">What is your bid amount per truck?</h2>
@@ -206,6 +211,7 @@
                   <b>{{ formData.currency }}</b> {{ formData.quotation.trucks_available * formData.offer_amount }}
                 </p>
               </div>
+
               <i>
                 <p class="timestamp">Bid submitted on {{ formData.quotation.date_created }}</p>
               </i>
