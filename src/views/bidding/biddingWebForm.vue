@@ -223,7 +223,7 @@ export default {
         amount_per_truck: null,
         available_trucks: 0,
       },
-      submitted: true,
+      submitted: false,
       trucks: 0,
       bid_amount: null,
       total_amount: 0,
