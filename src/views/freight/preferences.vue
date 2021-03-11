@@ -43,7 +43,7 @@
       <p class="request-advance-input-labels">Vehicle Management</p>
       <button class="partner-request-advance-button-active preferences-buttons" @click="addVehicleDialog()">Add Vehicles</button>
 
-      <div class="loading preferences-empty-table" v-if="loadingStatus"></div>
+      <div class="loading preferences-empty-table" v-if="loadingVehicle"></div>
       <div v-else>
         <div class="">
           <div v-if="rows.length > 0">
