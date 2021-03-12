@@ -484,7 +484,7 @@ export default {
         });
       });
       this.rows = record;
-      this.loadingVehicle = true;
+      this.loadingVehicle = false;
     },
     sortRidersActions(row) {
       const riderRow = [];
@@ -521,17 +521,19 @@ export default {
     },
     clearStoredVehicles() {
       this.$modal.hide('add-vehicle');
-      this.vehicle_data = {
-        vendor_type: '',
-        carrier_type: '',
-        vehicle_size: '',
-        load_capacity: '',
-        log_book_no: '',
-        registration_no: '',
-        insurance_name: '',
-        insurance_no: '',
-        policy_no: '',
-      };
+      this.vehicle_data = [
+        {
+          vendor_type: '',
+          carrier_type: '',
+          vehicle_size: '',
+          load_capacity: '',
+          registration_no: '',
+          insurance_name: '',
+          insurance_no: '',
+          policy_no: '',
+          log_book_no: '',
+        },
+      ];
       this.extra_vehicle = 0;
     },
     submitVehicle() {
@@ -557,7 +559,6 @@ export default {
               .then(response => {
                 this.notify(3, 1, 'Vehicle(s) added successfully');
                 this.clearStoredVehicles();
-                this.loadingVehicle = true;
                 this.fetchVehicles();
                 resolve(response);
               })
