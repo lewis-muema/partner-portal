@@ -157,7 +157,7 @@
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">What is the type of your vehicle ?</p>
               <el-select v-model="vehicle_data[n].vendor_type" class="request-advance-inputs">
-                <el-option :value="item.id" :label="item.vendor_type" v-for="(item, index) in vendor_type" :key="index"></el-option>
+                <el-option :value="item.id" :label="item.label" v-for="(item, index) in vendor_type" :key="index"></el-option>
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
@@ -546,6 +546,8 @@ export default {
           this.notify(3, 0, 'Vehicle size should be between 18 and 33 Tonnes');
         } else if (this.vehicle_data[i].load_capacity >= this.vehicle_data[i].vehicle_size) {
           this.notify(3, 0, 'Truck loading capacity should be less than the Truck size');
+        } else if (!this.verify_consent) {
+          this.notify(3, 0, 'Agree Sendy Ltd to verify my insurance documents to proceed');
         } else {
           vehicleArray.vehicles.map(v => Object.assign(v, { verify_consent: this.verify_consent }));
           const payload = vehicleArray;
