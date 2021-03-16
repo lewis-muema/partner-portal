@@ -251,6 +251,7 @@ export default {
           west: -19.1,
         },
         strictBounds: true,
+        types: ['(regions)'],
       },
       errorObj: '',
       locations: [],
