@@ -11,7 +11,7 @@
                 type="text"
                 class="container__search-element"
                 id="inp"
-                placeholder="Enter pickup"
+                :placeholder="$t('availableOrders.enter_pickup')"
                 @input="filterPickup()"
                 @keyup.delete="refresh()"
               />
@@ -21,44 +21,44 @@
                 type="text"
                 class="container__search-element"
                 id="dst"
-                placeholder="Enter destination"
+                :placeholder="$t('availableOrders.enter_destination')"
                 @input="filterDest()"
                 @keyup.delete="refresh()"
               />
             </span>
             <span class="container__search-select">
               <select name class="container__search-element select-font" @change="filterVendor()" id="vend" :disabled="!refreshStatus">
-                <option value selected>Select type of truck</option>
-                <option value="Pick up">Pick Up</option>
-                <option value="Van">Van</option>
-                <option value="3T Truck">3 Tonne Truck</option>
-                <option value="5T Truck">5 Tonne Truck</option>
-                <option value="10T Truck">10 Tonne Truck</option>
-                <option value="14T Truck">14 Tonne Truck</option>
-                <option value="20T Truck">20 Tonne Truck</option>
-                <option value="28T Truck">28 Tonne Truck</option>
-                <option value="Freight">Freight Truck</option>
+                <option value selected> {{ $t('availableOrders.select_truck_type')}} </option>
+                <option value="Pick up"> {{ $t('availableOrders.pick_up')}} </option>
+                <option value="Van"> {{ $t('availableOrders.van')}} </option>
+                <option value="3T Truck">3 {{ $t('availableOrders.tonne_truck')}} </option>
+                <option value="5T Truck">5 {{ $t('availableOrders.tonne_truck')}} </option>
+                <option value="10T Truck">10 {{ $t('availableOrders.tonne_truck')}}</option>
+                <option value="14T Truck">14 {{ $t('availableOrders.tonne_truck')}}</option>
+                <option value="20T Truck">20 {{ $t('availableOrders.tonne_truck')}}</option>
+                <option value="28T Truck">28 {{ $t('availableOrders.tonne_truck')}}</option>
+                <option value="Freight"> {{ $t('availableOrders.freight_truck')}} </option>
               </select>
             </span>
           </div>
           <div class="bids">
             <div id="orders__list-table" class="orders__list-table">
               <div class="orders__list-toprow table-head">
-                <div class="orders__col-head pickup">pickup location</div>
-                <div class="orders__col-head load">type of load</div>
-                <div class="orders__col-head destination">destination</div>
-                <div class="orders__col-head distance">distance</div>
-                <div class="orders__col-head pick-date">pickup date</div>
-                <div class="orders__col-head truck">truck</div>
-                <div class="orders__col-head orderNo">order number</div>
-                <div class="orders__col-head price-align">price</div>
-                <div class="orders__col-head price-align">vat</div>
+                <div class="orders__col-head pickup">  {{ $t('availableOrders.pickup_location')}} </div>
+                <div class="orders__col-head load"> {{ $t('availableOrders.type_of_load')}} </div>
+                <div class="orders__col-head destination"> {{ $t('availableOrders.destination')}} </div>
+                <div class="orders__col-head distance"> {{ $t('availableOrders.distance')}} </div>
+                <div class="orders__col-head pick-date"> {{ $t('availableOrders.pickup_date')}}</div>
+                <div class="orders__col-head truck"> {{ $t('availableOrders.truck')}} </div>
+                <div class="orders__col-head orderNo"> {{ $t('availableOrders.order_number')}} </div>
+                <div class="orders__col-head price-align"> {{ $t('availableOrders.price')}} </div>
+                <div class="orders__col-head price-align"> {{ $t('availableOrders.vat')}} </div>
                 <div class="orders__col-head bid-in"></div>
-                <div class="orders__col-head center-action">action</div>
+                <div class="orders__col-head center-action"> {{ $t('availableOrders.actions')}} </div>
               </div>
               <div class="loading" v-if="loadingStatus"></div>
               <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-                <p class="no-records-par">There are no orders</p>
+                <p class="no-records-par"> {{ $t('availableOrders.no_orders')}} </p>
               </div>
               <template v-for="order in orders">
                 <div
@@ -69,7 +69,7 @@
                   :key="order.id"
                 >
                   <div class="orders__list-col pickup">
-                    <p class="orders__mobile-col">Pickup</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.pickup')}} </p>
                     <p
                       class="row1"
                       @mouseover="showFromTooltip(order.id)"
@@ -80,11 +80,11 @@
                     >{{ order.from_name }}, {{ order.start_address }}</span>
                   </div>
                   <div class="orders__list-col load">
-                    <p class="orders__mobile-col">Load</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.load')}} </p>
                     <p>N/A</p>
                   </div>
                   <div class="orders__list-col destination">
-                    <p class="orders__mobile-col">Destination</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.destination_capital')}}</p>
                     <p
                       class="row2"
                       @mouseover="showToTooltip(order.id)"
@@ -95,23 +95,23 @@
                     >{{ order.to_name }}, {{ order.end_address }}</span>
                   </div>
                   <div class="orders__list-col distance">
-                    <p class="orders__mobile-col">Distance</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.distance')}} </p>
                     <p class="orders__mobile-col--distance">{{ formatDistance(order.id) }} km</p>
                   </div>
                   <div class="orders__list-col pick-date">
-                    <p class="orders__mobile-col">Date</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.date')}} </p>
                     <p>{{ timeFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col truck">
-                    <p class="orders__mobile-col">Truck</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.truck')}} </p>
                     <p class="row3">{{ order.vendorname }}</p>
                   </div>
                   <div class="orders__list-col orderNo">
-                    <p class="orders__mobile-col">order number</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.order_number')}} </p>
                     <p>{{ order.orderNo }}</p>
                   </div>
                   <div class="orders__list-col price-align">
-                    <p class="orders__mobile-col">Price</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.price_capital')}} </p>
                     <p
                       v-if="order.bid_status === 0"
                       class="right-align"
@@ -122,7 +122,7 @@
                     >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col price-align">
-                    <p class="orders__mobile-col">VAT</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.vat')}} </p>
                     <p>{{ order.currency }} {{ vatCurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col bid-in">
@@ -138,27 +138,27 @@
                     </div>
                   </div>
                   <div class="orders__list-col center-action uppercase">
-                    <p class="orders__mobile-col">action</p>
+                    <p class="orders__mobile-col"> {{ $t('availableOrders.action')}} </p>
                     <button
                       class="orders__confirm-icon button-menu"
                       v-if="order.confirmed === 0 && order.bid_status === 0"
-                    >confirm order</button>
+                    > {{ $t('availableOrders.confirm_order')}} </button>
                     <button
                       class="orders__sendquote-icon button-menu"
                       v-if="order.bidPlaced === 0 && order.bid_status === 1 && !opened.includes(order.id)"
-                    >send quote</button>
+                    > {{ $t('availableOrders.send_quote')}} </button>
                     <button
                       class="orders__bidplaced-icon button-menu"
                       v-if="order.bid_status === 1 && order.bidPlaced === 1"
-                    >bid placed</button>
+                    > {{ $t('availableOrders.bid_placed')}} </button>
                     <button
                       class="orders__hidedetails-icon button-menu"
                       v-if="order.bidPlaced === 0 && order.bid_status === 1 && opened.includes(order.id)"
-                    >hide details</button>
+                    > {{ $t('availableOrders.hide_details')}}</button>
                     <button
                       class="orders__confirmed-icon button-menu"
                       v-if="order.confirmed === 1"
-                    >confirmed</button>
+                    >{{ $t('availableOrders.confirmed')}} </button>
                   </div>
                 </div>
                 <div
@@ -169,40 +169,40 @@
                   <div colspan="8" class="expanded-row">
                     <div class="map-details--go-back" @click="toggle(order.id)">
                       <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
-                      <span class="map-details-go-back--span">Back</span>
+                      <span class="map-details-go-back--span"> {{ $t('availableOrders.back')}} </span>
                     </div>
                     <div class="map__column">
                       <img :src="createStaticMapUrl(order)" class="map" />
                       <div class="map__details-row">
                         <div class="map__details-col">
-                          <p class="map__details-pickup heading uppercase">pickup location</p>
+                          <p class="map__details-pickup heading uppercase"> {{ $t('availableOrders.pickup_location')}} </p>
                           <p class="map__details-pickup par">{{ order.from_name }}</p>
-                          <p class="map__details-date heading uppercase">date and time</p>
+                          <p class="map__details-date heading uppercase"> {{ $t('availableOrders.date_and_time')}}</p>
                           <p class="map__details-date par">{{ timeFormat(order.id) }}</p>
-                          <p class="map__details-date heading uppercase">Order type</p>
+                          <p class="map__details-date heading uppercase"> {{ $t('availableOrders.order_type')}} </p>
                           <p class="map__details-date par capitalize-text" >{{ order.order_type.replace(/_/g, " ") }}</p>
                         </div>
                         <div class="map__details-col">
-                          <p class="map__details-dest heading uppercase">destination</p>
+                          <p class="map__details-dest heading uppercase"> {{ $t('availableOrders.destination')}} </p>
                           <p class="map__details-dest par">{{ order.to_name }}</p>
-                          <p class="map__details-distance heading uppercase">distance</p>
+                          <p class="map__details-distance heading uppercase"> {{ $t('availableOrders.distance')}} </p>
                           <p class="map__details-distance par">{{ order.distance }} km</p>
                         </div>
                       </div>
                     </div>
                     <div class="order__column">
-                      <p class="order__weight heading uppercase">weight of the order</p>
-                      <p class="order__weight par" v-if="!weight">Not applicable</p>
+                      <p class="order__weight heading uppercase"> {{ $t('availableOrders.weight_of_orders')}}</p>
+                      <p class="order__weight par" v-if="!weight"> {{ $t('availableOrders.not_applicable')}} </p>
                       <p class="order__weight par" v-else>{{ weight }}</p>
-                      <p class="order__loader heading uppercase">loader(s) needed</p>
-                      <p class="order__loader par" v-if="!loaders">Not applicable</p>
+                      <p class="order__loader heading uppercase"> {{ $t('availableOrders.loader_needed')}} </p>
+                      <p class="order__loader par" v-if="!loaders"> {{ $t('availableOrders.not_applicable')}} </p>
                       <p class="order__loader par" v-else>{{ loaders }}</p>
-                      <p class="order__loadtype heading uppercase">type of load</p>
-                      <p class="order__loadtype par" v-if="!load">Not applicable</p>
+                      <p class="order__loadtype heading uppercase"> {{ $t('availableOrders.type_of_load')}} </p>
+                      <p class="order__loadtype par" v-if="!load"> {{ $t('availableOrders.not_applicable')}} </p>
                       <p class="order__loadtype par" v-else>{{ load }}</p>
-                      <p class="order__notes heading uppercase">notes</p>
+                      <p class="order__notes heading uppercase"> {{ $t('availableOrders.notes')}}</p>
                       <p class="order__notes par">{{ orderNotes(order.id) }}</p>
-                      <p class="order__notes heading uppercase">truck</p>
+                      <p class="order__notes heading uppercase"> {{ $t('availableOrders.truck')}} </p>
                       <p
                         class="order__notes par"
                       >{{ order.vendorname }}{{ carrierType(order.carrier_type) }}</p>
@@ -211,7 +211,7 @@
                       <p
                         class="order__amount heading uppercase"
                         v-if="order.bid_status === 0"
-                      >AMOUNT</p>
+                      > {{ $t('availableOrders.amount')}} </p>
                       <p
                         class="order__amount par"
                         v-if="order.bid_status === 0"
@@ -221,7 +221,7 @@
                           <span class="order__price-estimate">
                             <p
                               class="order__amount heading uppercase"
-                            >the minimum amount the client is willing to pay for the order is</p>
+                            > {{ $t('availableOrders.minimum_amount_client_to_pay')}} </p>
                             <p
                               class="order__estimate-amount par"
                             >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
@@ -240,25 +240,25 @@
                           </span>
                         </div>
                         <div class="order__quote-amount" v-if="order.bid_status === 1">
-                          <p class="order__amount heading uppercase">your quote</p>
+                          <p class="order__amount heading uppercase"> {{ $t('availableOrders.your_quote')}}</p>
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter quote amount"
+                            :placeholder="$t('availableOrders.enter_quote_amount')"
                             @input="confirm(order.id)"
                             v-model="quoteAmount"
                           />
                         </div>
                         <p
                           class="orders__assigndriver heading uppercase"
-                        >select a driver to assign to this order</p>
+                        > {{$t('availableOrders.select_driver_to_assign_order')}} </p>
                         <select
                           class="orders__assigndriver-input par"
                           v-if="!addDriverStatus"
                           v-model="count1"
                           @change="driverSelector(order.id)"
                         >
-                          <option class selected value="null">Select a driver</option>
+                          <option class selected value="null"> {{$t('availableOrders.select_a_driver')}}</option>
                           <option
                             class
                             v-for="rider in riders"
@@ -272,14 +272,14 @@
                           @click="setDriverStatus()"
                           readonly
                         >
-                          <option class value selected>Select a driver</option>
+                          <option class value selected> {{$t('availableOrders.select_a_driver')}}  </option>
                         </select>
                         <div class="center-action center-action--lower force-leftalign">
                           <button
                             class="orders__disabled-button"
                             v-if="order.confirmed === 0 && order.bid_status === 0 && buttonDisabledStatus === 0"
                             disabled
-                          >confirm order</button>
+                          > {{$t('availableOrders.confirm_order')}} </button>
                           <button
                             class="orders__confirm-button"
                             @click="sendPayload(order.id)"
@@ -289,7 +289,7 @@
                             class="orders__disabled-button"
                             v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 0"
                             disabled
-                          >send quotes</button>
+                          > {{$t('availableOrders.send_quotes')}} </button>
                           <button
                             class="orders__sendquote-button"
                             @click="sendBid(order.id)"
@@ -301,7 +301,7 @@
                         <button
                           class="orders__confirmed-button"
                           v-if="order.confirmed === 1"
-                        >confirmed</button>
+                        > {{$t('availableOrders.confirmed')}}</button>
                       </div>
                     </div>
                   </div>
@@ -385,8 +385,8 @@ export default {
       vehiclePayload: [],
       riderPayload: [],
       pick: [],
-      confirmButtonState: 'confirm order',
-      sendQuoteButtonState: 'send quote',
+      confirmButtonState: this.$t('availableOrders.confirm_order'),
+      sendQuoteButtonState: this.$t('availableOrders.send_quote'),
       getRiderz: 0,
       getVehiclez: 0,
       quoteAmount: null,
@@ -407,7 +407,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Drivers phone number',
+        placeholder: this.$t('availableOrders.driver_phone_number'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -714,7 +714,7 @@ export default {
       }
     },
     sendPayload(id) {
-      this.confirmButtonState = 'confirming order ...';
+      this.confirmButtonState = this.$t('availableOrders.confirming_order');
       const index = this.count1;
       const payload = JSON.stringify({
         sim_card_sn: this.riders[index].password,
@@ -736,13 +736,13 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.confirmButtonState = 'confirm order';
+            this.confirmButtonState = this.$t('availableOrders.confirm_order');
             this.notify(3, 0, `${error.response.data.reason}`);
           }
         });
     },
     sendBid(id) {
-      this.sendQuoteButtonState = 'sending quote...';
+      this.sendQuoteButtonState = this.$t('availableOrders.sending_quote');
       const vehicleIndex = this.riders[this.count1].vehicle_no;
       const payload = JSON.stringify({
         vehicle_details: {
@@ -766,7 +766,7 @@ export default {
       axios
         .post(`${this.auth}v1/place_order_bid/`, payload, this.config)
         .then(response => {
-          this.sendQuoteButtonState = 'adjust quote';
+          this.sendQuoteButtonState = this.$t('availableOrders.adjust_quote');
           if (response.data.status) {
             this.notify(3, 1, response.data.message);
             this.opened = [];
@@ -780,7 +780,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.sendQuoteButtonState = 'adjust quote';
+            this.sendQuoteButtonState = this.$t('availableOrders.adjust_quote');
             this.notify(3, 1, `${error.response.data.message}`);
           }
         });
