@@ -28,7 +28,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Enter a phone number',
+        placeholder: this.$t('authLogin.enter_phone_no'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -141,9 +141,9 @@ export default {
       this.notificationName = 'message-box-up';
       this.notificationType = 'failed';
       if (error.status) {
-        this.error = 'Please try again';
+        this.error = this.$t('authLogin.please_try_again');
       } else {
-        this.error = 'Sorry, your details did not match!';
+        this.error = this.$t('authLogin.details_not_match');
       }
       setTimeout(() => {
         this.notificationName = 'message-box-down';
