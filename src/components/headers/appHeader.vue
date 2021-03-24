@@ -7,52 +7,52 @@
           <div class="inner-left">
             <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/sendy_main_white.png" @click="location.href = 'https://sendyit.com/'" />
             <div class="inner-left-toggles" v-if="$store.getters.getFreightStatus === 2">
-              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')">TRANSPORTATION</span>
-              <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')">FREIGHT</span>
+              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')"> {{ $t('appHeader.transportation') }}</span>
+              <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')"> {{ $t('appHeader.freight') }}</span>
             </div>
           </div>
           <div class="inner-right">
             <div class="navitem">
               <div class="dropdown" @focus="toggleDropdown" @focusout="toggleDropUp" tabindex="-1">
                 <span class="menu-head">
-                  Menu
+                  {{ $t('appHeader.menu') }}
                   <i class="material-icons">arrow_drop_down</i>
                 </span>
                 <div class="dropdown-menu dropdown-menu-right" v-if="dropdown" @mouseover="timeout = 1000" @mouseleave="timeout = 0">
                   <router-link to="/vehicles" class="dropdown-link">
-                    <p class="dropdown-item">Vehicles</p>
+                    <p class="dropdown-item">{{ $t('appHeader.vehicles') }}</p>
                   </router-link>
                   <router-link to="/tracking" class="dropdown-link">
-                    <p class="dropdown-item">Tracking</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.tracking') }} </p>
                   </router-link>
                   <router-link to="/statement" class="dropdown-link">
-                    <p class="dropdown-item">Statement</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.statement') }} </p>
                   </router-link>
                   <router-link to="/banks" class="dropdown-link">
-                    <p class="dropdown-item">Banks</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.banks') }} </p>
                   </router-link>
                   <router-link to="/loans" class="dropdown-link">
-                    <p class="dropdown-item">Loans</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.loans') }} </p>
                   </router-link>
                   <router-link to="/savings" class="dropdown-link">
-                    <p class="dropdown-item">Savings</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.saving') }} </p>
                   </router-link>
                   <router-link to="/documents" class="dropdown-link">
-                    <p class="dropdown-item">Documents</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.document') }} </p>
                   </router-link>
 
                   <router-link v-if="show_performance" to="/performance" class="dropdown-link">
-                    <p class="dropdown-item">Performance</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.performance') }} </p>
                   </router-link>
                   <div @click="trainingRedirect()" class="dropdown-link">
-                    <p class="dropdown-item">Support</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.support') }} </p>
                   </div>
                   <hr />
                   <router-link to="/external_login" class="dropdown-link" v-if="super_user">
-                    <p class="dropdown-item">Sign Out</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.signout') }} </p>
                   </router-link>
                   <router-link to="/login" class="dropdown-link" v-else>
-                    <p class="dropdown-item">Sign Out</p>
+                    <p class="dropdown-item"> {{ $t('appHeader.signout') }} </p>
                   </router-link>
                 </div>
               </div>
@@ -63,22 +63,22 @@
       <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath && getFlow === 'logistics'">
         <div class="secondary-inner">
           <div class="secnav-container">
-            <router-link to="/dashboard" class="secnav-page" :class="showActiveDashboard()">Dashboard</router-link>
-            <router-link to="/" class="secnav-page" :class="showActivePending()">Available</router-link>
-            <router-link to="/quotes" class="secnav-page" :class="showActiveQuotes()">My Quotes</router-link>
-            <router-link to="/orders" class="secnav-page" :class="showActiveOrders()">My Orders</router-link>
+            <router-link to="/dashboard" class="secnav-page" :class="showActiveDashboard()">{{ $t('appHeader.dashboard') }} </router-link>
+            <router-link to="/" class="secnav-page" :class="showActivePending()">{{ $t('appHeader.available') }} </router-link>
+            <router-link to="/quotes" class="secnav-page" :class="showActiveQuotes()">{{ $t('appHeader.my_quotes') }} </router-link>
+            <router-link to="/orders" class="secnav-page" :class="showActiveOrders()">{{ $t('appHeader.my_orders') }} </router-link>
           </div>
           <div class="secnav-container">
-            <router-link to="/auxilliary" class="secnav-page" :class="showAuxilliaryServices()">Auxiliary Services</router-link>
+            <router-link to="/auxilliary" class="secnav-page" :class="showAuxilliaryServices()">{{ $t('appHeader.auxiliary_services') }} </router-link>
           </div>
         </div>
       </div>
       <div class="header-secondary header-secondary-freight" id="header-secondary" v-if="getFlow === 'freight'">
         <div class="secondary-inner">
           <div class="secnav-container">
-            <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">Activity Log</router-link>
-            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">Shipments</router-link>
-            <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()">Preferences</router-link>
+            <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">{{ $t('appHeader.activity_log') }}</router-link>
+            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">{{ $t('appHeader.shipment') }}</router-link>
+            <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()">{{ $t('appHeader.preference') }}</router-link>
           </div>
         </div>
       </div>

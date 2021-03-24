@@ -3,14 +3,14 @@
   <div class="container" v-if="selectedRating == ''">
   <div class="row">
     <div class="col-lg-12">
-    <h5 class="align-middle">How likely are you to invite a friend or collegue to join Sendy?</h5>
+    <h5 class="align-middle"> {{ $t('footer.how_likely') }} </h5>
     <br/>
     </div>
   </div>
   <div class="row" id="info">
     <div class="col-lg-12">
       <span>
-      0 Not Likely
+      {{ $t('footer.not_likely') }}
       </span>
     <span v-for="(rating, i) in ratings" :key="i">
     <button :id="rating" class="circles" :value="selectedRating" @click="getScore(rating)">
@@ -18,7 +18,7 @@
       </button>
     </span>
     <span>
-      10 Very Likely
+      {{ $t('footer.very_likely') }}
     </span>
     <button class="dismissbtn" @click="cancelSurvey()">
         X
@@ -29,7 +29,7 @@
     <div class="container" v-if="selectedRating !== '' && surveyStatus !== 1">
   <div class="row">
     <div class="col-lg-12">
-    <h5 class="align-middle">What do you like most about Sendy?(Optional)</h5>
+    <h5 class="align-middle">{{ $t('footer.what_like_most') }}</h5>
     <br/>
     </div>
   </div>
@@ -38,7 +38,7 @@
       <span>
         <textarea id="opinion" v-model="opinion"></textarea>
     <button id="submitbtn" @click="submitSurvey()">
-      Submit
+      {{ $t('footer.submit') }}
       </button>
       </span></div>
       <div class="col-lg-1">
@@ -118,11 +118,11 @@ beforeMount () {
       axios
         .post(`${process.env.ADONIS_PRIVATE_API}nps/surveys`, surveyPayload, this.config)
         .then(res => {
-          this.message = 'Thank you. We will use your feeedback to improve our service.';
+          this.message = this.$t('footer.thank_you');
           this.fadeSurvey();
         })
         .catch(error => {
-          this.message = 'Sorry Something went wrong. Try Again';
+          this.message = this.$t('footer.something_went_wrong');
         });
     },
     cancelSurvey() {
@@ -136,14 +136,14 @@ beforeMount () {
       axios
         .post(`${process.env.ADONIS_PRIVATE_API}nps/surveys`, surveyPayload, this.config)
         .then(res => {
-          if (res.data.message === 'User already surveyed within grace period.') {
+          if (res.data.message === this.$t('footer.user_already_surveyed')) {
             this.fadeSurvey();
           } else {
           this.fadeSurvey();
           }
         })
         .catch(error => {
-          this.message = 'Sorry Something went wrong. Try Again';
+          this.message = this.$t('footer.something_went_wrong');
         });
     },
 },
