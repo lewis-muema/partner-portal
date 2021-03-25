@@ -33,7 +33,7 @@
           <el-table-column>
             <template slot-scope="scope">
               <el-button size="mini" class="update-license" @click="openUpdateDialog(licenseData[scope.$index])">
-                Update
+                {{ $t('drivingLicence.update') }}
               </el-button>
             </template>
           </el-table-column>
@@ -47,19 +47,19 @@
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
                 <div v-if="fileName !== ''">{{ uploading_text }}</div>
-                <div v-else>Drop file here or <em>click to upload</em></div>
+                <div v-else>{{ $t('drivingLicence.drop_files_here') }} <em>{{ $t('drivingLicence.click_to_upload') }} </em></div>
               </el-upload>
               <div v-if="fileName !== ''">
                 <span class="reward-upload-label">
-                  Document uploaded successfully .
+                 {{ $t('drivingLicence.document_uploaded_successfully') }}
                 </span>
               </div>
             </div>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-          <el-button type="primary" @click="initiateUpload()" class="confirm-refund">Update</el-button>
+          <el-button @click="closeDialog()" class="cancel-refund">{{ $t('drivingLicence.cancel') }}</el-button>
+          <el-button type="primary" @click="initiateUpload()" class="confirm-refund">{{ $t('drivingLicence.update') }}</el-button>
         </span>
       </el-dialog>
       <notify />
@@ -97,7 +97,7 @@ export default {
       fileName: '',
       licenseData: [],
       errorObj: '',
-      uploading_text: 'Change',
+      uploading_text: this.$t('drivingLicence.change'),
     };
   },
   created() {
@@ -135,10 +135,10 @@ export default {
       this.fileName = '';
       const src = 'https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg';
       $(`#${imageId}`).attr('src', src);
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('drivingLicence.change');
     },
     handleClose(done) {
-      this.$confirm('Are you sure to close this dialog?')
+      this.$confirm(this.$t('drivingLicence.sure_close_dialogue'))
         .then(_ => {
           done();
           this.closeDialog();
@@ -156,15 +156,15 @@ export default {
       const currentTime = moment();
       let text = '';
       if ((data.driving_license.expiry_date === null || data.driving_license.expiry_date === '') && data.driving_license.renewal_status === -1) {
-        text = 'Kindly upload driving license';
+        text = this.$t('drivingLicence.kindly_upload_dl');
       } else if (data.driving_license.renewal_status === 0) {
-        text = 'Pending approval';
+        text = this.$t('drivingLicence.pending_approval');
       } else if (data.driving_license.renewal_status === 2) {
-        text = 'Document declined : Kindy re-upload or contact Customer Support';
+        text = this.$t('drivingLicence.document_declined');
       } else if (currentTime.diff(data.driving_license.expiry_date, 'days') >= 0 || currentTime.diff(data.driving_license.expiry_date, 'days') < 0) {
-        text = `Delivery license expires on ${data.driving_license.expiry_date} `;
+        text = this.$t('drivingLicence.delivery_licence_expires', { expiry_date: data.driving_license.expiry_date });
       } else {
-        text = `Delivery license expires on ${data.driving_license.expiry_date} `;
+        text = this.$t('drivingLicence.delivery_licence_expires', { expiry_date: data.driving_license.expiry_date });
       }
       return text;
     },
@@ -202,9 +202,9 @@ export default {
     },
     uploadDl() {
       if (Object.keys(this.licenseImageData).length === 0) {
-        this.notify(3, 0, 'Kindly upload driving license');
+        this.notify(3, 0, this.$t('drivingLicence.kindly_upload_dl'));
       } else {
-        this.uploading_text = 'Loading Preview ...';
+        this.uploading_text = this.$t('drivingLicence.loading_preview');
         const file = this.licenseImageData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -221,13 +221,13 @@ export default {
           },
           (err, data) => {
             if (err) {
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('drivingLicence.change');
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('drivingLicence.change');
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -245,7 +245,7 @@ export default {
         axios
           .post(`${process.env.NODE_PARTNER_API}partner_portal/update_document`, payload, this.config)
           .then(res => {
-            this.notify(3, 1, 'Driving License submitted');
+            this.notify(3, 1, this.$t('drivingLicence.dl_submited'));
             this.dialogVisible = false;
             this.show_loading = true;
             this.getLicenseData();
@@ -253,10 +253,10 @@ export default {
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, 'Request Refund Error . Try again');
+            this.notify(3, 0, this.$t('drivingLicence.request_refund_error'));
           });
       } else {
-        this.notify(3, 0, 'Kindly upload driving license');
+        this.notify(3, 0, this.$t('drivingLicence.kindly_upload_dl'));
       }
     },
     sanitizeFilename(name) {
@@ -293,7 +293,7 @@ export default {
     clearSavedData() {
       this.licenseImageData = {};
       this.fileName = '';
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('drivingLicence.change');
       this.closeDialog();
     },
   },
