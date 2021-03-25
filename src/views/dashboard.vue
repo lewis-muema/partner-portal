@@ -6,7 +6,7 @@
       <div class="dashboard-currency-buttons" v-for="(currency, index) in currencies" :key="index" :class="activeCurrency === currency ? 'active-currency' : ''" @click="activeCurrency = currency">{{ currency }}</div>
       <button class="dashboard-upload-invoice-button" @click="uploadStatus = true">
         <font-awesome-icon :icon="['fas', 'cloud-upload-alt']" />
-        Upload Invoice
+        {{ $t('dashboard.upload_invoice') }}
       </button>
     </div>
     <div class="page-dash" v-if="dataResponse && !uploadStatus">
@@ -17,7 +17,7 @@
               <font-awesome-icon :icon="['fas', 'coins']" class="new-dashboard__box-icon-orange" />
             </span>
             <div class="dashboard__box-content">
-              <span class="new-dashboard__box-text">Amount made this week</span>
+              <span class="new-dashboard__box-text">{{ $t('dashboard.amount_made_this_week') }}</span>
               <span class="new-dashboard__box-number new-dashboard__box-icon-orange">{{ activeCurrency }} {{ cashMadeThisWeek }}</span>
             </div>
           </div>
@@ -28,7 +28,7 @@
               <font-awesome-icon :icon="['fas', 'university']" class="new-dashboard__box-icon-green" />
             </span>
             <div class="dashboard__box-content">
-              <span class="new-dashboard__box-text">Next transfer</span>
+              <span class="new-dashboard__box-text">{{ $t('dashboard.next_transfer') }}</span>
               <span class="new-dashboard__box-number new-dashboard__box-icon-green">{{ activeCurrency }} {{ nextTransfer }}</span>
             </div>
           </div>
@@ -39,7 +39,7 @@
               <font-awesome-icon :icon="['fas', 'mobile']" class="new-dashboard__box-icon-maroon" />
             </span>
             <div class="dashboard__box-content">
-              <span class="new-dashboard__box-text">Weekly airime purchase</span>
+              <span class="new-dashboard__box-text">{{ $t('dashboard.weekly_airtime') }}</span>
               <span class="new-dashboard__box-number new-dashboard__box-icon-maroon">{{ activeCurrency }} {{ weeklyAirtimePurchases }}</span>
             </div>
           </div>
@@ -50,7 +50,7 @@
               <font-awesome-icon :icon="['fas', 'gas-pump']" class="new-dashboard__box-icon-yellow" />
             </span>
             <div class="dashboard__box-content">
-              <span class="new-dashboard__box-text">Weekly fuel advance</span>
+              <span class="new-dashboard__box-text">{{ $t('dashboard.weekly_fuel') }}</span>
               <span class="new-dashboard__box-number new-dashboard__box-icon-yellow">{{ activeCurrency }} 0</span>
             </div>
           </div>
@@ -61,7 +61,7 @@
               <font-awesome-icon :icon="['fas', 'calendar-week']" class="new-dashboard__box-icon-blue" />
             </span>
             <div class="dashboard__box-content">
-              <span class="new-dashboard__box-text">Pending D Notes</span>
+              <span class="new-dashboard__box-text">{{ $t('dashboard.pending_d_notes') }}</span>
               <span class="new-dashboard__box-number new-dashboard__box-icon-blue" v-if="count">{{ count }} </span>
             </div>
           </div>
@@ -78,16 +78,16 @@
                 <div class="col-lg-9">
                   <p class="new-dashboard-head-smol">
                     <span class="new-dashboard-graph-selector" :class="activeGraph === 'revenue' ? 'new-dashboard-active-graph' : ''" @click="activeGraph = 'revenue'">
-                      Revenue
+                      {{ $t('dashboard.revenue') }}
                     </span>
                     <span class="new-dashboard-graph-selector" :class="activeGraph === 'total orders' ? 'new-dashboard-active-graph' : ''" @click="activeGraph = 'total orders'">
-                      Total Orders
+                     {{ $t('dashboard.total_orders') }}
                     </span>
                     <span class="new-dashboard-graph-selector" :class="activeGraph === 'fuel advance' ? 'new-dashboard-active-graph' : ''" @click="activeGraph = 'fuel advance'">
-                      Fuel Advance
+                      {{ $t('dashboard.fuel_advance') }}
                     </span>
                     <span class="new-dashboard-graph-selector" :class="activeGraph === 'airtime purchases' ? 'new-dashboard-active-graph' : ''" @click="activeGraph = 'airtime purchases'">
-                      Airtime Purchases
+                      {{ $t('dashboard.airtime_purchases') }}
                     </span>
                   </p>
                   <div v-if="dataPoints && dataPoints.labels.length > 0">
@@ -95,12 +95,12 @@
                   </div>
                   <div v-else>
                     <img class="new-dashboard-graph-img" src="https://images.sendyit.com/partner_portal/images/no_data.png" alt="No gragh data" />
-                    <p class="new-dashboard-graph-label">No data to show here yet</p>
+                    <p class="new-dashboard-graph-label"> {{ $t('dashboard.no_data_yet') }}</p>
                   </div>
                 </div>
                 <div class="col-lg-3">
                   <div class="dashboard__rate-group">
-                    <span class="dashboard__rate-text">Average rating this week</span>
+                    <span class="dashboard__rate-text"> {{ $t('dashboard.avarage_rating_week') }}</span>
                     <div class="new-dashboard-ratings">
                       <span v-for="(star, index) in ratingThisWeek()" :key="index">
                         <font-awesome-icon v-if="star === 1" :icon="['fas', 'star']" class="new-dashboard__box-icon-orange all-stars" />
@@ -111,7 +111,7 @@
                     </div>
                   </div>
                   <div class="dashboard__rate-group">
-                    <span class="dashboard__rate-text">Average rating this month</span>
+                    <span class="dashboard__rate-text"> {{ $t('dashboard.avarage_rating_month') }}</span>
                     <div class="new-dashboard-ratings">
                       <span v-for="(star, index) in ratingThisMonth()" :key="index">
                         <font-awesome-icon v-if="star === 1" :icon="['fas', 'star']" class="new-dashboard__box-icon-orange all-stars" />
@@ -122,12 +122,12 @@
                     </div>
                   </div>
                   <div class="dashboard__rate-group">
-                    <span class="dashboard__rate-text">Hours online this week</span>
-                    <div class="new-dashboard-online-hours">{{ hoursOnlineThisWeek() }} Hours</div>
+                    <span class="dashboard__rate-text"> {{ $t('dashboard.hours_online_week') }}</span>
+                    <div class="new-dashboard-online-hours">{{ hoursOnlineThisWeek() }} {{ $t('dashboard.hours') }}</div>
                   </div>
                   <div class="dashboard__rate-group">
-                    <span class="dashboard__rate-text">Hours online this month</span>
-                    <div class="new-dashboard-online-hours">{{ hoursOnlineThisMonth() }} Hours</div>
+                    <span class="dashboard__rate-text"> {{ $t('dashboard.hours_online_month') }} </span>
+                    <div class="new-dashboard-online-hours">{{ hoursOnlineThisMonth() }} {{ $t('dashboard.hours') }}</div>
                   </div>
                 </div>
               </div>
@@ -139,40 +139,40 @@
     <div class="new-dashboard-upload-container" v-if="dataResponse && uploadStatus">
       <span class="upload-invoice-span">
         <font-awesome-icon :icon="['fas', 'arrow-left']" class="upload-invoice-back-button" @click="uploadStatus = false" />
-        Upload invoice
+       {{ $t('dashboard.upload_invoice') }}
       </span>
       <div class="upload-invoice-pad">
         <div class="upload-invoice-container">
           <div class="upload-invoice-pad-inputs" v-if="uploadingStage === 1">
             <div class="upload-invoice-inputs">
               <p>
-                Invoice number
+                {{ $t('dashboard.invoice_number') }}
               </p>
               <input type="text" class="upload__invoice-inputs" v-model="invoiceNumber" />
             </div>
             <div class="upload-invoice-inputs">
               <p>
-                Number of orders
+                {{ $t('dashboard.no_of_orders') }}
               </p>
               <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" class="upload__invoice-inputs" v-model="numberOfOrders" />
             </div>
             <div class="upload-invoice-inputs">
               <p>
-                Order dates
+                {{ $t('dashboard.order_dates') }}
               </p>
               <el-date-picker v-model="dateRange" type="daterange" range-separator="-" start-placeholder="Start date" end-placeholder="End date"> </el-date-picker>
             </div>
             <div class="upload-invoice-inputs">
               <div class="upload-invoice-submit-button" @click="transfer('invoiceUpload')">
                 <font-awesome-icon :icon="['fas', 'cloud-upload-alt']" />
-                Upload invoice
+                {{ $t('dashboard.upload_invoice') }}
               </div>
               <div v-if="invoiceSuccessUpload">
                 <span class="invoice-attached-label">
-                  invoice attached
+                  {{ $t('dashboard.invoice_attached') }}
                 </span>
                 <span class="invoice-change-label" @click="transfer('invoiceUpload')">
-                  change
+                   {{ $t('dashboard.change') }}
                 </span>
               </div>
             </div>
@@ -180,11 +180,11 @@
           </div>
           <div class="upload-invoice-buttons" v-if="uploadingStage === 1">
             <button class="upload-invoice-next-button" @click="submitInvoice()" :class="uploadInvoiceStatus ? 'ready-upload-status' : 'inactive-upload-status'">
-              Upload
+              {{ $t('dashboard.upload') }}
             </button>
           </div>
           <img class="uploading-gifs" :class="uploadingStage === 2 ? '' : 'hidden'" src="https://s3-eu-west-1.amazonaws.com/images.sendyit.com/partner_portal/images/loader.gif" alt="loader" />
-          <p v-if="uploadingStage === 2" class="center-text">Uploading</p>
+          <p v-if="uploadingStage === 2" class="center-text"> {{ $t('dashboard.uploading') }}</p>
           <img class="uploading-gifs" v-if="uploadingStage === 3" src="https://s3-eu-west-1.amazonaws.com/images.sendyit.com/partner_portal/images/check.gif" alt="check" />
         </div>
       </div>
@@ -592,7 +592,7 @@ export default {
       const files = document.getElementById('invoiceUpload')['files'];
       if (!files.length) {
         // eslint-disable-next-line no-alert
-        return alert('Please choose a file to upload first.');
+        return alert(this.$t('dashboard.choose_file_upload'));
       }
       this.invoiceSuccessUpload = false;
       const file = files[0];
