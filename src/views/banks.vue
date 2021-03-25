@@ -154,7 +154,7 @@
               </span>
             </p>
             <p class="banks__input-width font-16">
-              <span class="margin-right"> {{ $t('banks.acount_name') }}</span>
+              <span class="margin-right"> {{ $t('banks.account_name') }}</span>
               <span>
                 <input class="banks__new-account-input" type="text" v-model="name" @input="accountNameCheckpoint()" />
               </span>
