@@ -5,6 +5,10 @@ import authLogin from '../authLogin/en';
 import availableOrders from '../availableOrders/en';
 import banks from '../banks/en';
 import cdbStatus from '../cbdStatus/en';
+import dashboard from '../dashboard/en';
+import document from '../documents/en';
+import driverRequest from '../driverRequest/en';
+import drivingLicence from '../drivingLicense/en';
 
 const translation = {
     appHeader,
@@ -14,6 +18,10 @@ const translation = {
     availableOrders,
     banks,
     cdbStatus,
+    dashboard,
+    document,
+    driverRequest,
+    drivingLicence,
 };
 
 export default translation;
