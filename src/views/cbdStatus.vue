@@ -23,7 +23,7 @@
           <el-table-column width="700">
             <template slot-scope="scope">
               <div v-if="bikeData[scope.$index]['update_license_status'] === 1">
-                <span class="highlight-bike-status"> Update details </span>
+                <span class="highlight-bike-status"> {{ $t('cdbStatus.update_details') }} </span>
               </div>
               <div v-else>
                 {{ bikeStatus(bikeData[scope.$index]) }}
@@ -33,7 +33,7 @@
           <el-table-column>
             <template slot-scope="scope">
               <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(bikeData[scope.$index])" :class="{ disableUpdateBtn: bikeData[scope.$index]['update_license_status'] !== 1 }">
-                Update
+                {{ $t('cdbStatus.update') }}
               </el-button>
             </template>
           </el-table-column>
@@ -42,26 +42,26 @@
       <el-dialog :title="dialogTitle()" :visible.sync="dialogVisible" width="27%" :before-close="handleClose">
         <div class="inner-dialog">
           <div class="drag-image">
-            <p class="dialog-inner-label">Do you have a CBD license?</p>
+            <p class="dialog-inner-label"> {{ $t('cdbStatus.have_cbd_licence') }}</p>
             <div class="">
-              <el-radio v-model="radio" label="1" class="radio-options">Yes</el-radio>
+              <el-radio v-model="radio" label="1" class="radio-options"> {{ $t('cdbStatus.yes') }}</el-radio>
             </div>
             <div class="">
-              <el-radio v-model="radio" label="2" class="radio-options">No</el-radio>
+              <el-radio v-model="radio" label="2" class="radio-options"> {{ $t('cdbStatus.no') }}</el-radio>
             </div>
             <div class="" v-if="radio === '1'">
-              <p class="dialog-inner-label">Upload image of the license</p>
+              <p class="dialog-inner-label"> {{ $t('cdbStatus.upload_image') }}</p>
               <div class="bike-image">
                 <div class="download-refund-img">
                   <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
                     <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                     <i class="el-icon-upload"></i>
                     <div v-if="fileName !== ''">{{ uploading_text }}</div>
-                    <div v-else>Drop file here or <em>click to upload</em></div>
+                    <div v-else> {{ $t('cdbStatus.drop_files_here') }} <em> {{ $t('cdbStatus.click_to_upload') }}</em></div>
                   </el-upload>
                   <div v-if="fileName !== ''">
                     <span class="reward-upload-label">
-                      Document uploaded successfully .
+                      {{ $t('cdbStatus.doc_uploaded_successfully') }}
                     </span>
                   </div>
                 </div>
@@ -70,8 +70,8 @@
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-          <el-button type="primary" @click="initiateCbdLicenseUpdate()" class="confirm-refund">Update</el-button>
+          <el-button @click="closeDialog()" class="cancel-refund"> {{ $t('cdbStatus.cancel') }}</el-button>
+          <el-button type="primary" @click="initiateCbdLicenseUpdate()" class="confirm-refund"> {{ $t('cdbStatus.update') }}</el-button>
         </span>
       </el-dialog>
       <notify />
@@ -110,7 +110,7 @@ export default {
       bikeData: [],
       bikeDialogData: {},
       errorObj: '',
-      uploading_text: 'Change',
+      uploading_text: this.$t('cdbStatus.change'),
       fileName: '',
       bikeStatusData: {},
       rider: '',
@@ -168,7 +168,7 @@ export default {
       this.radio = '';
       this.fileName = '';
       this.bikeStatusData = {};
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('cdbStatus.change');
       this.bikeDialogData = data;
       this.rider = data.rider_id;
       this.dialogVisible = true;
@@ -178,13 +178,13 @@ export default {
       this.bikeDialogData = {};
       this.fileName = '';
       this.bikeStatusData = {};
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('cdbStatus.change');
     },
     dialogTitle() {
       return 'CBD status';
     },
     handleClose(done) {
-      this.$confirm('Are you sure to close this dialog?')
+      this.$confirm(this.$t('cdbStatus.sure_close_dialogue'))
         .then(_ => {
           done();
           this.closeDialog();
@@ -199,19 +199,19 @@ export default {
       return `https://images.sendyit.com/web_platform/vendor_type/side/v2/${id}.svg`;
     },
     bikeStatus(data) {
-      let cbd_state = 'Doesn’t have a CBD license';
+      let cbd_state = this.$t('cdbStatus.does_have_cbd_license');
 
       if (data.license_status === 1) {
-        cbd_state = 'Has a CBD license';
+        cbd_state = this.$t('cdbStatus.cbd_licence');
       }
 
       return cbd_state;
     },
     initiateCbdLicenseUpdate() {
       if (this.radio === '') {
-        this.notify(3, 0, 'Kindly provide all values');
+        this.notify(3, 0, this.$t('cdbStatus.provide_all_values'));
       } else if (this.radio === '1' && Object.keys(this.bikeStatusData).length === 0) {
-        this.notify(3, 0, 'Kindly upload cbd license document');
+        this.notify(3, 0, this.$t('cdbStatus.upload_cbd_licence'));
       } else {
         const payload = {
           sim_card_sn: this.bikeDialogData.sim_card_sn,
@@ -233,7 +233,7 @@ export default {
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, 'Bike Status Update Error . Try again');
+            this.notify(3, 0, this.$t('cdbStatus.upload_cbd_licence'));
           });
       }
     },
@@ -247,13 +247,13 @@ export default {
     handleRemove(file, fileList) {
       this.fileName = '';
       this.bikeStatusData = {};
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('cdbStatus.change');
     },
     uploadBikeData() {
       if (Object.keys(this.bikeStatusData).length === 0) {
-        this.notify(3, 0, 'Kindly upload cbd licence document');
+        this.notify(3, 0, this.$t('cdbStatus.upload_cbd_licence'));
       } else {
-        this.uploading_text = 'Loading Preview ...';
+        this.uploading_text = this.$t('cdbStatus.loading_preview');
         const file = this.bikeStatusData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -271,13 +271,13 @@ export default {
           },
           (err, data) => {
             if (err) {
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('cdbStatus.change');
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('cdbStatus.change');
             }
             // eslint-disable-next-line comma-dangle
           }
