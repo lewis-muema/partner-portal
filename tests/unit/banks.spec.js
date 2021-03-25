@@ -1,10 +1,15 @@
+import Vue from 'vue';
 import axios from 'axios';
 import moxios from 'moxios';
 import moment from 'moment';
+import VueI18n from 'vue-i18n';
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Banks from '@/views/banks.vue';
 import './localStorage';
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({});
 
 describe('Banks.vue', () => {
   beforeEach(() => {
@@ -16,6 +21,7 @@ describe('Banks.vue', () => {
   });
   const wrapper = shallowMount(Banks, {
     sync: false,
+    i18n,
   });
   const sessionData = {
     state: '1',
