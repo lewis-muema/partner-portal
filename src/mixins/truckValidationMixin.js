@@ -57,12 +57,12 @@ const truckValidationMixin = {
       const size = parseInt(this.truckSize, 10);
 
       if (size === 0) {
-        this.truckValidationErrorMessage =  this.$t('truckValidationMxn.input_truck_size');
+        this.truckValidationErrorMessage = this.$t('truckValidationMxn.input_truck_size');
         this.truckSizeErrorStatus = true;
         return false;
       }
       if (size < 18 || size > 33) {
-        this.truckValidationErrorMessage =  this.$t('truckValidationMxn.truck_size_less_or_more');
+        this.truckValidationErrorMessage = this.$t('truckValidationMxn.truck_size_less_or_more');
         this.truckSizeErrorStatus = true;
         return false;
       }
