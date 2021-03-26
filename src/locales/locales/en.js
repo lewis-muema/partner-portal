@@ -13,6 +13,11 @@ import externalLogin from '../externalLogin/en';
 import externalTracking from '../externalTrackin/en';
 import forgotPassword from '../forgotPassword/en';
 import insurance from '../insurence/en';
+import loans from '../loans/en';
+import login from '../login/en';
+import orders from '../orders/en';
+import perfomance from '../perfomance/en';
+import pending from '../pending/en';
 
 const translation = {
     appHeader,
@@ -30,6 +35,11 @@ const translation = {
     externalTracking,
     forgotPassword,
     insurance,
+    loans,
+    login,
+    orders,
+    perfomance,
+    pending,
 };
 
 export default translation;
