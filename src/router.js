@@ -25,6 +25,7 @@ import freightOrders from './views/freight/orders.vue';
 import freightOrderDetails from './views/freight/orderDetails.vue';
 import freightPreferences from './views/freight/preferences.vue';
 import bidding from './views/bidding/biddingWebForm';
+import recepientLogin from './views/recepientLogin';
 
 Vue.use(Router);
 
@@ -151,6 +152,11 @@ export default new Router({
       path: '/bidding/:shipment_id/:owner_id/',
       name: 'bidding',
       component: bidding,
+    },
+    {
+      path: '/recepientlogin',
+      name: 'recepientLogin',
+      component: recepientLogin,
     },
     {
       path: '/freight',
