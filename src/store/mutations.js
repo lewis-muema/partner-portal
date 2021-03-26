@@ -38,4 +38,7 @@ export default {
   setFreightStatus(state, freight_status) {
     state.freight_status = freight_status;
   },
+  setLanguage(state, language) {
+    state.language = language;
+  },
 };

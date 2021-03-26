@@ -1,0 +1,25 @@
+const en = {
+    transportation: 'TRANSPORTATION',
+    freight: 'FREIGHT',
+    menu: 'Menu',
+    vehicles: 'Vehicles',
+    tracking: 'Tracking',
+    statement: 'Statement',
+    banks: 'Banks',
+    loans: 'Loans',
+    saving: 'Savings',
+    document: 'Documents',
+    performance: 'Performance',
+    support: 'Support',
+    signout: 'Sign Out',
+    dashboard: 'Dashboard',
+    available: 'Available',
+    my_quotes: 'My Quotes',
+    my_orders: 'My Orders',
+    auxiliary_services: 'Auxiliary Services',
+    activity_log: 'Activity Log',
+    shipment: 'Shipments',
+    preference: 'Preferences',
+};
+
+export default en;

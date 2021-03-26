@@ -38,4 +38,7 @@ export default {
   getFreightStatus(state) {
     return state.freight_status;
   },
+  getLanguage(state) {
+    return state.language;
+  },
 };

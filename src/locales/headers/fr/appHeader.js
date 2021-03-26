@@ -1,0 +1,25 @@
+const fr = {
+    transportation: 'FR_TRANSPORTATION',
+    freight: 'FR_FREIGHT',
+    menu: 'FR_Menu',
+    vehicles: 'FR_Vehicles',
+    tracking: 'FR_Tracking',
+    statement: 'FR_Statement',
+    banks: 'FR_Banks',
+    loans: 'FR_Loans',
+    saving: 'FR_Savings',
+    document: 'FR_Documents',
+    performance: 'FR_Performance',
+    support: 'FR_Support',
+    signout: 'FR_Sign Out',
+    dashboard: 'FR_Dashboard',
+    available: 'FR_Available',
+    my_quotes: 'FR_My Quotes',
+    my_orders: 'FR_My Orders',
+    auxiliary_services: 'FR_Auxiliary Services',
+    activity_log: 'FR_Activity Log',
+    shipment: 'FR_Shipments',
+    preference: 'FR_Preferences',
+};
+
+export default fr;
