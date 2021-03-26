@@ -3,7 +3,7 @@
   <div class="">
     <div>
       <img
-        src="https://images.sendyit.com/partner_portal/images/owners_banner.svg"
+        src="https://images.sendyit.com/partner_portal/images/login-page-banner.svg"
         class="owners-banner-logo"
       >
     </div>
@@ -35,8 +35,7 @@ export default {
 .owners-banner-logo{
   display: block;
   margin: auto;
-  width: 133%;
-  padding-left: 17%;
-  margin-top: 10%;
+  width: 82%;
+  margin-top: 6%;
 }
 </style>
