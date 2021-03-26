@@ -298,7 +298,6 @@ a:hover {
   flex-direction: column;
   display: flex;
   -webkit-box-direction: normal;
-  margin-left: 13%;
 }
 .login-outer-content
 {
