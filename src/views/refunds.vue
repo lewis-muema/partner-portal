@@ -5,7 +5,7 @@
     <div class="stats-dash" v-else>
       <div class="request-refund--section">
         <el-button size="mini" class="request-refund-btn" @click="openRefundDialog()">
-          Request refund
+          {{ $t('refund.request_refund') }}
         </el-button>
       </div>
       <div class="row dashboard__row">
@@ -28,7 +28,7 @@
           <el-table-column label="Document">
             <template slot-scope="scope">
               <el-button size="mini" class="update-license" @click="openRefundView(refundsData[scope.$index])">
-                View
+                {{ $t('refund.view') }}
               </el-button>
             </template>
           </el-table-column>
@@ -42,11 +42,11 @@
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
                 <div v-if="fileName !== ''">{{ uploading_text }}</div>
-                <div v-else>Drop file here or <em>click to upload</em></div>
+                <div v-else>{{ $t('refund.drop_files_here') }}or <em>{{ $t('refund.click_to_upload') }}</em></div>
               </el-upload>
               <div v-if="fileName !== ''">
                 <span class="reward-upload-label">
-                  Document uploaded successfully .
+                {{ $t('refund.document_uploaded_successfully') }}
                 </span>
               </div>
             </div>
@@ -54,19 +54,19 @@
           <div class="main-dialog">
             <div class="request-refund-inputs">
               <p>
-                Description
+                {{ $t('refund.description') }}
               </p>
               <input type="text" class="request_refund-inputs" v-model="description" />
             </div>
             <div class="request-refund-inputs">
               <p>
-                Order number
+                {{ $t('refund.order_number') }}
               </p>
               <input type="text" class="request_refund-inputs" v-model="order_number" />
             </div>
             <div class="request-refund-inputs">
               <p>
-                Partner
+                {{ $t('refund.partner') }}
               </p>
               <el-select v-model="rider" placeholder="Select Partner" class="refund-rider-info">
                 <el-option v-for="item in rider_list" :key="item.rider_id" :label="item.name" :value="item.rider_id"> </el-option>
@@ -75,15 +75,15 @@
 
             <div class="request-refund-inputs">
               <p>
-                Refund amount
+                {{ $t('refund.refund_amount') }}
               </p>
               <input type="number" class="request_refund-inputs" v-model="refund_amount" />
             </div>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-          <el-button type="primary" @click="initiateRequest()" class="confirm-refund">Confirm</el-button>
+          <el-button @click="closeDialog()" class="cancel-refund">{{ $t('refund.cancel') }}</el-button>
+          <el-button type="primary" @click="initiateRequest()" class="confirm-refund">{{ $t('refund.confirm') }}</el-button>
         </span>
       </el-dialog>
 
@@ -97,32 +97,32 @@
           <div class="main-dialog">
             <div class="request-refund-inputs">
               <p class="request-refund-label">
-                Description
+                {{ $t('refund.description') }}
               </p>
               <p class="refund-text">{{ requestViewData.description }}</p>
             </div>
             <div class="request-refund-inputs">
               <p class="request-refund-label">
-                Order number
+                {{ $t('refund.order_number') }}
               </p>
               <p class="refund-text">{{ requestViewData.order_no }}</p>
             </div>
             <div class="request-refund-inputs">
               <p class="request-refund-label">
-                Refund amount
+                {{ $t('refund.refund_amount') }}
               </p>
               <p class="refund-text">{{ requestViewData.currency }} {{ requestViewData.amount }}</p>
             </div>
             <div class="request-refund-inputs" v-if="requestViewData.status === 2">
               <p class="request-refund-label">
-                Declined Reason
+                {{ $t('refund.declined_reason') }}
               </p>
               <p class="refund-text">{{ requestViewData.reason }}</p>
             </div>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog()" class="cancel-refund">Back</el-button>
+          <el-button @click="closeDialog()" class="cancel-refund">{{ $t('refund.back') }}</el-button>
         </span>
       </el-dialog>
       <notify />
@@ -168,7 +168,7 @@ export default {
       fileName: '',
       refundsData: [],
       errorObj: '',
-      uploading_text: 'Change',
+      uploading_text: this.$t('refund.change'),
     };
   },
   computed: {
@@ -272,13 +272,13 @@ export default {
           },
           (err, data) => {
             if (err) {
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('refund.change');
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('refund.change');
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -326,11 +326,11 @@ export default {
     checkStatus(value) {
       let status = '';
       if (value === 0) {
-        status = 'Pending';
+        status = this.$t('refund.pending');
       } else if (value === 1) {
-        status = 'Approved';
+        status = this.$t('refund.approved');
       } else {
-        status = 'Declined';
+        status = this.$t('refund.declined');
       }
 
       return status;
@@ -351,7 +351,7 @@ export default {
       return moment(date).format('MMMM Do YYYY');
     },
     handleClose(done) {
-      this.$confirm('Are you sure to close this dialog?')
+      this.$confirm(this.$t('refund.sure_close_dialog'))
         .then(_ => {
           done();
           this.closeDialog();
@@ -366,7 +366,7 @@ export default {
       this.uploadToS3();
     },
     closeDialog() {
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('refund.change');
       const imageId = 'imagePreview';
       this.refundRequest = false;
       this.dialogVisible = false;

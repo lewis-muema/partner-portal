@@ -63,6 +63,19 @@ const translation = {
     enter_name: 'Enter Name',
     id_number: 'ID Number',
     no_notes: 'No notes',
+    // quotes component
+    quotation: 'quotation',
+    bid_update: 'bid updated',
+    not_awarded: 'not awarded',
+    awarded: 'awarded',
+    sure_cancel_quote: 'Are you sure you want to cancel this quote?',
+    yes_cancel_quote: 'yes, cancel quote',
+    no: 'no',
+    approximate_weight_order: 'approximate weight of the order',
+    amount_small: 'amount',
+    adjust_quotes: 'adjust Quotes',
+    or_cancel_quote: 'or cancel this quote',
+
 };
 
 export default translation;

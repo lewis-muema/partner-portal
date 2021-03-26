@@ -62,7 +62,19 @@ const translation = {
     adjust_quote: 'FR_adjust quote',
     enter_name: 'FR_Enter Name',
     id_number: 'FR_ID Number',
-    no_notes: 'No notes',
+    no_notes: 'FR_No notes',
+    // quotes component
+    quotation: 'FR_quotation',
+    bid_update: 'FR_bid updated',
+    not_awarded: 'FR_not awarded',
+    awarded: 'FR_awarded',
+    sure_cancel_quote: 'FR_Are you sure you want to cancel this quote?',
+    yes_cancel_quote: 'FR_yes, cancel quote',
+    no: 'FR_no',
+    approximate_weight_order: 'FR_approximate weight of the order',
+    amount_small: 'FR_amount',
+    adjust_quotes: 'FR_adjust Quotes',
+    or_cancel_quote: 'FR_or cancel this quote',
 
 };
 
