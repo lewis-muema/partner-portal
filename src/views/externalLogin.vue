@@ -2,7 +2,7 @@
   <div>
     <div class="login__log-cont" v-if="state === 'login'">
       <div class="login__log-panel">
-        <p class="login__header-text">Request Log In</p>
+        <p class="login__header-text">{{ $t('externalLogin.request_log_in') }}</p>
         <div class="control-group">
           <div class="login__element">
             <input
@@ -10,7 +10,7 @@
               type="user"
               name="user"
               id="user"
-              placeholder="Enter User Email"
+              :placeholder="$t('externalLogin.enter_user_email')"
               required
               v-model="user"
             />
@@ -21,7 +21,7 @@
               type="password"
               name="password"
               id="password"
-              placeholder="Password"
+              :placeholder="$t('externalLogin.password')"
               required
               v-model="password"
             />
@@ -39,18 +39,18 @@
             <button
               class="form-control login__btn"
               type="submit"
-              value="Log in"
+              :value="$t('externalLogin.log_in')"
               id="login"
               @click="submit()"
-            >Submit</button>
+            >{{ $t('externalLogin.submit') }}</button>
           </div>
         </div>
       </div>
     </div>
     <div class="login__log-cont" v-if="state === 'verify'">
       <div class="login__log-panel">
-        <p class="login__header-text">Sign In</p>
-        <p>For your security, Sendy wants to make sure it's really you. We will send a message with your verification code</p>
+        <p class="login__header-text">{{ $t('externalLogin.sign_in') }}</p>
+        <p>{{ $t('externalLogin.for_your_security') }}</p>
         <div id="reset_error" class="error">{{ loginError }}</div>
         <div class="control-group">
           <div class="login__element">
@@ -59,7 +59,7 @@
               type="password"
               name="code"
               id="code"
-              placeholder="Authentication Code"
+              :placeholder="$t('externalLogin.authentication_code')"
               required
               v-model="code"
             />
@@ -71,10 +71,10 @@
               value="Reset Password"
               id="reset"
               @click="sendVerification()"
-            >Sign In</button>
+            > {{ $t('externalLogin.sign_in') }}</button>
           </div>
           <div class>
-            <p @click="verifyCode()" class="external-login__back-button">BACK</p>
+            <p @click="verifyCode()" class="external-login__back-button">{{ $t('externalLogin.back') }}</p>
           </div>
         </div>
       </div>
@@ -113,7 +113,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Enter owner phone number',
+        placeholder: this.$t('externalLogin.enter_owner_phone'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -181,18 +181,18 @@ export default {
         owner_phone: this.ownerPhone,
       });
       if (this.user && this.password && this.phoneValidity) {
-        this.handleButton("<div class='loading-spinner'></div> Please Wait");
+        this.handleButton(`<div class='loading-spinner'></div> ${this.$t('externalLogin.please_wait')}`);
         axios
           .post(`${process.env.VUE_APP_AUTH}rideradmin/external_login`, userPayload, { headers: { 'Content-Type': 'application/json' } })
           .then(response => {
             this.handleResponse(response);
           })
           .catch(error => {
-            this.handleButton('SUBMIT');
-            this.error('Please try again', 3000);
+            this.handleButton(this.$t('externalLogin.submit'));
+            this.error(this.$t('externalLogin.please_try_again'), 3000);
           });
       } else {
-        this.error('Please enter all details', 3000);
+        this.error(this.$t('externalLogin.please_enter_all'), 3000);
       }
     },
     handleResponse(response) {
@@ -217,7 +217,7 @@ export default {
         this.userPhone = phone;
         if (localStorage.externalRequestId) {
           this.verifyCode();
-          this.error('Please verify the code you recieved previously', 3000);
+          this.error(this.$t('externalLogin.please_verify_code'), 3000);
         } else {
           this.verifyPhone(phone);
         }
@@ -229,7 +229,7 @@ export default {
         localStorage.expiryDate = expiry;
         localStorage.sessionData = sessionData;
       } else {
-        this.handleButton('SUBMIT');
+        this.handleButton(this.$t('externalLogin.submit'));
         this.error(response.data.message, 7000);
       }
     },
@@ -240,7 +240,7 @@ export default {
       axios
         .post(process.env.VERIFY_PHONE, payload)
         .then(response => {
-          this.handleButton('SUBMIT');
+          this.handleButton(this.$t('externalLogin.submit'));
           if (response.data.status) {
             this.verifyCode();
             this.requestId = response.data.request_id;
@@ -249,7 +249,7 @@ export default {
             if (this.requestId) {
               this.verifyCode();
             } else {
-              this.error('Please wait for 15 minutes and try again', 3000);
+              this.error(this.$t('externalLogin.please_wait_for_15min'), 3000);
             }
           }
         })
@@ -264,11 +264,11 @@ export default {
           code: this.code,
           request_id: this.requestId,
         });
-        this.handleButton("<div class='loading-spinner spinner-position'></div> Signing in");
+        this.handleButton(`<div class='loading-spinner spinner-position'></div> ${this.$t('externalLogin.signing_in')}`);
         axios
           .post(process.env.CHECK_VERIFICATION, payload)
           .then(response => {
-            this.handleButton('SIGN IN');
+            this.handleButton(this.$t('externalLogin.sign_in'));
             if (response.data.status) {
               localStorage.removeItem('externalRequestId');
               this.TrackLogin('Track By-Pass Login', {
@@ -281,7 +281,7 @@ export default {
             } else {
               this.error(response.data.message, 5000);
               setTimeout(() => {
-                if (response.data.message === 'A wrong code was provided too many times. Workflow terminated') {
+                if (response.data.message === this.$t('externalLogin.wrong_code')) {
                   localStorage.removeItem('externalRequestId');
                   this.verifyCode();
                 }
@@ -289,12 +289,12 @@ export default {
             }
           })
           .catch(error => {
-            this.handleButton('SIGN IN');
+            this.handleButton(this.$t('externalLogin.sign_in'));
             this.errorObj = error.response;
             this.error(error.response, 3000);
           });
       } else {
-        this.error('Invalid code', 3000);
+        this.error(this.$t('externalLogin.invalid_code'), 3000);
       }
     },
     handleButton(data) {

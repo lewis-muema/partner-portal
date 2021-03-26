@@ -9,6 +9,10 @@ import dashboard from '../dashboard/en';
 import document from '../documents/en';
 import driverRequest from '../driverRequest/en';
 import drivingLicence from '../drivingLicense/en';
+import externalLogin from '../externalLogin/en';
+import externalTracking from '../externalTrackin/en';
+import forgotPassword from '../forgotPassword/en';
+import insurance from '../insurence/en';
 
 const translation = {
     appHeader,
@@ -22,6 +26,10 @@ const translation = {
     document,
     driverRequest,
     drivingLicence,
+    externalLogin,
+    externalTracking,
+    forgotPassword,
+    insurance,
 };
 
 export default translation;
