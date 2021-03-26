@@ -18,7 +18,8 @@ import login from '../login/fr';
 import orders from '../orders/fr';
 import perfomance from '../perfomance/fr';
 import pending from '../pending/fr';
-
+import refund from '../refund/fr';
+import riderTodayStats from '../riderTodayStats/fr';
 
 const translation = {
     appHeader,
@@ -41,6 +42,8 @@ const translation = {
     orders,
     perfomance,
     pending,
+    refund,
+    riderTodayStats,
 };
 
 export default translation;
