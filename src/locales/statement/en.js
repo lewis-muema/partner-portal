@@ -32,6 +32,7 @@ const translation = {
     to: 'To',
     loading: 'LOADING',
     sending_request: 'Sending request',
+    fetching_daily_stats: 'Fetching Daily Rider Statistics',
 };
 
 export default translation;
