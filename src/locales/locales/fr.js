@@ -20,6 +20,9 @@ import perfomance from '../perfomance/fr';
 import pending from '../pending/fr';
 import refund from '../refund/fr';
 import riderTodayStats from '../riderTodayStats/fr';
+import savings from '../savings/fr';
+import signature from '../signature/fr';
+import statement from '../statement/en';
 
 const translation = {
     appHeader,
@@ -44,6 +47,9 @@ const translation = {
     pending,
     refund,
     riderTodayStats,
+    savings,
+    signature,
+    statement,
 };
 
 export default translation;
