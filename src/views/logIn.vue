@@ -78,7 +78,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Enter a phone number',
+        placeholder: this.$t('login.enter_phone_number'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -182,14 +182,14 @@ export default {
       };
       axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/account`, payload).then(response => {
         if (response.data.status) {
-          this.handleButton('Reset Password');
+          this.handleButton(this.$t('login.reset_password'));
           this.error(response.data.message, 7000);
         } else {
-          this.handleButton('Reset Password');
-          this.error('Please try again', 7000);
+          this.handleButton(this.$t('login.reset_password'));
+          this.error(this.$t('login.please_try_again'), 7000);
         }
       }).catch(error => {
-        this.handleButton('Reset Password');
+        this.handleButton(this.$t('login.reset_password'));
         this.error(error.response.data.message, 7000);
       });
     },
@@ -205,8 +205,8 @@ export default {
         if (response.status === 200) {
           this.handleResponse(response);
         } else {
-          this.handleButton('LOG IN');
-          this.error('Please try again', 7000);
+          this.handleButton(this.$t('login.log_in_capital'));
+          this.error(this.$t('login.please_try_again'), 7000);
         }
       });
     },
@@ -236,8 +236,8 @@ export default {
         this.TrackLogin(parsedData.payload);
         this.fetchSignatureStatus(parsedData.payload.phone);
       } else {
-        this.handleButton('LOG IN');
-        this.error('Sorry, your details did not match!', 7000);
+        this.handleButton(this.$t('login.log_in_capital'));
+        this.error(this.$t('login.sorry_details_not_match'), 7000);
       }
     },
     handleButton(data) {

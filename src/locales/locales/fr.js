@@ -1,14 +1,23 @@
 import appHeader from '../headers/fr/appHeader';
 import footer from '../headers/fr/footer';
-import truckValidationMxn from '../truckValidationMixin/en';
+import truckValidationMxn from '../truckValidationMixin/fr';
 import authLogin from '../authLogin/fr';
 import availableOrders from '../availableOrders/fr';
-import banks from '../banks/en';
-import cdbStatus from '../cbdStatus/en';
-import dashboard from '../dashboard/en';
-import document from '../documents/en';
-import driverRequest from '../driverRequest/en';
-import drivingLicence from '../drivingLicense/en';
+import banks from '../banks/fr';
+import cdbStatus from '../cbdStatus/fr';
+import dashboard from '../dashboard/fr';
+import document from '../documents/fr';
+import driverRequest from '../driverRequest/fr';
+import drivingLicence from '../drivingLicense/fr';
+import externalLogin from '../externalLogin/fr';
+import externalTracking from '../externalTrackin/fr';
+import forgotPassword from '../forgotPassword/fr';
+import insurance from '../insurence/fr';
+import loans from '../loans/fr';
+import login from '../login/fr';
+import orders from '../orders/fr';
+import perfomance from '../perfomance/fr';
+import pending from '../pending/fr';
 
 
 const translation = {
@@ -23,6 +32,15 @@ const translation = {
     document,
     driverRequest,
     drivingLicence,
+    externalLogin,
+    externalTracking,
+    forgotPassword,
+    insurance,
+    loans,
+    login,
+    orders,
+    perfomance,
+    pending,
 };
 
 export default translation;

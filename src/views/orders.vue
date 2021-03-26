@@ -6,23 +6,23 @@
       <div class="truckflow__container-outer">
         <div class="truckflow__container-search">
           <span class="container__search-input">
-            <input type="text" onfocus="value = ''" class="container__search-element" id="inp" placeholder="Enter pickup" @input="filterPickup()" @keyup.delete="refresh()" />
+            <input type="text" onfocus="value = ''" class="container__search-element" id="inp" :placeholder="$t('orders.enter_pickup')" @input="filterPickup()" @keyup.delete="refresh()" />
           </span>
           <span class="container__search-input">
-            <input type="text" onfocus="value = ''" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
+            <input type="text" onfocus="value = ''" class="container__search-element" id="dst" :placeholder="$t('orders.enter_destination')" @input="filterDest()" @keyup.delete="refresh()" />
           </span>
           <span class="container__search-select">
             <select name class="container__search-element select-font" @change="filterVendor()" id="vend" :disabled="orders.length === 0">
-              <option value selected>Select type of truck</option>
-              <option value="Pick up">Pick Up</option>
-              <option value="Van">Van</option>
-              <option value="3T Truck">3 Tonne Truck</option>
-              <option value="5T Truck">5 Tonne Truck</option>
-              <option value="10T Truck">10 Tonne Truck</option>
-              <option value="14T Truck">14 Tonne Truck</option>
-              <option value="20T Truck">20 Tonne Truck</option>
-              <option value="28T Truck">28 Tonne Truck</option>
-              <option value="Freight">Freight Truck</option>
+              <option value selected> {{ $t('orders.select_type_truck') }}</option>
+              <option value="Pick up"> {{ $t('orders.pick_up') }}</option>
+              <option value="Van"> {{ $t('orders.van') }}</option>
+              <option value="3T Truck">3 {{ $t('orders.tonne_truck') }}</option>
+              <option value="5T Truck">5 {{ $t('orders.tonne_truck') }}</option>
+              <option value="10T Truck">10 {{ $t('orders.tonne_truck') }}</option>
+              <option value="14T Truck">14 {{ $t('orders.tonne_truck') }}</option>
+              <option value="20T Truck">20 {{ $t('orders.tonne_truck') }}</option>
+              <option value="28T Truck">28 {{ $t('orders.tonne_truck') }}</option>
+              <option value="Freight">{{ $t('orders.freight_truck') }}</option>
             </select>
           </span>
           <span class="container__search-select" v-if="ordercount.length > 0">
@@ -36,23 +36,23 @@
         </select>
         <div class="bids">
           <div class="orders__list-cash-filter">
-            <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
-            <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
-            <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+            <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">{{ $t('orders.all') }}</span>
+            <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">{{ $t('orders.cash_orders') }}</span>
+            <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">{{ $t('orders.non_cash_orders') }}</span>
           </div>
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
-              <div class="orders__col-head pickup uppercase">pickup location</div>
-              <div class="orders__col-head load uppercase">type of load</div>
-              <div class="orders__col-head destination uppercase">destination</div>
-              <div class="orders__col-head distance uppercase">distance</div>
-              <div class="orders__col-head pick-date uppercase">pickup date</div>
-              <div class="orders__col-head truck uppercase">truck</div>
-              <div class="orders__col-head orderNo">order number</div>
-              <div class="orders__col-head price-align uppercase">price</div>
-              <div class="orders__col-head price-align uppercase">vat</div>
+              <div class="orders__col-head pickup uppercase"> {{ $t('orders.pickup_location') }}</div>
+              <div class="orders__col-head load uppercase"> {{ $t('orders.type_of_load') }}</div>
+              <div class="orders__col-head destination uppercase"> {{ $t('orders.destination') }}</div>
+              <div class="orders__col-head distance uppercase"> {{ $t('orders.distance') }}</div>
+              <div class="orders__col-head pick-date uppercase"> {{ $t('orders.pickup_date') }}</div>
+              <div class="orders__col-head truck uppercase">{{ $t('orders.truck') }}</div>
+              <div class="orders__col-head orderNo"> {{ $t('orders.order_number') }}</div>
+              <div class="orders__col-head price-align uppercase">{{ $t('orders.price') }} </div>
+              <div class="orders__col-head price-align uppercase">{{ $t('orders.vat') }}</div>
               <div class="orders__col-head bid-in uppercase"></div>
-              <div class="orders__col-head center-action uppercase">action</div>
+              <div class="orders__col-head center-action uppercase">{{ $t('orders.action') }}</div>
             </div>
             <div class="loading" v-if="loadingStatus"></div>
             <div class="no-records" v-if="!loadingStatus && orders.length === 0">
@@ -67,55 +67,55 @@
                 :key="order.id"
               >
                 <div class="orders__list-col pickup">
-                  <p class="orders__mobile-col">Pickup</p>
+                  <p class="orders__mobile-col">{{ $t('orders.pickup') }}</p>
                   <p class="row1" @mouseover="showFromTooltip(order.id)" @mouseout="hideFromTooltip(order.id)">{{ shortFromName(order.id) }}</p>
                   <span :class="`tooltiptext sp${order.id}`">{{ order.from_name }}, {{ order.start_address }}</span>
                 </div>
                 <div class="orders__list-col load">
-                  <p class="orders__mobile-col">Load</p>
+                  <p class="orders__mobile-col"> {{ $t('orders.load') }}</p>
                   <p>N/A</p>
                 </div>
                 <div class="orders__list-col destination">
-                  <p class="orders__mobile-col">Destination</p>
+                  <p class="orders__mobile-col">{{ $t('orders.destination_capital') }}</p>
                   <p class="row2" @mouseover="showToTooltip(order.id)" @mouseout="hideToTooltip(order.id)">{{ shortToName(order.id) }}</p>
                   <span :class="`tooltiptext sps${order.id}`">{{ order.to_name }}, {{ order.end_address }}</span>
                 </div>
                 <div class="orders__list-col distance">
-                  <p class="orders__mobile-col">Distance</p>
+                  <p class="orders__mobile-col">{{ $t('orders.distance') }}</p>
                   <p class="orders__mobile-col--distance">{{ formatDistance(order.id) }} km</p>
                 </div>
                 <div class="orders__list-col pick-date">
-                  <p class="orders__mobile-col">Date</p>
+                  <p class="orders__mobile-col">{{ $t('orders.date') }}</p>
                   <p>{{ timeFormat(order.id) }}</p>
                 </div>
                 <div class="orders__list-col truck">
-                  <p class="orders__mobile-col">Truck</p>
+                  <p class="orders__mobile-col">{{ $t('orders.truck_capital') }}</p>
                   <p class="row3">{{ order.vendorname }}</p>
                 </div>
                 <div class="orders__list-col orderNo">
-                  <p class="orders__mobile-col">order number</p>
+                  <p class="orders__mobile-col"> {{ $t('orders.order_number') }}</p>
                   <p>{{ order.orderNo }}</p>
                 </div>
 
                 <div class="orders__list-col price-align">
-                  <p class="orders__mobile-col">Price</p>
+                  <p class="orders__mobile-col">{{ $t('orders.price_capital') }}</p>
                   <p class="right-align">{{ order.currency }} {{ currencyFormat(order.id) }}</p>
                 </div>
                 <div class="orders__list-col price-align">
-                  <p class="orders__mobile-col">Vat</p>
+                  <p class="orders__mobile-col">{{ $t('orders.vat') }}</p>
                   <p class="right-align">{{ order.currency }} {{ vatCurrencyFormat(order.id) }}</p>
                 </div>
 
                 <div class="orders__list-col bid-in"></div>
                 <div class="orders__list-col center-action">
-                  <P class="orders__mobile-col uppercase">action</P>
+                  <P class="orders__mobile-col uppercase">{{ $t('orders.action') }}</P>
                   <div class="orders__statuses">
                     <span>
-                      <p class="orders__confirm-icon confirmedbutton orders__buttons" v-if="confirmedStatus(order)">confirmed</p>
-                      <p class="orders__confirm-icon in-transitButton orders__buttons" v-if="inTransitStatus(order)">in transit</p>
-                      <p class="orders__confirm-icon deliveredButton orders__buttons" v-if="deliveredStatus(order)">delivered</p>
-                      <p class="orders__confirm-icon pendingDnotes orders__buttons" v-if="pendingDnotes(order)">pending d.notes</p>
-                      <p class="orders__confirm-icon cancelledButton orders__buttons" v-if="cancelledStatus(order)">cancelled</p>
+                      <p class="orders__confirm-icon confirmedbutton orders__buttons" v-if="confirmedStatus(order)">{{ $t('orders.confirmed') }}</p>
+                      <p class="orders__confirm-icon in-transitButton orders__buttons" v-if="inTransitStatus(order)"> {{ $t('orders.in_transit') }}</p>
+                      <p class="orders__confirm-icon deliveredButton orders__buttons" v-if="deliveredStatus(order)">{{ $t('orders.delivered') }}</p>
+                      <p class="orders__confirm-icon pendingDnotes orders__buttons" v-if="pendingDnotes(order)"> {{ $t('orders.pending_d_notes') }}</p>
+                      <p class="orders__confirm-icon cancelledButton orders__buttons" v-if="cancelledStatus(order)"> {{ $t('orders.cancelled') }}</p>
                     </span>
                     <span>
                       <i class="material-icons icon arrow" :class="orderStatuses(order)" v-if="opened.includes(order.id)">keyboard_arrow_down</i>
@@ -128,66 +128,66 @@
                 <div colspan="8" class="expanded-row">
                   <div class="map-details--go-back" @click="toggle(order.id)">
                     <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
-                    <span class="map-details-go-back--span">Back</span>
+                    <span class="map-details-go-back--span">{{ $t('orders.back') }}</span>
                   </div>
                   <div class="map__column">
                     <img :src="createStaticMapUrl(order)" class="map" />
                     <div class="map__details-row">
                       <div class="map__details-col">
-                        <p class="map__details-pickup heading uppercase">pickup location</p>
+                        <p class="map__details-pickup heading uppercase">{{ $t('orders.pickup_location') }}</p>
                         <p class="map__details-pickup par">{{ order.from_name }}</p>
-                        <p class="map__details-date heading uppercase">date and time</p>
+                        <p class="map__details-date heading uppercase">{{ $t('orders.date_and_time') }}</p>
                         <p class="map__details-date par">{{ timeFormat(order.id) }}</p>
                       </div>
                       <div class="map__details-col">
-                        <p class="map__details-dest heading uppercase">destination</p>
+                        <p class="map__details-dest heading uppercase">{{ $t('orders.destination') }}</p>
                         <p class="map__details-dest par">{{ order.to_name }}</p>
-                        <p class="map__details-distance heading uppercase">distance</p>
+                        <p class="map__details-distance heading uppercase">{{ $t('orders.distance') }}</p>
                         <p class="map__details-distance par">{{ order.distance }}</p>
-                        <p class="map__details-date heading uppercase">Order type</p>
+                        <p class="map__details-date heading uppercase"> {{ $t('orders.order_type') }}</p>
                         <p class="map__details-date par" v-if="order.order_type === 'Normal order'">{{ order.order_type }}</p>
                         <p class="map__details-date par capitalize-text" v-else>{{ order.order_type.order_type_tag.replace(/_/g, " ") }}</p>
                       </div>
                     </div>
                   </div>
                   <div class="order__column">
-                    <p class="order__weight heading uppercase">weight of the order</p>
-                    <p class="order__weight par" v-if="!weight">Not applicable</p>
+                    <p class="order__weight heading uppercase"> {{ $t('orders.weight_of_order') }}</p>
+                    <p class="order__weight par" v-if="!weight">{{ $t('orders.not_applicable') }}</p>
                     <p class="order__weight par" v-else>{{ weight }}</p>
-                    <p class="order__loader heading uppercase">loader(s) needed</p>
-                    <p class="order__loader par" v-if="!loaders">Not applicable</p>
+                    <p class="order__loader heading uppercase">{{ $t('orders.loaders_needed') }}</p>
+                    <p class="order__loader par" v-if="!loaders">{{ $t('orders.not_applicable') }}</p>
                     <p class="order__loader par" v-else>{{ loaders }}</p>
-                    <p class="order__loadtype heading uppercase">type of load</p>
-                    <p class="order__loadtype par" v-if="!load">Not applicable</p>
+                    <p class="order__loadtype heading uppercase"> {{ $t('orders.type_of_load') }}</p>
+                    <p class="order__loadtype par" v-if="!load">{{ $t('orders.not_applicable') }}</p>
                     <p class="order__loadtype par" v-else>{{ load }}</p>
-                    <p class="order__notes heading uppercase">notes</p>
+                    <p class="order__notes heading uppercase"> {{ $t('orders.notes') }}</p>
                     <p class="order__notes par">{{ orderNotes(order.id) }}</p>
                   </div>
                   <div class="order__column">
-                    <p class="order__amount heading uppercase">amount</p>
+                    <p class="order__amount heading uppercase">{{ $t('orders.amount') }}</p>
                     <p class="order__amount par">{{ order.currency }} {{ currencyFormat(order.id) }}</p>
                     <div v-if="order.confirmStatus === 1 && order.orderStatus === 1">
                       <div class="assigned">
-                        <p class="order__amount heading uppercase">vehicle assigned to this order</p>
+                        <p class="order__amount heading uppercase"> {{ $t('orders.vehicle_assigned_Order') }}</p>
                         <p class="order__amount par">{{ confirmedVehicle }}</p>
                       </div>
                       <div class="assigned">
-                        <p class="order__amount heading uppercase">driver assigned to this order</p>
+                        <p class="order__amount heading uppercase">{{ $t('orders.driver_assigned_order') }}</p>
                         <p class="order__amount par">{{ confirmedDriver }}</p>
                       </div>
                       <div class="assigned" v-if="pendingDnotes(order)">
-                        <p class="order__amount heading uppercase">delivery status</p>
-                        <p class="order__amount par">D Notes NOT delivered</p>
+                        <p class="order__amount heading uppercase"> {{ $t('orders.delivery_status') }}</p>
+                        <p class="order__amount par"> {{ $t('orders.d_notes_not_delivered') }}</p>
                       </div>
                       <div class="assigned" v-if="orderStatuses(order) === 'confirmedbutton'">
                         <button class="intransit--order__button order__button" @click="completeOrder(order, 'rider_app_pick_up')" v-if="sessionInfo.super_user">
-                          Pick up the order
+                          {{ $t('orders.pickup_the_order') }}
                           <div class="loading-spinner intransit--order__spinner" v-if="orderLoadingStatus"></div>
                         </button>
                       </div>
                       <div class="assigned" v-if="orderStatuses(order) === 'in-transitButton'">
                         <button class="complete--order__button order__button" @click="completeOrder(order, 'rider_app_deliver')" v-if="sessionInfo.super_user">
-                          Complete order
+                          {{ $t('orders.complete_order') }}
                           <div class="loading-spinner complete--order__spinner" v-if="orderLoadingStatus"></div>
                         </button>
                       </div>
@@ -285,7 +285,7 @@ export default {
       orderRange: '0 - 100',
       pay_method: 0,
       payment_methods: [],
-      loaderMessage: 'There are no orders',
+      loaderMessage: this.$t('orders.no_orders'),
     };
   },
   computed: {
@@ -507,7 +507,7 @@ export default {
         if (this.orders[id - 1].package_details.load_weight) {
           this.weight = `${this.orders[id - 1].package_details.load_weight} ${this.orders[id - 1].package_details.load_units}`;
         } else {
-          this.weight = 'No weight provided';
+          this.weight = this.$t('orders.no_weight_provided');
         }
         if (this.orders[id - 1].package_details.no_of_loaders) {
           this.loaders = this.orders[id - 1].package_details.no_of_loaders;
@@ -707,7 +707,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.loaderMessage = 'We are experiencing some issues while fetching your orders, Please try again later';
+            this.loaderMessage = this.$t('orders.experiencing_some_issues');
             this.loadingStatus = false;
           }
         });
@@ -755,7 +755,7 @@ export default {
       orderDetails.confirmStatus = confirmStatus;
       orderDetails.delivery_status = row.delivery_status;
       orderDetails.vat_amount = row.vat_amount;
-      orderDetails.order_type = Object.prototype.hasOwnProperty.call(JSON.parse(row.order_details).values, 'dedicated_order_details') ? JSON.parse(row.order_details).values.dedicated_order_details : 'Normal order';
+      orderDetails.order_type = Object.prototype.hasOwnProperty.call(JSON.parse(row.order_details).values, 'dedicated_order_details') ? JSON.parse(row.order_details).values.dedicated_order_details : this.$t('orders.normal_order');
       return orderDetails;
     },
   },
