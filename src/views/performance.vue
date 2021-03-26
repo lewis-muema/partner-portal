@@ -4,7 +4,7 @@
     <statsLoading v-if="show_loading" class="stats_loader-align" />
     <div class="stats-performance-dash" v-else>
       <div class="performance--header">
-        Performance
+        {{ $t('perfomance.perfomance') }}
       </div>
       <div class="row dashboard__row performance--row">
         <el-table :data="ridersData" class="documents-table-outer">
@@ -33,7 +33,7 @@
           <el-table-column label="Actions">
             <template slot-scope="scope">
               <span :class="showPerformanceHiglight(ridersData[scope.$index]['vendor_type'])" @click="showRiderRating(ridersData[scope.$index])">
-                View Performance
+                {{ $t('perfomance.view_perfomance') }}
                 <i class="el-icon-arrow-right"></i>
               </span>
             </template>
