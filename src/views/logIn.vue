@@ -1,41 +1,48 @@
 <template>
   <div>
-    <div class="login__log-cont" v-if="state === 'login'">
-      <div class="login__log-panel">
-        <p class="login__header-text">Log in to Sendy</p>
-        <div class="control-group">
-          <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
-          </div>
-          <div class="login__element">
-            <input class="login__password-input" type="password" name="password" id="password" placeholder="Password" required v-model="password" />
-          </div>
-          <div id="loggin_error" class="error">{{ loginError }}</div>
-          <div class="login__element">
-            <button class="form-control login__btn" type="submit" value="Log in" id="login" @click="postLogin">Log In</button>
-          </div>
-          <div class="login__inst">
-            <a href="#" @click="forgotPwd()" class="login__forgotPass">Forgot Password?</a>
-          </div>
-          <div class="login__inst">
-            Don't have an account?
-            <a href="#" @click="redirect()" class="login__sign-up">Sign Up</a>
+    <div class="login-outer-content">
+      <div class="">
+        <owners-banner-component />
+      </div>
+      <div class="login-group-card">
+        <div class="login__log-cont" v-if="state === 'login'">
+          <div class="login__log-panel">
+            <p class="login__header-text">Log in to Sendy</p>
+            <div class="control-group">
+              <div class="login__element">
+                <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
+              </div>
+              <div class="login__element">
+                <input class="login__password-input" type="password" name="password" id="password" placeholder="Password" required v-model="password" />
+              </div>
+              <div id="loggin_error" class="error">{{ loginError }}</div>
+              <div class="login__element">
+                <button class="form-control login__btn" type="submit" value="Log in" id="login" @click="postLogin">Log In</button>
+              </div>
+              <div class="login__inst">
+                <a href="#" @click="forgotPwd()" class="login__forgotPass">Forgot Password?</a>
+              </div>
+              <div class="login__inst">
+                Don't have an account?
+                <a href="#" @click="redirect()" class="login__sign-up">Sign Up</a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="login__log-cont" v-if="state === 'reset'">
-      <div class="login__log-panel">
-        <p class="login__header-text">Reset Password</p>
-        <div id="reset_error" class="error">{{ loginError }}</div>
-        <div class="control-group">
-          <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
+        <div class="login__log-cont" v-if="state === 'reset'">
+          <div class="login__log-panel">
+            <p class="login__header-text">Reset Password</p>
+            <div id="reset_error" class="error">{{ loginError }}</div>
+            <div class="control-group">
+              <div class="login__element">
+                <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
+              </div>
+              <div class="login__element">
+                <button class="form-control reset__btn" type="submit" value="Reset Password" id="reset" @click="postForgot">Reset Password</button>
+              </div>
+              <a href="#" @click="forgotPwd()" class="login__forgotPass">Sign In</a>
+            </div>
           </div>
-          <div class="login__element">
-            <button class="form-control reset__btn" type="submit" value="Reset Password" id="reset" @click="postForgot">Reset Password</button>
-          </div>
-          <a href="#" @click="forgotPwd()" class="login__forgotPass">Sign In</a>
         </div>
       </div>
     </div>
@@ -50,6 +57,7 @@ import axios from 'axios';
 import sha1 from 'js-sha1';
 import Mixpanel from 'mixpanel';
 import { Base64 } from 'js-base64';
+import ownersBannerComponent from './ownersBannerComponent.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
@@ -57,6 +65,7 @@ export default {
   title: 'Partner Portal - Log In',
   components: {
     VueTelInput,
+    ownersBannerComponent,
   },
   data() {
     return {
@@ -262,6 +271,11 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1036px) {
+  .login-outer-content , .login-group-card {
+    display: contents !important;
+  }
+}
 p {
   font-size: 24px;
   color: #666;
@@ -275,5 +289,20 @@ a:hover {
 }
 .login__phone-input .dropdown .selection {
   margin-left: 15px;
+}
+.login-group-card{
+  -webkit-box-flex: 2;
+  flex: 1;
+  padding-right: 1%;
+  -webkit-box-orient: vertical;
+  flex-direction: column;
+  display: flex;
+  -webkit-box-direction: normal;
+  margin-left: 13%;
+}
+.login-outer-content
+{
+  display: flex;
+  flex-direction: row !important;
 }
 </style>

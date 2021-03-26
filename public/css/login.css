@@ -9,6 +9,7 @@
 
 .login__header-text {
   font-size: 24px;
+  text-align: left;
 }
 
 .login__forgotPass,
@@ -70,9 +71,7 @@ input::-webkit-input-placeholder {
 
 .login__log-panel {
   max-width: 430px;
-  border: 1px solid #d8dfe6;
-  border-radius: 4px;
-  margin: 25px auto;
+  margin: 22% auto;
   padding: 25px;
 }
 
@@ -154,4 +153,16 @@ input {
 
 .external-login__back-button {
   cursor: pointer;
+}
+@media (max-width: 1036px) {
+  .login__log-panel {
+    max-width: 430px !important;
+    border: 1px solid #d8dfe6 !important;
+    border-radius: 4px;
+    margin: 25px auto !important;
+    padding: 25px !important;
+  }
+  .login__header-text{
+    text-align: center !important;
+  }
 }
