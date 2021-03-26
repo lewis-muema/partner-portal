@@ -37,7 +37,7 @@
     </div>
     <div class="performance--header--item__right">
       <div class="rating--section">
-        <a>Rating</a>
+        <a>{{ $t('perfomance.rating') }}</a>
         <p>
           <span style="padding-top: 3%;">{{ rider.rating }}</span> <el-rate v-model="rider.rating" disabled class="el-rate__icon" disabled-void-color="#C0C4CC" :colors="['#EE7D00', '#EE7D00', '#EE7D00']"> </el-rate>
         </p>
