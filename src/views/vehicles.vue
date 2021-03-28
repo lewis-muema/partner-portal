@@ -327,7 +327,7 @@
             name
             value
             class="form-control"
-            placeholder="$t('vehicles.reg_no')"
+            :placeholder="$t('vehicles.reg_no')"
             id="selReg"
             v-model="regNo"
           />
