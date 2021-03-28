@@ -5,7 +5,7 @@
     <modal name="driver-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modLabel">Assign a Driver</h5>
+          <h5 class="modal-title" id="modLabel">{{ $t('vehicles.assign_driver') }}</h5>
           <button
             type="button"
             class="close"
@@ -25,7 +25,7 @@
             data-target="#driModal"
             data-dismiss="modal"
             @click="confirmOwner();"
-          >Assign me as a Driver</button>
+          > {{ $t('vehicles.assign_me_driver') }}</button>
 
           <button
             type="button"
@@ -34,14 +34,14 @@
             data-target="#driverModal"
             data-dismiss="modal"
             @click="confirm();"
-          >Assign another Driver</button>
+          >{{ $t('vehicles.assign_another_driver') }}</button>
         </div>
       </div>
     </modal>
     <modal name="driver-owner-modal" :height="500" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="odLabel">Driver Details</h5>
+          <h5 class="modal-title" id="odLabel">{{ $t('vehicles.driver_details') }}</h5>
           <button
             type="button"
             class="close"
@@ -56,7 +56,7 @@
           <div class="vehicles__driver-error snap-error" id="upErr"></div>
 
           <div class="vehicles__driver--card-wrap" id="idCard">
-            <label for="driPicPreview">Passport size photo</label>
+            <label for="driPicPreview">{{ $t('vehicles.passport_size_photo') }}</label>
             <div class="vehicles__doccard-img-holder vehicles__driver--passport-photo-wrap">
               <img
                 src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg"
@@ -70,7 +70,7 @@
                 id="driPic"
                 class="btn btn-outline-primary btn-fake vehicles__driver--btn-upload"
                 @click="transfer('driPicImg')"
-              >Click here to upload image</button>
+              >{{ $t('vehicles.click_here') }}</button>
             </div>
 
             <input
@@ -78,7 +78,7 @@
               name
               value
               class="form-control"
-              placeholder="Driver Photo"
+              :placeholder="$t('vehicles.driver_photo')"
               accept="image/*"
               id="driPicImg"
               style="display:none;"
@@ -86,23 +86,23 @@
             />
           </div>
 
-          <label for="driDlNumber">Driving License Number</label>
+          <label for="driDlNumber">{{ $t('vehicles.driving_licence') }}</label>
           <input
             type="text"
             name
             value
             class="form-control"
-            placeholder="Driving License Number"
+            :placeholder="$t('vehicles.driving_licence') "
             id="driDlNumber"
           />
 
-          <label for="driLocation">Location</label>
+          <label for="driLocation">{{ $t('vehicles.location') }}</label>
           <input
             type="text"
             name
             value
             class="form-control"
-            placeholder="Operation Location"
+            :placeholder="$t('vehicles.operation_location')"
             id="driLocation"
           />
         </div>
@@ -113,20 +113,20 @@
             data-toggle="modal"
             data-dismiss="modal"
             @click="hide('driver-owner-modal')"
-          >Cancel</button>
+          >{{ $t('vehicles.cancel') }}</button>
           <button
             type="button"
             class="btn btn-primary modBtn"
             id="createDiverOwnerButton"
             @click="createOwnerDriver()"
-          >Submit</button>
+          >{{ $t('vehicles.submit') }}</button>
         </div>
       </div>
     </modal>
     <modal name="driver-invite-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modLabel">Driver Details</h5>
+          <h5 class="modal-title" id="modLabel">{{ $t('vehicles.driver_details') }}</h5>
           <button
             type="button"
             class="close"
@@ -153,7 +153,7 @@
             class="btn btn-secondary modBtn"
             data-dismiss="modal"
             @click="hide('driver-invite-modal')"
-          >Cancel</button>
+          >{{ $t('vehicles.cancel') }}</button>
           <button
             type="button"
             class="btn btn-primary modBtn"
@@ -161,14 +161,14 @@
             data-target="#fabConfirm"
             data-dismiss="modal"
             @click="confirmDriver();"
-          >Request Driver</button>
+          >{{ $t('vehicles.request_driver') }}</button>
         </div>
       </div>
     </modal>
     <modal name="confirm-driver-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <span class="modal-title" id="arLabel">Confirm Driver Request</span>
+          <span class="modal-title" id="arLabel">{{ $t('vehicles.confirm_driver_request') }}</span>
           <button
             type="button"
             class="close"
@@ -183,7 +183,7 @@
           <div class="vehicles__driver-error" id="upErr2"></div>
           <span
             id="confDes"
-          >Are you sure you want to request the driver with phone number {{ this.driverTel }} ?</span>
+          >{{ $t('vehicles.are_you_sure_request') }} {{ this.driverTel }} ?</span>
         </div>
         <div class="modal-footer">
           <button
@@ -192,21 +192,21 @@
             data-dismiss="modal"
             id="cancCancel"
             @click="hide('invite-cancel-modal')"
-          >Back</button>
+          >{{ $t('vehicles.back') }}</button>
           <button
             type="button"
             class="btn btn-primary modBtn"
             data-dismiss="modal"
             id="cancConfirm"
             @click="inviteDriver()"
-          >Confirm driver</button>
+          >{{ $t('vehicles.confirm_driver') }}</button>
         </div>
       </div>
     </modal>
     <modal name="invite-cancel-modal" :height="250" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <span class="modal-title" id="arLabel">Confirm Allocation Cancel</span>
+          <span class="modal-title" id="arLabel">{{ $t('vehicles.confirm_allocation') }}</span>
           <button
             type="button"
             class="close"
@@ -219,7 +219,7 @@
         </div>
         <div class="modal-body">
           <div class="vehicles__driver-error" id="upErr3"></div>
-          <span id="confDes">Are you sure you want to cancel this invite?</span>
+          <span id="confDes">{{ $t('vehicles.are_sure_cancel_invite') }}</span>
         </div>
         <div class="modal-footer">
           <button
@@ -228,21 +228,21 @@
             data-dismiss="modal"
             id="cancCancel"
             @click="hide('invite-cancel-modal')"
-          >Back</button>
+          >{{ $t('vehicles.back') }}</button>
           <button
             type="button"
             class="btn btn-primary modBtn"
             data-dismiss="modal"
             id="cancConfirm"
             @click="cancelInvite()"
-          >Cancel Invite</button>
+          >{{ $t('vehicles.cancel_invite') }}</button>
         </div>
       </div>
     </modal>
     <modal name="add-vehicle-modal" :height="'90%'" :width="'70%'" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="mLabel">Add Vehicle</h5>
+          <h5 class="modal-title" id="mLabel">{{ $t('vehicles.add_vehicle') }}</h5>
           <button
             type="button"
             class="close"
@@ -256,22 +256,22 @@
         <div class="modal-body mod-form">
           <div class="vehicles__documents-error" id="upErr4"></div>
 
-          <label for="selVendor">Is this a bike, van, truck or something else?</label>
+          <label for="selVendor">{{ $t('vehicles.bike_something_else') }}</label>
           <select class="form-control" id="selVendor" v-model="vendorType">
-            <option value="1" selected>Bike</option>
-            <option value="2">Pickup</option>
+            <option value="1" selected>{{ $t('vehicles.bike') }}</option>
+            <option value="2">{{ $t('vehicles.pickup') }}</option>
             <option value="3">Van</option>
-            <option value="12">Tuk Tuk</option>
-            <option value="6">3T Truck</option>
-            <option value="10">5T Truck</option>
-            <option value="13">7T Truck</option>
-            <option value="14">10T Truck</option>
-            <option value="17">14T Truck</option>
-            <option value="18">20T Truck</option>
-            <option value="19">24T Truck</option>
-            <option value="20">28T Truck</option>
+            <option value="12">{{ $t('vehicles.tuk_tuk') }}</option>
+            <option value="6">3T {{ $t('vehicles.truck') }}</option>
+            <option value="10">5T {{ $t('vehicles.truck') }}</option>
+            <option value="13">7T {{ $t('vehicles.truck') }}</option>
+            <option value="14">10T {{ $t('vehicles.truck') }}</option>
+            <option value="17">14T {{ $t('vehicles.truck') }}</option>
+            <option value="18">20T {{ $t('vehicles.truck') }}</option>
+            <option value="19">24T {{ $t('vehicles.truck') }}</option>
+            <option value="20">28T {{ $t('vehicles.truck') }}</option>
           </select>
-          <label for="selMake">What is the make?</label>
+          <label for="selMake">{{ $t('vehicles.what_make') }}</label>
           <input
             type="text"
             name
@@ -281,7 +281,7 @@
             id="selMake"
             v-model="make"
           />
-          <label for="selModel">What is the model?</label>
+          <label for="selModel">{{ $t('vehicles.what_model') }}</label>
           <input
             type="text"
             name
@@ -291,7 +291,7 @@
             id="selModel"
             v-model="model"
           />
-          <label for="selYear">What is the year of manufacture?</label>
+          <label for="selYear">{{ $t('vehicles.year_of_manufacture') }}</label>
           <input
             type="text"
             name
@@ -301,43 +301,43 @@
             id="selYear"
             v-model="mfg"
           />
-          <label for="selBox" id="selBoxLabel">Does your bike have a box?</label>
+          <label for="selBox" id="selBoxLabel">{{ $t('vehicles.have_box') }}</label>
           <select class="form-control" id="selBox" v-model="box">
-            <option value="0" selected>No</option>
-            <option value="1">Yes</option>
+            <option value="0" selected>{{ $t('vehicles.no') }}</option>
+            <option value="1">{{ $t('vehicles.yes') }}</option>
           </select>
-          <label for="selFridge" id="selFridgeLabel">Is your vehicle covered or open?</label>
+          <label for="selFridge" id="selFridgeLabel"> {{ $t('vehicles.covered_or_open') }}</label>
           <select class="form-control" id="selFridge" v-model="covered">
-            <option value="0" selected>Open</option>
-            <option value="1">Covered</option>
+            <option value="0" selected>{{ $t('vehicles.open') }}</option>
+            <option value="1">{{ $t('vehicles.covered') }}</option>
           </select>
-          <label for="selLog">Enter Log Book Number</label>
+          <label for="selLog">{{ $t('vehicles.log_book_number') }}</label>
           <input
             type="text"
             name
             value
             class="form-control"
-            placeholder="Log Book Number"
+           :placeholder="$t('vehicles.log_book_number')"
             id="selLog"
             v-model="logBook"
           />
-          <label for="selReg">Enter Registration Number</label>
+          <label for="selReg">{{ $t('vehicles.enter_reg_no') }}</label>
           <input
             type="text"
             name
             value
             class="form-control"
-            placeholder="Registration Number"
+            placeholder="$t('vehicles.reg_no')"
             id="selReg"
             v-model="regNo"
           />
-          <label for="selInsu">Enter Insurance Number</label>
+          <label for="selInsu">{{ $t('vehicles.insurance_number') }}</label>
           <input
             type="text"
             name
             value
             class="form-control"
-            placeholder="Insurance Number"
+            :placeholder="$t('vehicles.insurance_number')"
             id="selInsu"
             v-model="insuNo"
           />
@@ -349,8 +349,8 @@
             data-dismiss="modal"
             id="clearInp"
             @click="$modal.hide('add-vehicle-modal')"
-          >Cancel</button>
-          <button type="button" class="btn btn-primary modBtn" id="addNext" @click="logDocs();">Next</button>
+          >{{ $t('vehicles.cancel') }}</button>
+          <button type="button" class="btn btn-primary modBtn" id="addNext" @click="logDocs();">{{ $t('vehicles.next') }}</button>
         </div>
       </div>
     </modal>
@@ -363,7 +363,7 @@
     >
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="odLabel">Vehicle Documents</h5>
+          <h5 class="modal-title" id="odLabel">{{ $t('vehicles.vehicle_documents') }}</h5>
           <button
             type="button"
             class="close"
@@ -378,7 +378,7 @@
           <div class="vehicles__doccard-error" id="upErr"></div>
 
           <div class="vehicles__documents-card" id="logCard">
-            <div class="vehicles__doccard-text">Upload Log Book Image</div>
+            <div class="vehicles__doccard-text">{{ $t('vehicles.upload_log_book_image') }}</div>
             <div class="vehicles__doccard-img-holder">
               <img
                 src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg"
@@ -392,7 +392,7 @@
                 id="logBimgFake"
                 class="btn btn-outline-primary btn-fake"
                 @click="transfer('logBimg')"
-              >Click here to upload image</button>
+              >{{ $t('vehicles.click_here') }}</button>
             </div>
 
             <input
@@ -400,7 +400,7 @@
               name
               value
               class="form-control"
-              placeholder="Log Book"
+              :placeholder="$t('vehicles.log_book')"
               accept="image/*"
               id="logBimg"
               style="display:none;"
@@ -416,7 +416,7 @@
             data-target="#vehModal"
             data-dismiss="modal"
             @click="nextModal('vehicle-documents-modal', 'add-vehicle-modal')"
-          >Back</button>
+          >{{ $t('vehicles.back') }}</button>
           <button
             type="button"
             class="btn btn-primary modBtn"
@@ -426,14 +426,14 @@
             id="lgNext"
             disabled
             @click="nextModal('vehicle-documents-modal', 'vehicle-image-modal')"
-          >Next</button>
+          >{{ $t('vehicles.next') }}</button>
         </div>
       </div>
     </modal>
     <modal name="vehicle-image-modal" :height="400" :width="500" transition="slide" :pivot-y="0">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="odLabel">Vehicle Documents</h5>
+          <h5 class="modal-title" id="odLabel">{{ $t('vehicles.vehicle_documents') }}</h5>
           <button
             type="button"
             class="close"
@@ -446,7 +446,7 @@
         </div>
         <div class="modal-body vehicles__mod-up">
           <div class="vehicles__documents-card" id="vehCard">
-            <div class="vehicles__doccard-text">Upload Vehicle Image</div>
+            <div class="vehicles__doccard-text">{{ $t('vehicles.upload_vehicle_image') }}</div>
             <div class="vehicles__doccard-img-holder">
               <img
                 src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg"
@@ -460,14 +460,14 @@
                 id="vehImgFake"
                 class="btn btn-outline-primary btn-fake"
                 @click="transfer('vehImag')"
-              >Click here to upload image</button>
+              >{{ $t('vehicles.click_here') }} Click here to upload image</button>
             </div>
             <input
               type="file"
               name
               value
               class="form-control"
-              placeholder="Vehicle Image"
+              :placeholder="$t('vehicles.vehicle_image')"
               accept="image/*"
               id="vehImag"
               style="display:none;"
@@ -483,7 +483,7 @@
             data-target="#logUpModal"
             data-dismiss="modal"
             @click="nextModal('vehicle-image-modal', 'vehicle-documents-modal')"
-          >Back</button>
+          >{{ $t('vehicles.back') }}</button>
           <button
             type="button"
             class="btn btn-primary modBtn"
@@ -493,7 +493,7 @@
             id="vehFin"
             disabled
             @click="nextModal('vehicle-image-modal', 'confirm-documents-modal')"
-          >Confirm</button>
+          >{{ $t('vehicles.confirm') }}</button>
         </div>
       </div>
     </modal>
@@ -506,7 +506,7 @@
     >
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="vehAddLabel">Confirm Vehicle Addition</h5>
+          <h5 class="modal-title" id="vehAddLabel">{{ $t('vehicles.confirm_vehicle_addition') }}</h5>
           <button
             type="button"
             class="close"
@@ -520,41 +520,41 @@
         <div class="modal-body vehicles__mod-up">
           <div class="vehicles__documents-error vehicles__add-confirm" id="upErr5"></div>
 
-          <div class="vehicles__addc-title">Please confirm that the following details are correct</div>
+          <div class="vehicles__addc-title">{{ $t('vehicles.confirm_details_correct') }}</div>
           <div class="row vehicles__addc-content">
             <div class="col-lg-6 col-md-6 col-sm-12">
               <p class="color-black font-14">
-                Vehicle Type :
+                {{ $t('vehicles.vehicle_type') }} :
                 <span id="addcVend" class="color-black font-14">{{ vendorName }}</span>
               </p>
               <p class="color-black font-14">
-                Make :
+                {{ $t('vehicles.make') }} :
                 <span id="addcMake" class="color-black font-14">{{ make }}</span>
               </p>
               <p class="color-black font-14">
-                Model :
+                {{ $t('vehicles.model') }} :
                 <span id="addcModel" class="color-black font-14">{{ model }}</span>
               </p>
               <p class="color-black font-14">
-                Model Year :
+                {{ $t('vehicles.model_year') }} :
                 <span id="addcYear" class="color-black font-14">{{ mfg }}</span>
               </p>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12">
               <p id="addcBoxDes" class="color-black font-14">
-                Box :
+                {{ $t('vehicles.box') }} :
                 <span id="addcBox" class="color-black font-14">{{ boxOption }}</span>
               </p>
               <p class="color-black font-14">
-                Registration :
+                {{ $t('vehicles.registration') }} :
                 <span id="addcReg" class="color-black font-14">{{ regNo }}</span>
               </p>
               <p class="color-black font-14">
-                Log Book Number :
+               {{ $t('vehicles.log_book_number') }} :
                 <span id="addcLogno" class="color-black font-14">{{ logBook }}</span>
               </p>
               <p class="color-black font-14">
-                Insurance Number :
+                {{ $t('vehicles.insurance_number') }}  :
                 <span id="addcInsu" class="color-black font-14">{{ insuNo }}</span>
               </p>
             </div>
@@ -586,13 +586,13 @@
             data-target="#vehUpModal"
             data-dismiss="modal"
             @click="nextModal('confirm-documents-modal', 'vehicle-image-modal')"
-          >Back</button>
+          >{{ $t('vehicles.back') }} </button>
           <button
             type="button"
             class="btn btn-primary modBtn"
             id="endAdd"
             @click="sendDocuments()"
-          >Finish</button>
+          >{{ $t('vehicles.finish') }} </button>
         </div>
       </div>
     </modal>
@@ -617,35 +617,35 @@
       <div class="printContain hidden-md-up" v-for="row in rows" :key="row.registration_no" v-else>
         <div class="table-responsive mobile-table">
           <div class="row-mobile">
-            <div class="thead-mobile">Make</div>
+            <div class="thead-mobile">{{ $t('vehicles.make') }} </div>
             <div class="thead-mobile-row">{{ row.make }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Model</div>
+            <div class="thead-mobile">{{ $t('vehicles.model') }} </div>
             <div class="thead-mobile-row">{{ row.model }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Registration No</div>
+            <div class="thead-mobile">{{ $t('vehicles.registration_no') }} </div>
             <div class="thead-mobile-row">{{ row.registration_no }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Active Driver Name</div>
+            <div class="thead-mobile">{{ $t('vehicles.active_driver_name') }}</div>
             <div class="thead-mobile-row">{{ row.name }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Active Driver Phone</div>
+            <div class="thead-mobile"> {{ $t('vehicles.active_driver_phone') }}</div>
             <div class="thead-mobile-row">{{ row.phone_no }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Active Driver Balance</div>
+            <div class="thead-mobile">{{ $t('vehicles.active_driver_balance') }}</div>
             <div class="thead-mobile-row">{{ row.rb }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Invited Driver</div>
+            <div class="thead-mobile">{{ $t('vehicles.invite_driver') }}</div>
             <div class="thead-mobile-row">{{ row.rider_phone }}</div>
           </div>
           <div class="row-mobile">
-            <div class="thead-mobile">Options</div>
+            <div class="thead-mobile">{{ $t('vehicles.options') }}</div>
             <!--eslint-disable-next-line-->
             <div class="thead-mobile-row" v-html="row.options"></div>
           </div>
@@ -655,12 +655,12 @@
         <div class="fab">
           <div class="fab-buttons" @click="showVehicleModal()">
             <span class="fab-buttons__link" data-tooltip="Add Vehicle" @click="showVehicleModal()">
-              <p class="vehicle-tool-tip">Add vehicle</p>
+              <p class="vehicle-tool-tip">{{ $t('vehicles.add_vehicle') }}</p>
             </span>
             <i class="icon-material fa fa-car"></i>
           </div>
           <div class="fab-action-button" @click="showVehicleModal()">
-            <i class="fab-action-button__icon material-icons">add</i>
+            <i class="fab-action-button__icon material-icons">{{ $t('vehicles.add') }}</i>
           </div>
         </div>
       </div>
@@ -713,7 +713,7 @@ export default {
           Authorization: localStorage.token,
         },
       },
-      columns: [{ label: '', field: 'first' }, { label: 'Make', field: 'make' }, { label: 'Model', field: 'model' }, { label: 'Registration', field: 'registration_no' }, { label: 'Active Driver Phone', field: 'phone_no' }, { label: 'Active Driver Name', field: 'name' }, { label: 'Invited Driver', field: 'rider_phone' }, { label: 'Driver Balance', field: 'rb' }, { label: 'Options', field: 'options', html: true }],
+      columns: [{ label: '', field: 'first' }, { label: this.$t('vehicles.make'), field: 'make' }, { label: this.$t('vehicles.model'), field: 'model' }, { label: this.$t('vehicles.registration'), field: 'registration_no' }, { label: this.$t('vehicles.active_driver_phone'), field: 'phone_no' }, { label: this.$t('vehicles.active_driver_name'), field: 'name' }, { label: this.$t('vehicles.invited_driver'), field: 'rider_phone' }, { label: this.$t('vehicles.driver_balance'), field: 'rb' }, { label: this.$t('vehicles.option'), field: 'options', html: true }],
       page: 1,
       rows: [],
       from: '',
@@ -725,7 +725,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Enter a phone number',
+        placeholder: this.$t('vehicles.enter_phone_number'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -789,7 +789,7 @@ export default {
         owner_id: this.sessionInfo.id,
       });
       this.rows = [];
-      this.displayFetchingStatus('Fetching vehicles', 0);
+      this.displayFetchingStatus(this.$t('vehicles.fetching_vehicles'), 0);
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
         .then(response => {
@@ -799,7 +799,7 @@ export default {
             document.body.addEventListener('click', this.logger);
           } else {
             this.rows = [];
-            this.displayFetchingStatus('No vehicles found', 0);
+            this.displayFetchingStatus(this.$t('vehicles.no_vehicles_found'), 0);
           }
         })
         .catch(error => {
@@ -842,15 +842,15 @@ export default {
           riderRow.riderName = `${riderRow.f_name} ${riderRow.s_name}`;
         }
         if (row.allocation && row.allocation[0].allocation_status === 1) {
-          riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
+          riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">${this.$t('vehicles.cancel_allocation')}</span>`;
         } else {
           riderRow.action = `<span class="reassign-driver" id="${row.vehicle.id}">Reassign driver</span>`;
         }
       } else {
         if (row.allocation && row.allocation[0].allocation_status === 1) {
-          riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">Cancel allocation</span>`;
+          riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">${this.$t('vehicles.cancel_allocation')}</span>`;
         } else {
-          riderRow.action = `<span class="add-driver" id="${row.vehicle.id}">Add driver</span>`;
+          riderRow.action = `<span class="add-driver" id="${row.vehicle.id}">${this.$t('vehicles.add_driver')}</span>`;
         }
       }
       return riderRow;
@@ -861,11 +861,11 @@ export default {
       if (row.allocation) {
         allocationRow = row.allocation[0];
         if (allocationRow.allocation_status === 1) {
-          invitedPhone = `${allocationRow.rider_phone} (Pending)`;
+          invitedPhone = `${allocationRow.rider_phone} (${this.$t('vehicles.pending')})`;
         } else if (allocationRow.allocation_status === 2) {
-          invitedPhone = `${allocationRow.rider_phone} (Accepted)`;
+          invitedPhone = `${allocationRow.rider_phone} (${this.$t('vehicles.accepted')})`;
         } else if (allocationRow.allocation_status === 3) {
-          invitedPhone = `${allocationRow.rider_phone} (Rejected)`;
+          invitedPhone = `${allocationRow.rider_phone} (${this.$t('vehicles.rejected')})`;
         }
       }
       return invitedPhone;
@@ -931,7 +931,7 @@ export default {
           .text();
       } else {
         $('#upErr4')
-          .html('Please enter all details')
+          .html(this.$t('vehicles.please_enter_all'))
           .fadeIn('slow');
         setTimeout(() => {
           $('#upErr4').fadeOut('slow');
@@ -974,7 +974,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           $('#upErr5')
-              .html(`Something went wrong while adding the vehicle. ${error.response.data.message}. Please try again.`)
+              .html(this.$t('vehicles.something_went_wrong', { message: error.response.data.message }))
               .fadeIn('slow');
             setTimeout(() => {
               $('#upErr5').fadeOut('slow');
@@ -985,7 +985,7 @@ export default {
       const files = document.getElementById(id)['files'];
       if (!files.length) {
         // eslint-disable-next-line no-alert
-        return alert('Please choose a file to upload first.');
+        return alert(this.$t('vehicles.please_choose_file'));
       }
       this.loadingLabel(id);
       const file = files[0];
@@ -1032,7 +1032,7 @@ export default {
       }
     },
     disableLoadingPreviews(className, buttonName) {
-      $(`#${className}`).html('Uploading...');
+      $(`#${className}`).html(this.$t('vehicles.uploading'));
       $(`#${buttonName}`)
         .prop('disabled', true)
         .css('background-color', 'gray');
@@ -1098,14 +1098,14 @@ export default {
       }
     },
     successfulLabelReset(id, button) {
-      $(`#${id}`).html('Click here to change image');
+      $(`#${id}`).html(this.$t('vehicles.click_here_to_change'));
       $(`#${button}`)
         .prop('disabled', false)
         .css('background-color', '#EE7D00');
       $(`#${id}`).prop('disabled', false);
     },
     failedLabelReset(id, button) {
-      $(`#${id}`).html('Image upload failed, please try again');
+      $(`#${id}`).html(this.$t('vehicles.image_upload_failed'));
       $(`#${button}`)
         .prop('disabled', false)
         .css('background-color', '#0275d8');
@@ -1122,7 +1122,7 @@ export default {
           this.$modal.show('confirm-driver-modal');
         } else {
           $('#upErr2')
-            .html('Please enter a valid phone number')
+            .html(this.$t('vehicles.enter_valid_phone'))
             .fadeIn('slow');
           setTimeout(() => {
             $('#upErr2').fadeOut('slow');
@@ -1130,7 +1130,7 @@ export default {
         }
       } else {
         $('#upErr2')
-          .html('Please enter a phone number<br>')
+          .html(`${this.$t('vehicles.please_enter_phone')}<br>`)
           .fadeIn('slow');
         setTimeout(() => {
           $('#upErr2').fadeOut('slow');
@@ -1143,7 +1143,7 @@ export default {
         vehicle_id: this.vehicleAllocation,
       };
       $('#upErr2')
-        .html('Sending driver invite.')
+        .html(this.$t('vehicles.sending_driver_invite'))
         .fadeIn('slow');
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/allocate_rider`, payload, this.config)
