@@ -10,9 +10,11 @@ const translation = {
     sign_in: 'FR_Sign In',
     enter_phone_number: 'FR_Enter a phone number',
     reset_password: 'FR_Reset Password',
-    log_in_Capital: 'FR_LOG IN',
+    log_in_capital: 'FR_LOG IN',
     please_try_again: 'FR_Please try again',
     sorry_details_not_match: 'FR_Sorry, your details did not match!',
+    please_wait: 'FR_Please Wait',
+
 };
 
 export default translation;

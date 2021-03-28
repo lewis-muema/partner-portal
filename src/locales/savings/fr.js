@@ -8,7 +8,7 @@ const translation = {
     please_select_both: 'FR_Please select both a from and to date',
     fetch_savings: 'FR_Fetching savings',
     date: 'FR_Date',
-    Narrative: 'FR_Narrative',
+    narrative: 'FR_Narrative',
 };
 
 export default translation;
