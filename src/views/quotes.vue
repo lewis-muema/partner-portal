@@ -432,7 +432,7 @@ export default {
       pick: [],
       responseNo: 0,
       confirmButtonState: this.$t('pending.confirm_quote'),
-      sendQuoteButtonState: this.$t('pending.ajust_quote'),
+      sendQuoteButtonState: this.$t('pending.adjust_quote'),
       getRiderz: 0,
       getVehiclez: 0,
       quoteAmount: null,
@@ -949,7 +949,7 @@ export default {
       axios
         .post(`${this.auth}v1/update_order_bid/`, payload, this.config)
         .then(response => {
-          this.sendQuoteButtonState = this.$t('pending.ajust_quote');
+          this.sendQuoteButtonState = this.$t('pending.adjust_quote');
           if (response.data.status) {
             this.notify(3, 1, response.data.message);
             this.opened = [];
@@ -963,7 +963,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.sendQuoteButtonState = this.$t('pending.ajust_quote');
+            this.sendQuoteButtonState = this.$t('pending.adjust_quote');
             this.notify(3, 0, `${error.response.data.message}`);
           }
         });
@@ -975,7 +975,7 @@ export default {
       axios
         .post(`${this.auth}v1/cancel_order_bid/`, cancelbidpayload, this.config)
         .then(response => {
-          this.sendQuoteButtonState = this.$t('pending.ajust_quote');
+          this.sendQuoteButtonState = this.$t('pending.adjust_quote');
           if (response.data.status) {
             this.notify(3, 1, response.data.message);
             this.opened = [];
@@ -989,7 +989,7 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.sendQuoteButtonState = this.$t('pending.ajust_quote');
+            this.sendQuoteButtonState = this.$t('pending.adjust_quote');
             this.notify(3, 0, `${error.response.data.message}`);
           }
         });

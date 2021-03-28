@@ -75,6 +75,7 @@ const translation = {
     amount_small: 'FR_amount',
     adjust_quotes: 'FR_adjust Quotes',
     or_cancel_quote: 'FR_or cancel this quote',
+    confirm_quote: 'FR_confirm quote',
 
 };
 

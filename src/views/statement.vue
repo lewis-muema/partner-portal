@@ -134,7 +134,7 @@
         </div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
           <div class="divider-top"></div>
-          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
+          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="$t('statement.statement_for', { name: this.sessionInfo.name, monthPeriod: monthPeriod })" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
@@ -625,7 +625,7 @@ export default {
           payment_type: paymethod,
           amount: this.amount,
         });
-        notification = this.$t('statement.withraw_processed_mpesa', { amount: this.amount });
+        notification = this.$t('statement.withdraw_processed_mpesa', { amount: this.amount });
       } else {
         payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
@@ -634,7 +634,7 @@ export default {
           amount: this.amount,
           payment_bank_id: this.bankId,
         });
-        notification = this.$t('statement.withraw_processed_bank', { amount: this.amount });
+        notification = this.$t('statement.withdraw_processed_bank', { amount: this.amount });
       }
       this.payload = payload;
       this.sendWithdrawRequest(payload, notification, paymethod);

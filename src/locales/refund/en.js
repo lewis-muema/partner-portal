@@ -23,6 +23,8 @@ const translation = {
     approved: 'Approved',
     declined: 'Declined',
     sure_close_dialog: 'Are you sure to close this dialog?',
+    view_refund_request: 'FR_View Refund Request',
+
 };
 
 export default translation;

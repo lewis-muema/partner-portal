@@ -82,6 +82,11 @@ const translation = {
     no_vehicles_found: 'No vehicles found',
     please_enter_phone: 'Please enter a phone number',
     sending_driver_invite: 'Sending driver invite.',
+    option: 'Options',
+    bike: 'Bike',
+    confirm: 'Confirm',
+    confirm_vehicle_addition: 'Confirm Vehicle Addition',
+    box: 'Box',
 };
 
 export default translation;

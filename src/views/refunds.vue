@@ -42,7 +42,7 @@
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
                 <div v-if="fileName !== ''">{{ uploading_text }}</div>
-                <div v-else>{{ $t('refund.drop_files_here') }}or <em>{{ $t('refund.click_to_upload') }}</em></div>
+                <div v-else>{{ $t('refund.drop_file_here') }} <em>{{ $t('refund.click_to_upload') }}</em></div>
               </el-upload>
               <div v-if="fileName !== ''">
                 <span class="reward-upload-label">
@@ -87,7 +87,7 @@
         </span>
       </el-dialog>
 
-      <el-dialog title="View Refund Request" :visible.sync="refundRequest" width="50%" :before-close="handleClose">
+      <el-dialog :title="$t('refund.view_refund_request')" :visible.sync="refundRequest" width="50%" :before-close="handleClose">
         <div class="inner-dialog">
           <div class="drag-image">
             <div class="download-refund-img">
@@ -252,9 +252,9 @@ export default {
     },
     uploadToS3() {
       if (Object.keys(this.refundImageData).length === 0) {
-        this.notify(3, 0, 'Kindly upload refund image');
+        this.notify(3, 0, this.$t('refund.kindly_upload_refund_image'));
       } else {
-        this.uploading_text = 'Loading Preview ...';
+        this.uploading_text = this.$t('refund.loading_preview');
         const file = this.refundImageData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -287,7 +287,7 @@ export default {
     },
     initiateRequest() {
       if (Object.keys(this.refundImageData).length === 0 || this.description === '' || this.order_number === '' || this.rider === '' || this.refund_amount === '') {
-        this.notify(3, 0, 'Kindly provide all values');
+        this.notify(3, 0, this.$t('refund.kindly_provide_all'));
       } else {
         const payload = {
           rider_id: parseInt(this.rider, 10),
@@ -306,7 +306,7 @@ export default {
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, 'Request Refund Error . Try again');
+            this.notify(3, 0, this.$t('refund.request_refund_error'));
           });
       }
     },
