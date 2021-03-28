@@ -213,7 +213,7 @@
               </div>
 
               <i>
-                <p class="timestamp">Bid submitted on {{ formData.quotation.date_created }}</p>
+                <p class="timestamp">Bid submitted on {{ this.date }}</p>
               </i>
             </div>
           </div>
