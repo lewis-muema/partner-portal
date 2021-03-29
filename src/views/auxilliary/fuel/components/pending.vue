@@ -5,11 +5,11 @@
     <div class="fuel-blinder" v-if="approvalStatus === false">
       <div class="fuel-request-rejection-dialogue">
         <div class="fuel-request-close-icon" @click="approvalStatus = ''"><i class="fa fa-times"></i></div>
-        You are about to reject this request. <br /> Please add a reason.
+        {{ $t('fuelPending.about_reject_request') }} <br /> {{ $t('fuelPending.please_add_reason') }}
         <el-select class="fuel-request-reason-input" v-model="rejectReason">
           <el-option v-for="(reason, index) in reasons" :key="index" :value="reason" :label="reason"></el-option>
         </el-select>
-        <button :class="rejectReason !== '' && loading === false ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" @click="actionFuelAdvance(rowIndex)">Confirm</button>
+        <button :class="rejectReason !== '' && loading === false ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" @click="actionFuelAdvance(rowIndex)">{{ $t('fuelPending.confirm') }}</button>
       </div>
     </div>
     <div
@@ -54,7 +54,7 @@
             "
             @click="changeTab(index, 'details')"
           >
-            Details
+            {{ $t('fuelPending.details') }}
           </div>
           <div
             class="pending-requests-actions-menu-items"
@@ -63,7 +63,7 @@
             "
             @click="changeTab(index, 'action')"
           >
-            Action
+            {{ $t('fuelPending.action') }}
           </div>
           <div
             class="pending-requests-actions-menu-items"
@@ -72,7 +72,7 @@
             "
             @click="changeTab(index, 'edit')"
           >
-            Edit
+            {{ $t('fuelPending.edit') }}
           </div>
           <div
             class="pending-requests-actions-menu-items"
@@ -84,18 +84,18 @@
             "
             @click="changeTab(index, 'advanced')"
           >
-            Fuel Advanced
+            {{ $t('fuelPending.fuel_advanced') }}
           </div>
         </div>
         <div class="pending-requests-actions-tabs">
           <div v-if="order.activeMenuTab === 'details'">
             <div class="pending-requests-actions-table-header">
-              <div class="pending-requests-large-column">Order</div>
-              <div class="pending-requests-standard-column">Amount</div>
-              <div class="pending-requests-standard-column">Station</div>
-              <div class="pending-requests-standard-column">Fuel type</div>
-              <div class="pending-requests-standard-column">Order type</div>
-              <div class="pending-requests-standard-column">Percentage</div>
+              <div class="pending-requests-large-column">{{ $t('fuelPending.order') }}</div>
+              <div class="pending-requests-standard-column">{{ $t('fuelPending.amount') }}</div>
+              <div class="pending-requests-standard-column">{{ $t('fuelPending.station') }}</div>
+              <div class="pending-requests-standard-column">{{ $t('fuelPending.fuel_type') }}</div>
+              <div class="pending-requests-standard-column">{{ $t('fuelPending.order_type') }}</div>
+              <div class="pending-requests-standard-column">{{ $t('fuelPending.percentage') }}</div>
             </div>
             <div class="pending-requests-actions-table-body">
               <div class="pending-requests-large-column">
@@ -147,7 +147,7 @@
           >
             <div class="pending-requests-edit-top">
               <div class="pending-requests-filler">
-                <span class="pending-requests-input-label">Fuel amount</span><br />
+                <span class="pending-requests-input-label">{{ $t('fuelPending.fuel_amount') }}</span><br />
                 <input
                   type="text"
                   class="pending-requests-edit-inputs"
@@ -157,7 +157,7 @@
                 />
               </div>
               <div class="pending-requests-filler">
-                <span class="pending-requests-input-label">Fueling station</span><br />
+                <span class="pending-requests-input-label">{{ $t('fuelPending.fueling_station') }}</span><br />
                 <select
                   name="station"
                   id=""
@@ -177,7 +177,7 @@
                 </select>
               </div>
               <div class="pending-requests-filler">
-                <span class="pending-requests-input-label">Station Address</span><br />
+                <span class="pending-requests-input-label">{{ $t('fuelPending.station_address') }}</span><br />
                 <select
                   name="address"
                   id=""
@@ -194,7 +194,7 @@
                 </select>
               </div>
               <div class="pending-requests-filler">
-                <span class="pending-requests-input-label">Fuel type</span><br />
+                <span class="pending-requests-input-label">{{ $t('fuelPending.fuel_type') }}</span><br />
                 <select
                   name="fuel"
                   id=""
@@ -225,7 +225,7 @@
               <div
                 class="pending-requests-owner-details approved-question-override"
               >
-                Would you like to confirm this request?
+                {{ $t('fuelPending.confirm_request') }}
               </div>
               <div>
                 <input
@@ -236,7 +236,7 @@
                   v-model="approvalStatus"
                   @change="rowIndex = index"
                 />
-                <span class="pending-requests-spacer-1">Yes</span>
+                <span class="pending-requests-spacer-1">{{ $t('fuelPending.yes') }}</span>
                 <input
                   type="radio"
                   id="owner-approval-no"
@@ -245,25 +245,25 @@
                   v-model="approvalStatus"
                   @change="rowIndex = index"
                 />
-                <span class="pending-requests-spacer-1">No</span>
-                <button :class="approvalStatus === true && loading === false ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" v-loading="loading && rowIndex === index" @click="actionFuelAdvance(index)">Update</button>
+                <span class="pending-requests-spacer-1">{{ $t('fuelPending.no') }}</span>
+                <button :class="approvalStatus === true && loading === false ? 'fuel-request-reason-button-active' : 'fuel-request-reason-button-inactive'" v-loading="loading && rowIndex === index" @click="actionFuelAdvance(index)">{{ $t('fuelPending.update') }}</button>
               </div>
             </div>
             <div v-else>
-              <span class="approved-fuel-request" v-if="editData[index].owner_details.status === 'approved'">You have approved this request</span>
-              <span class="rejected-fuel-request" v-if="editData[index].owner_details.status === 'rejected'">You have rejected this request</span>
-              <span class="edit-action-input" @click="editData[index].owner_details.status = 'pending'">EDIT ACTION</span>
+              <span class="approved-fuel-request" v-if="editData[index].owner_details.status === 'approved'">{{ $t('fuelPending.approve_request') }}</span>
+              <span class="rejected-fuel-request" v-if="editData[index].owner_details.status === 'rejected'">{{ $t('fuelPending.reject_request') }}</span>
+              <span class="edit-action-input" @click="editData[index].owner_details.status = 'pending'">{{ $t('fuelPending.edit_action') }}</span>
             </div>
           </div>
           <div v-if="order.activeMenuTab === 'advanced'">
             <div class="pending-requests-actions-table-header">
               <div class="pending-requests-standard-column-adv">DD/TT</div>
-              <div class="pending-requests-large-column-adv">Order</div>
-              <div class="pending-requests-standard-column-adv">Amount</div>
-              <div class="pending-requests-standard-column-adv">Station</div>
-              <div class="pending-requests-standard-column-adv">Fuel type</div>
-              <div class="pending-requests-standard-column-adv">Order type</div>
-              <div class="pending-requests-standard-column-adv">Percentage</div>
+              <div class="pending-requests-large-column-adv">{{ $t('fuelPending.order') }}</div>
+              <div class="pending-requests-standard-column-adv">{{ $t('fuelPending.amount') }}</div>
+              <div class="pending-requests-standard-column-adv">{{ $t('fuelPending.station') }}</div>
+              <div class="pending-requests-standard-column-adv">{{ $t('fuelPending.fuel_type') }}</div>
+              <div class="pending-requests-standard-column-adv">{{ $t('fuelPending.order_type') }}</div>
+              <div class="pending-requests-standard-column-adv">{{ $t('fuelPending.percentage') }}</div>
             </div>
             <div class="pending-requests-actions-table-body">
               <div
@@ -318,7 +318,7 @@
       </div>
     </div>
     <div v-if="orders.length === 0 && !loadingStatus" class="no-requests-tab">
-      There are no requests
+      {{ $t('fuelPending.no_requests') }}
     </div>
     <notify />
   </div>
@@ -349,8 +349,8 @@ export default {
       addresses: [],
       rejectReason: '',
       reasons: [
-        'Vehicle has fuel',
-        'Other reason',
+        this.$t('fuelPending.has_fuel'),
+        this.$t('fuelPending.other_reason'),
       ],
       sessionInfo: '',
       approvalStatus: '',
@@ -461,7 +461,7 @@ export default {
               this.fetchStatus = false;
               if (response.status === 200) {
                 this.maxFuelAmount = response.data.data.available_advance + this.orders[index].request_details.amount;
-                this.editMessage = `The maximum amount you can edit is ${response.data.data.available_advance + this.orders[index].request_details.amount}`;
+                this.editMessage = `${this.$t('fuelPending.max_amount_edit')} ${response.data.data.available_advance + this.orders[index].request_details.amount}`;
               }
             resolve(response);
             })
@@ -469,7 +469,7 @@ export default {
               this.fetchStatus = false;
               this.errorObj = error.response;
               this.maxFuelAmount = 0;
-              this.editMessage = 'The total amount for fuel advancement has already been reached for this order, we cant allow you to edit it';
+              this.editMessage = this.$t('fuelPending.total_amount_reached');
             resolve(error);
             });
         });
@@ -584,7 +584,7 @@ export default {
             })
             .catch(error => {
               this.loading = false;
-              this.notify(3, 0, `Failed to action: ${error.response.data.message}`);
+              this.notify(3, 0, `${this.$t('fuelPending.failed_action')}: ${error.response.data.message}`);
               this.errorObj = error.response;
             resolve(error);
             });
@@ -620,7 +620,7 @@ export default {
             })
             .catch(error => {
               this.loading = false;
-              this.notify(3, 0, `Failed to edit: ${error.response.data.message}`);
+              this.notify(3, 0, `${this.$t('fuelPending.failed_edit')}:: ${error.response.data.message}`);
               this.errorObj = error.response;
             resolve(error);
             });

@@ -1,0 +1,25 @@
+const translation = {
+    pickup_location: 'pickup location',
+    destination: 'destination',
+    distance: 'distance',
+    pickup_date: 'pickup date',
+    order_number: 'order number',
+    truck: 'truck',
+    price: 'price',
+    vat: 'VAT',
+    action: 'action',
+    pickup: 'Pickup',
+    destiantion_capital: 'Destination',
+    pick_up_date: 'Pick-up date',
+    amount: 'Amount',
+    in_transit: 'in transit',
+    maximum_of: 'You can request a maximum of',
+    total_amount: 'Total amount',
+    choose_fueling_station: 'Choose fueling Station',
+    station_address: 'Station address',
+    fuel_type: 'Fuel type',
+    confirm_request: 'Confirm request',
+    no_requests: 'There are no orders',
+};
+
+export default translation;

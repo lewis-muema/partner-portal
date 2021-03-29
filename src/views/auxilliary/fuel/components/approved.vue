@@ -43,22 +43,22 @@
             "
             @click="changeTab(index, 'details')"
           >
-            Details
+            {{ $t('approved.details') }}
           </div>
         </div>
         <div class="approved-requests-actions-tabs">
           <div v-if="order.activeMenuTab === 'details'">
             <div class="approved-requests-actions-table-header">
-              <div class="approved-requests-standard-column-adv">Date</div>
-              <div class="approved-requests-large-column-adv">Order</div>
-              <div class="approved-requests-standard-column-adv">Amount</div>
-              <div class="approved-requests-standard-column-adv">Station</div>
-              <div class="approved-requests-standard-column-adv">Fuel type</div>
+              <div class="approved-requests-standard-column-adv"> {{ $t('approved.date') }}</div>
+              <div class="approved-requests-large-column-adv"> {{ $t('approved.order') }}</div>
+              <div class="approved-requests-standard-column-adv"> {{ $t('approved.amount') }}</div>
+              <div class="approved-requests-standard-column-adv"> {{ $t('approved.station') }}</div>
+              <div class="approved-requests-standard-column-adv"> {{ $t('approved.fuel_type') }}</div>
               <div class="approved-requests-standard-column-adv">
-                Order type
+                 {{ $t('approved.order_type') }}
               </div>
               <div class="approved-requests-standard-column-adv">
-                Percentage
+                 {{ $t('approved.percentage') }}
               </div>
             </div>
             <div class="approved-requests-actions-table-body">
@@ -114,7 +114,7 @@
       </div>
     </div>
     <div v-if="orders.length === 0 && !loadingStatus" class="no-requests-tab">
-      There are no requests
+       {{ $t('approved.no_requests') }}
     </div>
   </div>
 </template>
