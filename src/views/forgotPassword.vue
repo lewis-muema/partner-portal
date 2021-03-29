@@ -73,7 +73,7 @@ export default {
     /* eslint-enable */
     postForgot() {
       // eslint-disable-next-line quotes
-      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
+      this.handleButton(`<div class='loading-spinner'></div> ${this.$t('forgotPassword.please_wait')}`);
       this.tel = this.tel.replace(/ /g, '');
       const payload = {
         phone: this.tel,

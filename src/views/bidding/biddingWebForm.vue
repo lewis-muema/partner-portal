@@ -1,4 +1,4 @@
-<template >
+<template>
   <div id="bidding">
     <errorHandler :error="errorObj" v-if="errorObj" />
     <!-- CONFIRMATION MODAL -->
@@ -213,7 +213,7 @@
               </div>
 
               <i>
-                <p class="timestamp">Bid submitted on {{ formData.quotation.date_created }}</p>
+                <p class="timestamp">Bid submitted on {{ this.date }}</p>
               </i>
             </div>
           </div>
@@ -349,19 +349,19 @@ export default {
       this.initialSubmit = true;
       await axios
         .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
-        .then((res) => {
+        .then(res => {
           if (res.status === 200) {
             this.success = true;
           }
         })
-        .catch((err) => {
+        .catch(err => {
           this.errObj = err;
         });
     },
     async getBid() {
       axios
         .get(`${this.auth}freight-service/shipments/quotations/${this.$route.params.shipment_id}/${this.$route.params.owner_id}?authkey=${process.env.BIDDING_API_KEY}`)
-        .then((res) => {
+        .then(res => {
           this.requests = res;
           this.formData = res.data.data;
           if (this.formData.quotation.status === 0) {
@@ -370,7 +370,7 @@ export default {
             this.submitted = true;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           this.errObj = error;
         });
     },
@@ -378,6 +378,6 @@ export default {
 };
 </script>
 
-<style >
+<style>
 @import '../../../public/css/bidding.css';
 </style>

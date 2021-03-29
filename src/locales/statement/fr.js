@@ -6,7 +6,7 @@ const translation = {
     next: 'FR_Next',
     want_paid: 'FR_How do you want to be paid?',
     dont_have_active_bank_account: 'FR_You dont have any active bank accounts',
-    deriver: 'FR_Driver',
+    driver: 'FR_Driver',
     vehicle: 'FR_vehicle',
     can_withdraw: 'FR_You can withdraw ',
     button_disabled: 'FR_The button is disabled. You cannot withdraw today',
@@ -26,13 +26,15 @@ const translation = {
     fetching_statement: 'FR_Fetching statement',
     please_select_both: 'FR_Please select both a from and to date',
     sending_request: 'FR_Sending request',
-    withraw_processed_mpesa: 'FR_The withdrawal is currently being processed. The {amount} will reflect in your m-pesa',
-    withraw_processed_bank: 'FR_The withdrawal is currently being processed. The {amount} will reflect in your bank account',
+    withdraw_processed_mpesa: 'FR_The withdrawal is currently being processed. The {amount} will reflect in your m-pesa',
+    withdraw_processed_bank: 'FR_The withdrawal is currently being processed. The {amount} will reflect in your bank account',
     from: 'FR_From',
     to: 'FR_To',
     loading: 'FR_LOADING',
     sending_request: 'FR_Sending request',
     fetching_daily_stats: 'FR_Fetching Daily Rider Statistics',
+    statement_for: 'FR_Statement for {name} for {monthPeriod}',
+
 };
 
 export default translation;

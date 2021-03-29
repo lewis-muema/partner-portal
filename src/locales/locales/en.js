@@ -23,6 +23,9 @@ import riderTodayStats from '../riderTodayStats/en';
 import savings from '../savings/en';
 import signature from '../signature/en';
 import statement from '../statement/en';
+import tracking from '../tracking/en';
+import vehicles from '../vehicles/en';
+import vehicleStatus from '../vehicleStatus/en';
 
 const translation = {
     appHeader,
@@ -50,6 +53,9 @@ const translation = {
     savings,
     signature,
     statement,
+    tracking,
+    vehicles,
+    vehicleStatus,
 };
 
 export default translation;
