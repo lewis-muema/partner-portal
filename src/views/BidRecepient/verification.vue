@@ -4,12 +4,12 @@
       <a href="/recepient/signup"><i class='far fa-arrow-alt-circle-left fa-4x light'></i> </a>
     </div>
     <div class='verificationContent'>
-      <h1 class='verificationContent__heading'>Verification</h1>
-      <p class='verificationContent__description'>For your security, Sendy wants to make sure it’s really you. An SMS with your code was sent to {{ PhoneNumber }}</p>
+      <h1 class='verificationContent__heading'>{{ $t('signup.verification') }}</h1>
+      <p class='verificationContent__description'>{{ $t('signup.for_security') }}{{ PhoneNumber }}</p>
       <form class='verificationForm'>
-        <label class='verificationForm__label'>Enter verification code</label>
-        <input class='verificationForm__input' type='text' placeholder='Enter Code' />
-        <button class='verificationForm__btn'>Verifiy Code</button>
+        <label class='verificationForm__label'>{{ $t('signup.enter_verification_code') }}</label>
+        <input class='verificationForm__input' type='text' :placeholder="$t('signup.enter_code')" />
+        <button class='verificationForm__btn'>{{ $t('signup.verify_code') }}</button>
       </form>
     </div>
   </div>
