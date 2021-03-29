@@ -26,7 +26,6 @@ import freightOrderDetails from './views/freight/orderDetails.vue';
 import freightPreferences from './views/freight/preferences.vue';
 import bidding from './views/bidding/biddingWebForm';
 import recepient from './views/BidRecepient/landing.vue';
-// import verifyRecepient from './views/BidRecepient/verification.vue';
 
 Vue.use(Router);
 
