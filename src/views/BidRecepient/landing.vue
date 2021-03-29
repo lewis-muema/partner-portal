@@ -24,9 +24,6 @@ export default {
     Verification,
   },
   methods: {
-    routeChecker() {
-      console.log();
-    },
   },
 };
 </script>
