@@ -35,7 +35,7 @@ import placeRequest from '../auxilliary/en/components/placeRequest';
 import clientSearch from '../freight/en/clientSearch';
 import freightDashboard from '../freight/en/dashboard';
 import orderCreation from '../freight/en/orderCreation';
-import OrderDetails from '../freight/fr/orderDetails';
+import OrderDetails from '../freight/en/orderDetails';
 import freightOrders from '../freight/en/orders';
 import preferences from '../freight/en/preferences';
 
