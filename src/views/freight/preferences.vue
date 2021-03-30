@@ -78,7 +78,7 @@
       <p class="request-advance-input-labels">Notification Recipients</p>
       <button class="partner-request-advance-button-active preferences-buttons" @click="addRecipientsDialog()">Add Recipient</button>
 
-      <div class="loading preferences-empty-table" v-if="loadingVehicle"></div>
+      <div class="loading preferences-empty-table" v-if="loadingRecipients"></div>
       <div v-else>
         <div class="">
           <div v-if="recipient_row.length > 0">
