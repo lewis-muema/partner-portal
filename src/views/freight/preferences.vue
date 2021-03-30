@@ -74,6 +74,49 @@
       </div>
     </div>
 
+    <div class="preferences-container-sections">
+      <p class="request-advance-input-labels">Notification Recipients</p>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addRecipientsDialog()">Add Recipient</button>
+
+      <div class="loading preferences-empty-table" v-if="loadingRecipients"></div>
+      <div v-else>
+        <div class="">
+          <div v-if="recipient_row.length > 0">
+            <div class="vehicleContain hidden-sm-down" v-if="windowWidth > 768">
+              <table class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
+                <datatable class="savings__row" :columns="recipient_columns" :rows="recipient_row" v-if="recipient_row" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="false" :exportable="false" :printable="false"></datatable>
+              </table>
+            </div>
+
+            <div class="vehicleContain hidden-md-up" v-for="row in recipient_row" :key="row.user_id" v-else>
+              <div class="table-responsive mobile-table">
+                <div class="row-mobile">
+                  <div class="thead-mobile">Name</div>
+                  <div class="thead-mobile-row">{{ row.name }}</div>
+                </div>
+                <div class="row-mobile">
+                  <div class="thead-mobile">Phone Number</div>
+                  <div class="thead-mobile-row">{{ row.phone }}</div>
+                </div>
+                <div class="row-mobile">
+                  <div class="thead-mobile">Email</div>
+                  <div class="thead-mobile-row">{{ row.email }}</div>
+                </div>
+                <div class="row-mobile">
+                  <div class="thead-mobile">Action</div>
+                  <!--eslint-disable-next-line-->
+                  <div class="thead-mobile-row" v-html="row.options"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="preferences-empty-table" v-else>
+            <div>There are no notification recipients</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <modal name="add-preference" :height="250" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-documents-modal">
         <div class="upload-documents-modal-top-row">
@@ -209,6 +252,100 @@
         </button>
       </div>
     </modal>
+
+    <!-- Add freight notification recipients -->
+
+    <modal name="add-recipient-dialog" class="add_vehicle" :width="400" transition="slide" :pivot-y="0.5">
+      <div class="upload-vehicles-modal">
+        <div class="upload-documents-modal-top-row">
+          <p class="upload-documents-modal-top-row-title">Add Users</p>
+        </div>
+        <div class="add-user-info">
+          <div class="add-user-info-inner">
+            These are the people that will receive notifications for offers and bid requests and be able to promptly respond to them.
+            <div class="add-user-extra">
+              You can add up to 7 users
+            </div>
+          </div>
+        </div>
+        <div class="add-vehicles-outer" v-if="!summary_tab">
+          <div class="vehicle-details-borderline">
+            <div class="vehicle-inner-detail">
+              <p class="request-advance-input-labels">Name</p>
+              <input class="add-vehicle-input" v-model="recipient_data[0].name" />
+            </div>
+            <div class="vehicle-inner-detail">
+              <p class="request-advance-input-labels">Phone Number</p>
+              <input class="add-vehicle-input" v-model="recipient_data[0].phone_no" />
+            </div>
+            <div class="vehicle-inner-detail">
+              <p class="request-advance-input-labels">Email Address</p>
+              <input class="add-vehicle-input" v-model="recipient_data[0].email" />
+            </div>
+          </div>
+          <div class="vehicle-details-borderline" v-for="n in extra_recipient" :key="n" :data-index="n">
+            <div class="vehicle-inner-detail">
+              <p class="request-advance-input-labels">Name</p>
+              <input class="add-vehicle-input" v-model="recipient_data[n].name" />
+            </div>
+            <div class="vehicle-inner-detail">
+              <p class="request-advance-input-labels">Phone Number</p>
+              <input class="add-vehicle-input" v-model="recipient_data[n].phone_no" />
+            </div>
+            <div class="vehicle-inner-detail">
+              <p class="request-advance-input-labels">Email Address</p>
+              <input class="add-vehicle-input" v-model="recipient_data[n].email" />
+            </div>
+            <div class="vehicle-inner-detail" @click="removeRecipient(n)">
+              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">Remove user</span></i>
+            </div>
+          </div>
+          <div class="vehicle-inner-detail" @click="addRecipient()" v-if="extra_recipient < 7">
+            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">Add another user</span></i>
+          </div>
+        </div>
+
+        <div class="add-vehicles-outer" v-if="summary_tab">
+          <div class="vehicleContain hidden-md-up">
+            <div class="table-responsive mobile-table" v-for="row in recipient_data" :key="row.email">
+              <div class="row-mobile">
+                <div class="thead-mobile">Name</div>
+                <div class="thead-mobile-row">{{ row.name }}</div>
+              </div>
+              <div class="row-mobile">
+                <div class="thead-mobile">Phone Number</div>
+                <div class="thead-mobile-row">{{ row.phone_no }}</div>
+              </div>
+              <div class="row-mobile">
+                <div class="thead-mobile">Email Address</div>
+                <div class="thead-mobile-row">{{ row.email }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-recipient-btn-outer" v-if="!summary_tab">
+          <div class="set-div-flex"></div>
+          <div class="close-recipients-dialog" @click="$modal.hide('add-recipient-dialog')">
+            Cancel
+          </div>
+          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="nextTab(true)">
+            Save
+          </button>
+        </div>
+
+        <div class="add-recipient-btn-outer" v-else>
+          <div class="set-div-flex"></div>
+          <div class="close-recipients-dialog" @click="nextTab(false)">
+            Edit
+          </div>
+          <button class="partner-request-advance-button-active add-recipients-modal-button">
+            Confirm
+          </button>
+        </div>
+      </div>
+    </modal>
+
     <notify />
   </div>
 </template>
@@ -293,6 +430,23 @@ export default {
       truckSizeMask: '##',
       verify_consent: false,
       loadingVehicle: true,
+      loadingRecipients: true,
+      recipient_data: [
+        {
+          name: '',
+          phone_no: '',
+          email: '',
+        },
+      ],
+      recipient_columns: [
+        { label: 'Name', field: 'name' },
+        { label: 'Phone Number', field: 'phone_no' },
+        { label: 'Email', field: 'email' },
+        { label: 'Action', field: 'options', html: true },
+      ],
+      recipient_row: [],
+      extra_recipient: 0,
+      summary_tab: false,
     };
   },
   computed: {
@@ -329,6 +483,7 @@ export default {
       this.fetchCargoTypes();
       this.fetchOwnerPreferences();
       this.fetchVehicles();
+      this.fetchRecipients();
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
       this.fetchCarrierTypes();
@@ -451,6 +606,22 @@ export default {
     addVehicleDialog() {
       this.$modal.show('add-vehicle');
     },
+    addRecipientsDialog() {
+      this.$modal.show('add-recipient-dialog');
+    },
+    nextTab(val) {
+      if (val) {
+        for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
+          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone_no === '' || this.recipient_data[i].email === '') {
+            this.notify(3, 0, 'Please fill all entries');
+          } else {
+            this.summary_tab = val;
+          }
+        }
+      } else {
+        this.summary_tab = val;
+      }
+    },
     handleResize() {
       this.windowWidth = window.innerWidth;
     },
@@ -486,6 +657,21 @@ export default {
       });
       this.rows = record;
       this.loadingVehicle = false;
+    },
+    addRecipient() {
+      this.recipient_data.push({
+        name: '',
+        phone_no: '',
+        email: '',
+      });
+      this.extra_recipient++;
+    },
+    removeRecipient(index) {
+      this.extra_recipient--;
+      this.recipient_data.splice(index, 1);
+    },
+    fetchRecipients() {
+      this.loadingRecipients = false;
     },
     sortRidersActions(row) {
       const riderRow = [];
@@ -670,5 +856,31 @@ export default {
 }
 .vehicle_awaiting_verification {
   color: #0f4176;
+}
+.add-user-info {
+  background: #fdedd3;
+  border-radius: 4px;
+  margin-top: 1%;
+  margin-bottom: 3%;
+}
+.add-user-info-inner {
+  padding: 4%;
+}
+.add-user-extra {
+  margin-top: 7%;
+}
+.add-recipients-modal-button {
+  width: 47% !important;
+}
+.close-recipients-dialog {
+  margin: 20px 10px 10px 0px;
+  color: #ea7125;
+}
+.add-recipient-btn-outer {
+  text-align: right;
+  display: flex;
+}
+.set-div-flex {
+  flex-grow: 1;
 }
 </style>
