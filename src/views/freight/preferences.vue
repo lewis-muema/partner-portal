@@ -75,7 +75,7 @@
     </div>
 
     <div class="preferences-container-sections">
-      <p class="request-advance-input-labels">{{ $t('preferences.notification_recipeint') }}</p>
+      <p class="request-advance-input-labels">{{ $t('preferences.notification_recipient') }}</p>
       <button class="partner-request-advance-button-active preferences-buttons" @click="addRecipientsDialog()">{{ $t('preferences.add_recipient') }}</button>
 
       <div class="loading preferences-empty-table" v-if="loadingRecipients"></div>
@@ -613,7 +613,7 @@ export default {
       if (val) {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
           if (this.recipient_data[i].name === '' || this.recipient_data[i].phone_no === '' || this.recipient_data[i].email === '') {
-            this.notify(3, 0, this.$t('preferences.fill_all_etries'));
+            this.notify(3, 0, this.$t('preferences.fill_all_entries'));
           } else {
             this.summary_tab = val;
           }
@@ -734,7 +734,7 @@ export default {
         } else if (this.vehicle_data[i].vehicle_size < 18 || this.vehicle_data[i].vehicle_size > 33) {
           this.notify(3, 0, this.$t('preferences.vehicle_size_should'));
         } else if (this.vehicle_data[i].load_capacity >= this.vehicle_data[i].vehicle_size) {
-          this.notify(3, 0, this.$t('preferences.truck_loading_capicity'));
+          this.notify(3, 0, this.$t('preferences.truck_loading_capacity'));
         } else if (!this.verify_consent) {
           this.notify(3, 0, this.$t('preferences.agree_sendy_verify'));
         } else {

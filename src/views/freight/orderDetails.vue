@@ -87,7 +87,7 @@
             </div>
             <div>
               <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">{{ $t('orderDetails.request_fuel_advance') }}</button>
-              <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">{{ $t('orderDetails.reqeust_cash_advance') }}</button>
+              <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">{{ $t('orderDetails.request_cash_advance') }}</button>
             </div>
             <div v-if="(data.fuel_advances && data.fuel_advances.length > 0) || (data.cash_advances && data.cash_advances.length > 0)">
             <div class="partner-documents-upload-rows">

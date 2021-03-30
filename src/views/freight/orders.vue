@@ -44,7 +44,7 @@
                   <span :class="`tooltiptext sp${index}`">{{ order.pickup }}</span>
                 </div>
                 <div class="orders__list-col destination-freight">
-                  <p class="orders__mobile-col">{{ $t('freightOrders.destanation') }}</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.destination') }}</p>
                   <p class="row2" @mouseover="showToTooltip(index)" @mouseout="hideToTooltip(index)">{{ order.destination }}</p>
                   <span :class="`tooltiptext sps${index}`">{{ order.destination }}</span>
                 </div>
