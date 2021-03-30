@@ -8,7 +8,7 @@
         <div class="partner-order-container" :class="'row-' + data.id" v-if="Object.keys(data).length > 0">
           <div class="map-details--go-back-freight" @click="$router.push('/freight/orders')">
             <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
-            <span class="map-details-go-back--span">Back</span>
+            <span class="map-details-go-back--span">{{ $t('orderDetails.back') }}</span>
           </div>
           <div colspan="8" class="expanded-row-freight">
             <div class="map__column-freight">
@@ -16,128 +16,128 @@
             </div>
             <div class="order__column-freight">
               <div class="map-details-row">
-                <p class="map__details-pickup heading-freight uppercase">pickup location</p>
+                <p class="map__details-pickup heading-freight uppercase">{{ $t('orderDetails.pickup_location') }}</p>
                 <p class="map__details-pickup par">{{ data.pickup.name }}</p>
               </div>
               <div class="map-details-row">
-                <p class="map__details-dest heading-freight uppercase">destination</p>
+                <p class="map__details-dest heading-freight uppercase">{{ $t('orderDetails.destination') }}</p>
                 <p class="map__details-dest par">{{ data.destination.name }}</p>
               </div>
               <div class="map-details-row">
-                <p class="order__amount heading-freight uppercase">order amount</p>
+                <p class="order__amount heading-freight uppercase">{{ $t('orderDetails.order_amount') }}</p>
                 <p class="order__amount par">{{ data.currency }} {{ currencyFormat() }}</p>
               </div>
             </div>
             <div class="order__column-freight">
               <div class="map-details-row">
-                <p class="map__details-distance heading-freight uppercase">client</p>
+                <p class="map__details-distance heading-freight uppercase">{{ $t('orderDetails.client') }}</p>
                 <p class="map__details-distance par">{{ data.client_name }}</p>
               </div>
               <div class="map-details-row">
-                <p class="map__details-date heading-freight uppercase">pickup time</p>
+                <p class="map__details-date heading-freight uppercase">{{ $t('orderDetails.pickup_time') }}</p>
                 <p class="map__details-date par">{{ timeFormat(data.pickup_time) }}</p>
               </div>
               <div class="map-details-row">
-                <p class="map__details-date heading-freight uppercase">type of truck needed</p>
+                <p class="map__details-date heading-freight uppercase">{{ $t('orderDetails.type_of_truck_needed') }}</p>
                 <p class="map__details-date par">{{ data.cargo_type }}</p>
               </div>
             </div>
             <div class="order__column-freight">
               <div class="map-details-row">
-                <p class="map__details-distance heading-freight uppercase">weight of the load</p>
-                <p class="map__details-distance par">{{ data.tonnes_per_truck }} Tonnes per truck </p>
+                <p class="map__details-distance heading-freight uppercase">{{ $t('orderDetails.weight_load') }}</p>
+                <p class="map__details-distance par">{{ data.tonnes_per_truck }} {{ $t('orderDetails.tonnes_per_truck') }} </p>
               </div>
               <div class="map-details-row">
-                <p class="map__details-date heading-freight uppercase">type of load</p>
+                <p class="map__details-date heading-freight uppercase">{{ $t('orderDetails.type_of_load') }}</p>
                 <p class="map__details-date par">{{ data.carrier_type ? data.carrier_type : 'N/A' }}</p>
               </div>
             </div>
           </div>
           <div class="partner-documents-container">
-            <p class="partner-documents-upload-title">Documents</p>
-            <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">Upload document</button>
+            <p class="partner-documents-upload-title">{{ $t('orderDetails.documents') }}</p>
+            <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">{{ $t('orderDetails.upload_documents') }}</button>
             <div class="partner-documents-upload-rows" v-if="data.quotation.documents.length">
-              <span class="partner-documents-upload-header partner-documents-third-row">Type of document</span>
-              <span class="partner-documents-upload-header partner-documents-third-row">Date</span>
-              <span class="partner-documents-upload-header partner-documents-third-row">Actions</span>
-              <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.type_of_documents') }}</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.date') }}</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.actions') }}</span>
+              <span class="partner-documents-upload-header partner-documents-fourth-row">{{ $t('orderDetails.status') }}</span>
             </div>
             <div class="partner-documents-upload-rows" v-for="(document, index) in data.quotation.documents" :key="`${document.document_name}-${index}`">
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ document.document_name }}</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ timeFormat(document.date_created) }}</span>
-              <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.document_url)">View document ></span>
+              <span class="partner-documents-upload-columns partner-documents-third-row partner-document-view-trigger" @click="showPreview(document.document_url)">{{ $t('orderDetails.view_document') }} ></span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row" v-if="document.status === 'PENDING' && document.actionable">
-                <button class="partner-documents-approve-button" @click="triggerAction(2, document)">Approve</button>
-                <button class="partner-documents-decline-button" @click="triggerAction(3, document)">Decline</button>
+                <button class="partner-documents-approve-button" @click="triggerAction(2, document)">{{ $t('orderDetails.approve') }}</button>
+                <button class="partner-documents-decline-button" @click="triggerAction(3, document)">{{ $t('orderDetails.decline') }}</button>
               </span>
-              <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ document.message }}<br /><span class="reject-documents-reason" v-if="document.status === 'REJECTED'">Reason: {{ document.reason }}</span></span>
+              <span v-else class="partner-documents-upload-columns partner-documents-fourth-row">{{ document.message }}<br /><span class="reject-documents-reason" v-if="document.status === 'REJECTED'">{{ $t('orderDetails.reason') }}: {{ document.reason }}</span></span>
             </div>
             <div class="partner-documents-upload-empty" v-if="data.quotation.documents.length === 0">
-              No uploaded documents at the time
+              {{ $t('orderDetails.no_uploaded_docs') }}
             </div>
           </div>
           <div class="partner-documents-container">
-            <p class="partner-documents-upload-title">Auxillary Services</p>
+            <p class="partner-documents-upload-title">{{ $t('orderDetails.auxillary_services') }}</p>
             <div class="request-advances-info">
               <i class="el-icon-info request-advances-info-icon"></i>
               <div>
-                <div>To request for <b>fuel advance</b>, the purchase order and bill of lading documents should uploaded and approved by both parties. <br /></div>
-                <div>For <b>cash advance</b>, the interchange document (for return container orders), clients delivery notes and invoice documents should be uploaded and approved by both parties.</div>
+                <div v-html="$t('orderDetails.request_for')"></div>
+                <div v-html="$t('orderDetails.cash_advance')"></div>
               </div>
             </div>
             <div>
-              <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">Request fuel advance</button>
-              <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">Request cash advance</button>
+              <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">{{ $t('orderDetails.request_fuel_advance') }}</button>
+              <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">{{ $t('orderDetails.request_cash_advance') }}</button>
             </div>
             <div v-if="(data.fuel_advances && data.fuel_advances.length > 0) || (data.cash_advances && data.cash_advances.length > 0)">
             <div class="partner-documents-upload-rows">
-              <span class="partner-documents-upload-header partner-documents-fourth-row">Type of request</span>
-              <span class="partner-documents-upload-header partner-documents-third-row">Amount</span>
-              <span class="partner-documents-upload-header partner-documents-fourth-row">Details</span>
-              <span class="partner-documents-upload-header partner-documents-fourth-row">Status</span>
+              <span class="partner-documents-upload-header partner-documents-fourth-row">{{ $t('orderDetails.type_of_request') }} </span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.amount') }}</span>
+              <span class="partner-documents-upload-header partner-documents-fourth-row">{{ $t('orderDetails.details') }}</span>
+              <span class="partner-documents-upload-header partner-documents-fourth-row">{{ $t('orderDetails.status') }}</span>
             </div>
             <div class="partner-documents-upload-rows" v-for="(advance, index) in data.fuel_advances" :key="`fuel-${index}`">
-              <span class="partner-documents-upload-columns partner-documents-fourth-row">Fuel</span>
+              <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ $t('orderDetails.fuel') }}</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ data.currency }} {{ advance.amount }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.fuel_station_name }} ({{ advance.fuel_station_address }}) <br />{{ advance.fuel_type }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.status }}</span>
             </div>
             <div class="partner-documents-upload-rows" v-for="(advance, index) in data.cash_advances" :key="`cash-${index}`">
-              <span class="partner-documents-upload-columns partner-documents-fourth-row">Cash</span>
+              <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ $t('orderDetails.cash') }}</span>
               <span class="partner-documents-upload-columns partner-documents-third-row">{{ data.currency }} {{ advance.amount }}</span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row"></span>
               <span class="partner-documents-upload-columns partner-documents-fourth-row">{{ advance.status }}</span>
             </div>
             </div>
             <div class="partner-documents-upload-empty" v-else>
-              No fuel and cash advance request at the moment
+             {{ $t('orderDetails.no_fuel_advance') }}
             </div>
           </div>
           <modal name="upload-documents" :height="500" :width="400" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
-                <p class="upload-documents-modal-top-row-title">Upload document</p>
+                <p class="upload-documents-modal-top-row-title">{{ $t('orderDetails.upload_document') }}</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('upload-documents')"></i>
               </div>
-              <p class="upload-documents-modal-top-input-labels">Select type of document</p>
+              <p class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.select_type_of_doc') }}</p>
               <select name="" id="" class="upload-documents-modal-top-inputs" v-model="documentType">
                 <option v-for="(document, index) in documents" :key="index" :value="document.documentType">
                   {{ document.documentType }}
                 </option>
               </select>
-              <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">Name of the document</p>
+              <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.name_of_document') }}</p>
               <input type="text" class="upload-documents-modal-top-inputs" v-if="documentType === 'Other'" v-model="documentName">
-              <p class="upload-documents-modal-top-input-labels">Upload document</p>
+              <p class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.upload_document') }}</p>
               <div class="partner-upload-module" @click="transfer('upload-doc')">
                 <p class="upload-documents-modal-click-text" v-if="!uploadStatus"><i class="el-icon-upload upload-documents-modal-click-icon"></i> Upload document</p>
-                <p class="upload-documents-modal-click-text" v-else>File selected: {{ uploadFileName }}</p>
+                <p class="upload-documents-modal-click-text" v-else>{{ $t('orderDetails.file_selected') }}: {{ uploadFileName }}</p>
               </div>
               <input
                 type="file"
                 name
                 value
                 class="form-control"
-                placeholder="Log Book"
+                :placeholder="$t('orderDetails.file_selected')"
                 accept="application/pdf"
                 style="display:none;"
                 id="upload-doc"
@@ -145,22 +145,22 @@
               />
               <button :class="uploadStatus && !uploadProgress ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="triggerUpload()">
                 <i class="el-icon-loading" v-if="uploadProgress"></i>
-                Upload document
+                {{ $t('orderDetails.upload_document') }}
               </button>
             </div>
           </modal>
           <modal name="request-fuel-advance" :height="550" :width="400" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
-                <p class="upload-documents-modal-top-row-title">Request fuel payment</p>
+                <p class="upload-documents-modal-top-row-title">{{ $t('orderDetails.request_fuel_payment') }}</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('request-fuel-advance')"></i>
               </div>
               <div>
                 <div class="request-payment-info">
                   <i class="el-icon-info request-payment-info-icon"></i>
-                  You can request a maximum of {{ data.currency }} {{ data.advance_limit }}
+                  {{ $t('orderDetails.request_maximum_of') }} {{ data.currency }} {{ data.advance_limit }}
                 </div>
-                <p class="request-advance-input-labels">Enter amount</p>
+                <p class="request-advance-input-labels">{{ $t('orderDetails.enter_amount') }}</p>
                 <el-input
                   type="text"
                   class="request-advance-inputs"
@@ -173,7 +173,7 @@
                 </el-input>
               </div>
               <div>
-                <p class="request-advance-input-labels">Choose fueling Station</p>
+                <p class="request-advance-input-labels">{{ $t('orderDetails.choose_fueling_station') }}</p>
                 <el-select
                   class="request-advance-inputs"
                   v-model="station"
@@ -188,7 +188,7 @@
                 </el-select>
               </div>
               <div>
-                <p class="request-advance-input-labels">Station address</p>
+                <p class="request-advance-input-labels">{{ $t('orderDetails.station_address') }}</p>
                 <el-select
                   class="request-advance-inputs"
                   v-model="address"
@@ -204,7 +204,7 @@
                 </el-select>
               </div>
               <div>
-                <p class="request-advance-input-labels">Fuel type</p>
+                <p class="request-advance-input-labels">{{ $t('orderDetails.fuel_type') }}</p>
                 <el-select
                   class="request-advance-inputs"
                   v-model="fuel"
@@ -221,22 +221,22 @@
               </div>
               <button :class="fuelSubmitStatus && !requestLoadingStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitFuelRequest">
                 <i class="el-icon-loading" v-if="requestLoadingStatus"></i>
-                Request fuel advance
+                {{ $t('orderDetails.request_fuel_advance') }}
               </button>
             </div>
           </modal>
           <modal name="request-cash-advance" :height="300" :width="400" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
-                <p class="upload-documents-modal-top-row-title">Request advance cash payment</p>
+                <p class="upload-documents-modal-top-row-title">{{ $t('orderDetails.request_advance_cash_payment') }}</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('request-cash-advance')"></i>
               </div>
               <div>
                 <div class="request-payment-info">
                   <i class="el-icon-info request-payment-info-icon"></i>
-                  You can request a maximum of {{ data.currency }} {{ data.advance_limit }}
+                  {{ $t('orderDetails.request_a_maximum_of') }} {{ data.currency }} {{ data.advance_limit }}
                 </div>
-                <p class="request-advance-input-labels">Enter amount</p>
+                <p class="request-advance-input-labels">{{ $t('orderDetails.enter_amount') }}</p>
                 <el-input
                   type="text"
                   class="request-advance-inputs"
@@ -250,14 +250,14 @@
               </div>
               <button :class="cashSubmitStatus && !requestLoadingStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitCashRequest">
                 <i class="el-icon-loading" v-if="requestLoadingStatus"></i>
-                Request cash advance
+                {{ $t('orderDetails.request_cash_advance') }}
               </button>
             </div>
           </modal>
           <modal name="preview-documents" :height="600" :width="800" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
-                <p class="upload-documents-modal-top-row-title">Preview document</p>
+                <p class="upload-documents-modal-top-row-title">{{ $t('orderDetails.preview_document') }}</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('preview-documents')"></i>
               </div>
             <iframe :src="documentPreview" width="100%" height="100%" title="Document preview"></iframe>
@@ -266,13 +266,13 @@
           <modal name="reject-documents" :height="350" :width="400" transition="slide" :pivot-y="0.5">
             <div class="upload-documents-modal">
               <div class="upload-documents-modal-top-row">
-                <p class="upload-documents-modal-top-row-title">Decline document</p>
+                <p class="upload-documents-modal-top-row-title">{{ $t('orderDetails.decline_document') }}</p>
                 <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('reject-documents')"></i>
               </div>
             <textarea name="" id="" cols="30" rows="10" placeholder="Please write a reason why you want to decline this document" class="reject-documents-textarea" v-model="declineReason"></textarea>
             <div class="reject-documents-buttons">
-              <button class="partner-documents-approve-button" @click="actionDocument(3)">Decline</button>
-              <button class="partner-documents-decline-button" @click="$modal.hide('reject-documents')">Cancel</button>
+              <button class="partner-documents-approve-button" @click="actionDocument(3)">{{ $t('orderDetails.decline') }}</button>
+              <button class="partner-documents-decline-button" @click="$modal.hide('reject-documents')">{{ $t('orderDetails.cancel') }}</button>
             </div>
             </div>
           </modal>
@@ -425,7 +425,7 @@ export default {
       if (!files.length) {
         this.uploadStatus = false;
         // eslint-disable-next-line no-alert
-        return alert('Please choose a file to upload first.');
+        return alert(this.$t('orderDetails.choose_file_upload'));
       }
       this.uploadStatus = true;
       const file = files[0];
@@ -435,7 +435,7 @@ export default {
       const files = document.getElementById('upload-doc')['files'];
       if (!files.length) {
         // eslint-disable-next-line no-alert
-        return alert('Please choose a file to upload first.');
+        return alert(this.$t('orderDetails.choose_file_upload'));
       }
       this.uploadProgress = true;
       const file = files[0];
@@ -454,7 +454,7 @@ export default {
           document.getElementById('upload-doc').value = '';
           this.uploadProgress = false;
           if (err) {
-            this.notify(3, 0, `There was an error uploading your document: ${err.message}`);
+            this.notify(3, 0, `${this.$t('orderDetails.error_uploading')}: ${err.message}`);
           } else {
             this.uploadDocuments(photoKey);
             this.uploadStatus = false;
@@ -531,7 +531,7 @@ export default {
               resolve(response);
             })
             .catch(error => {
-              this.notify(3, 0, `There was an error submitting your advance: ${error.response.data.message}`);
+              this.notify(3, 0, `${this.$t('orderDetails.error_submitting')}: ${error.response.data.message}`);
               this.errorObj = error.response;
               this.requestLoadingStatus = false;
               resolve(error);
@@ -556,7 +556,7 @@ export default {
               resolve(response);
             })
             .catch(error => {
-              this.notify(3, 0, `There was an error submitting your advance: ${error.response.data.message}`);
+              this.notify(3, 0, `${this.$t('orderDetails.error_submitting')}: ${error.response.data.message}`);
               this.errorObj = error.response;
               this.requestLoadingStatus = false;
               resolve(error);
@@ -633,13 +633,13 @@ export default {
         axios
           .post(`${this.auth}freight-service/shipments/quotations/documents`, payload, this.config)
           .then(response => {
-            this.notify(3, 1, 'Successfully uploaded document.');
+            this.notify(3, 1, this.$t('orderDetails.successfully_uploaded_doc'));
             this.$modal.hide('upload-documents');
             this.fetchOrder();
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, `There was an error uploading your document: ${error.response.data.reason}`);
+            this.notify(3, 0, `${this.$t('orderDetails.error_uploading')} ${error.response.data.reason}`);
             this.errorObj = error.response;
             resolve(error);
           });
@@ -658,14 +658,14 @@ export default {
         axios
           .put(`${this.auth}freight-service/shipments/quotations/documents/${status === 3 ? 'decline' : 'approve'}`, payload, this.config)
           .then(response => {
-            this.notify(3, 1, `Successfully ${status === 3 ? 'rejected' : 'approved'} document.`);
+            this.notify(3, 1, `${this.$t('orderDetails.successfully')} ${status === 3 ? this.$t('orderDetails.rejected') : this.$t('orderDetails.approved')} ${this.$t('orderDetails.document')}.`);
             this.$modal.hide('reject-documents');
             this.declineReason = '';
             this.fetchOrder();
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, `There was an error ${status === 3 ? 'rejecting' : 'approving'} the document`);
+            this.notify(3, 0, `${this.$t('orderDetails.an_error')}  ${status === 3 ? this.$t('orderDetails.rejecting') : this.$t('orderDetails.approving')} ${this.$t('orderDetails.the_document')}`);
             this.errorObj = error.response;
             resolve(error);
           });

@@ -32,6 +32,12 @@ import fuelAdvance from '../auxilliary/fr/fuelAdvance';
 import approved from '../auxilliary/fr/components/approved';
 import fuelPending from '../auxilliary/fr/components/pending';
 import placeRequest from '../auxilliary/fr/components/placeRequest';
+import clientSearch from '../freight/fr/clientSearch';
+import freightDashboard from '../freight/en/dashboard';
+import orderCreation from '../freight/fr/orderCreation';
+import OrderDetails from '../freight/fr/orderDetails';
+import freightOrders from '../freight/fr/orders';
+import preferences from '../freight/fr/preferences';
 
 const translation = {
     appHeader,
@@ -68,6 +74,12 @@ const translation = {
     approved,
     fuelPending,
     placeRequest,
+    clientSearch,
+    freightDashboard,
+    orderCreation,
+    OrderDetails,
+    freightOrders,
+    preferences,
 };
 
 export default translation;
