@@ -16,11 +16,11 @@ const translation = {
     load_picked_at: 'FR_The load will be picked at',
     destination: 'FR_Destination',
     type_of_load: 'FR_Type of load',
-    datea_of_pickup: 'FR_Date of Pick up',
+    date_of_pickup: 'FR_Date of Pick up',
     number_of_trucks_wanted: 'FR_Number of Trucks wanted',
     type_of_truck: 'FR_Type of Truck',
     weight_of_load: 'FR_Weight of load per truck',
-    tonned: 'FR_Tonnes',
+    tonnes: 'FR_Tonnes',
     return_container: 'FR_Return container?',
     yes_containers_returned: 'FR_Yes, containers will be returned',
     no_containers_returned: 'FR_No, containers will not be returned',
@@ -30,7 +30,7 @@ const translation = {
     bid_amount_per_truck: 'FR_What is your bid amount per truck?',
     total_bid_amount: 'FR_Your total bid amount',
     successfully_rejected_bid: 'FR_You successfully rejected the bid',
-    forfeit_subimitted: 'FR_Forfeit submitted on',
+    forfeit_submitted: 'FR_Forfeit submitted on',
     enter_your_bid: 'FR_Enter your bid',
     truck_cannot_be_less: 'FR_Truck cannot be less than one',
     offer: 'FR_Offer',
@@ -38,7 +38,7 @@ const translation = {
     per_truck: 'FR_Per Truck',
     or: 'FR_OR',
     your_bid: 'FR_Your bid',
-    bid_sumitted_on: 'FR_Bid submitted on',
+    bid_submitted_on: 'FR_Bid submitted on',
 };
 
 export default translation;
