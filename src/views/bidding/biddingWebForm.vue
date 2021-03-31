@@ -121,7 +121,7 @@
             <div v-else-if="rejected">
               <p class="bid-details-content"> {{ $t('biddingWebForm.successfully_rejected_bid') }}</p>
               <i>
-                <p class="timestamp"> {{ $t('biddingWebForm.forfeit_subimitted') }} {{ formData.quotation.date_created }}</p>
+                <p class="timestamp"> {{ $t('biddingWebForm.forfeit_submitted') }} {{ formData.quotation.date_created }}</p>
               </i>
             </div>
             <!-- BID IS NEGOTIABLE AND HAS OFFER AMOUNT OR WHEN THERE IS NO OFFER_AMOUNT  -->
@@ -213,7 +213,7 @@
               </div>
 
               <i>
-                <p class="timestamp">{{ $t('biddingWebForm.bid_sumitted_on') }} {{ this.date }}</p>
+                <p class="timestamp">{{ $t('biddingWebForm.bid_submitted_on') }} {{ this.date }}</p>
               </i>
             </div>
           </div>

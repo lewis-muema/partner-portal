@@ -9,7 +9,7 @@ const translation = {
     vat: 'VAT',
     action: 'action',
     pickup: 'Pickup',
-    destiantion_capital: 'Destination',
+    destination_capital: 'Destination',
     pick_up_date: 'Pick-up date',
     amount: 'Amount',
     in_transit: 'in transit',
