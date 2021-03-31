@@ -711,6 +711,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       columns: [{ label: '', field: 'first' }, { label: this.$t('vehicles.make'), field: 'make' }, { label: this.$t('vehicles.model'), field: 'model' }, { label: this.$t('vehicles.registration'), field: 'registration_no' }, { label: this.$t('vehicles.active_driver_phone'), field: 'phone_no' }, { label: this.$t('vehicles.active_driver_name'), field: 'name' }, { label: this.$t('vehicles.invited_driver'), field: 'rider_phone' }, { label: this.$t('vehicles.driver_balance'), field: 'rb' }, { label: this.$t('vehicles.option'), field: 'options', html: true }],
