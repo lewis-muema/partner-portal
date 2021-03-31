@@ -123,6 +123,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: this.$t('savings.date'), field: 'pay_time' }, { label: this.$t('savings.amount'), field: 'amount' }, { label: this.$t('savings.balance'), field: 'running_balance' }, { label: this.$t('savings.narrative'), field: 'pay_narrative' }],
