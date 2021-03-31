@@ -183,7 +183,7 @@ export default {
       if (this.user && this.password && this.phoneValidity) {
         this.handleButton(`<div class='loading-spinner'></div> ${this.$t('externalLogin.please_wait')}`);
         axios
-          .post(`${process.env.VUE_APP_AUTH}rideradmin/external_login`, userPayload, { headers: { 'Content-Type': 'application/json' } })
+          .post(`${process.env.VUE_APP_AUTH}rideradmin/external_login`, userPayload, { headers: { 'Content-Type': 'application/json', 'Accept-Language': localStorage.getItem('language') } })
           .then(response => {
             this.handleResponse(response);
           })
