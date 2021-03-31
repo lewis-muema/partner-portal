@@ -26,6 +26,18 @@ import statement from '../statement/en';
 import tracking from '../tracking/en';
 import vehicles from '../vehicles/en';
 import vehicleStatus from '../vehicleStatus/en';
+import biddingWebForm from '../bidding/en/biddingWebForm';
+import signup from '../bidRecipient/en/signup';
+import fuelAdvance from '../auxilliary/en/fuelAdvance';
+import approved from '../auxilliary/en/components/approved';
+import fuelPending from '../auxilliary/en/components/pending';
+import placeRequest from '../auxilliary/en/components/placeRequest';
+import clientSearch from '../freight/en/clientSearch';
+import freightDashboard from '../freight/en/dashboard';
+import orderCreation from '../freight/en/orderCreation';
+import OrderDetails from '../freight/en/orderDetails';
+import freightOrders from '../freight/en/orders';
+import preferences from '../freight/en/preferences';
 
 const translation = {
     appHeader,
@@ -56,6 +68,18 @@ const translation = {
     tracking,
     vehicles,
     vehicleStatus,
+    biddingWebForm,
+    signup,
+    fuelAdvance,
+    approved,
+    fuelPending,
+    placeRequest,
+    clientSearch,
+    freightDashboard,
+    orderCreation,
+    OrderDetails,
+    freightOrders,
+    preferences,
 };
 
 export default translation;

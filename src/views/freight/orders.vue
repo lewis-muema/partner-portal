@@ -7,10 +7,10 @@
         <div class="freight__container">
           <div class="truckflow__container-search">
             <span class="container__search-input">
-              <input type="text" onfocus="value = ''" class="container__search-element" id="inp" placeholder="Enter pickup" @input="filterPickup()" @keyup.delete="refresh()" />
+              <input type="text" onfocus="value = ''" class="container__search-element" id="inp" :placeholder="$t('freightOrders.enter_pickup')" @input="filterPickup()" @keyup.delete="refresh()" />
             </span>
             <span class="container__search-input">
-              <input type="text" onfocus="value = ''" class="container__search-element" id="dst" placeholder="Enter destination" @input="filterDest()" @keyup.delete="refresh()" />
+              <input type="text" onfocus="value = ''" class="container__search-element" id="dst" :placeholder="$t('freightOrders.enter_destination')" @input="filterDest()" @keyup.delete="refresh()" />
             </span>
           </div>
           <!-- <button class="partner-request-advance-button-active" @click="$store.commit('setCreateOrderStatus', true)">
@@ -20,12 +20,12 @@
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
-              <div class="orders__col-head pickup-freight uppercase">pickup location</div>
-              <div class="orders__col-head destination-freight uppercase">destination</div>
-              <div class="orders__col-head pick-date-freight uppercase">pickup date</div>
-              <div class="orders__col-head truck-freight uppercase">truck</div>
-              <div class="orders__col-head client-freight">client</div>
-              <div class="orders__col-head price-align-freight uppercase">No of trucks</div>
+              <div class="orders__col-head pickup-freight uppercase">{{ $t('freightOrders.pickup_loaction') }}</div>
+              <div class="orders__col-head destination-freight uppercase">{{ $t('freightOrders.destination') }}</div>
+              <div class="orders__col-head pick-date-freight uppercase">{{ $t('freightOrders.pickup_date') }}</div>
+              <div class="orders__col-head truck-freight uppercase">{{ $t('freightOrders.truck') }}</div>
+              <div class="orders__col-head client-freight">{{ $t('freightOrders.client') }}</div>
+              <div class="orders__col-head price-align-freight uppercase">{{ $t('freightOrders.no_of_trucks') }}</div>
               <div class="orders__col-head center-action-freight uppercase"></div>
             </div>
             <div class="loading" v-if="loadingStatus && orders.length === 0"></div>
@@ -39,35 +39,35 @@
                 :key="order.id"
               >
                 <div class="orders__list-col pickup-freight">
-                  <p class="orders__mobile-col">Pickup</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.pickup') }}</p>
                   <p class="row1" @mouseover="showFromTooltip(index)" @mouseout="hideFromTooltip(index)">{{ order.pickup }}</p>
                   <span :class="`tooltiptext sp${index}`">{{ order.pickup }}</span>
                 </div>
                 <div class="orders__list-col destination-freight">
-                  <p class="orders__mobile-col">Destination</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.destination') }}</p>
                   <p class="row2" @mouseover="showToTooltip(index)" @mouseout="hideToTooltip(index)">{{ order.destination }}</p>
                   <span :class="`tooltiptext sps${index}`">{{ order.destination }}</span>
                 </div>
                 <div class="orders__list-col pick-date-freight">
-                  <p class="orders__mobile-col">Date</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.date') }}</p>
                   <p>{{ timeFormat(index) }}</p>
                 </div>
                 <div class="orders__list-col truck-freight">
-                  <p class="orders__mobile-col">Truck</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.truck') }}</p>
                   <p class="row3">{{ order.cargo_type }}</p>
                 </div>
                 <div class="orders__list-col client-freight">
-                  <p class="orders__mobile-col">client</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.client') }}</p>
                   <p>{{ order.customer_name }}</p>
                 </div>
                 <div class="orders__list-col price-align-freight">
-                  <p class="orders__mobile-col">No of trucks</p>
-                  <p>{{ order.total_trucks }} Truck/s</p>
+                  <p class="orders__mobile-col">{{ $t('freightOrders.no_of_trucks') }}</p>
+                  <p>{{ order.total_trucks }} {{ $t('freightOrders.trucks') }}</p>
                 </div>
                 <div class="orders__list-col center-action-freight">
-                  <P class="orders__mobile-col uppercase">action</P>
+                  <P class="orders__mobile-col uppercase">{{ $t('freightOrders.action') }}</P>
                   <div class="orders__statuses">
-                    <span>view ></span>
+                    <span>{{ $t('freightOrders.view') }} ></span>
                   </div>
                 </div>
               </div>
@@ -79,7 +79,7 @@
     <div class="freight-create-order-container" v-else>
       <div class="map-details--go-back-freight" @click="$store.commit('setCreateOrderStatus', false)">
         <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
-        <span class="map-details-go-back--span">Back</span>
+        <span class="map-details-go-back--span">{{ $t('freightOrders.back') }}</span>
       </div>
       <orderCreation />
     </div>
@@ -118,7 +118,7 @@ export default {
         },
       },
       errorObj: '',
-      loaderMessage: 'There are no orders',
+      loaderMessage: $t('freightOrders.no_orders'),
     };
   },
   computed: {

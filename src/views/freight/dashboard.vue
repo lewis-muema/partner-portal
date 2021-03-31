@@ -4,20 +4,20 @@
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="freight-dashboard-empty-row" v-if="!loadingStatus && timeline.length === 0">
       <img src="https://s3-eu-west-1.amazonaws.com/images.sendyit.com/partner_portal/images/log.png" class="freight-log-img" alt="log">
-      <div>There are no documents on your timeline</div>
+      <div>{{ $t('freightDashboard.no_documents') }}</div>
     </div>
     <div class="freight-dashboard" v-else>
       <div class="freight-dashboard-top-row">
-        <p class="freight-dashboard-title">Recent activity</p>
+        <p class="freight-dashboard-title">{{ $t('freightDashboard.recent_activity') }}</p>
       </div>
       <div class="loading" v-if="loadingStatus && timeline.length === 0"></div>
       <div class="freight-dashboard-row freight-dashboard-timeline-rows" v-for="(time, index) in timeline" :key="index">
         <p>{{ time.message }}</p>
-        <p @click="showDocument(time.data.url)" v-if="time.actionable" class="freight-dashboard-links">View document <i class="el-icon-arrow-right"></i></p>
-        <p @click="showOrder(time.data.order_id)" class="freight-dashboard-links" v-else>View order <i class="el-icon-arrow-right"></i></p>
+        <p @click="showDocument(time.data.url)" v-if="time.actionable" class="freight-dashboard-links">{{ $t('freightDashboard.view_document') }} <i class="el-icon-arrow-right"></i></p>
+        <p @click="showOrder(time.data.order_id)" class="freight-dashboard-links" v-else>{{ $t('freightDashboard.view_order') }} <i class="el-icon-arrow-right"></i></p>
         <div v-if="time.actionable && time.data.created_by !== 'OWNER'" class="freight-dashboard-buttons">
-          <button class="partner-documents-approve-button" @click="approve(time.data, 2)">Approve</button>
-          <button class="partner-documents-decline-button" @click="decline(time.data, 3)">Reject</button>
+          <button class="partner-documents-approve-button" @click="approve(time.data, 2)">{{ $t('freightDashboard.approve') }}</button>
+          <button class="partner-documents-decline-button" @click="decline(time.data, 3)">{{ $t('freightDashboard.reject') }}</button>
         </div>
         <p class="freight-dashboard-time">{{ formatTime(time.date_time) }}</p>
       </div>
@@ -25,7 +25,7 @@
     <modal name="preview-documents" :height="600" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-documents-modal">
         <div class="upload-documents-modal-top-row">
-          <p class="upload-documents-modal-top-row-title">Preview document</p>
+          <p class="upload-documents-modal-top-row-title">{{ $t('freightDashboard.preview_document') }}</p>
           <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('preview-documents')"></i>
         </div>
       <iframe :src="documentPreview" width="100%" height="100%" title="Document preview"></iframe>
@@ -34,13 +34,13 @@
     <modal name="reject-documents" :height="350" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-documents-modal">
         <div class="upload-documents-modal-top-row">
-          <p class="upload-documents-modal-top-row-title">Decline document</p>
+          <p class="upload-documents-modal-top-row-title">{{ $t('freightDashboard.decline_document') }}</p>
           <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('reject-documents')"></i>
         </div>
       <textarea name="" id="" cols="30" rows="10" placeholder="Please write a reason why you want to decline this document" class="reject-documents-textarea" v-model="declineReason"></textarea>
       <div class="reject-documents-buttons">
-        <button class="partner-documents-approve-button" @click="actionDocument()">Decline</button>
-        <button class="partner-documents-decline-button" @click="$modal.hide('reject-documents')">Cancel</button>
+        <button class="partner-documents-approve-button" @click="actionDocument()">{{ $t('freightDashboard.decline') }}</button>
+        <button class="partner-documents-decline-button" @click="$modal.hide('reject-documents')">{{ $t('freightDashboard.cancel') }}</button>
       </div>
       </div>
     </modal>
@@ -76,7 +76,7 @@ export default {
       errorObj: '',
       timeline: [],
       documentPreview: '',
-      loaderMessage: 'There are no logs',
+      loaderMessage: this.$t('freightDashboard.no_logs'),
       declineReason: '',
       document: '',
       status: '',
@@ -142,7 +142,7 @@ export default {
         axios
           .put(`${this.auth}freight-service/shipments/quotations/documents/${this.status === 3 ? 'decline' : 'approve'}`, payload, this.config)
           .then(response => {
-            this.notify(3, 1, `Successfully ${this.status === 3 ? 'rejected' : 'approved'} document.`);
+            this.notify(3, 1, `${this.$t('freightDashboard.successfully')} ${this.status === 3 ? this.$t('freightDashboard.rejected') : this.$t('freightDashboard.approved')} ${this.$t('freightDashboard.document')}.`);
             this.$modal.hide('reject-documents');
             this.declineReason = '';
             this.document = '';
@@ -151,7 +151,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, `There was an error ${this.status === 3 ? 'rejecting' : 'approving'} the document: ${error.response.data.reason}`);
+            this.notify(3, 0, `${this.$t('freightDashboard.error')} ${this.status === 3 ? this.$t('freightDashboard.rejecting') : this.$t('freightDashboard.approving')} ${this.$t('freightDashboard.the_document')}: ${error.response.data.reason}`);
             this.errorObj = error.response;
             resolve(error);
           });

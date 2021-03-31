@@ -1,6 +1,6 @@
 <template>
   <div class='signup'>
-    <h1 class='signup__heading'>Join Umoja Transporters</h1>
+    <h1 class='signup__heading'>{{ $t('signup.join_umoja_transporters') }}</h1>
 
     <div class='recepient' v-for='(recepient, i) in recepientData' :key='i'>
       <p class='recepient__title'>{{ recepient.title }}</p>
@@ -8,20 +8,20 @@
     </div>
     <form class='password'>
       <div class='password__label'>
-        <label class='password__labelText'>Password</label>
+        <label class='password__labelText'>{{ $t('signup.password') }}</label>
         <i @mouseover.self='setInfo' class='fas fa-info-circle fa-lg password__labelIcon'></i>
-        <span class='information' v-show="info">This is the password we sent to you in the invite email</span>
+        <span class='information' v-show="info"> {{ $t('signup.password_sent_invite') }}</span>
       </div>
       <div class='password__input' v-if='showPassword'>
-        <input class='password__inputBox' type='text' placeholder='Enter Password' />
+        <input class='password__inputBox' type='text' :placeholder="$t('signup.enter_password')"/>
         <i @click='showPassword = !showPassword' class='fas fa-eye-slash fa-lg password__inputIcon'></i>
       </div>
       <div class='password__input' v-else>
-        <input class='password__inputBox' type='password' placeholder='Enter Password' />
+        <input class='password__inputBox' type='password' :placeholder="$t('signup.enter_password')" />
         <i @click='showPassword = !showPassword' class='fas fa-eye fa-lg password__inputIcon'></i>
       </div>
-      <button class='password__btn'>Sign Up</button>
-      <p class='password__login'>Already have an account? <a href='/login'>Login here</a></p>
+      <button class='password__btn'>{{ $t('signup.sign_up') }}</button>
+      <p class='password__login'>{{ $t('signup.have_account') }}<a href='/login'>{{ $t('signup.login_here') }}</a></p>
     </form>
   </div>
 </template>
@@ -33,15 +33,15 @@ export default {
     return {
       recepientData: [
         {
-          title: 'Name',
+          title: this.$t('signup.name'),
           value: 'Khamisi Matende',
         },
         {
-          title: 'Phone Number',
+          title: this.$t('signup.phone_number'),
           value: '0722639059',
         },
         {
-          title: 'Email Address',
+          title: this.$t('signup.email_address'),
           value: 'kham@gmail.com',
         },
       ],

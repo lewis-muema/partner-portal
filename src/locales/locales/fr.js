@@ -22,10 +22,22 @@ import refund from '../refund/fr';
 import riderTodayStats from '../riderTodayStats/fr';
 import savings from '../savings/fr';
 import signature from '../signature/fr';
-import statement from '../statement/en';
+import statement from '../statement/fr';
 import tracking from '../tracking/fr';
 import vehicles from '../vehicles/fr';
-import vehicleStatus from '../vehicleStatus/en';
+import vehicleStatus from '../vehicleStatus/fr';
+import biddingWebForm from '../bidding/fr/biddingWebForm';
+import signup from '../bidRecipient/fr/signup';
+import fuelAdvance from '../auxilliary/fr/fuelAdvance';
+import approved from '../auxilliary/fr/components/approved';
+import fuelPending from '../auxilliary/fr/components/pending';
+import placeRequest from '../auxilliary/fr/components/placeRequest';
+import clientSearch from '../freight/fr/clientSearch';
+import freightDashboard from '../freight/en/dashboard';
+import orderCreation from '../freight/fr/orderCreation';
+import OrderDetails from '../freight/fr/orderDetails';
+import freightOrders from '../freight/fr/orders';
+import preferences from '../freight/fr/preferences';
 
 const translation = {
     appHeader,
@@ -56,6 +68,18 @@ const translation = {
     tracking,
     vehicles,
     vehicleStatus,
+    biddingWebForm,
+    signup,
+    fuelAdvance,
+    approved,
+    fuelPending,
+    placeRequest,
+    clientSearch,
+    freightDashboard,
+    orderCreation,
+    OrderDetails,
+    freightOrders,
+    preferences,
 };
 
 export default translation;
