@@ -59,7 +59,7 @@ const translation = {
     add_another_user: 'Add another user',
     cancel: 'Cancel',
     save: 'Save',
-    edit: 'Edit',    
+    edit: 'Edit',
 };
 
 export default translation;
