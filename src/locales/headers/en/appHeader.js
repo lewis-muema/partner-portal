@@ -6,6 +6,7 @@ const en = {
     tracking: 'Tracking',
     statement: 'Statement',
     banks: 'Banks',
+    change_language: 'Change language',
     loans: 'Loans',
     saving: 'Savings',
     document: 'Documents',

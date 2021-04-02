@@ -38,6 +38,7 @@ import orderCreation from '../freight/en/orderCreation';
 import OrderDetails from '../freight/en/orderDetails';
 import freightOrders from '../freight/en/orders';
 import preferences from '../freight/en/preferences';
+import changeLanguage from '../changeLanguage/en';
 
 const translation = {
     appHeader,
@@ -80,6 +81,7 @@ const translation = {
     OrderDetails,
     freightOrders,
     preferences,
+    changeLanguage,
 };
 
 export default translation;
