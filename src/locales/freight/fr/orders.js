@@ -1,6 +1,6 @@
 const translation = {
     enter_pickup: 'FR_Enter pickup',
-    ente_destiantion: 'FR_Enter destination',
+    enter_destination: 'FR_Enter destination',
     pickup_location: 'FR_pickup location',
     destination: 'FR_destination',
     pickup_date: 'FR_pickup date',
