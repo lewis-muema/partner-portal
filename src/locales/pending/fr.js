@@ -21,7 +21,7 @@ const translation = {
     pickup: 'FR_Pickup',
     load: 'FR_Load',
     destination_capital: 'FR_Destination',
-    distance: 'FR_Distance',
+    distance_capital: 'FR_Distance',
     date: 'FR_Date',
     truck_capital: 'FR_Truck',
     order_number: 'FR_order number',
