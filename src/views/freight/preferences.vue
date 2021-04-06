@@ -22,7 +22,7 @@
     </div>
     <div class="preferences-container-sections">
       <p class="request-advance-input-labels"> {{ $t('preferences.load_type_not_deliver') }}</p>
-      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">{{ $t('preferences.add_locations') }}</button>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">{{ $t('preferences.add_loads') }}</button>
       <div v-if="loadData.length > 0" class="preferences-table">
         <div class="preferences-table-row">
           <div class="preferences-table-column preferences-header">{{ $t('preferences.type_of_load') }}</div>

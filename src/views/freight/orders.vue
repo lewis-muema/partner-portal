@@ -20,7 +20,7 @@
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
-              <div class="orders__col-head pickup-freight uppercase">{{ $t('freightOrders.pickup_loaction') }}</div>
+              <div class="orders__col-head pickup-freight uppercase">{{ $t('freightOrders.pickup_location') }}</div>
               <div class="orders__col-head destination-freight uppercase">{{ $t('freightOrders.destination') }}</div>
               <div class="orders__col-head pick-date-freight uppercase">{{ $t('freightOrders.pickup_date') }}</div>
               <div class="orders__col-head truck-freight uppercase">{{ $t('freightOrders.truck') }}</div>
