@@ -276,7 +276,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <input class="add-vehicle-input" v-model="recipient_data[0].phone_no" />
+              <input class="add-vehicle-input" v-model="recipient_data[0].phone" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
@@ -290,7 +290,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <input class="add-vehicle-input" v-model="recipient_data[n].phone_no" />
+              <input class="add-vehicle-input" v-model="recipient_data[n].phone" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
@@ -314,7 +314,7 @@
               </div>
               <div class="row-mobile">
                 <div class="thead-mobile">{{ $t('preferences.phone_number') }}</div>
-                <div class="thead-mobile-row">{{ row.phone_no }}</div>
+                <div class="thead-mobile-row">{{ row.phone }}</div>
               </div>
               <div class="row-mobile">
                 <div class="thead-mobile">{{ $t('preferences.email_address') }}</div>
@@ -339,7 +339,7 @@
           <div class="close-recipients-dialog" @click="nextTab(false)">
             {{ $t('preferences.edit') }}
           </div>
-          <button class="partner-request-advance-button-active add-recipients-modal-button">
+          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitNotificationRecipients()">
             {{ $t('preferences.confirm') }}
           </button>
         </div>
@@ -441,7 +441,7 @@ export default {
       ],
       recipient_columns: [
         { label: this.$t('preferences.name'), field: 'name' },
-        { label: this.$t('preferences.phone_number'), field: 'phone_no' },
+        { label: this.$t('preferences.phone_number'), field: 'phone' },
         { label: this.$t('preferences.email'), field: 'email' },
         { label: this.$t('preferences.action'), field: 'options', html: true },
       ],
@@ -613,7 +613,7 @@ export default {
     nextTab(val) {
       if (val) {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
-          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone_no === '' || this.recipient_data[i].email === '') {
+          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone === '' || this.recipient_data[i].email === '') {
             this.notify(3, 0, this.$t('preferences.fill_all_entries'));
           } else {
             this.summary_tab = val;
