@@ -91,7 +91,7 @@
                 <h2 class="bid-details-subheading"> {{ $t('biddingWebForm.weight_of_load') }}</h2>
                 <p class="bid-details-content">{{ formData.tonnes_per_truck }} {{ $t('biddingWebForm.tonnes') }}</p>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
-                <p class="bid-details-content">{{ formData.is_return === true ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_container_returned') }}</p>
+                <p class="bid-details-content">{{ formData.is_return === true ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
                 <div v-if="formData.offer_amount > 0 && formData.is_negotiable">
                   <h2 class="bid-details-subheading">{{ $t('biddingWebForm.clients_price_offer') }}</h2>
                   <p class="bid-details-content">{{ formData.currency }} {{ formData.offer_amount }}</p>
