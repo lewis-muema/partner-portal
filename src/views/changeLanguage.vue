@@ -56,6 +56,7 @@ export default {
           'Accept-Language': localStorage.getItem('language'),
         },
       },
+      partner_type: 1,
     };
   },
   computed: {
@@ -73,6 +74,7 @@ export default {
   },
   mounted() {
     this.locale = localStorage.getItem('timeLocale');
+    this.getPartnerDetails();
   },
   methods: {
     ...mapMutations(['setLanguage']),
@@ -82,12 +84,34 @@ export default {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
     },
+    getPartnerDetails() {
+      const session = this.getSessionInfo;
+      console.log(session);
+      const payload = {
+        phone_no: session.phone,
+      };
+      axios.post(`${process.env.NODE_PARTNER_API}management/get_partner_details`, payload, this.config).then((response) => {
+        this.partner_type = response.data.partner_type;
+      })
+      .catch(error => {
+      });
+    },
     changeLanguage() {
       const session = this.getSessionInfo;
       const payload = {
-        owner_id: session.id,
         preferred_language: this.locale,
       };
+      switch (this.partner_type) {
+        case 1:
+          payload['rider_id'] = session.id;
+          break;
+        case 2:
+          payload['owner_id'] = session.id;
+          break;
+        default:
+          payload['owner_id'] = session.id;
+          break;
+      }
       axios.post(`${process.env.ADONIS_PRIVATE_API}user-preferences`, payload, this.config).then((response) => {
         this.message = response.status ? this.$t('changeLanguage.language_changed') : this.$t('changeLanguage.something_went_wrong');
         this.notify(3, 1, this.message);
