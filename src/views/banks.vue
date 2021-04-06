@@ -7,54 +7,54 @@
       <div class="banks__confirm-banks-blinder">
         <div class="banks__confirm-banks-withdraw-popup banks__confirm-banks-row">
           <div class="popup-row banks__confirm-banks-row">
-            <span class="banks__heavy-font">Confirm Details</span>
+            <span class="banks__heavy-font"> {{ $t('banks.confirm_details') }}</span>
             <span>
               <i class="material-icons banks__confirm-banks-cancel-icon" @click="confirmDetails()">cancel</i>
             </span>
           </div>
           <div class="confirm-details-section">
-            <p class="banks__heavy-font no-margin font-16 color-black">Bank name</p>
+            <p class="banks__heavy-font no-margin font-16 color-black"> {{ $t('banks.bank_name') }}</p>
             <p class="font-16">{{ getBankName(bankid) }}</p>
-            <p class="banks__heavy-font no-margin font-16 color-black">Bank branch</p>
+            <p class="banks__heavy-font no-margin font-16 color-black"> {{ $t('banks.bank_branch') }} </p>
             <p class="font-16">{{ branch }}</p>
-            <p class="banks__heavy-font no-margin font-16 color-black">Account name</p>
+            <p class="banks__heavy-font no-margin font-16 color-black"> {{ $t('banks.account_name') }} </p>
             <p class="font-16">{{ name }}</p>
-            <p class="banks__heavy-font no-margin font-16 color-black">Account number</p>
+            <p class="banks__heavy-font no-margin font-16 color-black"> {{ $t('banks.account_number') }}</p>
             <p class="font-16">{{ account }}</p>
           </div>
-          <p class="banks__edit-details banks__confirm-banks-last-row banks__heavy-font font-16 color-black" @click="confirmDetails()">edit</p>
-          <button class="full-width input-height submit banks__confirm-banks-last-row banks__active-buttons" v-if="!sendingCodeStatus" @click="sendCode(1)">submit</button>
-          <button class="full-width input-height submit banks__confirm-banks-last-row" disabled v-else>submit</button>
+          <p class="banks__edit-details banks__confirm-banks-last-row banks__heavy-font font-16 color-black" @click="confirmDetails()"> {{ $t('banks.edit') }}</p>
+          <button class="full-width input-height submit banks__confirm-banks-last-row banks__active-buttons" v-if="!sendingCodeStatus" @click="sendCode(1)"> {{ $t('banks.submit') }} </button>
+          <button class="full-width input-height submit banks__confirm-banks-last-row" disabled v-else> {{ $t('banks.submit') }}</button>
         </div>
       </div>
       <!--Show existing owner bank accounts tab-->
       <div class="banks__existing-accounts">
-        <p class="banks__bank-text-head">Bank Account</p>
-        <button class="banks__add-account-button" @click="addAccount()">Add bank account</button>
+        <p class="banks__bank-text-head">  {{ $t('banks.bank_account') }}</p>
+        <button class="banks__add-account-button" @click="addAccount()"> {{ $t('banks.add_bank_account') }}</button>
         <div class="banks__banks-table" v-if="!Mobile">
           <div class="banks__table-head">
             <div class="banks__table-head-col">
-              <p class="no-margin color-white font-16">Bank</p>
+              <p class="no-margin color-white font-16"> {{ $t('banks.bank') }}</p>
             </div>
             <div class="banks__table-head-col">
-              <p class="no-margin color-white font-16">Bank branch</p>
+              <p class="no-margin color-white font-16"> {{ $t('banks.bank_branch') }}</p>
             </div>
             <div class="banks__table-head-col">
-              <p class="no-margin color-white font-16">Account name</p>
+              <p class="no-margin color-white font-16"> {{ $t('banks.account_name') }}</p>
             </div>
             <div class="banks__table-head-col">
-              <p class="no-margin color-white font-16">Account number</p>
+              <p class="no-margin color-white font-16"> {{ $t('banks.account_number') }}</p>
             </div>
             <div class="banks__table-head-col">
-              <p class="no-margin color-white font-16">Status</p>
+              <p class="no-margin color-white font-16"> {{ $t('banks.status') }}</p>
             </div>
             <div class="banks__table-head-col">
-              <p class="no-margin color-white font-16">Action</p>
+              <p class="no-margin color-white font-16"> {{ $t('banks.action') }} </p>
             </div>
           </div>
           <div class="banks__loader" v-if="accounts.length === 0 && !recievedResponse"></div>
           <div class="banks__no-banks-par" v-if="accounts.length === 0 && recievedResponse">
-            <p>No banks found</p>
+            <p> {{ $t('banks.no_banks_found') }}</p>
           </div>
           <div class="banks__table-rows" v-for="account1 in accounts" :key="account1.account_no">
             <div class="banks__table-col">
@@ -70,51 +70,51 @@
               <p class="no-margin small-font color-black">{{ account1.account_no }}</p>
             </div>
             <div class="banks__table-col">
-              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 0">Not Approved</p>
-              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 1">Approved</p>
-              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 2">Declined</p>
+              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 0"> {{ $t('banks.not_approved') }}</p>
+              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 1"> {{ $t('banks.approved') }}</p>
+              <p class="no-margin small-font color-black" v-if="account1.admin_approval === 2"> {{ $t('banks.declined') }}</p>
             </div>
             <div class="banks__table-col">
-              <p class="no-margin banks__edit-bank-details" @click="addAccount(account1.id)" v-if="account1.admin_approval === 0">Edit</p>
-              <p class="no-margin banks__no-edit-bank-details" v-if="account1.admin_approval === 1 || account1.admin_approval === 2">Edit</p>
+              <p class="no-margin banks__edit-bank-details" @click="addAccount(account1.id)" v-if="account1.admin_approval === 0"> {{ $t('banks.edit_capital') }}</p>
+              <p class="no-margin banks__no-edit-bank-details" v-if="account1.admin_approval === 1 || account1.admin_approval === 2"> {{ $t('banks.edit_capital') }}</p>
             </div>
           </div>
         </div>
         <div class="banks__table--mobi" v-if="Mobile">
           <div class="banks__table-head--mobi">
-            <p class="banks__table-header--mobi">Banks</p>
+            <p class="banks__table-header--mobi"> {{ $t('banks.banks') }}</p>
           </div>
           <div class="banks__loader" v-if="accounts.length === 0 && !recievedResponse"></div>
           <div class="banks__no-banks-par" v-if="accounts.length === 0 && recievedResponse">
-            <p>No banks found</p>
+            <p> {{ $t('banks.no_banks_found') }}</p>
           </div>
           <div class="banks__table-rows--mobi" v-for="account1 in accounts" :key="account1.account_no">
             <div class="banks__table-col--mobi">
-              <p class="bolded">Bank Name</p>
+              <p class="bolded"> {{ $t('banks.bank_name_capital') }} </p>
               <p class="no-margin small-font">{{ account1.bank_name }}</p>
             </div>
             <div class="banks__table-col--mobi">
-              <p class="bolded">Bank Branch</p>
+              <p class="bolded"> {{ $t('banks.bank_name_capital') }}</p>
               <p class="no-margin small-font">{{ account1.bank_branch }}</p>
             </div>
             <div class="banks__table-col--mobi">
-              <p class="bolded">Account Name</p>
+              <p class="bolded"> {{ $t('banks.account_name_capital') }} </p>
               <p class="no-margin small-font">{{ account1.account_name }}</p>
             </div>
             <div class="banks__table-col--mobi">
-              <p class="bolded">Account Number</p>
+              <p class="bolded"> {{ $t('banks.account_number_capital') }}</p>
               <p class="no-margin small-font">{{ account1.account_no }}</p>
             </div>
             <div class="banks__table-col--mobi">
-              <p class="bolded">Status</p>
-              <p class="no-margin small-font" v-if="account1.admin_approval === 0">Not Approved</p>
-              <p class="no-margin small-font" v-if="account1.admin_approval === 1">Approved</p>
-              <p class="no-margin small-font" v-if="account1.admin_approval === 2">Declined</p>
+              <p class="bolded"> {{ $t('banks.status') }}</p>
+              <p class="no-margin small-font" v-if="account1.admin_approval === 0"> {{ $t('banks.not_approved') }}</p>
+              <p class="no-margin small-font" v-if="account1.admin_approval === 1"> {{ $t('banks.approved') }}</p>
+              <p class="no-margin small-font" v-if="account1.admin_approval === 2"> {{ $t('banks.declined') }}</p>
             </div>
             <div class="banks__table-col--mobi">
-              <p class="bolded">Action</p>
-              <p class="no-margin banks__edit-bank-details--mobi" v-if="account1.admin_approval === 0" @click="addAccount(account1.id)">Edit</p>
-              <p class="no-margin banks__no-edit-bank-details" v-if="account1.admin_approval === 1 || account1.admin_approval === 2">Edit</p>
+              <p class="bolded"> {{ $t('banks.action') }}</p>
+              <p class="no-margin banks__edit-bank-details--mobi" v-if="account1.admin_approval === 0" @click="addAccount(account1.id)"> {{ $t('banks.edit_capital') }}</p>
+              <p class="no-margin banks__no-edit-bank-details" v-if="account1.admin_approval === 1 || account1.admin_approval === 2"> {{ $t('banks.edit_capital') }}</p>
             </div>
           </div>
         </div>
@@ -123,10 +123,10 @@
       <div class="banks__verify-code-section">
         <i class="material-icons arrow" @click="verifyDetails()">arrow_back</i>
         <div class="banks__verify-tab">
-          <p class="banks__verify-text font-16">For your security, Sendy wants to make sure it’s really you. An SMS with your verification code was sent to your phone. <span class="resend-code" @click="sendCode(2)">Resend code</span></p>
+          <p class="banks__verify-text font-16"> {{ $t('banks.for_your_security') }} <span class="resend-code" @click="sendCode(2)"> {{ $t('banks.resend_code') }}</span></p>
           <input class="banks__verify-inputs" maxlength="4" type="text" v-model="inputCode" />
-          <button class="banks__verify-inputs banks__active-buttons" v-if="verifyCodeStatus" @click="verifyCode()">verify</button>
-          <button class="banks__verify-inputs" disabled v-else>verify</button>
+          <button class="banks__verify-inputs banks__active-buttons" v-if="verifyCodeStatus" @click="verifyCode()"> {{ $t('banks.verify') }}</button>
+          <button class="banks__verify-inputs" disabled v-else> {{ $t('banks.verify') }}</button>
         </div>
       </div>
       <!--add new bank account tab-->
@@ -135,38 +135,38 @@
         <i class="material-icons arrow" @click="addAccount(); fetchOwnerBanks();">arrow_back</i>
         <div class="banks__new-bank-account">
           <div class="banks__new-bank-account-head no-margin">
-            <p class="banks__new-bank-account-par no-margin font-16">New Bank Account</p>
+            <p class="banks__new-bank-account-par no-margin font-16"> {{ $t('banks.new_bank_account') }}</p>
           </div>
           <div class="banks__new-bank-account-body">
             <p class="banks__input-width font-16">
-              <span class="margin-right">Bank name</span>
+              <span class="margin-right"> {{ $t('banks.bank_name') }}</span>
               <span>
                 <select class="banks__new-account-input" @change="bankNameCheckpoint()" v-model="bankid">
-                  <option selected value="null">Select Bank</option>
+                  <option selected value="null"> {{ $t('banks.select_bank') }}</option>
                   <option class :value="bank.payment_bank_id" v-for="bank in banks" :key="bank.bankid">{{ bank.name }}</option>
                 </select>
               </span>
             </p>
             <p class="banks__input-width font-16">
-              <span class="margin-right">Bank Branch</span>
+              <span class="margin-right"> {{ $t('banks.bank_branch_capital') }}</span>
               <span>
                 <input class="banks__new-account-input" type="text" v-model="branch" @input="bankBranchCheckpoint()" />
               </span>
             </p>
             <p class="banks__input-width font-16">
-              <span class="margin-right">Account name</span>
+              <span class="margin-right"> {{ $t('banks.account_name') }}</span>
               <span>
                 <input class="banks__new-account-input" type="text" v-model="name" @input="accountNameCheckpoint()" />
               </span>
             </p>
             <p class="banks__input-width font-16">
-              <span class="margin-right">Account number</span>
+              <span class="margin-right"> {{ $t('banks.account_number') }}</span>
               <span>
                 <input class="banks__new-account-input" type="text" v-model="account" @input="accountNoCheckpoint()" />
               </span>
             </p>
-            <button class="banks__input-button submit banks__active-buttons" v-if="submitStatus" @click="confirmDetails()">Submit</button>
-            <button class="banks__input-button submit" disabled v-else>Submit</button>
+            <button class="banks__input-button submit banks__active-buttons" v-if="submitStatus" @click="confirmDetails()"> {{ $t('banks.submit') }}</button>
+            <button class="banks__input-button submit" disabled v-else> {{ $t('banks.submit') }}</button>
           </div>
         </div>
       </div>
@@ -226,6 +226,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       errorObj: '',
@@ -369,21 +370,21 @@ export default {
           return '';
         } else {
           this.verifyCodeStatus = true;
-          return 'Please enter the correct verification code';
+          return this.$t('banks.enter_correct_verification_code');
         }
       } else if (parsedResponse.message.indexOf('it has been verified already') > -1) {
         localStorage.requestId = '';
         this.requestId = '';
         this.verifyCodeStatus = false;
-        return 'Failed to verify, Please request for another code';
+        return this.$t('banks.failed_to_verify');
       } else if (parsedResponse.message.indexOf('Your request is incomplete and missing the mandatory parameter') > -1) {
         this.verifyCodeStatus = true;
-        return 'Please enter the full verification code';
+        return this.$t('banks.please_enter_full_verification_code');
       } else if (parsedResponse.message.indexOf('A wrong code was provided too many times') > -1) {
         localStorage.requestId = '';
         this.requestId = '';
         this.verifyCodeStatus = false;
-        return 'A wrong code was entered too many times, Please request for another';
+        return this.$t('banks.wrong_code_entered_many_times');
       }
     },
     sendCode(code) {
@@ -391,10 +392,10 @@ export default {
         if (code === 1) {
           this.verifyDetails();
         }
-        this.notify(3, 2, 'You have a pending verification code');
+        this.notify(3, 2, this.$t('banks.pending_verification_code'));
       } else {
         this.codeResponseNumber = 0;
-        this.notify(1, 2, 'Sending Code');
+        this.notify(1, 2, this.$t('banks.sending_code'));
         this.sendingCodeStatus = true;
         const payload = JSON.stringify({
           number: this.sessionInfo.phone,
@@ -418,7 +419,7 @@ export default {
         date.setMinutes(date.getMinutes() + 20);
         localStorage.requestId = parsedResponse.request_id;
         localStorage.time = date;
-        this.notify(3, 1, `Code has been sent to ${this.sessionInfo.phone}`);
+        this.notify(3, 1, `${this.$t('banks.code_sent_to')} ${this.sessionInfo.phone}`);
         this.sendingCodeStatus = false;
         this.inputCode = '';
         this.verifyDetails();

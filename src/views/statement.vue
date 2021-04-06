@@ -5,9 +5,9 @@
     <div class="statements__blinder">
       <div class="statement__withdraw-popup statement__row">
         <div class="popup-row statement__row">
-          <span>Withdraw cash</span>
+          <span>{{ $t('statement.withdraw_cash') }}</span>
           <span>
-            <i class="material-icons statement__cancel-icon" @click="closePopup">cancel</i>
+            <i class="material-icons statement__cancel-icon" @click="closePopup">{{ $t('statement.cancel') }}</i>
           </span>
         </div>
         <div v-if="payable_amount" class="withdraw-modal-screen">
@@ -15,7 +15,7 @@
             <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
             <p class="small-margin color-white">{{ withdrawError }}</p>
             <router-link to="/banks" v-if="addAccountStatus">
-              <p class="small-margin statement__bg-orange">+ Add a bank account</p>
+              <p class="small-margin statement__bg-orange">+ {{ $t('statement.add_bank_account') }}</p>
             </router-link>
           </div>
           <div class="statement__row statement__divided-row">
@@ -23,7 +23,7 @@
               <i class="material-icons statement__wallet">account_balance_wallet</i>
             </span>
             <span class="statement__column-9">
-              <p class="no-margin large-font">Balance</p>
+              <p class="no-margin large-font">{{ $t('statement.balance') }}</p>
               <p class="no-margin large-font">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</p>
             </span>
           </div>
@@ -31,13 +31,13 @@
             <input id="withdrawalAmount" type="text" placeholder="Enter amount" class="full-width input-height input-border" v-model="amount" @input="checkDetails()" @keyup.delete="checkDetails()" :maxlength="amountLength" />
           </div>
           <div class="statement__row">
-            <button id="continue" class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="sendWithdrawStatus" @click="goNext()">Next</button>
-            <button class="continue full-width input-height withdraw-buttons" disabled v-else>Next</button>
+            <button id="continue" class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="sendWithdrawStatus" @click="goNext()">{{ $t('statement.next') }}</button>
+            <button class="continue full-width input-height withdraw-buttons" disabled v-else>{{ $t('statement.next') }}</button>
           </div>
         </div>
         <div class="withdraw-modal-screen-2" v-if="payment_options">
           <div class="statement__row">
-            <p class="no-margin x-large-font">How do you want to be paid?</p>
+            <p class="no-margin x-large-font"> {{ $t('statement.want_paid') }}</p>
           </div>
           <div class="statement__row statement__scrollable-row" v-for="method in payment_methods" :key="method.payment_method_id">
             <div class="withdraw-payment-options">
@@ -56,12 +56,12 @@
               </span>
             </div>
             <div v-if="bankAccounts.length === 0">
-              You dont have any active bank accounts
+              {{ $t('statement.dont_have_active_bank_account') }}
             </div>
           </div>
           <div class="statement__row">
-            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal && (bankAccounts.length > 0 || payment_method === 1)" @click="withdraw()">Withdraw Cash</button>
-            <button class="input-height" disabled v-else>Withdraw Cash</button>
+            <button class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="allowWithdrawal && (bankAccounts.length > 0 || payment_method === 1)" @click="withdraw()">{{ $t('statement.withdraw_cash') }}</button>
+            <button class="input-height" disabled v-else>{{ $t('statement.withdraw_cash') }}</button>
           </div>
         </div>
       </div>
@@ -73,21 +73,21 @@
             <div class="row justify-content-between">
               <div class="col-2 padding">
                 <select class="dropdown-filter" v-model="riderId" @change="selectRider(riderId)">
-                  <option selected value>Driver</option>
+                  <option selected value>{{ $t('statement.driver') }}</option>
                   <option v-for="rider in riders" :value="rider.rider_id" :key="rider.rider_id">{{ rider.f_name }} {{ rider.s_name }}</option>
                 </select>
               </div>
               <div class="col-2 padding">
                 <select class="dropdown-filter" v-model="vehicleId">
-                  <option selected value>vehicle</option>
+                  <option selected value>{{ $t('statement.vehicle') }}</option>
                   <option v-for="vehicle in vehicles" :value="vehicle.id" :key="vehicle.id">{{ vehicle.registration_no }}</option>
                 </select>
               </div>
               <div class="col-3">
-                <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
+                <datepicker v-model="from" input-class="filtIn" id="dtfrom" :placeholder="$t('statement.from')" name="$t('statement.to')"></datepicker>
               </div>
               <div class="col-3 to-date-selector">
-                <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+                <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('statement.to')" name="to"></datepicker>
                 <i v-if="to || from || vehicleId || riderId" class="fa fa-times-circle clear-inputs-icon" aria-hidden="true" @click="clearFilters()"></i>
               </div>
               <div class="subFilt col-2">
@@ -105,7 +105,7 @@
                     <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
                   </span>
                   <div class="statement__box-content">
-                    <span class="statement__box-text">You can withdraw :</span>
+                    <span class="statement__box-text">{{ $t('statement.can_withdraw') }} :</span>
                     <br />
                     <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
                   </div>
@@ -115,9 +115,9 @@
           </div>
           <div class="stat-cards col-2">
             <div class="subFilt">
-              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">Withdraw cash</button>
-              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>Withdraw cash</button>
-              <p class="hidden-btn-error">The button is disabled. You cannot withdraw today</p>
+              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">{{ $t('statement.withdraw_cash') }}</button>
+              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>{{ $t('statement.withdraw_cash') }}</button>
+              <p class="hidden-btn-error"> {{ $t('statement.button_disabled') }}</p>
             </div>
           </div>
         </div>
@@ -128,21 +128,21 @@
           </div>
         </div>
         <div class="statement__list-cash-filter">
-          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
-          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
-          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">{{ $t('statement.all') }}</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">{{ $t('statement.cash_orders') }}</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''"> {{ $t('statement.non_cash') }}</span>
         </div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
           <div class="divider-top"></div>
-          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="`Statement for ${this.sessionInfo.name} for ${monthPeriod}`" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
+          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="$t('statement.statement_for', { name: this.sessionInfo.name, monthPeriod: monthPeriod })" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
         <div class="col-12 padding margin-bottom">
-          <datepicker v-model="from" input-class="filtIn" id="dtfrom" placeholder="From" name="from"></datepicker>
+          <datepicker v-model="from" input-class="filtIn" id="dtfrom" :placeholder="$t('statement.from')" name="from"></datepicker>
         </div>
         <div class="col-12 padding margin-bottom to-date-selector">
-          <datepicker v-model="to" input-class="filtIn to-filter-input" id="dtto" placeholder="To" name="to"></datepicker>
+          <datepicker v-model="to" input-class="filtIn to-filter-input" id="dtto" :placeholder="$t('statement.to')" name="to"></datepicker>
           <i v-if="to || from || vehicleId || riderId" class="fa fa-times-circle clear-inputs-icon" aria-hidden="true" @click="clearFilters()"></i>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
@@ -152,8 +152,8 @@
         </div>
         <div class="search-error" id="err">{{ error }}</div>
         <div class="withdrawal-button-mobile">
-          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">Withdraw cash</button>
-          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>Withdraw cash</button>
+          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus"> {{ $t('statement.withdraw_cash') }}</button>
+          <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>{{ $t('statement.withdraw_cash') }}</button>
         </div>
         <div class="orders__list-currency-filter-mobile">
           <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
@@ -161,17 +161,17 @@
           </div>
         </div>
         <div class="statement__list-cash-filter">
-          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">ALL</span>
-          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">CASH ORDERS</span>
-          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">NON-CASH ORDERS</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 0" :class="pay_method === 0 ? 'cash-selector-active' : ''">{{ $t('statement.all') }}</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 1" :class="pay_method === 1 ? 'cash-selector-active' : ''">{{ $t('statement.cash_orders') }}</span>
+          <span class="orders__list-cash-selectors" @click="pay_method = 2" :class="pay_method === 2 ? 'cash-selector-active' : ''">{{ $t('statement.non_cash') }}</span>
         </div>
-        <p v-if="filteredTransactions.length === 0" class="no-loans">No {{ mode }} found for this period</p>
+        <p v-if="filteredTransactions.length === 0" class="no-loans"> {{ $t('statement.no_mode_found', { mode: mode }) }}</p>
         <div class="statement__mobile-view" v-for="row in filteredTransactions" :key="row.id">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
-                <th>Amount</th>
-                <th>Balance</th>
+                <th>{{ $t('statement.amount') }}</th>
+                <th>{{ $t('statement.balance') }}</th>
               </tr>
             </thead>
             <tr class="divider">
@@ -227,15 +227,16 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       columns: [
         { label: 'Txn No', field: 'txn' },
-        { label: 'Date', field: 'pay_time' },
-        { label: 'Amount', field: 'amount' },
-        { label: 'Balance', field: 'running_balance' },
-        { label: 'Narrative', field: 'pay_narrative' },
-        { label: 'Driver Name', field: 'rider_name' },
+        { label: this.$t('statement.date'), field: 'pay_time' },
+        { label: this.$t('statement.amount'), field: 'amount' },
+        { label: this.$t('statement.balance'), field: 'running_balance' },
+        { label: this.$t('statement.narrative'), field: 'pay_narrative' },
+        { label: this.$t('statement.driver_name'), field: 'rider_name' },
       ],
       page: 1,
       rows: [
@@ -283,7 +284,7 @@ export default {
       riders: [],
       vehicleId: '',
       riderId: '',
-      riderNames: 'all riders',
+      riderNames: this.$t('statement.all_riders'),
       vehArray: [],
       monthPeriod: '',
       errorObj: '',
@@ -329,11 +330,11 @@ export default {
     },
     mode() {
       if (this.pay_method === 0) {
-        return 'statements';
+        return this.$t('statement.statement');
       } else if (this.pay_method === 1) {
-        return 'cash orders';
+        return this.$t('statement.cash_orders_small');
       }
-      return 'non-cash orders';
+      return this.$t('statement.non_cash_orders_small');
     },
     ownerRb() {
       if (this.ownerRbs) {
@@ -351,7 +352,7 @@ export default {
   watch: {
     pay_method() {
       if (this.filteredTransactions.length === 0 && !this.fetchingStatus) {
-        this.displayFetchingStatus(`No ${this.mode} found for this period`, 0);
+        this.displayFetchingStatus(this.$t('statement.no_mode_found', { mode: this.mode }), 0);
       } else {
         this.removeFetchingStatus();
       }
@@ -438,7 +439,7 @@ export default {
     },
     filt() {
       if (this.to === '' || this.from === '') {
-        this.error = 'Please select both a from and to date';
+        this.error = this.$t('statement.please_select_both');
         setTimeout(() => {
           this.error = '';
         }, 4000);
@@ -469,7 +470,7 @@ export default {
               this.handleResponse(response);
             } else {
               this.rows = [];
-              this.displayFetchingStatus(`No ${this.mode} found for this period`, 0);
+              this.displayFetchingStatus(this.$t('statement.no_mode_found', { mode: this.mode }), 0);
             }
             resolve(response);
           })
@@ -497,7 +498,7 @@ export default {
           to: lastDay,
         });
       } else {
-        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
+        $('#filtSub').html(`<div class="loading-spinner"></div> ${this.$t('statement.loading')}`);
         firstDay = `${moment(this.from).format('YYYY-MM-DD')} 00:00:00`;
         lastDay = `${moment(this.to).format('YYYY-MM-DD')} 23:59:59`;
         payload = JSON.stringify({
@@ -608,7 +609,7 @@ export default {
     },
     withdraw() {
       this.sendWithdrawStatus = false;
-      this.notify(1, 2, 'Sending request');
+      this.notify(1, 2, this.$t('statement.sending_request'));
       if (this.mpesaWithdrawal && !this.bankWithdrawal) {
         this.constructPayload(1);
       } else if (!this.mpesaWithdrawal && this.bankWithdrawal) {
@@ -625,7 +626,7 @@ export default {
           payment_type: paymethod,
           amount: this.amount,
         });
-        notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your m-pesa`;
+        notification = this.$t('statement.withdraw_processed_mpesa', { amount: this.amount });
       } else {
         payload = JSON.stringify({
           owner_id: this.sessionInfo.id,
@@ -634,7 +635,7 @@ export default {
           amount: this.amount,
           payment_bank_id: this.bankId,
         });
-        notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your bank account`;
+        notification = this.$t('statement.withdraw_processed_bank', { amount: this.amount });
       }
       this.payload = payload;
       this.sendWithdrawRequest(payload, notification, paymethod);
@@ -760,7 +761,7 @@ export default {
       if (filterObj.length > 0) {
         this.riderNames = `${filterObj[0].f_name} ${filterObj[0].s_name}`;
       } else {
-        this.riderNames = 'all riders';
+        this.riderNames = this.$t('statement.all_riders');
       }
     },
     trackMpesaWithdrawal(payload) {

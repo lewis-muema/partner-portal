@@ -23,7 +23,7 @@
           <el-table-column width="700">
             <template slot-scope="scope">
               <div v-if="vehicleData[scope.$index]['update_carrier_type'] === 1">
-                <span class="highlight-bike-status"> Update details </span>
+                <span class="highlight-bike-status">{{ $t('vehicleStatus.update_details') }}</span>
               </div>
               <div v-else>
                 {{ vehicleStatus(vehicleData[scope.$index]) }}
@@ -33,7 +33,7 @@
           <el-table-column>
             <template slot-scope="scope">
               <el-button size="mini" class="update-license action-button--active" @click="openUpdateDialog(vehicleData[scope.$index])" :class="{ disableUpdateBtn: vehicleData[scope.$index]['update_carrier_type'] !== 1 }">
-                Update
+                {{ $t('vehicleStatus.update') }}
               </el-button>
             </template>
           </el-table-column>
@@ -43,35 +43,35 @@
         <div class="inner-dialog">
           <div class="drag-image">
             <div v-if="vehicleDialogData.update_carrier_type === 1">
-              <p class="dialog-inner-label">What is the type of your {{ vehicleDialogData.vendor_disp_name }}?</p>
+              <p class="dialog-inner-label"> {{ $t('vehicleStatus.type__of_your') }} {{ vehicleDialogData.vendor_disp_name }}?</p>
               <div class="carrier-upper-padding">
                 <div class="vendors-final-outerline">
                   <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'no-box' }" @click="selectCard('no-box', 0)">
                     <img class="vendor-types-final" :src="getVendorIcon(0, vehicleDialogData.vendor_type)" alt="" />
-                    <p v-if="vehicleDialogData.vendor_type === 1" class="vendor-label">Bike without Box</p>
-                    <p v-else class="vendor-label">Open {{ vehicleDialogData.vendor_disp_name }}</p>
+                    <p v-if="vehicleDialogData.vendor_type === 1" class="vendor-label"> {{ $t('vehicleStatus.bike_without_box') }}</p>
+                    <p v-else class="vendor-label">{{ $t('vehicleStatus.open') }} {{ vehicleDialogData.vendor_disp_name }}</p>
                   </div>
                   <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'box' }" @click="selectCard('box', 1)">
                     <img class="vendor-types-final" :src="getVendorIcon(1, vehicleDialogData.vendor_type)" alt="" />
-                    <p v-if="vehicleDialogData.vendor_type === 1" class="vendor-label">Bike with a Box</p>
-                    <p v-else class="vendor-label">Closed {{ vehicleDialogData.vendor_disp_name }}</p>
+                    <p v-if="vehicleDialogData.vendor_type === 1" class="vendor-label"> {{ $t('vehicleStatus.bike_with_box') }}</p>
+                    <p v-else class="vendor-label">{{ $t('vehicleStatus.closed') }} {{ vehicleDialogData.vendor_disp_name }}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div class="">
-              <p class="dialog-inner-label">Upload image of your {{ vehicleDialogData.vendor_disp_name }}</p>
+              <p class="dialog-inner-label">{{ $t('vehicleStatus.upload_image') }} {{ vehicleDialogData.vendor_disp_name }}</p>
               <div class="bike-image">
                 <div class="download-refund-img">
                   <el-upload class="upload-demo" drag action="handlePictureCardPreview" :http-request="handlePictureCardPreview" :on-remove="handleRemove">
                     <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                     <i class="el-icon-upload"></i>
                     <div v-if="fileName !== ''">{{ uploading_text }}</div>
-                    <div v-else>Drop file here or <em>click to upload</em></div>
+                    <div v-else>{{ $t('vehicleStatus.drop_file') }} <em>{{ $t('vehicleStatus.click_upload') }}</em></div>
                   </el-upload>
                   <div v-if="fileName !== ''">
                     <span class="reward-upload-label">
-                      Document uploaded successfully .
+                      {{ $t('vehicleStatus.doc_uploaded_successfully') }}
                     </span>
                   </div>
                 </div>
@@ -79,8 +79,8 @@
             </div>
           </div>
           <span slot="footer" class="dialog-footer submit-dialog-footer">
-            <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-            <el-button type="primary" @click="initiateVehicleUpdate()" class="confirm-refund">Update</el-button>
+            <el-button @click="closeDialog()" class="cancel-refund">{{ $t('vehicleStatus.cancel') }}</el-button>
+            <el-button type="primary" @click="initiateVehicleUpdate()" class="confirm-refund">{{ $t('vehicleStatus.update') }}</el-button>
           </span>
         </div></el-dialog>
       <notify />
@@ -110,6 +110,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       activeTab: '',
@@ -119,7 +120,7 @@ export default {
       vehicleData: [],
       vehicleDialogData: {},
       errorObj: '',
-      uploading_text: 'Change',
+      uploading_text: this.$t('vehicleStatus.change'),
       fileName: '',
       vehicleStatusData: {},
       rider: '',
@@ -187,13 +188,13 @@ export default {
       this.vehicleDialogData = {};
       this.fileName = '';
       this.vehicleStatusData = {};
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('vehicleStatus.change');
     },
     dialogTitle(vendor) {
-      return `Update type of ${vendor}`;
+      return this.$t('vehicleStatus.change', { vendor });
     },
     handleClose(done) {
-      this.$confirm('Are you sure to close this dialog?')
+      this.$confirm(this.$t('vehicleStatus.sure_cancel_dialogue'))
         .then(_ => {
           done();
           this.closeDialog();
@@ -211,16 +212,16 @@ export default {
       return `https://images.sendyit.com/web_platform/vendor_type/side/v2/closed/${vendor}.svg`;
     },
     vehicleStatus(data) {
-      let carrier_name = data.vendor_type === 1 ? 'Bike without a box' : `Open ${data.vendor_disp_name}`;
+      let carrier_name = data.vendor_type === 1 ? this.$t('vehicleStatus.bike_without_a_box') : `${this.$t('vehicleStatus.open')} ${data.vendor_disp_name}`;
       if (data.carrier_type === 1) {
-        carrier_name = data.vendor_type === 1 ? 'Bike with a box' : `Closed ${data.vendor_disp_name}`;
+        carrier_name = data.vendor_type === 1 ? this.$t('vehicleStatus.bike_with_box') : `${this.$t('vehicleStatus.box')} ${data.vendor_disp_name}`;
       }
 
       return carrier_name;
     },
     initiateVehicleUpdate() {
       if (this.carrier_type === '' || Object.keys(this.vehicleStatusData).length === 0) {
-        this.notify(3, 0, 'Kindly provide all values');
+        this.notify(3, 0, this.$t('vehicleStatus.upload_bike_image'));
       } else {
         const payload = {
           sim_card_sn: this.vehicleDialogData.sim_card_sn,
@@ -238,7 +239,7 @@ export default {
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, `${this.vehicleDialogData.vendor_disp_name} Status Update Error . Try again`);
+            this.notify(3, 0, `${this.vehicleDialogData.vendor_disp_name} ${this.$t('vehicleStatus.status_update_error')}`);
           });
       }
     },
@@ -252,13 +253,13 @@ export default {
     handleRemove(file, fileList) {
       this.fileName = '';
       this.vehicleStatusData = {};
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('vehicleStatus.change');
     },
     uploadVehicleData() {
       if (Object.keys(this.vehicleStatusData).length === 0) {
-        this.notify(3, 0, 'Kindly upload bike image ');
+        this.notify(3, 0, this.$t('vehicleStatus.upload_bike_image'));
       } else {
-        this.uploading_text = 'Loading Preview ...';
+        this.uploading_text = this.$t('vehicleStatus.loading_preview');
         const file = this.vehicleStatusData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -276,13 +277,13 @@ export default {
           },
           (err, data) => {
             if (err) {
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('vehicleStatus.change');
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('vehicleStatus.change');
             }
             // eslint-disable-next-line comma-dangle
           }

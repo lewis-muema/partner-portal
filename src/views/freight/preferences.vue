@@ -3,45 +3,45 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="preferences-container-sections">
-      <p class="request-advance-input-labels">Locations that you dont want to service</p>
-      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('location')">Add locations</button>
+      <p class="request-advance-input-labels">{{ $t('preferences.locations_that_dont') }}</p>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('location')">{{ $t('preferences.add_location') }}</button>
       <div v-if="locationData.length > 0" class="preferences-table">
         <div class="preferences-table-row">
-          <div class="preferences-table-column preferences-header">Name of the location</div>
-          <div class="preferences-table-column preferences-header">Actions</div>
+          <div class="preferences-table-column preferences-header">{{ $t('preferences.name_location') }}</div>
+          <div class="preferences-table-column preferences-header">{{ $t('preferences.action') }}</div>
         </div>
         <div v-for="(location, index) in locationData" class="preferences-table-row" :key="index">
           <div class="preferences-table-column preferences-body">{{ location.location_name }}</div>
-          <div class="preferences-table-column preferences-link" @click="deletePreference(location.id)">Delete</div>
+          <div class="preferences-table-column preferences-link" @click="deletePreference(location.id)">{{ $t('preferences.delete') }}</div>
         </div>
       </div>
       <div v-else class="preferences-empty-table">
         <div class="loading" v-if="loadingStatus"></div>
-        <div v-else>There are no locations</div>
+        <div v-else>{{ $t('preferences.no_locations') }}</div>
       </div>
     </div>
     <div class="preferences-container-sections">
-      <p class="request-advance-input-labels">Type of loads that you don’t want to deliver</p>
-      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">Add loads</button>
+      <p class="request-advance-input-labels"> {{ $t('preferences.load_type_not_deliver') }}</p>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">{{ $t('preferences.add_loads') }}</button>
       <div v-if="loadData.length > 0" class="preferences-table">
         <div class="preferences-table-row">
-          <div class="preferences-table-column preferences-header">Type of load</div>
-          <div class="preferences-table-column preferences-header">Actions</div>
+          <div class="preferences-table-column preferences-header">{{ $t('preferences.type_of_load') }}</div>
+          <div class="preferences-table-column preferences-header">{{ $t('preferences.actions') }}</div>
         </div>
         <div v-for="(load, index) in loadData" class="preferences-table-row" :key="index">
           <div class="preferences-table-column preferences-body">{{ load.cargo_type }}</div>
-          <div class="preferences-table-column preferences-link" @click="deletePreference(load.id)">Delete</div>
+          <div class="preferences-table-column preferences-link" @click="deletePreference(load.id)">{{ $t('preferences.delete') }}</div>
         </div>
       </div>
       <div v-else class="preferences-empty-table">
         <div class="loading" v-if="loadingStatus"></div>
-        <div v-else>There are no loads</div>
+        <div v-else>{{ $t('preferences.there_are_no_loads') }}</div>
       </div>
     </div>
 
     <div class="preferences-container-sections">
-      <p class="request-advance-input-labels">Vehicle Management</p>
-      <button class="partner-request-advance-button-active preferences-buttons" @click="addVehicleDialog()">Add Vehicles</button>
+      <p class="request-advance-input-labels">{{ $t('preferences.vehicle_management') }}</p>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addVehicleDialog()">{{ $t('preferences.add_vehicles') }}</button>
 
       <div class="loading preferences-empty-table" v-if="loadingVehicle"></div>
       <div v-else>
@@ -56,11 +56,11 @@
             <div class="vehicleContain hidden-md-up" v-for="row in rows" :key="row.registration_no" v-else>
               <div class="table-responsive mobile-table">
                 <div class="row-mobile">
-                  <div class="thead-mobile">Number Plate</div>
+                  <div class="thead-mobile">{{ $t('preferences.number_plate') }}</div>
                   <div class="thead-mobile-row">{{ row.registration_no }}</div>
                 </div>
                 <div class="row-mobile">
-                  <div class="thead-mobile">Status</div>
+                  <div class="thead-mobile">{{ $t('preferences.status') }}</div>
                   <!--eslint-disable-next-line-->
                   <div class="thead-mobile-row" v-html="row.options"></div>
                 </div>
@@ -68,15 +68,15 @@
             </div>
           </div>
           <div class="preferences-empty-table" v-else>
-            <div>There are no vehicles</div>
+            <div>{{ $t('preferences.no_vehicles') }}</div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="preferences-container-sections">
-      <p class="request-advance-input-labels">Notification Recipients</p>
-      <button class="partner-request-advance-button-active preferences-buttons" @click="addRecipientsDialog()">Add Recipient</button>
+      <p class="request-advance-input-labels">{{ $t('preferences.notification_recipient') }}</p>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addRecipientsDialog()">{{ $t('preferences.add_recipient') }}</button>
 
       <div class="loading preferences-empty-table" v-if="loadingRecipients"></div>
       <div v-else>
@@ -91,19 +91,19 @@
             <div class="vehicleContain hidden-md-up" v-for="row in recipient_row" :key="row.user_id" v-else>
               <div class="table-responsive mobile-table">
                 <div class="row-mobile">
-                  <div class="thead-mobile">Name</div>
+                  <div class="thead-mobile">{{ $t('preferences.name') }}</div>
                   <div class="thead-mobile-row">{{ row.name }}</div>
                 </div>
                 <div class="row-mobile">
-                  <div class="thead-mobile">Phone Number</div>
+                  <div class="thead-mobile">{{ $t('preferences.phone_number') }}</div>
                   <div class="thead-mobile-row">{{ row.phone }}</div>
                 </div>
                 <div class="row-mobile">
-                  <div class="thead-mobile">Email</div>
+                  <div class="thead-mobile">{{ $t('preferences.email') }}</div>
                   <div class="thead-mobile-row">{{ row.email }}</div>
                 </div>
                 <div class="row-mobile">
-                  <div class="thead-mobile">Action</div>
+                  <div class="thead-mobile">{{ $t('preferences.action') }}</div>
                   <!--eslint-disable-next-line-->
                   <div class="thead-mobile-row" v-html="row.options"></div>
                 </div>
@@ -111,7 +111,7 @@
             </div>
           </div>
           <div class="preferences-empty-table" v-else>
-            <div>There are no notification recipients</div>
+            <div>{{ $t('preferences.no_notification_recipient') }}</div>
           </div>
         </div>
       </div>
@@ -120,16 +120,16 @@
     <modal name="add-preference" :height="250" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-documents-modal">
         <div class="upload-documents-modal-top-row">
-          <p class="upload-documents-modal-top-row-title">Add {{ type }}</p>
+          <p class="upload-documents-modal-top-row-title">{{ $t('preferences.add') }} {{ type }}</p>
           <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('add-preference')"></i>
         </div>
         <div>
-          <p class="request-advance-input-labels">Select {{ type }}</p>
+          <p class="request-advance-input-labels">{{ $t('preferences.select') }} {{ type }}</p>
           <gmap-autocomplete
             v-if="type === 'location'"
             id="location"
             :options="map_options"
-            placeholder="Enter a location"
+            :placeholder="$t('preferences.enter_location')"
             :select-first-on-enter="true"
             class="request-advance-inputs order-creation-location-inputs"
             @place_changed="setLocation($event)"
@@ -140,7 +140,7 @@
         </div>
         <button :class="sendStatus && !submitStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" class="upload-documents-modal-button" @click="submitPreference">
           <i class="el-icon-loading" v-if="submitStatus"></i>
-          Add {{ type }}
+          {{ $t('preferences.add') }} {{ type }}
         </button>
       </div>
     </modal>
@@ -150,105 +150,105 @@
     <modal name="add-vehicle" class="add_vehicle" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-vehicles-modal">
         <div class="upload-documents-modal-top-row">
-          <p class="upload-documents-modal-top-row-title">Add vehicles</p>
+          <p class="upload-documents-modal-top-row-title">{{ $t('preferences.add_vehicles') }}</p>
           <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('add-vehicle')"></i>
         </div>
         <div class="add-vehicles-outer">
           <div class="vehicle-details-borderline">
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the type of your vehicle ?</p>
+              <p class="request-advance-input-labels"> {{ $t('preferences.type_of_vehicle') }}</p>
               <el-select v-model="vehicle_data[0].vendor_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.label" v-for="(item, index) in vendor_type" :key="index"></el-option>
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the type of truck?</p>
+              <p class="request-advance-input-labels"> {{ $t('preferences.type_of_truck') }} </p>
               <el-select v-model="vehicle_data[0].carrier_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.carrier_type" v-for="(item, index) in freight_carrier_types" :key="index"></el-option>
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the size of your truck ?</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.size_of_truck') }}</p>
               <div class="tonnage-flex"><input v-model="vehicle_data[0].vehicle_size" v-mask="truckSizeMask" type="text" class="add-vehicle-input tonnage-input" /> <span>Tonnes</span></div>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the exact load size of your truck ?</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.exact_load_size') }}</p>
               <div class="tonnage-flex"><input v-model="vehicle_data[0].load_capacity" v-mask="loadWeightMask" type="text" class="add-vehicle-input tonnage-input" /> <span>Tonnes</span></div>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Vehicle Number Plate</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.vehicle_number_plate') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[0].registration_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Vehicle Logbook Number</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.vehicle_logbook_number') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[0].log_book_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Name of Insurance Company</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.name_of_insurance') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[0].insurance_name" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Insurance Cert No</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.insurance_cert_no') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[0].insurance_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Insurance Policy Number</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.insurance_policy_number') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[0].policy_no" />
             </div>
           </div>
           <div class="vehicle-details-borderline" v-for="n in extra_vehicle" :key="n" :data-index="n">
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the type of your vehicle ?</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.type_of_vehicle') }}</p>
               <el-select v-model="vehicle_data[n].vendor_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.label" v-for="(item, index) in vendor_type" :key="index"></el-option>
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the type of truck?</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.type_of_truck') }}</p>
               <el-select v-model="vehicle_data[n].carrier_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.carrier_type" v-for="(item, index) in freight_carrier_types" :key="index"></el-option>
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the size of your truck ?</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.size_of_truck') }}</p>
               <div class="tonnage-flex"><input v-model="vehicle_data[n].vehicle_size" type="number" class="add-vehicle-input tonnage-input" /> <span>Tonnes</span></div>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">What is the exact load size of your truck ?</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.exact_load_size') }}</p>
               <div class="tonnage-flex"><input v-model="vehicle_data[n].load_capacity" type="number" class="add-vehicle-input tonnage-input" /> <span>Tonnes</span></div>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Vehicle Number Plate</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.vehicle_number_plate') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[n].registration_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Vehicle Logbook Number</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.vehicle_logbook_number') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[n].log_book_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Name of Insurance Company</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.name_of_insurance') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[n].insurance_name" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Insurance Cert No</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.insurance_cert_no') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[n].insurance_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Insurance Policy Number</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.insurance_policy_number') }}</p>
               <input class="add-vehicle-input" v-model="vehicle_data[n].policy_no" />
             </div>
             <div class="vehicle-inner-detail" @click="removeVehicle(n)">
-              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">Remove Vehicle</span></i>
+              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">{{ $t('preferences.remove_vehicle') }}</span></i>
             </div>
           </div>
           <div class="vehicle-inner-detail" @click="addVehicle()">
-            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">Add Vehicle</span></i>
+            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">{{ $t('preferences.add_vehicle') }}</span></i>
           </div>
         </div>
-        <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span>I Allow Sendy Ltd to verify my insurance documents</span></div>
+        <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span></div>
         <button class="partner-request-advance-button-active upload-documents-modal-button" @click="submitVehicle">
           <i class="el-icon-loading" v-if="submitStatus"></i>
-          Add vehicles
+          {{ $t('preferences.add_vehicles') }}
         </button>
       </div>
     </modal>
@@ -258,50 +258,50 @@
     <modal name="add-recipient-dialog" class="add_vehicle" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-vehicles-modal">
         <div class="upload-documents-modal-top-row">
-          <p class="upload-documents-modal-top-row-title">Add Users</p>
+          <p class="upload-documents-modal-top-row-title">{{ $t('preferences.add_users') }}</p>
         </div>
         <div class="add-user-info">
           <div class="add-user-info-inner">
-            These are the people that will receive notifications for offers and bid requests and be able to promptly respond to them.
+            {{ $t('preferences.people_recieve_notifications') }}
             <div class="add-user-extra">
-              You can add up to 7 users
+              {{ $t('preferences.add_upto_seven_users') }}
             </div>
           </div>
         </div>
         <div class="add-vehicles-outer" v-if="!summary_tab">
           <div class="vehicle-details-borderline">
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Name</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.name') }}</p>
               <input class="add-vehicle-input" v-model="recipient_data[0].name" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Phone Number</p>
-              <input class="add-vehicle-input" v-model="recipient_data[0].phone" />
+              <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
+              <input class="add-vehicle-input" v-model="recipient_data[0].phone_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Email Address</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
               <input class="add-vehicle-input" v-model="recipient_data[0].email" />
             </div>
           </div>
           <div class="vehicle-details-borderline" v-for="n in extra_recipient" :key="n" :data-index="n">
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Name</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.name') }}</p>
               <input class="add-vehicle-input" v-model="recipient_data[n].name" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Phone Number</p>
-              <input class="add-vehicle-input" v-model="recipient_data[n].phone" />
+              <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
+              <input class="add-vehicle-input" v-model="recipient_data[n].phone_no" />
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">Email Address</p>
+              <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
               <input class="add-vehicle-input" v-model="recipient_data[n].email" />
             </div>
             <div class="vehicle-inner-detail" @click="removeRecipient(n)">
-              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">Remove user</span></i>
+              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">{{ $t('preferences.remove_user') }}</span></i>
             </div>
           </div>
           <div class="vehicle-inner-detail" @click="addRecipient()" v-if="extra_recipient < 7">
-            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">Add another user</span></i>
+            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">{{ $t('preferences.add_another_user') }}</span></i>
           </div>
         </div>
 
@@ -309,15 +309,15 @@
           <div class="vehicleContain hidden-md-up">
             <div class="table-responsive mobile-table" v-for="row in recipient_data" :key="row.email">
               <div class="row-mobile">
-                <div class="thead-mobile">Name</div>
+                <div class="thead-mobile">{{ $t('preferences.name') }}</div>
                 <div class="thead-mobile-row">{{ row.name }}</div>
               </div>
               <div class="row-mobile">
-                <div class="thead-mobile">Phone Number</div>
-                <div class="thead-mobile-row">{{ row.phone }}</div>
+                <div class="thead-mobile">{{ $t('preferences.phone_number') }}</div>
+                <div class="thead-mobile-row">{{ row.phone_no }}</div>
               </div>
               <div class="row-mobile">
-                <div class="thead-mobile">Email Address</div>
+                <div class="thead-mobile">{{ $t('preferences.email_address') }}</div>
                 <div class="thead-mobile-row">{{ row.email }}</div>
               </div>
             </div>
@@ -327,20 +327,20 @@
         <div class="add-recipient-btn-outer" v-if="!summary_tab">
           <div class="set-div-flex"></div>
           <div class="close-recipients-dialog" @click="$modal.hide('add-recipient-dialog')">
-            Cancel
+            {{ $t('preferences.cancel') }}
           </div>
           <button class="partner-request-advance-button-active add-recipients-modal-button" @click="nextTab(true)">
-            Save
+            {{ $t('preferences.save') }}
           </button>
         </div>
 
         <div class="add-recipient-btn-outer" v-else>
           <div class="set-div-flex"></div>
           <div class="close-recipients-dialog" @click="nextTab(false)">
-            Edit
+            {{ $t('preferences.edit') }}
           </div>
-          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitNotificationRecipients()">
-            Confirm
+          <button class="partner-request-advance-button-active add-recipients-modal-button">
+            {{ $t('preferences.confirm') }}
           </button>
         </div>
       </div>
@@ -375,6 +375,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       map_options: {
@@ -422,7 +423,7 @@ export default {
       ],
       vendor_type: [
         {
-          label: 'Freight Truck (Over 18T Trucks)',
+          label: this.$t('preferences.freight_truck_over'),
           id: 25,
         },
       ],
@@ -439,10 +440,10 @@ export default {
         },
       ],
       recipient_columns: [
-        { label: 'Name', field: 'name' },
-        { label: 'Phone Number', field: 'phone' },
-        { label: 'Email', field: 'email' },
-        { label: 'Action', field: 'options', html: true },
+        { label: this.$t('preferences.name'), field: 'name' },
+        { label: this.$t('preferences.phone_number'), field: 'phone_no' },
+        { label: this.$t('preferences.email'), field: 'email' },
+        { label: this.$t('preferences.action'), field: 'options', html: true },
       ],
       recipient_row: [],
       extra_recipient: 0,
@@ -550,7 +551,7 @@ export default {
         axios
           .post(`${this.auth}partners/transporter_preferences`, payload, this.config)
           .then(response => {
-            this.notify(3, 1, 'Preference added successfully');
+            this.notify(3, 1, this.$t('preferences.preference_added_successfully'));
             this.fetchOwnerPreferences();
             this.preference = '';
             this.location = '';
@@ -559,7 +560,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, 'Could not save preference');
+            this.notify(3, 0, this.$t('preferences.not_save_preference'));
             this.submitStatus = false;
             this.errorObj = error.response;
             resolve(error);
@@ -577,12 +578,12 @@ export default {
             data: payload,
           })
           .then(response => {
-            this.notify(3, 1, 'Preference deleted successfully');
+            this.notify(3, 1, this.$t('preferences.preference_deleted'));
             this.fetchOwnerPreferences();
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, 'Could not delete preference');
+            this.notify(3, 0, this.$t('preferences.not_delete_preference'));
             this.errorObj = error.response;
             resolve(error);
           });
@@ -612,8 +613,8 @@ export default {
     nextTab(val) {
       if (val) {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
-          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone === '' || this.recipient_data[i].email === '') {
-            this.notify(3, 0, 'Please fill all entries');
+          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone_no === '' || this.recipient_data[i].email === '') {
+            this.notify(3, 0, this.$t('preferences.fill_all_entries'));
           } else {
             this.summary_tab = val;
           }
@@ -721,15 +722,15 @@ export default {
     sortRidersActions(row) {
       const riderRow = [];
       if (row.review_status === 1) {
-        riderRow.action = `<span class="vehicle_approval" id="${row.id}">Approved</span>`;
+        riderRow.action = `<span class="vehicle_approval" id="${row.id}">${this.$t('preferences.approved')}</span>`;
       } else if (row.review_status === 2) {
-        riderRow.action = `<span class="vehicle_ongoing_verification" id="${row.id}">Ongoing verification</span>`;
+        riderRow.action = `<span class="vehicle_ongoing_verification" id="${row.id}">${this.$t('preferences.ongoing_verification')}</span>`;
       } else if (row.review_status === 3) {
-        riderRow.action = `<span class="vehicle_inconsistency" id="${row.id}">Vehicle marked for inconsistency</span>`;
+        riderRow.action = `<span class="vehicle_inconsistency" id="${row.id}">${this.$t('preferences.marked_for_inconsistency')}</span>`;
       } else if (row.review_status === 4) {
-        riderRow.action = `<span class="vehicle_reupload" id="${row.id}">Documents uploaded : Awaiting verification</span>`;
+        riderRow.action = `<span class="vehicle_reupload" id="${row.id}">${this.$t('preferences.documents_uploaded')}</span>`;
       } else {
-        riderRow.action = `<span class="vehicle_awaiting_verification" id="${row.id}">Awaiting verification</span>`;
+        riderRow.action = `<span class="vehicle_awaiting_verification" id="${row.id}">${this.$t('preferences.waiting_verification')}</span>`;
       }
       return riderRow;
     },
@@ -775,13 +776,13 @@ export default {
           parcel_owner_id: parseInt(this.sessionInfo.id, 10),
         };
         if (this.vehicle_data[i].vendor_type === '' || this.vehicle_data[i].carrier_type === '' || this.vehicle_data[i].vehicle_size === '' || this.vehicle_data[i].load_capacity === '' || this.vehicle_data[i].registration_no === '' || this.vehicle_data[i].insurance_name === '' || this.vehicle_data[i].insurance_no === '' || this.vehicle_data[i].policy_no === '' || this.vehicle_data[i].log_book_no === '') {
-          this.notify(3, 0, 'Please fill all entries');
+          this.notify(3, 0, this.$t('preferences.fill_all_entries'));
         } else if (this.vehicle_data[i].vehicle_size < 18 || this.vehicle_data[i].vehicle_size > 33) {
-          this.notify(3, 0, 'Vehicle size should be between 18 and 33 Tonnes');
+          this.notify(3, 0, this.$t('preferences.vehicle_size_should'));
         } else if (this.vehicle_data[i].load_capacity >= this.vehicle_data[i].vehicle_size) {
-          this.notify(3, 0, 'Truck loading capacity should be less than the Truck size');
+          this.notify(3, 0, this.$t('preferences.truck_loading_capacity'));
         } else if (!this.verify_consent) {
-          this.notify(3, 0, 'Agree Sendy Ltd to verify my insurance documents to proceed');
+          this.notify(3, 0, this.$t('preferences.agree_sendy_verify'));
         } else {
           vehicleArray.vehicles.map(v => Object.assign(v, { verify_consent: this.verify_consent }));
           const payload = vehicleArray;
@@ -789,13 +790,13 @@ export default {
             axios
               .post(`${this.auth}partner-api/onboarding/freight/add-vehicle`, payload, this.config)
               .then(response => {
-                this.notify(3, 1, 'Vehicle(s) added successfully');
+                this.notify(3, 1, this.$t('preferences.vehicles_added'));
                 this.clearStoredVehicles();
                 this.fetchVehicles();
                 resolve(response);
               })
               .catch(error => {
-                this.notify(3, 0, 'Could not add vehicles');
+                this.notify(3, 0, this.$t('preferences.not_add_vehicles'));
                 this.errorObj = error.response;
                 resolve(error);
               });

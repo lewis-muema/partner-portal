@@ -11,7 +11,7 @@
                 type="text"
                 class="container__search-element"
                 id="inp"
-                placeholder="Enter pickup"
+                :placeholder="$t('pending.enter_pickup')"
                 @input="filterPickup()"
                 @keyup.delete="refresh()"
               />
@@ -21,23 +21,23 @@
                 type="text"
                 class="container__search-element"
                 id="dst"
-                placeholder="Enter destination"
+                :placeholder="$t('pending.enter_destination')"
                 @input="filterDest()"
                 @keyup.delete="refresh()"
               />
             </span>
             <span class="container__search-select">
               <select name class="container__search-element select-font" @change="filterVendor()" id="vend" :disabled="!refreshStatus">
-                <option value selected>Select type of truck</option>
-                <option value="Pick up">Pick Up</option>
-                <option value="Van">Van</option>
-                <option value="3T Truck">3 Tonne Truck</option>
-                <option value="5T Truck">5 Tonne Truck</option>
-                <option value="10T Truck">10 Tonne Truck</option>
-                <option value="14T Truck">14 Tonne Truck</option>
-                <option value="20T Truck">20 Tonne Truck</option>
-                <option value="28T Truck">28 Tonne Truck</option>
-                <option value="Freight">Freight Truck</option>
+                <option value selected> {{ $t('pending.enter_pickup') }}</option>
+                <option value="Pick up">{{ $t('pending.pick_up') }}</option>
+                <option value="Van"> {{ $t('pending.van') }}</option>
+                <option value="3T Truck">3 {{ $t('pending.tonne_truck') }}</option>
+                <option value="5T Truck">5 {{ $t('pending.tonne_truck') }}</option>
+                <option value="10T Truck">10 {{ $t('pending.tonne_truck') }}</option>
+                <option value="14T Truck">14 {{ $t('pending.tonne_truck') }}</option>
+                <option value="20T Truck">20 {{ $t('pending.tonne_truck') }}</option>
+                <option value="28T Truck">28 {{ $t('pending.tonne_truck') }}</option>
+                <option value="Freight">{{ $t('pending.freight_truck') }}</option>
               </select>
             </span>
             <span class="container__search-loader">
@@ -47,21 +47,21 @@
           <div class="bids">
             <div id="orders__list-table" class="orders__list-table">
               <div class="orders__list-toprow table-head">
-                <div class="orders__col-head pickup">pickup location</div>
-                <div class="orders__col-head load">type of load</div>
-                <div class="orders__col-head destination">destination</div>
-                <div class="orders__col-head distance">distance</div>
-                <div class="orders__col-head pick-date">pickup date</div>
-                <div class="orders__col-head truck">truck</div>
-                <div class="orders__col-head orderNo">order number</div>
-                <div class="orders__col-head price-align">price</div>
-                <div class="orders__col-head price-align">vat</div>
+                <div class="orders__col-head pickup">{{ $t('pending.pickup_location') }}</div>
+                <div class="orders__col-head load">{{ $t('pending.type_of_load') }}</div>
+                <div class="orders__col-head destination">{{ $t('pending.destination') }}</div>
+                <div class="orders__col-head distance">{{ $t('pending.distance') }}</div>
+                <div class="orders__col-head pick-date">{{ $t('pending.pickup_date') }}</div>
+                <div class="orders__col-head truck">{{ $t('pending.truck') }}</div>
+                <div class="orders__col-head orderNo">{{ $t('pending.order_number') }}</div>
+                <div class="orders__col-head price-align">{{ $t('pending.price') }}</div>
+                <div class="orders__col-head price-align">{{ $t('pending.vat') }}</div>
                 <div class="orders__col-head bid-in"></div>
-                <div class="orders__col-head center-action">action</div>
+                <div class="orders__col-head center-action">{{ $t('pending.action') }}</div>
               </div>
               <div class="loading" v-if="loadingStatus"></div>
               <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-                <p class="no-records-par">There are no orders</p>
+                <p class="no-records-par">{{ $t('pending.no_orders') }}</p>
               </div>
               <template v-for="order in orders">
                 <div
@@ -72,7 +72,7 @@
                   :key="order.id"
                 >
                   <div class="orders__list-col pickup">
-                    <p class="orders__mobile-col">Pickup</p>
+                    <p class="orders__mobile-col"> {{ $t('pending.pickup') }}</p>
                     <p
                       class="row1"
                       @mouseover="showFromTooltip(order.id)"
@@ -83,11 +83,11 @@
                     >{{ order.from_name }}, {{ order.start_address }}</span>
                   </div>
                   <div class="orders__list-col load">
-                    <p class="orders__mobile-col">Load</p>
+                    <p class="orders__mobile-col">{{ $t('pending.load') }}</p>
                     <p>N/A</p>
                   </div>
                   <div class="orders__list-col destination">
-                    <p class="orders__mobile-col">Destination</p>
+                    <p class="orders__mobile-col">{{ $t('pending.destination_capital') }}</p>
                     <p
                       class="row2"
                       @mouseover="showToTooltip(order.id)"
@@ -98,23 +98,23 @@
                     >{{ order.to_name }}, {{ order.end_address }}</span>
                   </div>
                   <div class="orders__list-col distance">
-                    <p class="orders__mobile-col">Distance</p>
+                    <p class="orders__mobile-col">{{ $t('pending.distance_capital') }}</p>
                     <p class="orders__mobile-col--distance">{{ formatDistance(order.id) }} km</p>
                   </div>
                   <div class="orders__list-col pick-date">
-                    <p class="orders__mobile-col">Date</p>
+                    <p class="orders__mobile-col">{{ $t('pending.date') }}</p>
                     <p>{{ timeFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col truck">
-                    <p class="orders__mobile-col">Truck</p>
+                    <p class="orders__mobile-col">{{ $t('pending.truck') }}</p>
                     <p class="row3">{{ order.vendorname }}</p>
                   </div>
                   <div class="orders__list-col orderNo">
-                    <p class="orders__mobile-col">order number</p>
+                    <p class="orders__mobile-col">{{ $t('pending.order_number') }}</p>
                     <p>{{ order.orderNo }}</p>
                   </div>
                   <div class="orders__list-col price-align">
-                    <p class="orders__mobile-col">Price</p>
+                    <p class="orders__mobile-col">{{ $t('pending.price') }}</p>
                     <p
                       v-if="order.bid_status === 0"
                       class="right-align"
@@ -125,7 +125,7 @@
                     >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col price-align">
-                    <p class="orders__mobile-col">VAT</p>
+                    <p class="orders__mobile-col">{{ $t('pending.VAT') }}</p>
                     <p>{{ order.currency }} {{ vatCurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col bid-in">
@@ -141,27 +141,27 @@
                     </div>
                   </div>
                   <div class="orders__list-col center-action uppercase">
-                    <p class="orders__mobile-col">action</p>
+                    <p class="orders__mobile-col">{{ $t('pending.action') }}</p>
                     <button
                       class="orders__confirm-icon button-menu"
                       v-if="order.confirmed === 0 && order.bid_status === 0"
-                    >confirm order</button>
+                    >{{ $t('pending.confirm_order') }}</button>
                     <button
                       class="orders__sendquote-icon button-menu"
                       v-if="order.bidPlaced === 0 && order.bid_status === 1 && !opened.includes(order.id)"
-                    >send quote</button>
+                    >{{ $t('pending.send_quote') }}</button>
                     <button
                       class="orders__bidplaced-icon button-menu"
                       v-if="order.bid_status === 1 && order.bidPlaced === 1"
-                    >bid placed</button>
+                    >{{ $t('pending.bid_placed') }}</button>
                     <button
                       class="orders__hidedetails-icon button-menu"
                       v-if="order.bidPlaced === 0 && order.bid_status === 1 && opened.includes(order.id)"
-                    >hide details</button>
+                    > {{ $t('pending.hide_details') }}</button>
                     <button
                       class="orders__confirmed-icon button-menu"
                       v-if="order.confirmed === 1"
-                    >confirmed</button>
+                    >{{ $t('pending.confirmed') }}</button>
                   </div>
                 </div>
                 <div
@@ -172,41 +172,41 @@
                   <div colspan="8" class="expanded-row">
                     <div class="map-details--go-back" @click="toggle(order.id)">
                       <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
-                      <span class="map-details-go-back--span">Back</span>
+                      <span class="map-details-go-back--span">{{ $t('pending.back') }}</span>
                     </div>
                     <div class="map__column">
                       <img :src="createStaticMapUrl(order)" class="map" />
                       <div class="map__details-row">
                         <div class="map__details-col">
-                          <p class="map__details-pickup heading uppercase">pickup location</p>
+                          <p class="map__details-pickup heading uppercase">{{ $t('pending.pickup_location') }}</p>
                           <p class="map__details-pickup par">{{ order.from_name }}</p>
-                          <p class="map__details-date heading uppercase">date and time</p>
+                          <p class="map__details-date heading uppercase"> {{ $t('pending.date_and_time') }}</p>
                           <p class="map__details-date par">{{ timeFormat(order.id) }}</p>
-                          <p class="map__details-date heading uppercase">Order type</p>
+                          <p class="map__details-date heading uppercase"> {{ $t('pending.order_type') }}</p>
                           <p class="map__details-date par" v-if="order.order_type === 'Normal order'">{{ order.order_type }}</p>
                           <p class="map__details-date par capitalize-text" v-else>{{ order.order_type.order_type_tag.replace(/_/g, " ") }}</p>
                         </div>
                         <div class="map__details-col">
-                          <p class="map__details-dest heading uppercase">destination</p>
+                          <p class="map__details-dest heading uppercase">{{ $t('pending.destination') }}</p>
                           <p class="map__details-dest par">{{ order.to_name }}</p>
-                          <p class="map__details-distance heading uppercase">distance</p>
+                          <p class="map__details-distance heading uppercase">{{ $t('pending.distance') }}</p>
                           <p class="map__details-distance par">{{ order.distance }}</p>
                         </div>
                       </div>
                     </div>
                     <div class="order__column">
-                      <p class="order__weight heading uppercase">weight of the order</p>
-                      <p class="order__weight par" v-if="!weight">Not applicable</p>
+                      <p class="order__weight heading uppercase"> {{ $t('pending.weight_of_order') }}</p>
+                      <p class="order__weight par" v-if="!weight"> {{ $t('pending.not_applicable') }}</p>
                       <p class="order__weight par" v-else>{{ weight }}</p>
-                      <p class="order__loader heading uppercase">loader(s) needed</p>
-                      <p class="order__loader par" v-if="!loaders">Not applicable</p>
+                      <p class="order__loader heading uppercase"> {{ $t('pending.loader_needed') }}</p>
+                      <p class="order__loader par" v-if="!loaders"> {{ $t('pending.not_applicable') }}</p>
                       <p class="order__loader par" v-else>{{ loaders }}</p>
-                      <p class="order__loadtype heading uppercase">type of load</p>
-                      <p class="order__loadtype par" v-if="!load">Not applicable</p>
+                      <p class="order__loadtype heading uppercase"> {{ $t('pending.type_of_load') }}</p>
+                      <p class="order__loadtype par" v-if="!load"> {{ $t('pending.not_applicable') }}</p>
                       <p class="order__loadtype par" v-else>{{ load }}</p>
-                      <p class="order__notes heading uppercase">notes</p>
+                      <p class="order__notes heading uppercase">{{ $t('pending.notes') }}</p>
                       <p class="order__notes par">{{ orderNotes(order.id) }}</p>
-                      <p class="order__notes heading uppercase">truck</p>
+                      <p class="order__notes heading uppercase">{{ $t('pending.truck') }}</p>
                       <p
                         class="order__notes par"
                       >{{ order.vendorname }}{{ carrierType(order.carrier_type) }}</p>
@@ -215,7 +215,7 @@
                       <p
                         class="order__amount heading uppercase"
                         v-if="order.bid_status === 0"
-                      >AMOUNT</p>
+                      >{{ $t('pending.amount') }}</p>
                       <p
                         class="order__amount par"
                         v-if="order.bid_status === 0"
@@ -225,7 +225,7 @@
                           <span class="order__price-estimate">
                             <p
                               class="order__amount heading uppercase"
-                            >the minimum amount the client is willing to pay for the order is</p>
+                            > {{ $t('pending.minimum_amount') }}</p>
                             <p
                               class="order__estimate-amount par"
                             >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
@@ -244,25 +244,25 @@
                           </span>
                         </div>
                         <div class="order__quote-amount" v-if="order.bid_status === 1">
-                          <p class="order__amount heading uppercase">your quote</p>
+                          <p class="order__amount heading uppercase"> {{ $t('pending.your_quote') }}</p>
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter quote amount"
+                            :placeholder="$t('pending.enter_quote_amount')"
                             @input="confirm(order.id)"
                             v-model="quoteAmount"
                           />
                         </div>
                         <p
                           class="orders__bidvehicle-type heading uppercase"
-                        >select a vehicle to service this order</p>
+                        > {{ $t('pending.select_vehicle_to_service') }}</p>
                         <select
                           class="orders__bidvehicle-type-input par"
                           v-if="!addVehicleStatus"
                           v-model="count"
                           @change="vehicleSelector(order.id)"
                         >
-                          <option class selected value="null">Select a vehicle</option>
+                          <option class selected value="null">{{ $t('pending.select_vehicle') }}</option>
                           <option
                             class
                             v-for="vehicle in vehicles"
@@ -276,38 +276,38 @@
                           @click="setVehicleStatus()"
                           readonly
                         >
-                          <option class value selected>Select a vehicle</option>
+                          <option class value selected>{{ $t('pending.select_vehicle') }}</option>
                         </select>
                         <p class="orders__addvehicle link" @click="toggleVehicle(order.id)">
-                          <i class="material-icons icon-padded" v-if="!addVehicleStatus">add</i>
-                          <i class="material-icons icon-padded" v-if="addVehicleStatus">remove</i>&nbsp;&nbsp;Add a vehicle
+                          <i class="material-icons icon-padded" v-if="!addVehicleStatus">{{ $t('pending.add') }}</i>
+                          <i class="material-icons icon-padded" v-if="addVehicleStatus">{{ $t('pending.remove') }}</i>&nbsp;&nbsp; {{ $t('pending.add_vehicle') }}
                         </p>
                         <div class="orders__addvehicle-form" v-if="addVehicleStatus">
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter Registration Number"
+                            :placeholder="$t('pending.enter_reg_no')"
                             v-model="regNo"
                             @input="addRegNo(order.id)"
                           />
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter Insurance Number"
+                            :placeholder="$t('pending.enter_insurance_number')"
                             v-model="insuNo"
                             @input="addInsuNo(order.id)"
                           />
                         </div>
                         <p
                           class="orders__assigndriver heading uppercase"
-                        >select a driver to assign to this order</p>
+                        >{{ $t('pending.select_driver_to_assign') }}</p>
                         <select
                           class="orders__assigndriver-input par"
                           v-if="!addDriverStatus"
                           v-model="count1"
                           @change="driverSelector(order.id)"
                         >
-                          <option class selected value="null">Select a driver</option>
+                          <option class selected value="null"> {{ $t('pending.select_driver') }}</option>
                           <option
                             class
                             v-for="rider in riders"
@@ -321,15 +321,15 @@
                           @click="setDriverStatus()"
                           readonly
                         >
-                          <option class value selected>Select a driver</option>
+                          <option class value selected>{{ $t('pending.select_driver') }}</option>
                         </select>
                         <p class="orders__add-driver link" @click="toggleDriver()">
-                          <i class="material-icons icon-padded" v-if="!addDriverStatus">add</i>
-                          <i class="material-icons icon-padded" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
+                          <i class="material-icons icon-padded" v-if="!addDriverStatus">{{ $t('pending.add') }}</i>
+                          <i class="material-icons icon-padded" v-if="addDriverStatus">{{ $t('pending.remove') }}</i>&nbsp;&nbsp; {{ $t('pending.add_driver') }}
                         </p>
                         <div class="orders__adddriver-form" v-if="addDriverStatus">
-                          <input type="text" class="input orders__bid-input" placeholder="Enter Name" v-model="driverName" @input="addDriverName(order.id)" />
-                          <input type="text" class="input orders__bid-input" placeholder="ID Number" v-model="ID" @input="addId(order.id)" />
+                          <input type="text" class="input orders__bid-input" :placeholder="$t('pending.enter_name')" v-model="driverName" @input="addDriverName(order.id)" />
+                          <input type="text" class="input orders__bid-input" :placeholder="$t('pending.id_number')" v-model="ID" @input="addId(order.id)" />
                           <vue-tel-input v-model="driverPhone" v-bind="bindProps" id="phone" class="input orders__bid-input" @input="addPhone(order.id)"></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
@@ -337,7 +337,7 @@
                             class="orders__disabled-button"
                             v-if="order.confirmed === 0 && order.bid_status === 0 && buttonDisabledStatus === 0"
                             disabled
-                          >confirm order</button>
+                          > {{ $t('pending.confirm_order') }}</button>
                           <button
                             class="orders__confirm-button"
                             @click="sendPayload(order.id)"
@@ -347,7 +347,7 @@
                             class="orders__disabled-button"
                             v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 0"
                             disabled
-                          >send quotes</button>
+                          > {{ $t('pending.send_quotes') }}</button>
                           <button
                             class="orders__sendquote-button"
                             @click="sendBid(order.id)"
@@ -359,7 +359,7 @@
                         <button
                           class="orders__confirmed-button"
                           v-if="order.confirmed === 1"
-                        >confirmed</button>
+                        >{{ $t('pending.confirmed') }}</button>
                       </div>
                     </div>
                   </div>
@@ -444,8 +444,8 @@ export default {
       riderPayload: [],
       pick: [],
       responseNo: 0,
-      confirmButtonState: 'confirm order',
-      sendQuoteButtonState: 'send quote',
+      confirmButtonState: this.$t('pending.confirm_order'),
+      sendQuoteButtonState: this.$t('pending.send_quote'),
       getRiderz: 0,
       getVehiclez: 0,
       quoteAmount: null,
@@ -460,6 +460,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       bindProps: {
@@ -467,7 +468,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Drivers phone number',
+        placeholder: this.$t('pending.driver_phone_number'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -651,7 +652,7 @@ export default {
       if (this.orders[id - 1].orderNotes) {
         return this.orders[id - 1].orderNotes.slice(7, 10000);
       } else {
-        return 'No notes';
+        return this.$t('pending.no_notes');
       }
     },
     timer(id) {
@@ -797,7 +798,7 @@ export default {
         if (this.orders[id - 1].package_details.load_weight) {
           this.weight = `${this.orders[id - 1].package_details.load_weight} ${this.orders[id - 1].package_details.load_units}`;
         } else {
-          this.weight = 'No weight provided';
+          this.weight = this.$t('pending.no_weight_provided');
         }
         if (this.orders[id - 1].package_details.no_of_loaders) {
           this.loaders = this.orders[id - 1].package_details.no_of_loaders;
@@ -940,7 +941,7 @@ export default {
       }
     },
     sendPayload(id) {
-      this.confirmButtonState = 'confirming order ...';
+      this.confirmButtonState = this.$t('pending.confirming_order');
       const newVehiclePayload = {
         registration_no: this.regNo,
         box: this.box,
@@ -1020,13 +1021,13 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.confirmButtonState = 'confirm order';
+            this.confirmButtonState = this.$t('pending.confirm_order');
             this.notify(3, 0, `${error.response.data.reason}`);
           }
         });
     },
     sendBid(id) {
-      this.sendQuoteButtonState = 'sending quote...';
+      this.sendQuoteButtonState = this.$t('pending.sending_quote');
       const newVehiclePayload = {
         registration_no: this.regNo,
         box: this.box,
@@ -1090,7 +1091,7 @@ export default {
       axios
         .post(`${this.auth}v1/place_order_bid/`, payload, this.config)
         .then(response => {
-          this.sendQuoteButtonState = 'adjust quote';
+          this.sendQuoteButtonState = this.$t('pending.adjust_quote');
           if (response.data.status) {
             this.notify(3, 1, response.data.message);
             this.opened = [];

@@ -11,12 +11,12 @@
                 v-model="from"
                 input-class="filtIn"
                 id="dtfrom"
-                placeholder="From"
+                :placeholder="$t('loans.from')"
                 name="from"
               ></datepicker>
             </div>
             <div class="col-5">
-              <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+              <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('loans.to')" name="to"></datepicker>
             </div>
             <div class="subFilt col-2">
               <button
@@ -37,7 +37,7 @@
           <datatable
             :columns="columns"
             :rows="rows"
-            :title="`Loans for ${this.sessionInfo.name} for ${monthPeriod}`"
+            :title="$t('loans.loans_for', { name: sessionInfo.name, monthPeriod: monthPeriod })"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -54,12 +54,12 @@
             v-model="from"
             input-class="filtIn"
             id="dtfrom"
-            placeholder="From"
+            :placeholder="$t('loans.from')"
             name="from"
           ></datepicker>
         </div>
         <div class="col-12 padding margin-bottom">
-          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="$t('loans.to')" name="to"></datepicker>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
           <button
@@ -73,13 +73,13 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No loans found for this period</p>
+        <p v-if="rows.length === 0" class="no-loans">{{ $t('loans.no_loans') }}</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
-                <th>Amount</th>
-                <th>Balance</th>
+                <th>{{ $t('loans.amount') }}</th>
+                <th> {{ $t('loans.balance') }}</th>
               </tr>
             </thead>
             <tr class="divider">
@@ -123,9 +123,10 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
-      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }],
+      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: this.$t('loans.date'), field: 'pay_time' }, { label: this.$t('loans.amount'), field: 'amount' }, { label: this.$t('loans.balance'), field: 'running_balance' }, { label: this.$t('loans.narrative'), field: 'pay_narrative' }],
       page: 1,
       rows: [
         {
@@ -164,7 +165,7 @@ export default {
     },
     filt() {
       if (this.to === '' || this.from === '') {
-        this.error = 'Please select both a from and to date';
+        this.error = this.$t('loans.please_select');
         setTimeout(() => {
           this.error = '';
         }, 4000);
@@ -175,7 +176,7 @@ export default {
     },
     fetchLoans(requestType) {
       const payload = this.definePayload(requestType);
-      this.displayFetchingStatus('Fetching loans', 0);
+      this.displayFetchingStatus(this.$t('loans.fetching_loans'), 0);
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/loans`, payload, this.config)
         .then(response => {
@@ -202,7 +203,7 @@ export default {
           .endOf('month')
           .format('YYYY-MM-DD HH:mm:ss');
       } else {
-        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
+        $('#filtSub').html(`<div class="loading-spinner"></div> ${this.$t('loans.loading')}`);
         firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
         lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
         this.rows = [];
