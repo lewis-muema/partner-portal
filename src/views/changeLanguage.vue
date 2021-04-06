@@ -91,15 +91,9 @@ export default {
         phone_no: session.phone,
       };
       axios.post(`${process.env.NODE_PARTNER_API}management/get_partner_details`, payload, this.config).then((response) => {
-        // this.message = response.status ? this.$t('changeLanguage.language_changed') : this.$t('changeLanguage.something_went_wrong');
-        // this.notify(3, 1, this.message);
-        console.log(response.data);
         this.partner_type = response.data.partner_type;
       })
       .catch(error => {
-        console.log(error);
-        // this.message = this.$t('changeLanguage.something_went_wrong');
-        // this.notify(3, 0, this.message);
       });
     },
     changeLanguage() {
