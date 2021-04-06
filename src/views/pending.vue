@@ -125,7 +125,7 @@
                     >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col price-align">
-                    <p class="orders__mobile-col">{{ $t('pending.VAT') }}</p>
+                    <p class="orders__mobile-col">{{ $t('pending.vat_capital') }}</p>
                     <p>{{ order.currency }} {{ vatCurrencyFormat(order.id) }}</p>
                   </div>
                   <div class="orders__list-col bid-in">

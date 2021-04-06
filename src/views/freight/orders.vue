@@ -119,7 +119,7 @@ export default {
         },
       },
       errorObj: '',
-      loaderMessage: $t('freightOrders.no_orders'),
+      loaderMessage: this.$t('freightOrders.no_orders'),
     };
   },
   computed: {
