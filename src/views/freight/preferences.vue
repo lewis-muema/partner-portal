@@ -276,7 +276,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">Phone Number</p>
-              <input class="add-vehicle-input" v-model="recipient_data[0].phone_no" />
+              <input class="add-vehicle-input" v-model="recipient_data[0].phone" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">Email Address</p>
@@ -290,7 +290,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">Phone Number</p>
-              <input class="add-vehicle-input" v-model="recipient_data[n].phone_no" />
+              <input class="add-vehicle-input" v-model="recipient_data[n].phone" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">Email Address</p>
@@ -314,7 +314,7 @@
               </div>
               <div class="row-mobile">
                 <div class="thead-mobile">Phone Number</div>
-                <div class="thead-mobile-row">{{ row.phone_no }}</div>
+                <div class="thead-mobile-row">{{ row.phone }}</div>
               </div>
               <div class="row-mobile">
                 <div class="thead-mobile">Email Address</div>
@@ -339,7 +339,7 @@
           <div class="close-recipients-dialog" @click="nextTab(false)">
             Edit
           </div>
-          <button class="partner-request-advance-button-active add-recipients-modal-button">
+          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitNotificationRecipients()">
             Confirm
           </button>
         </div>
@@ -434,13 +434,13 @@ export default {
       recipient_data: [
         {
           name: '',
-          phone_no: '',
+          phone: '',
           email: '',
         },
       ],
       recipient_columns: [
         { label: 'Name', field: 'name' },
-        { label: 'Phone Number', field: 'phone_no' },
+        { label: 'Phone Number', field: 'phone' },
         { label: 'Email', field: 'email' },
         { label: 'Action', field: 'options', html: true },
       ],
@@ -612,7 +612,7 @@ export default {
     nextTab(val) {
       if (val) {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
-          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone_no === '' || this.recipient_data[i].email === '') {
+          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone === '' || this.recipient_data[i].email === '') {
             this.notify(3, 0, 'Please fill all entries');
           } else {
             this.summary_tab = val;
@@ -661,7 +661,7 @@ export default {
     addRecipient() {
       this.recipient_data.push({
         name: '',
-        phone_no: '',
+        phone: '',
         email: '',
       });
       this.extra_recipient++;
@@ -670,8 +670,53 @@ export default {
       this.extra_recipient--;
       this.recipient_data.splice(index, 1);
     },
+    clearRecipients() {
+      this.$modal.hide('add-recipient-dialog');
+      this.recipient_data = [
+        {
+          name: '',
+          phone: '',
+          email: '',
+        },
+      ];
+      this.extra_recipient = 0;
+    },
     fetchRecipients() {
+      this.loadingRecipients = true;
+      this.recipient_row = [];
+      axios
+        .get(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-users?page=1&status=1&ownerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
+        .then(response => {
+          if (response.data.data.length > 0) {
+            this.populateRecipientsTable(response);
+          } else {
+            this.recipient_row = [];
+            this.loadingRecipients = false;
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+          this.loadingRecipients = false;
+        });
+    },
+    populateRecipientsTable(response) {
+      const data = [];
+      response.data.data.forEach((row, i) => {
+        const riderRow = this.sortRecipientActions(row);
+        data.push({
+          name: row.name,
+          phone: row.phone,
+          email: row.email,
+          options: riderRow.action,
+        });
+      });
+      this.recipient_row = data;
       this.loadingRecipients = false;
+    },
+    sortRecipientActions(row) {
+      const recipientRow = [];
+      recipientRow.action = `<span class="delete_recipient" id="${row.id}">Delete</span>`;
+      return recipientRow;
     },
     sortRidersActions(row) {
       const riderRow = [];
@@ -757,6 +802,28 @@ export default {
           });
         }
       }
+    },
+    submitNotificationRecipients() {
+      const payload = {
+        users: this.recipient_data,
+        ownerId: parseInt(this.sessionInfo.id, 10),
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${this.auth}partner-api//parcel/partner-user`, payload, this.config)
+          .then(response => {
+            this.notify(3, 1, 'Notification recipient(s) added successfully');
+            this.clearRecipients();
+            this.fetchRecipients();
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, 'Could not add notification recipients');
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
   },
 };
@@ -882,5 +949,8 @@ export default {
 }
 .set-div-flex {
   flex-grow: 1;
+}
+.delete_recipient {
+  color: #ff0000;
 }
 </style>
