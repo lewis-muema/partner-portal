@@ -86,7 +86,6 @@ export default {
     },
     getPartnerDetails() {
       const session = this.getSessionInfo;
-      console.log(session);
       const payload = {
         phone_no: session.phone,
       };
