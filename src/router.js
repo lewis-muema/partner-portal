@@ -26,6 +26,7 @@ import freightOrderDetails from './views/freight/orderDetails.vue';
 import freightPreferences from './views/freight/preferences.vue';
 import bidding from './views/bidding/biddingWebForm';
 import recepient from './views/BidRecepient/landing.vue';
+import changeLanguage from './views/changeLanguage';
 
 Vue.use(Router);
 
@@ -67,6 +68,11 @@ export default new Router({
       path: '/banks',
       name: 'banks',
       component: Banks,
+    },
+    {
+      path: '/change_language',
+      name: 'change_language',
+      component: changeLanguage,
     },
     {
       path: '/loans',

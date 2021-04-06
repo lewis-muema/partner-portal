@@ -4,6 +4,7 @@ const translation = {
     name_location: 'FR_Name of the location',
     actions: 'FR_Actions',
     no_locations: 'FR_There are no locations',
+    add_loads: 'FR_Add loads',
     load_type_not_deliver: 'FR_Type of loads that you don’t want to deliver',
     type_of_load: 'FR_Type of load',
     delete: 'FR_Delete',
