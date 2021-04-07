@@ -965,7 +965,7 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-.add_vehicle .notification_recipient > div > div.v--modal-box.v--modal {
+.add_vehicle > div > div.v--modal-box.v--modal {
   min-height: 300px !important;
   height: auto !important;
   top: 160px !important;
@@ -1075,8 +1075,10 @@ export default {
 .notification_recipient > .v--modal-background-click {
   margin-top: 0% !important;
 }
-.notification_recipient.v--modal-overlay > div > div.v--modal-box.v--modal {
-  height: 238px !important;
+.notification_recipient > div > div.v--modal-box.v--modal {
+  min-height: 200px !important;
+  height: auto !important;
+  top: 160px !important;
 }
 .remove-recipient-info {
   margin-top: 5%;
