@@ -84,7 +84,15 @@
           <div v-if="recipient_row.length > 0">
             <div class="vehicleContain hidden-sm-down" v-if="windowWidth > 768">
               <table class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
-                <datatable class="savings__row" :columns="recipient_columns" :rows="recipient_row" v-if="recipient_row" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="false" :exportable="false" :printable="false"></datatable>
+                <datatable class="savings__row" :columns="recipient_columns" :rows="recipient_row" v-if="recipient_row" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="false" :exportable="false" :printable="false">
+                  <th slot="thead-tr">
+                    Actions
+                  </th>
+                  <template slot="tbody-tr" slot-scope="props">
+                    <td class="delete_recipient" @click="deleteRecipient(props.row)">
+                      Delete
+                    </td>
+                  </template></datatable>
               </table>
             </div>
 
@@ -346,6 +354,30 @@
       </div>
     </modal>
 
+    <!-- Add freight notification recipients -->
+
+    <modal name="delete-recipient-dialog" class="notification_recipient" :width="400" transition="slide" :pivot-y="0.5">
+      <div class="upload-vehicles-modal">
+        <div class="upload-documents-modal-top-row">
+          <p class="upload-documents-modal-top-row-title">Delete User</p>
+        </div>
+        <div class="remove-recipient-info">
+          <div class="">
+            Are you sure you want to delete<span>{{ singleRecipientData.name }} ?</span>
+          </div>
+        </div>
+        <div class="add-recipient-btn-outer">
+          <div class="set-div-flex"></div>
+          <div class="close-recipients-dialog cancel-notification" @click="closeDeleteRecipientDialog()">
+            No
+          </div>
+          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitDeleteRequest()">
+            Yes , Delete User
+          </button>
+        </div>
+      </div>
+    </modal>
+
     <notify />
   </div>
 </template>
@@ -447,7 +479,6 @@ export default {
         { label: this.$t('preferences.name'), field: 'name' },
         { label: this.$t('preferences.phone_number'), field: 'phone' },
         { label: this.$t('preferences.email'), field: 'email' },
-        { label: this.$t('preferences.action'), field: 'options', html: true },
       ],
       recipient_row: [],
       extra_recipient: 0,
@@ -478,6 +509,7 @@ export default {
         validCharactersOnly: true,
       },
       phoneInputIndex: 0,
+      singleRecipientData: {},
     };
   },
   computed: {
@@ -733,7 +765,7 @@ export default {
       this.loadingRecipients = true;
       this.recipient_row = [];
       axios
-        .get(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-users?page=1&status=1&ownerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
+        .get(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-users?page=1&status!=3&ownerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
         .then(response => {
           if (response.data.data.length > 0) {
             this.populateRecipientsTable(response);
@@ -755,6 +787,7 @@ export default {
           name: row.name,
           phone: row.phone,
           email: row.email,
+          id: row.id,
           options: riderRow.action,
         });
       });
@@ -863,7 +896,7 @@ export default {
 
       return new Promise((resolve, reject) => {
         axios
-          .post(`${this.auth}partner-api//parcel/partner-user`, payload, this.config)
+          .post(`${this.auth}partner-api/parcel/partner-user`, payload, this.config)
           .then(response => {
             this.notify(3, 1, 'Notification recipient(s) added successfully');
             this.clearRecipients();
@@ -872,6 +905,34 @@ export default {
           })
           .catch(error => {
             this.notify(3, 0, 'Could not add notification recipients');
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    deleteRecipient(val) {
+      this.singleRecipientData = val;
+      this.$modal.show('delete-recipient-dialog');
+    },
+    closeDeleteRecipientDialog() {
+      this.$modal.hide('delete-recipient-dialog');
+      this.singleRecipientData = {};
+    },
+    submitDeleteRequest() {
+      let payload = {
+        status: 3,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${this.auth}partner-api/parcel/partner-user/${this.singleRecipientData.id}`, payload, this.config)
+          .then(response => {
+            this.notify(3, 1, 'Notification recipient(s) has been deleted successfully');
+            this.closeDeleteRecipientDialog();
+            this.fetchRecipients();
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, 'Could not delete notification recipients');
             this.errorObj = error.response;
             resolve(error);
           });
@@ -904,7 +965,7 @@ export default {
   flex-direction: column;
   justify-content: center;
 }
-.add_vehicle > div > div.v--modal-box.v--modal {
+.add_vehicle .notification_recipient > div > div.v--modal-box.v--modal {
   min-height: 300px !important;
   height: auto !important;
   top: 160px !important;
@@ -994,6 +1055,7 @@ export default {
 .close-recipients-dialog {
   margin: 20px 10px 10px 0px;
   color: #ea7125;
+  cursor: pointer;
 }
 .add-recipient-btn-outer {
   text-align: right;
@@ -1003,10 +1065,24 @@ export default {
   flex-grow: 1;
 }
 .delete_recipient {
-  color: #ff0000;
+  color: #ff0000 !important;
+  cursor: pointer !important;
 }
 .vehicle-details-borderline > div:nth-child(2) > div > div > ul {
   margin-left: -21% !important;
   width: 336px !important;
+}
+.notification_recipient > .v--modal-background-click {
+  margin-top: 0% !important;
+}
+.notification_recipient.v--modal-overlay > div > div.v--modal-box.v--modal {
+  height: 238px !important;
+}
+.remove-recipient-info {
+  margin-top: 5%;
+  margin-bottom: 11%;
+}
+.cancel-notification {
+  margin-right: 11% !important;
 }
 </style>
