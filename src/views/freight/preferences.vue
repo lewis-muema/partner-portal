@@ -650,12 +650,16 @@ export default {
       this.$modal.show('add-recipient-dialog');
     },
     nextTab(val) {
+      let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
       if (val) {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
           if (this.recipient_data[i].name === '' || this.recipient_data[i].phone === '' || this.recipient_data[i].email === '') {
             this.notify(3, 0, this.$t('preferences.fill_all_entries'));
           } else if (this.recipient_data[i].phone !== '' && !this.recipient_data[i].phoneValidity) {
             this.notify(3, 0, 'Kindly provide a valid phone number');
+          } else if (this.recipient_data[i].email !== '' && !this.recipient_data[i].email.match(mailformat)) {
+            this.notify(3, 0, 'Kindly provide a valid email address');
           } else {
             this.summary_tab = val;
           }
