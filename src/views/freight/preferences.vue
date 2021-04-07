@@ -276,7 +276,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <input class="add-vehicle-input" v-model="recipient_data[0].phone" />
+              <vue-tel-input v-model="recipient_data[0].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input" @validate="Valid" @input="setPhoneInputIndex(0)"></vue-tel-input>
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
@@ -290,7 +290,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <input class="add-vehicle-input" v-model="recipient_data[n].phone" />
+              <vue-tel-input v-model="recipient_data[n].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input" @validate="Valid" @input="setPhoneInputIndex(n)"></vue-tel-input>
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
@@ -353,10 +353,12 @@
 <script>
 import axios from 'axios';
 import DataTable from 'vue-materialize-datatable';
+import VueTelInput from 'vue-tel-input';
 import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
+import 'vue-tel-input/dist/vue-tel-input.css';
 
 export default {
   title: 'Partner Portal - Freight Preferences',
@@ -365,6 +367,7 @@ export default {
     errorHandler,
     notify,
     datatable: DataTable,
+    VueTelInput,
   },
   data() {
     return {
@@ -437,6 +440,7 @@ export default {
           name: '',
           phone: '',
           email: '',
+          phoneValidity: false,
         },
       ],
       recipient_columns: [
@@ -448,6 +452,32 @@ export default {
       recipient_row: [],
       extra_recipient: 0,
       summary_tab: false,
+      bindProps: {
+        defaultCountry: 'KE',
+        disabledFetchingCountry: false,
+        disabled: false,
+        disabledFormatting: false,
+        placeholder: this.$t('login.enter_phone_number'),
+        required: false,
+        enabledCountryCode: false,
+        enabledFlags: true,
+        preferredCountries: ['KE', 'UG', 'TZ'],
+        onlyCountries: [],
+        ignoredCountries: [],
+        autocomplete: 'off',
+        name: 'telephone',
+        maxLen: 20,
+        wrapperClasses: '',
+        inputClasses: '',
+        dropdownOptions: {
+          disabledDialCode: false,
+        },
+        inputOptions: {
+          showDialCode: false,
+        },
+        validCharactersOnly: true,
+      },
+      phoneInputIndex: 0,
     };
   },
   computed: {
@@ -493,6 +523,15 @@ export default {
   methods: {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
+    },
+    /* eslint-disable */
+    Valid: function({ number, isValid, country }) {
+      if (number !== '') {
+        this.recipient_data[this.phoneInputIndex].phoneValidity = isValid;
+      }
+    },
+    setPhoneInputIndex(index) {
+      this.phoneInputIndex = index;
     },
     setLocation(place) {
       if (!place) {
@@ -615,6 +654,8 @@ export default {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
           if (this.recipient_data[i].name === '' || this.recipient_data[i].phone === '' || this.recipient_data[i].email === '') {
             this.notify(3, 0, this.$t('preferences.fill_all_entries'));
+          } else if (this.recipient_data[i].phone !== '' && !this.recipient_data[i].phoneValidity) {
+            this.notify(3, 0, 'Kindly provide a valid phone number');
           } else {
             this.summary_tab = val;
           }
@@ -664,6 +705,7 @@ export default {
         name: '',
         phone: '',
         email: '',
+        phoneValidity: false,
       });
       this.extra_recipient++;
     },
@@ -678,6 +720,7 @@ export default {
           name: '',
           phone: '',
           email: '',
+          phoneValidity: false,
         },
       ];
       this.extra_recipient = 0;
@@ -953,5 +996,9 @@ export default {
 }
 .delete_recipient {
   color: #ff0000;
+}
+.vehicle-details-borderline > div:nth-child(2) > div > div > ul {
+  margin-left: -21% !important;
+  width: 336px !important;
 }
 </style>
