@@ -852,6 +852,10 @@ export default {
       }
     },
     submitNotificationRecipients() {
+      let data = this.recipient_data;
+      for (let key in data) {
+        delete data[key].phoneValidity;
+      }
       const payload = {
         users: this.recipient_data,
         ownerId: parseInt(this.sessionInfo.id, 10),
