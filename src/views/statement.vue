@@ -134,7 +134,7 @@
         </div>
         <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
           <div class="divider-top"></div>
-          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="$t('statement.statement_for', { name: this.sessionInfo.name, monthPeriod: monthPeriod })" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true"></datatable>
+          <datatable ref="input" :columns="columns" :rows="filteredTransactions" :title="$t('statement.statement_for', { name: this.sessionInfo.name, monthPeriod: monthPeriod })" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="true" :exportable="true" :locale="getLanguage"></datatable>
         </table>
       </div>
       <div class="printContain hidden-md-up" v-else>
@@ -197,6 +197,7 @@ import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 import axios from 'axios';
 import Mixpanel from 'mixpanel';
+import { mapGetters } from 'vuex';
 import notify from '../components/notification';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
@@ -296,6 +297,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(['getLanguage']),
     displayAccounts() {
       return this.payment_method === 10;
     },

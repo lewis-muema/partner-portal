@@ -45,6 +45,7 @@
             :sortable="true"
             :exact-search="true"
             :exportable="true"
+            :locale="getLanguage"
           ></datatable>
         </table>
       </div>
@@ -103,6 +104,7 @@ import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 import timezone from '../mixins/timezone';
@@ -136,6 +138,9 @@ export default {
       monthPeriod: '',
       errorObj: '',
     };
+  },
+  computed: {
+    ...mapGetters(['getLanguage']),
   },
   created() {
     if (localStorage.sessionData) {

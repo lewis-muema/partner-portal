@@ -126,7 +126,7 @@
           <p class="banks__verify-text font-16"> {{ $t('banks.for_your_security') }} <span class="resend-code" @click="sendCode(2)"> {{ $t('banks.resend_code') }}</span></p>
           <input class="banks__verify-inputs" maxlength="4" type="text" v-model="inputCode" />
           <button class="banks__verify-inputs banks__active-buttons" v-if="verifyCodeStatus" @click="verifyCode()"> {{ $t('banks.verify') }}</button>
-          <button class="banks__verify-inputs" disabled v-else> {{ $t('banks.verify') }}</button>
+          <button class="banks__verify-inputs" disabled v-else> {{ $t('banks.verifying_code') }}</button>
         </div>
       </div>
       <!--add new bank account tab-->
@@ -139,7 +139,7 @@
           </div>
           <div class="banks__new-bank-account-body">
             <p class="banks__input-width font-16">
-              <span class="margin-right"> {{ $t('banks.bank_name') }}</span>
+              <span class="margin-right"> {{ $t('banks.bank_name_capital') }}</span>
               <span>
                 <select class="banks__new-account-input" @change="bankNameCheckpoint()" v-model="bankid">
                   <option selected value="null"> {{ $t('banks.select_bank') }}</option>
@@ -154,13 +154,13 @@
               </span>
             </p>
             <p class="banks__input-width font-16">
-              <span class="margin-right"> {{ $t('banks.account_name') }}</span>
+              <span class="margin-right"> {{ $t('banks.account_name_capital') }}</span>
               <span>
                 <input class="banks__new-account-input" type="text" v-model="name" @input="accountNameCheckpoint()" />
               </span>
             </p>
             <p class="banks__input-width font-16">
-              <span class="margin-right"> {{ $t('banks.account_number') }}</span>
+              <span class="margin-right"> {{ $t('banks.account_number_capital') }}</span>
               <span>
                 <input class="banks__new-account-input" type="text" v-model="account" @input="accountNoCheckpoint()" />
               </span>
