@@ -23,7 +23,9 @@ const translation = {
     approved: 'FR_Approved',
     declined: 'FR_Declined',
     sure_close_dialog: 'FR_Are you sure to close this dialog?',
-    view_refund_request: 'View Refund Request',
+    view_refund_request: 'FR_View Refund Request',
+    select_partner: 'FR_Select Partner',
+    refund_request: 'FR_Request refund',
 
 };
 

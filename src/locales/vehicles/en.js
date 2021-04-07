@@ -59,7 +59,7 @@ const translation = {
     options: 'Options',
     enter_phone_number: 'Enter a phone number',
     cancel_allocation: 'Cancel allocation',
-    Reassign_driver: 'Reassign driver',
+    reassign_driver: 'Reassign driver',
     add_driver: 'Add driver',
     pending: 'Pending',
     accepted: 'Accepted',
@@ -87,6 +87,8 @@ const translation = {
     confirm: 'Confirm',
     confirm_vehicle_addition: 'Confirm Vehicle Addition',
     box: 'Box',
+    fill_all_fields: 'Please fill all the fields',
+    vehicles_for: 'Vehicles for {name}',
 };
 
 export default translation;

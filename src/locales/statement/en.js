@@ -33,7 +33,7 @@ const translation = {
     loading: 'LOADING',
     sending_request: 'Sending request',
     fetching_daily_stats: 'Fetching Daily Rider Statistics',
-    statement_for: 'FR_Statement for {name} for {monthPeriod}',
+    statement_for: 'Statement for {name} for {monthPeriod}',
 };
 
 export default translation;
