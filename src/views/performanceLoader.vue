@@ -5,7 +5,7 @@
       <div class="rider--stats-menu">
         <div class="secondary-inner">
           <div class="secnav-container rider--stats-section">
-            <router-link to="/performance" class="secnav-page" :class="showActiveDashboard()">{{ $t('performance.today') }} </router-link>
+            <router-link to="/performance" class="secnav-page" :class="showActiveDashboard()">{{ $t('perfomance.today') }} </router-link>
           </div>
         </div>
       </div>

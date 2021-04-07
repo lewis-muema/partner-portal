@@ -17,7 +17,7 @@
                 </el-option>
                 </el-select>
             <div class="mt-5">
-                <el-button type="primary" class="px-5 mt-5 primary" @click="changeLanguage" >{{ $t('changeLanguage.save') }}</el-button>
+                <el-button type="primary" class="px-5 mt-5 primary" @click="changeLanguage" :loading="loading">{{ $t('changeLanguage.save') }}</el-button>
             </div>
         </div>
     </div>
@@ -38,6 +38,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       options: [
         {
           value: 'en',
@@ -96,6 +97,7 @@ export default {
       });
     },
     changeLanguage() {
+      this.loading = true;
       const session = this.getSessionInfo;
       const payload = {
         preferred_language: this.locale,
@@ -114,10 +116,12 @@ export default {
       axios.post(`${process.env.ADONIS_PRIVATE_API}user-preferences`, payload, this.config).then((response) => {
         this.message = response.status ? this.$t('changeLanguage.language_changed') : this.$t('changeLanguage.something_went_wrong');
         this.notify(3, 1, this.message);
+        this.loading = false;
       })
       .catch(error => {
         this.message = this.$t('changeLanguage.something_went_wrong');
         this.notify(3, 0, this.message);
+        this.loading = false;
       });
     },
 
