@@ -151,7 +151,7 @@ export default {
       const file = blob;
       const fileType = blob.type;
       const albumPhotosKey = `${encodeURIComponent('signature')}/t&c_owner_`;
-      const photoKey = `${albumPhotosKey}${this.sessionInfo.id}`;
+      const photoKey = `${albumPhotosKey}${this.sessionInfo.owner_id}`;
       s3.upload(
         {
           Key: photoKey,
@@ -165,7 +165,7 @@ export default {
             this.notify(3, 0, `There was an error uploading your photo: ${err.message}`);
           } else {
             this.notify(3, 1, 'Signature submitted');
-            this.submitSignature(`t&c_owner_${this.sessionInfo.id}.png`);
+            this.submitSignature(`t&c_owner_${this.sessionInfo.owner_id}.png`);
           }
           // eslint-disable-next-line comma-dangle
         }

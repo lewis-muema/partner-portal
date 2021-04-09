@@ -103,7 +103,7 @@ beforeMount () {
     },
     getSessionData() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.ownerID = sessionInfo.id;
+      this.ownerID = sessionInfo.owner_id;
       this.countryCode = sessionInfo.country_code;
     },
     postSurvey() {

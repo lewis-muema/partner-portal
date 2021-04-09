@@ -497,7 +497,7 @@ export default {
       this.count1 = null;
       this.ownerPhone = this.sessionInfo.phone;
       this.vendorType = this.orders[id - 1].vendor_type;
-      this.ownerId = this.sessionInfo.id;
+      this.ownerId = this.sessionInfo.owner_id;
       this.closed = this.orders[id - 1].carrier_type;
       this.orderNo = this.orders[id - 1].order_no;
       this.message = null;
@@ -668,7 +668,7 @@ export default {
       clearInterval(interval);
       this.orders = [];
       const payload = {
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
         to_date: moment().format('YYYY-MM-DD'),
         from_date: '2014-02-09',
         limit: `${this.orderRange.split(' ')[0]}, ${100}`,
