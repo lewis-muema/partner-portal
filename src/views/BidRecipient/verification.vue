@@ -8,33 +8,59 @@
       <p class="verificationContent__description">{{ $t('signup.for_security') }}</p>
       <form class="verificationForm">
         <label class="verificationForm__label">{{ $t('signup.enter_verification_code') }}</label>
-        <input class="verificationForm__input" type="text" :placeholder="$t('signup.enter_code')" v-model="code" />
+        <input class="verificationForm__input" type="number" :placeholder="$t('signup.enter_code')" v-model="code" />
+        <span v-show="info" class="info">Invalid code, please confirm and try again</span>
         <button class="verificationForm__btn" @click.prevent="verifyCode">{{ $t('signup.verify_code') }}</button>
       </form>
     </div>
+    <notify />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import notify from '../../components/notification';
 
 export default {
+  components: {
+    notify,
+  },
   data() {
     return {
       code: '',
+      info: false,
     };
   },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     async verifyCode() {
-      const payload = {
-        request_id: localStorage.recipientRequestId,
-        code: this.code,
-      };
-      axios.post('https://auth.sendyit.com/v1/check_verification', payload).then(res => {
-        if (res.status === 200) {
-          this.$router.push('/login');
-        }
-      });
+      if (this.code.length < 4) {
+        this.info = true;
+        setTimeout(() => {
+          this.info = false;
+        }, 3000);
+      } else {
+        const payload = {
+          request_id: localStorage.recipientRequestId,
+          code: this.code,
+        };
+        axios
+          .post('https://auth.sendyit.com/v1/check_verification', payload)
+          .then(res => {
+            if (res.data.status) {
+              this.notify(3, 1, 'Verified successfully');
+              this.$router.push('/login');
+            } else {
+              this.notify(3, 1, response.data.message);
+            }
+          })
+          .catch(error => {
+            this.notify(3, 0, 'Verification code Error , Unable to connect to the server . Please try again');
+            resolve(error);
+          });
+      }
     },
   },
 };
@@ -89,5 +115,18 @@ a {
   font-weight: 700;
   font-size: 16px;
   margin: 26px 0px 10px 0px;
+}
+.info {
+  font-size: 14px;
+  color: #ea7125;
+  padding: 10px 0px;
+  line-height: 0;
+}
+@media only screen and (max-width: 700px) {
+  .verification__backIcon {
+    position: relative;
+    bottom: 50px;
+    cursor: pointer;
+  }
 }
 </style>

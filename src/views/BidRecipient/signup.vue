@@ -1,5 +1,7 @@
 <template>
   <div class="signup">
+    <notify />
+
     <h1 class="signup__heading">{{ $t('signup.join') }}{{ recipient.company_name }}</h1>
     <div class="recipient">
       <p class="recipient__title">{{ $t('signup.name') }}</p>
@@ -23,6 +25,7 @@
         <input class="password__inputBox" type="password" v-model="password" :placeholder="$t('signup.enter_password')" />
         <i @click="showPassword = !showPassword" class="fas fa-eye fa-lg password__inputIcon"></i>
       </div>
+      <span v-show="passwordInfo" class="infoPassword">Invalid code, please confirm and try again</span>
       <button class="password__btn" @click.prevent="verifyPassword">{{ $t('signup.sign_up') }}</button>
       <p class="password__login">
         {{ $t('signup.have_account') }} <a href="/login">{{ $t('signup.login_here') }}</a>
@@ -33,15 +36,18 @@
 
 <script>
 import axios from 'axios';
+import notify from '../../components/notification';
 
 export default {
-  components: {},
+  components: { notify },
   props: ['recipient'],
   data() {
     return {
       showPassword: false,
       passwordValue: ' ',
+      error: false,
       info: false,
+      passwordInfo: false,
       password: '',
       auth: process.env.VUE_APP_AUTH,
       config: {
@@ -60,29 +66,56 @@ export default {
         this.info = false;
       }, 3000);
     },
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     async verifyPassword() {
-      const payload = {
-        uuid: this.recipient.uuid,
-        password: this.password,
-      };
-      axios.post(`${this.auth}partner-api/parcel/partner-user/verify?authkey=${process.env.BIDDING_API_KEY}`, payload).then(res => {
-        if (res.status === 200) {
-          this.verificationCode();
-        }
-      });
+      if (this.password.length < 4) {
+        this.passwordInfo = true;
+        setTimeout(() => {
+          this.passwordInfo = false;
+        }, 3000);
+      } else {
+        const payload = {
+          uuid: this.recipient.uuid,
+          password: this.password,
+        };
+        axios
+          .post(`${this.auth}partner-api/parcel/partner-user/verify?authkey=${process.env.BIDDING_API_KEY}`, payload)
+          .then(res => {
+            if (res.status === 200) {
+              this.verificationCode();
+              this.notify(3, 1, 'Password confirmed successfully');
+            } else {
+              this.notify(3, 1, response.data.message);
+            }
+          })
+          .catch(err => {
+            this.notify(3, 0, 'Check password and try again');
+            resolve(err);
+          });
+      }
     },
     async verificationCode() {
       const payload = {
         number: this.recipient.phone,
       };
-      axios.post('https://auth.sendyit.com/v1/request_verification', payload).then(res => {
-        if (res.status === 200) {
-          localStorage.setItem('recipientRequestId', res.data.request_id);
-          this.$router.push('verification');
-        } else {
+      axios
+        .post('https://auth.sendyit.com/v1/request_verification', payload)
+        .then(response => {
+          if (response.status) {
+            this.notify(3, 1, 'Verification code has been sent to your phone');
+            localStorage.setItem('recipientRequestId', response.data.request_id);
+            this.$router.push('verification');
+          } else {
+            this.notify(3, 1, response.message);
+          }
+        })
+        .catch(error => {
+          this.notify(3, 0, 'Phone Verification Error , Unable to connect to the server . Please try again after 15 minutes');
           this.$router.push('/login');
-        }
-      });
+          resolve(error);
+        });
     },
   },
 };
@@ -166,6 +199,12 @@ export default {
 }
 .password__login a {
   color: #ea7125;
+}
+.infoPassword {
+  font-size: 14px;
+  color: #ea7125;
+  padding: 10px 0px;
+  line-height: 0;
 }
 @media only screen and (max-width: 700px) {
   .signup__heading {
