@@ -110,7 +110,7 @@ export default {
     getLicenseData() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const payload = {
-        ownerId: sessionInfo.owner_id,
+        ownerId: sessionInfo.id,
       };
       axios
         .post(`${process.env.NODE_PARTNER_API}partner_portal/owner_documents`, payload, this.config)
