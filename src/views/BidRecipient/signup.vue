@@ -1,12 +1,12 @@
 <template>
   <div class="signup">
-    <h1 class="signup__heading">Join {{ recipient.company_name }}</h1>
+    <h1 class="signup__heading">{{ $t('signup.join') }}{{ recipient.company_name }}</h1>
     <div class="recipient">
-      <p class="recipient__title">Name</p>
+      <p class="recipient__title">{{ $t('signup.name') }}</p>
       <p class="recipient__details">{{ recipient.name }}</p>
-      <p class="recipient__title">Phone Number</p>
+      <p class="recipient__title">{{ $t('signup.phone_number') }}</p>
       <p class="recipient__details">{{ recipient.phone }}</p>
-      <p class="recipient__title">Email Address</p>
+      <p class="recipient__title">{{ $t('signup.email_address') }}</p>
       <p class="recipient__details">{{ recipient.email }}</p>
     </div>
     <form class="password">
