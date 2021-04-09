@@ -49,7 +49,6 @@ export default {
         axios
           .post('https://auth.sendyit.com/v1/check_verification', payload)
           .then(res => {
-            console.log(res);
             if (res.data.status === true) {
               this.notify(3, 1, 'Verified successfully');
               this.$router.push('/login');
