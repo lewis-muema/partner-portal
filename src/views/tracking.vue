@@ -189,7 +189,7 @@ export default {
       const riders = [];
       const riderIds = [];
       const payload = {
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
       };
       const lastPositionPayload = {
         rider_id: riderIds,

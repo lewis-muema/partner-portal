@@ -95,7 +95,7 @@ export default {
     fetchTimeline() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}freight-service/activity_log/${this.sessionInfo.id}/2`, this.config)
+          .get(`${this.auth}freight-service/activity_log/${this.sessionInfo.owner_id}/2`, this.config)
           .then(response => {
             this.timeline = response.data.data;
             this.loadingStatus = false;
@@ -132,7 +132,7 @@ export default {
     actionDocument() {
       const payload = {
         document_id: this.document.document_id,
-        transporter_id: this.sessionInfo.id,
+        transporter_id: this.sessionInfo.owner_id,
         status: this.status === 2 ? 1 : -1,
       };
       if (this.status === 3) {

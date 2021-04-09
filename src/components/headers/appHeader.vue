@@ -226,7 +226,7 @@ export default {
     fetchBikeDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
-        owner_id: sessionInfo.id,
+        owner_id: sessionInfo.owner_id,
         vendor_type: 1,
       };
       axios
@@ -247,7 +247,7 @@ export default {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const userPayload = {
         respondent_type: 'owner',
-        respondent_id: sessionInfo.id,
+        respondent_id: sessionInfo.owner_id,
       };
       axios
         .post(`${process.env.ADONIS_PRIVATE_API}nps/verify`, userPayload, this.config)
@@ -262,7 +262,7 @@ export default {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       return new Promise((resolve, reject) => {
         axios
-            .get(`${process.env.ADONIS_PARTNER_API}parcel/owner/freight-status/${sessionInfo.id}`, this.config)
+            .get(`${process.env.ADONIS_PARTNER_API}parcel/owner/freight-status/${sessionInfo.owner_id}`, this.config)
             .then(response => {
               this.$store.commit('setFreightStatus', response.data.freightStatus);
               this.checkFlow(this.$route.path);
@@ -280,7 +280,7 @@ export default {
       this.show_performance = false;
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const userPayload = {
-        owner_id: sessionInfo.id,
+        owner_id: sessionInfo.owner_id,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/performance_status`, userPayload, this.config)

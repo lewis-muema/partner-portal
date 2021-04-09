@@ -477,7 +477,7 @@ export default {
       return new Promise((resolve, reject) => {
         const riders = [];
         const riderPayload = {
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         };
         const parsedData = JSON.parse(localStorage.sessionData);
         axios
@@ -500,7 +500,7 @@ export default {
     fetchOwnerVehicles() {
       return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         });
         axios
           .post(`${this.auth}partner/v1/partner_portal/vehicles`, payload, this.config)
@@ -680,7 +680,7 @@ export default {
       this.quoteAmount = null;
       this.driverSelector(id);
       this.vendorType = this.orders[id - 1].vendor_type;
-      this.ownerId = this.sessionInfo.id;
+      this.ownerId = this.sessionInfo.owner_id;
       this.closed = this.orders[id - 1].carrier_type;
       this.orderNo = this.orders[id - 1].order_no;
       this.newRider = false;
@@ -748,18 +748,18 @@ export default {
         vehicle_details: {
           new_vehicle: this.newVehicle,
           vehicle_id: this.allVehicles[vehicleIndex].vehicle.id,
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         },
         rider_details: {
           new_rider: this.newRider,
           rider_id: this.riders[this.count1].rider_id,
           vendor_type: this.allVehicles[vehicleIndex].vendor_type,
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         },
         bid_details: {
           order_no: this.orders[id - 1].orderNo,
           amount: this.quoteAmount,
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
           rider_id: this.riders[this.count1].rider_id,
         },
       });
@@ -892,7 +892,7 @@ export default {
         }
         this.ownerPhone = this.sessionInfo.phone;
         axios
-          .get(`${this.auth}partner-api/parcel/available_orders/${this.sessionInfo.id}`, this.config)
+          .get(`${this.auth}partner-api/parcel/available_orders/${this.sessionInfo.owner_id}`, this.config)
           .then(response => {
             const unescaped = response.data;
             this.orders = [];
@@ -914,7 +914,7 @@ export default {
     getOrders() {
       this.ownerPhone = this.sessionInfo.phone;
       axios
-        .get(`${this.auth}partner-api/parcel/available_orders/${this.sessionInfo.id}`, this.config)
+        .get(`${this.auth}partner-api/parcel/available_orders/${this.sessionInfo.owner_id}`, this.config)
         .then(response => {
           const unescaped = response.data;
           unescaped.reverse().forEach((row, i) => {

@@ -439,7 +439,7 @@ export default {
       this.recievedResponse = '';
       this.accounts = [];
       const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
       });
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/get_owner_bank_accounts`, payload, this.config)
@@ -476,7 +476,7 @@ export default {
     },
     sendOwnerBanks() {
       const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
         account_no: this.account,
         account_name: this.name,
         bank_branch: this.branch,
