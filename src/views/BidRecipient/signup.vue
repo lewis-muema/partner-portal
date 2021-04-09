@@ -87,7 +87,7 @@ export default {
               this.verificationCode();
               this.notify(3, 1, 'Password confirmed successfully');
             } else {
-              this.notify(3, 1, response.data.message);
+              this.notify(3, 1, res.data.message);
             }
           })
           .catch(err => {
@@ -102,13 +102,14 @@ export default {
       };
       axios
         .post('https://auth.sendyit.com/v1/request_verification', payload)
-        .then(response => {
-          if (response.status) {
+        .then(res => {
+          console.log(res);
+          if (res.data.status === true) {
             this.notify(3, 1, 'Verification code has been sent to your phone');
-            localStorage.setItem('recipientRequestId', response.data.request_id);
+            localStorage.setItem('recipientRequestId', res.data.request_id);
             this.$router.push('verification');
           } else {
-            this.notify(3, 1, response.message);
+            this.notify(3, 1, res.data.message);
           }
         })
         .catch(error => {

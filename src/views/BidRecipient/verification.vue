@@ -49,11 +49,12 @@ export default {
         axios
           .post('https://auth.sendyit.com/v1/check_verification', payload)
           .then(res => {
-            if (res.data.status) {
+            console.log(res);
+            if (res.data.status === true) {
               this.notify(3, 1, 'Verified successfully');
               this.$router.push('/login');
             } else {
-              this.notify(3, 1, response.data.message);
+              this.notify(3, 1, 'Verification code expired');
             }
           })
           .catch(error => {
