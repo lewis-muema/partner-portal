@@ -363,7 +363,7 @@ export default {
     getLegibleOrders() {
       return new Promise((resolve, reject) => {
         axios
-            .get(`${this.auth}adonis/aux/fuel/legible-orders/${this.sessionInfo.owner_id}`, this.config)
+            .get(`${this.auth}adonis/aux/fuel/legible-orders/${this.sessionInfo.id}`, this.config)
             .then(response => {
               this.loadingStatus = false;
               if (response.status === 200) {

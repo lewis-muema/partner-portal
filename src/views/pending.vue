@@ -536,7 +536,7 @@ export default {
       return new Promise((resolve, reject) => {
         const riders = [];
         const riderPayload = {
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
         };
         const parsedData = JSON.parse(localStorage.sessionData);
         axios
@@ -559,7 +559,7 @@ export default {
     fetchOwnerVehicles() {
       return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
         });
         axios
           .post(`${this.auth}partner/v1/partner_portal/vehicles`, payload, this.config)
@@ -787,7 +787,7 @@ export default {
       this.quoteAmount = null;
       this.driverSelector();
       this.vendorType = this.orders[id - 1].vendor_type;
-      this.ownerId = this.sessionInfo.owner_id;
+      this.ownerId = this.sessionInfo.id;
       this.closed = this.orders[id - 1].carrier_type;
       this.orderNo = this.orders[id - 1].order_no;
       this.newRider = false;
@@ -1218,7 +1218,7 @@ export default {
     getRiders() {
       return new Promise((resolve, reject) => {
         const riderload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
         });
         axios
           .post(`${this.auth}partner/v1/partner_portal/available_riders`, riderload, this.config)
@@ -1239,7 +1239,7 @@ export default {
     getVehicles(id) {
       return new Promise((resolve, reject) => {
         const vehicleload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
         });
         axios
           .post(`${this.auth}partner/v1/partner_portal/available_vehicles`, vehicleload, this.config)
@@ -1276,7 +1276,7 @@ export default {
           }
           this.ownerPhone = this.sessionInfo.phone;
           const orderPayload = JSON.stringify({
-            owner_id: this.sessionInfo.owner_id,
+            owner_id: this.sessionInfo.id,
           });
           axios
             .post(`${this.auth}v1/pending_truck_orders/`, orderPayload, this.config)
@@ -1311,7 +1311,7 @@ export default {
       });
       this.ownerPhone = this.sessionInfo.phone;
       const orderPayload = JSON.stringify({
-        owner_id: this.sessionInfo.owner_id,
+        owner_id: this.sessionInfo.id,
         limit: `${this.orderLimit}, 10`,
       });
       const orderCount = this.orders.length;

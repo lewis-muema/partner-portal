@@ -81,7 +81,7 @@ export default {
     fetchAvailableDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
-        owner_id: sessionInfo.owner_id,
+        owner_id: sessionInfo.id,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)

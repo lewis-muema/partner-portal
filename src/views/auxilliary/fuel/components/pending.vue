@@ -510,7 +510,7 @@ export default {
       return new Promise((resolve, reject) => {
         const oldOrders = this.orders;
         axios
-            .get(`${this.auth}adonis/aux/fuel/fuel-advances?owner_id=${this.sessionInfo.owner_id}&pending=0`, this.config)
+            .get(`${this.auth}adonis/aux/fuel/fuel-advances?owner_id=${this.sessionInfo.id}&pending=0`, this.config)
             .then(response => {
               if (response.status === 200) {
                 const rawData = response.data.data;
@@ -558,7 +558,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.rowIndex = index;
         const payload = {
-          owner_id: parseInt(this.sessionInfo.owner_id, 10),
+          owner_id: parseInt(this.sessionInfo.id, 10),
           order_no: this.orders[this.rowIndex].request_details.order_no,
           approval_status: this.approvalStatus ? 1 : 2,
           fuel_advance_id: this.orders[this.rowIndex].request_details.fuel_advance_id,

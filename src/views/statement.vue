@@ -417,7 +417,7 @@ export default {
     getVehicles() {
       return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
         });
         axios
           .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
@@ -492,7 +492,7 @@ export default {
           .endOf('month')
           .format('YYYY-MM-DD HH:mm:ss');
         payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
           from: firstDay,
           to: lastDay,
         });
@@ -501,7 +501,7 @@ export default {
         firstDay = `${moment(this.from).format('YYYY-MM-DD')} 00:00:00`;
         lastDay = `${moment(this.to).format('YYYY-MM-DD')} 23:59:59`;
         payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
           from: firstDay,
           to: lastDay,
           vehicle_id: this.vehicleId === '' ? null : this.vehicleId,
@@ -620,7 +620,7 @@ export default {
       let notification = '';
       if (paymethod === 1) {
         payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
           phone_no: this.sessionInfo.phone,
           payment_type: paymethod,
           amount: this.amount,
@@ -628,7 +628,7 @@ export default {
         notification = `The withdrawal is currently being processed. The ${this.amount} will reflect in your m-pesa`;
       } else {
         payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
           account_no: this.bankAccounts[this.selectedRow].account_no,
           payment_type: paymethod,
           amount: this.amount,
@@ -680,7 +680,7 @@ export default {
         this.responseCount = 0;
         this.bankAccounts = [];
         const payload = JSON.stringify({
-          owner_id: this.sessionInfo.owner_id,
+          owner_id: this.sessionInfo.id,
         });
         let counter = -1;
         axios

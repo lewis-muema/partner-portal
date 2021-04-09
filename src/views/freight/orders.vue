@@ -225,7 +225,7 @@ export default {
     fetchOrders() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}freight-service/shipments/quotations?transporterId=${this.sessionInfo.owner_id}&status=2`, this.config)
+          .get(`${this.auth}freight-service/shipments/quotations?transporterId=${this.sessionInfo.id}&status=2`, this.config)
           .then(response => {
             this.$store.commit('setFreightOrders', response.data.data);
             this.loadingStatus = false;

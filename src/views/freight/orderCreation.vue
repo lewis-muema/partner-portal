@@ -489,7 +489,7 @@ export default {
         cop_id: this.$store.getters.getCopId ? parseInt(this.$store.getters.getCopId, 10) : null,
         cop_user_id: null,
         peer_id: this.$store.getters.getUserId ? parseInt(this.$store.getters.getUserId, 10) : null,
-        owner_id: parseInt(this.sessionInfo.owner_id, 10),
+        owner_id: parseInt(this.sessionInfo.id, 10),
         created_by: 2,
         pick_up: this.pickup,
         destination: this.destination,
@@ -554,7 +554,7 @@ export default {
       });
     },
     sanitizeFilename(name, type) {
-      const temp_name = `${type}_${this.sessionInfo.owner_id}_${new Date().getTime()}.${name.split('.').pop()}`;
+      const temp_name = `${type}_${this.sessionInfo.id}_${new Date().getTime()}.${name.split('.').pop()}`;
       return temp_name;
     },
     transfer(id) {

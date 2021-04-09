@@ -220,7 +220,7 @@ export default {
       return new Promise((resolve, reject) => {
         const oldOrders = this.orders;
         axios
-            .get(`${this.auth}adonis/aux/fuel/fuel-advances?owner_id=${this.sessionInfo.owner_id}&declined=1`, this.config)
+            .get(`${this.auth}adonis/aux/fuel/fuel-advances?owner_id=${this.sessionInfo.id}&declined=1`, this.config)
             .then(response => {
               if (response.status === 200) {
                 const rawData = response.data.data;
