@@ -6,6 +6,7 @@ const fr = {
     tracking: 'FR_Tracking',
     statement: 'FR_Statement',
     banks: 'FR_Banks',
+    change_language: 'FR_Change language',
     loans: 'FR_Loans',
     saving: 'FR_Savings',
     document: 'FR_Documents',

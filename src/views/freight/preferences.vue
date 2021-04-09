@@ -22,7 +22,7 @@
     </div>
     <div class="preferences-container-sections">
       <p class="request-advance-input-labels"> {{ $t('preferences.load_type_not_deliver') }}</p>
-      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">{{ $t('preferences.add_locations') }}</button>
+      <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">{{ $t('preferences.add_loads') }}</button>
       <div v-if="loadData.length > 0" class="preferences-table">
         <div class="preferences-table-row">
           <div class="preferences-table-column preferences-header">{{ $t('preferences.type_of_load') }}</div>
@@ -84,7 +84,15 @@
           <div v-if="recipient_row.length > 0">
             <div class="vehicleContain hidden-sm-down" v-if="windowWidth > 768">
               <table class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
-                <datatable class="savings__row" :columns="recipient_columns" :rows="recipient_row" v-if="recipient_row" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="false" :exportable="false" :printable="false"></datatable>
+                <datatable class="savings__row" :columns="recipient_columns" :rows="recipient_row" v-if="recipient_row" :per-page="[10, 20, 30, 40, 50]" :default-per-page="10" :clickable="false" :sortable="true" :exact-search="false" :exportable="false" :printable="false">
+                  <th slot="thead-tr">
+                    Actions
+                  </th>
+                  <template slot="tbody-tr" slot-scope="props">
+                    <td class="delete_recipient" @click="deleteRecipient(props.row)">
+                      Delete
+                    </td>
+                  </template></datatable>
               </table>
             </div>
 
@@ -276,7 +284,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <input class="add-vehicle-input" v-model="recipient_data[0].phone_no" />
+              <vue-tel-input v-model="recipient_data[0].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input" @validate="Valid" @input="setPhoneInputIndex(0)"></vue-tel-input>
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
@@ -290,7 +298,7 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <input class="add-vehicle-input" v-model="recipient_data[n].phone_no" />
+              <vue-tel-input v-model="recipient_data[n].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input" @validate="Valid" @input="setPhoneInputIndex(n)"></vue-tel-input>
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
@@ -314,7 +322,7 @@
               </div>
               <div class="row-mobile">
                 <div class="thead-mobile">{{ $t('preferences.phone_number') }}</div>
-                <div class="thead-mobile-row">{{ row.phone_no }}</div>
+                <div class="thead-mobile-row">{{ row.phone }}</div>
               </div>
               <div class="row-mobile">
                 <div class="thead-mobile">{{ $t('preferences.email_address') }}</div>
@@ -339,8 +347,32 @@
           <div class="close-recipients-dialog" @click="nextTab(false)">
             {{ $t('preferences.edit') }}
           </div>
-          <button class="partner-request-advance-button-active add-recipients-modal-button">
+          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitNotificationRecipients()">
             {{ $t('preferences.confirm') }}
+          </button>
+        </div>
+      </div>
+    </modal>
+
+    <!-- Add freight notification recipients -->
+
+    <modal name="delete-recipient-dialog" class="notification_recipient" :width="400" transition="slide" :pivot-y="0.5">
+      <div class="upload-vehicles-modal">
+        <div class="upload-documents-modal-top-row">
+          <p class="upload-documents-modal-top-row-title">Delete User</p>
+        </div>
+        <div class="remove-recipient-info">
+          <div class="">
+            Are you sure you want to delete<span>{{ singleRecipientData.name }} ?</span>
+          </div>
+        </div>
+        <div class="add-recipient-btn-outer">
+          <div class="set-div-flex"></div>
+          <div class="close-recipients-dialog cancel-notification" @click="closeDeleteRecipientDialog()">
+            No
+          </div>
+          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitDeleteRequest()">
+            Yes , Delete User
           </button>
         </div>
       </div>
@@ -353,10 +385,12 @@
 <script>
 import axios from 'axios';
 import DataTable from 'vue-materialize-datatable';
+import VueTelInput from 'vue-tel-input';
 import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
+import 'vue-tel-input/dist/vue-tel-input.css';
 
 export default {
   title: 'Partner Portal - Freight Preferences',
@@ -365,6 +399,7 @@ export default {
     errorHandler,
     notify,
     datatable: DataTable,
+    VueTelInput,
   },
   data() {
     return {
@@ -375,6 +410,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       map_options: {
@@ -434,19 +470,46 @@ export default {
       recipient_data: [
         {
           name: '',
-          phone_no: '',
+          phone: '',
           email: '',
+          phoneValidity: false,
         },
       ],
       recipient_columns: [
         { label: this.$t('preferences.name'), field: 'name' },
-        { label: this.$t('preferences.phone_number'), field: 'phone_no' },
+        { label: this.$t('preferences.phone_number'), field: 'phone' },
         { label: this.$t('preferences.email'), field: 'email' },
-        { label: this.$t('preferences.action'), field: 'options', html: true },
       ],
       recipient_row: [],
       extra_recipient: 0,
       summary_tab: false,
+      bindProps: {
+        defaultCountry: 'KE',
+        disabledFetchingCountry: false,
+        disabled: false,
+        disabledFormatting: false,
+        placeholder: this.$t('login.enter_phone_number'),
+        required: false,
+        enabledCountryCode: false,
+        enabledFlags: true,
+        preferredCountries: ['KE', 'UG', 'TZ'],
+        onlyCountries: [],
+        ignoredCountries: [],
+        autocomplete: 'off',
+        name: 'telephone',
+        maxLen: 20,
+        wrapperClasses: '',
+        inputClasses: '',
+        dropdownOptions: {
+          disabledDialCode: false,
+        },
+        inputOptions: {
+          showDialCode: false,
+        },
+        validCharactersOnly: true,
+      },
+      phoneInputIndex: 0,
+      singleRecipientData: {},
     };
   },
   computed: {
@@ -492,6 +555,15 @@ export default {
   methods: {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
+    },
+    /* eslint-disable */
+    Valid: function({ number, isValid, country }) {
+      if (number !== '') {
+        this.recipient_data[this.phoneInputIndex].phoneValidity = isValid;
+      }
+    },
+    setPhoneInputIndex(index) {
+      this.phoneInputIndex = index;
     },
     setLocation(place) {
       if (!place) {
@@ -610,10 +682,16 @@ export default {
       this.$modal.show('add-recipient-dialog');
     },
     nextTab(val) {
+      let mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
       if (val) {
         for (let i = 0, iLen = this.recipient_data.length; i < iLen; i += 1) {
-          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone_no === '' || this.recipient_data[i].email === '') {
+          if (this.recipient_data[i].name === '' || this.recipient_data[i].phone === '' || this.recipient_data[i].email === '') {
             this.notify(3, 0, this.$t('preferences.fill_all_entries'));
+          } else if (this.recipient_data[i].phone !== '' && !this.recipient_data[i].phoneValidity) {
+            this.notify(3, 0, 'Kindly provide a valid phone number');
+          } else if (this.recipient_data[i].email !== '' && !this.recipient_data[i].email.match(mailformat)) {
+            this.notify(3, 0, 'Kindly provide a valid email address');
           } else {
             this.summary_tab = val;
           }
@@ -661,8 +739,9 @@ export default {
     addRecipient() {
       this.recipient_data.push({
         name: '',
-        phone_no: '',
+        phone: '',
         email: '',
+        phoneValidity: false,
       });
       this.extra_recipient++;
     },
@@ -670,8 +749,55 @@ export default {
       this.extra_recipient--;
       this.recipient_data.splice(index, 1);
     },
+    clearRecipients() {
+      this.$modal.hide('add-recipient-dialog');
+      this.recipient_data = [
+        {
+          name: '',
+          phone: '',
+          email: '',
+          phoneValidity: false,
+        },
+      ];
+      this.extra_recipient = 0;
+    },
     fetchRecipients() {
+      this.loadingRecipients = true;
+      this.recipient_row = [];
+      axios
+        .get(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-users?page=1&status!=3&ownerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
+        .then(response => {
+          if (response.data.data.length > 0) {
+            this.populateRecipientsTable(response);
+          } else {
+            this.recipient_row = [];
+            this.loadingRecipients = false;
+          }
+        })
+        .catch(error => {
+          this.errorObj = error.response;
+          this.loadingRecipients = false;
+        });
+    },
+    populateRecipientsTable(response) {
+      const data = [];
+      response.data.data.forEach((row, i) => {
+        const riderRow = this.sortRecipientActions(row);
+        data.push({
+          name: row.name,
+          phone: row.phone,
+          email: row.email,
+          id: row.id,
+          options: riderRow.action,
+        });
+      });
+      this.recipient_row = data;
       this.loadingRecipients = false;
+    },
+    sortRecipientActions(row) {
+      const recipientRow = [];
+      recipientRow.action = `<span class="delete_recipient" id="${row.id}">Delete</span>`;
+      return recipientRow;
     },
     sortRidersActions(row) {
       const riderRow = [];
@@ -757,6 +883,60 @@ export default {
           });
         }
       }
+    },
+    submitNotificationRecipients() {
+      let data = this.recipient_data;
+      for (let key in data) {
+        delete data[key].phoneValidity;
+      }
+      const payload = {
+        users: this.recipient_data,
+        ownerId: parseInt(this.sessionInfo.id, 10),
+      };
+
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${this.auth}partner-api/parcel/partner-user`, payload, this.config)
+          .then(response => {
+            this.notify(3, 1, 'Notification recipient(s) added successfully');
+            this.clearRecipients();
+            this.fetchRecipients();
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, 'Could not add notification recipients');
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    deleteRecipient(val) {
+      this.singleRecipientData = val;
+      this.$modal.show('delete-recipient-dialog');
+    },
+    closeDeleteRecipientDialog() {
+      this.$modal.hide('delete-recipient-dialog');
+      this.singleRecipientData = {};
+    },
+    submitDeleteRequest() {
+      let payload = {
+        status: 3,
+      };
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(`${this.auth}partner-api/parcel/partner-user/${this.singleRecipientData.id}`, payload, this.config)
+          .then(response => {
+            this.notify(3, 1, 'Notification recipient(s) has been deleted successfully');
+            this.closeDeleteRecipientDialog();
+            this.fetchRecipients();
+            resolve(response);
+          })
+          .catch(error => {
+            this.notify(3, 0, 'Could not delete notification recipients');
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
   },
 };
@@ -875,6 +1055,7 @@ export default {
 .close-recipients-dialog {
   margin: 20px 10px 10px 0px;
   color: #ea7125;
+  cursor: pointer;
 }
 .add-recipient-btn-outer {
   text-align: right;
@@ -882,5 +1063,28 @@ export default {
 }
 .set-div-flex {
   flex-grow: 1;
+}
+.delete_recipient {
+  color: #ff0000 !important;
+  cursor: pointer !important;
+}
+.vehicle-details-borderline > div:nth-child(2) > div > div > ul {
+  margin-left: -21% !important;
+  width: 336px !important;
+}
+.notification_recipient > .v--modal-background-click {
+  margin-top: 0% !important;
+}
+.notification_recipient > div > div.v--modal-box.v--modal {
+  min-height: 200px !important;
+  height: auto !important;
+  top: 160px !important;
+}
+.remove-recipient-info {
+  margin-top: 5%;
+  margin-bottom: 11%;
+}
+.cancel-notification {
+  margin-right: 11% !important;
 }
 </style>

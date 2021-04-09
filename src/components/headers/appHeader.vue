@@ -31,6 +31,9 @@
                   <router-link to="/banks" class="dropdown-link">
                     <p class="dropdown-item"> {{ $t('appHeader.banks') }} </p>
                   </router-link>
+                  <router-link to="/change_language" class="dropdown-link">
+                    <p class="dropdown-item"> {{ $t('appHeader.change_language') }} </p>
+                  </router-link>
                   <router-link to="/loans" class="dropdown-link">
                     <p class="dropdown-item"> {{ $t('appHeader.loans') }} </p>
                   </router-link>
@@ -60,7 +63,7 @@
           </div>
         </div>
       </div>
-      <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath && getFlow === 'logistics'">
+      <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath && getFlow === 'logistics' && $router.name === 'change_language'">
         <div class="secondary-inner">
           <div class="secnav-container">
             <router-link to="/dashboard" class="secnav-page" :class="showActiveDashboard()">{{ $t('appHeader.dashboard') }} </router-link>
@@ -104,6 +107,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       performance_status: false,

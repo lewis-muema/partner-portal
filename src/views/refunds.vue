@@ -34,7 +34,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-dialog title="Request refund" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+      <el-dialog :title="$t('refund.request_refund')" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
         <div class="inner-dialog">
           <div class="drag-image">
             <div class="download-refund-img">
@@ -68,7 +68,7 @@
               <p>
                 {{ $t('refund.partner') }}
               </p>
-              <el-select v-model="rider" placeholder="Select Partner" class="refund-rider-info">
+              <el-select v-model="rider" :placeholder="$t('refund.select_partner')" class="refund-rider-info">
                 <el-option v-for="item in rider_list" :key="item.rider_id" :label="item.name" :value="item.rider_id"> </el-option>
               </el-select>
             </div>
@@ -152,6 +152,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       dialogVisible: false,

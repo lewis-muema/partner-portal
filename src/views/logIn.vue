@@ -180,7 +180,7 @@ export default {
       const payload = {
         phone: this.tel,
       };
-      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/account`, payload).then(response => {
+      axios.post(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-user/reset-password`, payload).then(response => {
         if (response.data.status) {
           this.handleButton(this.$t('login.reset_password'));
           this.error(response.data.message, 7000);
@@ -197,11 +197,11 @@ export default {
       // eslint-disable-next-line quotes
       this.handleButton(`<div class='loading-spinner'></div> ${this.$t('login.please_wait')}`);
       this.tel = this.tel.replace(/ /g, '');
-      const payload = JSON.stringify({
+      const payload = {
         phone: this.tel,
-        password: sha1(this.password),
-      });
-      axios.post(`${process.env.VUE_APP_AUTH}rideradmin/login`, payload).then(response => {
+        password: this.password,
+      };
+      axios.post(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-user/login`, payload).then(response => {
         if (response.status === 200) {
           this.handleResponse(response);
         } else {

@@ -7,6 +7,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
               Authorization: localStorage.token,
+              'Accept-Language': localStorage.getItem('language'),
             },
         };
         axios.post(payload.url, payload.payload, config).then(response => {
@@ -25,7 +26,8 @@ export default {
         const config = {
             headers: {
               'Content-Type': 'application/json',
-              Authorization: localStorage.token,
+               Authorization: localStorage.token,
+              'Accept-Language': localStorage.getItem('language'),
             },
         };
         axios.get(payload.url, config).then(response => {

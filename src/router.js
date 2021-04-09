@@ -70,6 +70,11 @@ export default new Router({
       component: Banks,
     },
     {
+      path: '/change_language',
+      name: 'change_language',
+      component: changeLanguage,
+    },
+    {
       path: '/loans',
       name: 'loans',
       component: Loans,

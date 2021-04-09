@@ -45,6 +45,7 @@
             :sortable="true"
             :exact-search="true"
             :exportable="true"
+            :locale="getLanguage"
           ></datatable>
         </table>
       </div>
@@ -103,6 +104,7 @@ import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 import timezone from '../mixins/timezone';
@@ -123,6 +125,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: this.$t('savings.date'), field: 'pay_time' }, { label: this.$t('savings.amount'), field: 'amount' }, { label: this.$t('savings.balance'), field: 'running_balance' }, { label: this.$t('savings.narrative'), field: 'pay_narrative' }],
@@ -135,6 +138,9 @@ export default {
       monthPeriod: '',
       errorObj: '',
     };
+  },
+  computed: {
+    ...mapGetters(['getLanguage']),
   },
   created() {
     if (localStorage.sessionData) {

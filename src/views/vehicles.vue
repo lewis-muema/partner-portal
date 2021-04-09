@@ -603,7 +603,7 @@
             class="savings__row"
             :columns="columns"
             :rows="rows"
-            :title="`Vehicles for ${this.sessionInfo.name}`"
+            :title="$t('vehicles.vehicles_for', { name: this.sessionInfo.name})"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -611,6 +611,7 @@
             :sortable="true"
             :exact-search="true"
             :exportable="true"
+            :locale="getLanguage"
           ></datatable>
         </table>
       </div>
@@ -660,7 +661,7 @@
             <i class="icon-material fa fa-car"></i>
           </div>
           <div class="fab-action-button" @click="showVehicleModal()">
-            <i class="fab-action-button__icon material-icons">{{ $t('vehicles.add') }}</i>
+            <i class="fab-action-button__icon material-icons">add</i>
           </div>
         </div>
       </div>
@@ -675,6 +676,7 @@ import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
 import axios from 'axios';
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -711,6 +713,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       columns: [{ label: '', field: 'first' }, { label: this.$t('vehicles.make'), field: 'make' }, { label: this.$t('vehicles.model'), field: 'model' }, { label: this.$t('vehicles.registration'), field: 'registration_no' }, { label: this.$t('vehicles.active_driver_phone'), field: 'phone_no' }, { label: this.$t('vehicles.active_driver_name'), field: 'name' }, { label: this.$t('vehicles.invited_driver'), field: 'rider_phone' }, { label: this.$t('vehicles.driver_balance'), field: 'rb' }, { label: this.$t('vehicles.option'), field: 'options', html: true }],
@@ -748,6 +751,9 @@ export default {
       ownerDriverTel: '',
       errorObj: '',
     };
+  },
+  computed: {
+    ...mapGetters(['getLanguage']),
   },
   created() {
     if (localStorage.sessionData) {
@@ -844,7 +850,7 @@ export default {
         if (row.allocation && row.allocation[0].allocation_status === 1) {
           riderRow.action = `<span class="cancel-allocation" id="${row.allocation[0].temp_rider_allocation_id}">${this.$t('vehicles.cancel_allocation')}</span>`;
         } else {
-          riderRow.action = `<span class="reassign-driver" id="${row.vehicle.id}">Reassign driver</span>`;
+          riderRow.action = `<span class="reassign-driver" id="${row.vehicle.id}">${this.$t('vehicles.reassign_driver')}</span>`;
         }
       } else {
         if (row.allocation && row.allocation[0].allocation_status === 1) {
@@ -1194,7 +1200,7 @@ export default {
       const neighborhood = $('#driLocation').val();
       if (photo === '' || dl_no === '' || neighborhood === '' || photo.includes('grey_bg_01')) {
         $('#upErr')
-          .text('Please fill all the fields')
+          .text(this.$t('vehicles.please_enter_phone'))
           .fadeIn('slow');
         setTimeout(() => {
           $('#upErr').fadeOut('slow');
