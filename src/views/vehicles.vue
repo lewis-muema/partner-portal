@@ -786,7 +786,7 @@ export default {
     fetchVehicles() {
       const date = new Date();
       const payload = JSON.stringify({
-        owner_id: this.sessionInfo.owner_id,
+        owner_id: this.sessionInfo.id,
       });
       this.rows = [];
       this.displayFetchingStatus('Fetching vehicles', 0);
@@ -953,7 +953,7 @@ export default {
         registration_no: this.regNo,
         log_book: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${this.logName}`,
         vehicle: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/photo/${this.vehImgName}`,
-        owner_id: this.sessionInfo.owner_id,
+        owner_id: this.sessionInfo.id,
         trailer_no: 0,
         kwartos_code: 0,
       };
@@ -1207,7 +1207,7 @@ export default {
         dl_no,
         neighborhood,
       };
-      const owner_id = this.sessionInfo.owner_id;
+      const owner_id = this.sessionInfo.id;
       const payload = {
         vehicle_id: this.vehicleAllocation,
         rider_details,

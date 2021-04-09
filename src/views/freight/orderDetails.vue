@@ -564,7 +564,7 @@ export default {
         });
     },
     sanitizeFilename(name, type) {
-      const temp_name = `${type}_${this.sessionInfo.owner_id}_${new Date().getTime()}.${name.split('.').pop()}`;
+      const temp_name = `${type}_${this.sessionInfo.id}_${new Date().getTime()}.${name.split('.').pop()}`;
       return temp_name;
     },
     transfer(id) {
@@ -573,7 +573,7 @@ export default {
     fetchOrder() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}freight-service/shipments/quotations/${this.$route.params.order}/${this.sessionInfo.owner_id}`, this.config)
+          .get(`${this.auth}freight-service/shipments/quotations/${this.$route.params.order}/${this.sessionInfo.id}`, this.config)
           .then(response => {
             this.data = response.data.data;
             this.loadingStatus = false;
@@ -627,7 +627,7 @@ export default {
         document_type: this.document_type,
         document_name: this.document_type === 1 ? this.documentName : this.documentType,
         url: `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${url}`,
-        transporter_id: this.sessionInfo.owner_id,
+        transporter_id: this.sessionInfo.id,
        };
       return new Promise((resolve, reject) => {
         axios
@@ -648,7 +648,7 @@ export default {
     actionDocument(status) {
       const payload = {
         document_id: this.activeDoc.document_id,
-        transporter_id: this.sessionInfo.owner_id,
+        transporter_id: this.sessionInfo.id,
         status: status === 2 ? 1 : -1,
       };
       if (status === 3) {

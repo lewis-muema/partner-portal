@@ -73,7 +73,7 @@ export default {
     this.fetchRiderList();
     const sessionInfo = JSON.parse(localStorage.sessionData).payload;
     const mixPanelPayload = {
-      owner_id: sessionInfo.owner_id,
+      owner_id: sessionInfo.id,
     };
     // this tracks all performance page loads
     this.trackRiderPerformanceLoad(mixPanelPayload);
@@ -87,7 +87,7 @@ export default {
     fetchBikeDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
-        owner_id: sessionInfo.owner_id,
+        owner_id: sessionInfo.id,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
