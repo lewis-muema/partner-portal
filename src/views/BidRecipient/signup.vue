@@ -103,7 +103,6 @@ export default {
       axios
         .post('https://auth.sendyit.com/v1/request_verification', payload)
         .then(res => {
-          console.log(res);
           if (res.data.status === true) {
             this.notify(3, 1, 'Verification code has been sent to your phone');
             localStorage.setItem('recipientRequestId', res.data.request_id);
