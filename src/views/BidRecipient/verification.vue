@@ -54,7 +54,7 @@ export default {
               this.notify(3, 1, 'Verified successfully');
               this.$router.push('/login');
             } else {
-              this.notify(3, 1, response.data.message);
+              this.notify(3, 1, res.data.message);
             }
           })
           .catch(error => {
