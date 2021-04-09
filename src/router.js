@@ -25,7 +25,8 @@ import freightOrders from './views/freight/orders.vue';
 import freightOrderDetails from './views/freight/orderDetails.vue';
 import freightPreferences from './views/freight/preferences.vue';
 import bidding from './views/bidding/biddingWebForm';
-import recepient from './views/BidRecepient/landing.vue';
+import webform from './views/bidding/webForm.vue';
+import recipient from './views/BidRecipient/landing.vue';
 
 Vue.use(Router);
 
@@ -154,9 +155,14 @@ export default new Router({
       component: bidding,
     },
     {
-      path: '/recepient/:route_name',
-      name: 'recepient',
-      component: recepient,
+      path: '/webform/:shipment_id/:owner_id/',
+      name: 'webform',
+      component: webform,
+    },
+    {
+      path: '/recipient/:recipient_id',
+      name: 'recipient',
+      component: recipient,
     },
     {
       path: '/freight',
