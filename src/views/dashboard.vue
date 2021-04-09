@@ -419,7 +419,7 @@ export default {
       this.initiateS3();
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const payload = JSON.stringify({
-        owner_id: parseInt(this.sessionInfo.id, 10),
+        owner_id: parseInt(this.sessionInfo.owner_id, 10),
       });
       this.post(process.env.VUE_APP_AUTH, 'partner/v1/partner_portal/dashboard', payload).then(response => {
         this.dataStatus = true;
@@ -502,7 +502,7 @@ export default {
     getVehicles() {
       return new Promise((resolve, reject) => {
         const payload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         });
         axios
           .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/vehicles`, payload, this.config)
@@ -621,7 +621,7 @@ export default {
     submitInvoice() {
       this.uploadingStage = 2;
       const payload = {
-        owner_id: parseInt(this.sessionInfo.id, 10),
+        owner_id: parseInt(this.sessionInfo.owner_id, 10),
         invoice_file_name: this.fileName.split('.')[0],
         invoice_no: this.invoiceNumber,
         no_of_orders: parseInt(this.numberOfOrders, 10),
@@ -651,7 +651,7 @@ export default {
         });
     },
     sanitizeFilename(name) {
-      const temp_name = `invoice_${this.sessionInfo.id}_${new Date().getTime()}.${name.split('.').pop()}`;
+      const temp_name = `invoice_${this.sessionInfo.owner_id}_${new Date().getTime()}.${name.split('.').pop()}`;
       return temp_name;
     },
   },

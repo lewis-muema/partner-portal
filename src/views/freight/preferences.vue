@@ -344,7 +344,7 @@ export default {
         return;
       }
       this.location = {
-        owner_id: parseInt(this.sessionInfo.id, 10),
+        owner_id: parseInt(this.sessionInfo.owner_id, 10),
         address_components: place.address_components,
         location_name: place.name,
       };
@@ -371,7 +371,7 @@ export default {
     fetchOwnerPreferences() {
       return new Promise((resolve, reject) => {
         axios
-          .get(`${this.auth}partners/transporter_pref_list?owner_id=${this.sessionInfo.id}`, this.config)
+          .get(`${this.auth}partners/transporter_pref_list?owner_id=${this.sessionInfo.owner_id}`, this.config)
           .then(response => {
             this.preferences = response.data.owner_preferences;
             this.loadingStatus = false;
@@ -387,7 +387,7 @@ export default {
     submitPreference() {
       this.submitStatus = true;
       const payload = this.type === 'load' ? {
-        owner_id: parseInt(this.sessionInfo.id, 10),
+        owner_id: parseInt(this.sessionInfo.owner_id, 10),
         cargo_type_id: this.preference,
       }
       : this.location;
@@ -457,11 +457,11 @@ export default {
     fetchVehicles() {
       this.loadingVehicle = true;
       const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
       });
       this.rows = [];
       axios
-        .get(`${process.env.VUE_APP_AUTH}partner-api/onboarding/freight/vehicle-applicants?page=1&pending=1&parcelOwnerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
+        .get(`${process.env.VUE_APP_AUTH}partner-api/onboarding/freight/vehicle-applicants?page=1&pending=1&parcelOwnerId=${parseInt(this.sessionInfo.owner_id, 10)}`, this.config)
         .then(response => {
           if (response.data.data.length > 0) {
             this.populateTable(response);
@@ -541,7 +541,7 @@ export default {
       for (let i = 0, iLen = this.vehicle_data.length; i < iLen; i += 1) {
         const vehicleArray = {
           vehicles: this.vehicle_data,
-          parcel_owner_id: parseInt(this.sessionInfo.id, 10),
+          parcel_owner_id: parseInt(this.sessionInfo.owner_id, 10),
         };
         if (this.vehicle_data[i].vendor_type === '' || this.vehicle_data[i].carrier_type === '' || this.vehicle_data[i].vehicle_size === '' || this.vehicle_data[i].load_capacity === '' || this.vehicle_data[i].registration_no === '' || this.vehicle_data[i].insurance_name === '' || this.vehicle_data[i].insurance_no === '' || this.vehicle_data[i].policy_no === '' || this.vehicle_data[i].log_book_no === '') {
           this.notify(3, 0, 'Please fill all entries');

@@ -146,7 +146,7 @@ export default {
     getInsuranceData() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const payload = {
-        ownerId: sessionInfo.id,
+        ownerId: sessionInfo.owner_id,
       };
       axios
         .post(`${process.env.NODE_PARTNER_API}partner_portal/owner_documents`, payload, this.config)

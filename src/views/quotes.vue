@@ -734,7 +734,7 @@ export default {
         });
       }
       this.vendorType = this.orders[id - 1].vendor_type;
-      this.ownerId = this.sessionInfo.id;
+      this.ownerId = this.sessionInfo.owner_id;
       this.closed = this.orders[id - 1].carrier_type;
       this.orderNo = this.orders[id - 1].order_no;
       this.newRider = false;
@@ -1101,7 +1101,7 @@ export default {
     getRiders(id) {
       return new Promise((resolve, reject) => {
         const riderload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         });
 
         axios
@@ -1126,7 +1126,7 @@ export default {
     getVehicles(id) {
       return new Promise((resolve, reject) => {
         const vehicleload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
         });
         axios
           .post(`${this.auth}partner/v1/partner_portal/available_vehicles`, vehicleload, this.config)
@@ -1165,7 +1165,7 @@ export default {
         }
         this.ownerPhone = this.sessionInfo.phone;
         const payload = JSON.stringify({
-          owner_id: this.sessionInfo.id,
+          owner_id: this.sessionInfo.owner_id,
           to_date: moment().format('YYYY-MM-DD HH:mm:ss'),
           from_date: '2019-02-09 00:00:00',
         });
@@ -1198,7 +1198,7 @@ export default {
       clearInterval(interval);
       this.orders = [];
       const payload = {
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
         to_date: moment().format('YYYY-MM-DD'),
         from_date: '2014-02-09',
         limit: `${this.orderRange.split(' ')[0]}, ${100}`,
@@ -1213,7 +1213,7 @@ export default {
       this.loadingStatus = true;
       this.ownerPhone = this.sessionInfo.phone;
       const payload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.owner_id,
         to_date: moment().format('YYYY-MM-DD HH:mm:ss'),
         from_date: '2019-02-09 00:00:00',
       });
