@@ -765,7 +765,7 @@ export default {
       this.loadingRecipients = true;
       this.recipient_row = [];
       axios
-        .get(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-users?page=1&status!=3&ownerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
+        .get(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-users?page=1&status=1&status=2&ownerId=${parseInt(this.sessionInfo.id, 10)}`, this.config)
         .then(response => {
           if (response.data.data.length > 0) {
             this.populateRecipientsTable(response);
