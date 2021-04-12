@@ -1,6 +1,6 @@
 
 const translation = {
-    join_umoja_transporters: 'Join Umoja Transporters',
+    join: 'Join',
     password: 'Password',
     password_sent_invite: 'This is the password we sent to you in the invite',
     sign_up: 'Sign Up',
