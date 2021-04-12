@@ -2,7 +2,7 @@
   <div class="signup">
     <notify />
 
-    <h1 class="signup__heading">{{ $t('signup.join') }}{{ recipient.company_name }}</h1>
+    <h1 class="signup__heading">{{ $t('signup.join') }} {{ recipient.company_name }}</h1>
     <div class="recipient">
       <p class="recipient__title">{{ $t('signup.name') }}</p>
       <p class="recipient__details">{{ recipient.name }}</p>
