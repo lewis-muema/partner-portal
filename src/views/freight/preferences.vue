@@ -904,7 +904,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
-            this.notify(3, 0, 'Could not add notification recipients');
+            this.notify(3, 0, `Could not add notification recipients : ${error.response.data.message}`);
             this.errorObj = error.response;
             resolve(error);
           });
