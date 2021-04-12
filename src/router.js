@@ -26,8 +26,8 @@ import freightOrderDetails from './views/freight/orderDetails.vue';
 import freightPreferences from './views/freight/preferences.vue';
 import bidding from './views/bidding/biddingWebForm';
 import changeLanguage from './views/changeLanguage';
-import webform from './views/bidding/webForm.vue';
-import recipient from './views/BidRecipient/landing.vue';
+import webform from './views/bidding/biddingWebForm.vue';
+import recipient from './views/bidRecipient/landing.vue';
 
 Vue.use(Router);
 
