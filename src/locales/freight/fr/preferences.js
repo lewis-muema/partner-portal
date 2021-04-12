@@ -61,6 +61,7 @@ const translation = {
     cancel: 'FR_Cancel',
     save: 'FR_Save',
     edit: 'FR_Edit',
+    confirm: 'FR_confirm',
 };
 
 export default translation;

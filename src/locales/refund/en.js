@@ -25,6 +25,7 @@ const translation = {
     sure_close_dialog: 'Are you sure to close this dialog?',
     view_refund_request: 'View Refund Request',
     select_partner: 'Select Partner',
+    refund_request: 'Request refund',
 
 };
 
