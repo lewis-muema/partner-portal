@@ -41,4 +41,10 @@ export default {
   setLanguage(state, language) {
     state.language = language;
   },
+  setNotificationRecipientCode(state, val) {
+    state.recipient_code = val;
+  },
+  setNotificationRecipientPhone(state, val) {
+    state.recipient_phone = val;
+  },
 };

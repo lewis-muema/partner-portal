@@ -23,6 +23,8 @@ const state = {
   create_order: false,
   freight_status: '',
   language: 'en',
+  recipient_code: '',
+  recipient_phone: '',
 };
 
 export default {

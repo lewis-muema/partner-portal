@@ -86,6 +86,8 @@ export default {
             if (res.status === 200) {
               this.verificationCode();
               this.notify(3, 1, 'Password confirmed successfully');
+              this.$store.commit('setNotificationRecipientPhone', this.recipient.phone);
+              this.$store.commit('setNotificationRecipientCode', this.password);
             } else {
               this.notify(3, 1, res.data.message);
             }
