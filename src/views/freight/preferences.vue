@@ -760,6 +760,7 @@ export default {
         },
       ];
       this.extra_recipient = 0;
+      this.summary_tab = false;
     },
     fetchRecipients() {
       this.loadingRecipients = true;
@@ -995,7 +996,7 @@ export default {
   margin: 3%;
 }
 .add-vehicles-outer {
-  max-height: 500px;
+  max-height: 400px;
   overflow-x: hidden;
 }
 .remove-vehicle {
