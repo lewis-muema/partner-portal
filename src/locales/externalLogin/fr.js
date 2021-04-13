@@ -1,0 +1,26 @@
+const translation = {
+    request_log_in: 'FR_Request Log In',
+    enter_user_email: 'FR_Enter User Email',
+    password: 'FR_Password',
+    submit: 'FR_Submit',
+    sign_in: 'FR_Sign In',
+    for_your_security: "FR_For your security, Sendy wants to make sure it's really you. We will send a message with your verification code",
+    authentication_code: 'FR_Authentication Code',
+    reset_password: 'FR_Reset Password',
+    back: 'FR_BACK',
+    enter_owner_phone: 'FR_Enter owner phone number',
+    login: 'FR_login',
+    verify: 'FR_verify',
+    please_wait: 'FR_Please Wait',
+    please_try_again: 'FR_Please try again',
+    please_enter_all: 'FR_Please enter all details',
+    please_verify_code: 'FR_Please verify the code you recieved previously',
+    submit: 'FR_SUBMIT',
+    please_wait_for_15min: 'FR_Please wait for 15 minutes and try again',
+    signing_in: 'FR_Signing in',
+    wrong_code: 'FR_A wrong code was provided too many times. Workflow terminated',
+    sign_in_capital: 'FR_SIGN IN',
+    invalid_code: 'FR_Invalid code',
+};
+
+export default translation;

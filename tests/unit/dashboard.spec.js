@@ -1,12 +1,18 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import { expect } from 'chai';
 import moment from 'moment';
 import { shallowMount } from '@vue/test-utils';
 import Dashboard from '@/views/dashboard.vue';
 import './localStorage';
 
+Vue.use(VueI18n);
+const i18n = new VueI18n({});
+
 describe('Dashboard.vue', () => {
   const wrapper = shallowMount(Dashboard, {
     sync: false,
+    i18n,
   });
   wrapper.vm.activeCurrency = 'KES';
   wrapper.vm.currencyStats = {

@@ -4,7 +4,7 @@
       <input
         type="text"
         class="request-advance-inputs order-creation-location-inputs"
-        placeholder="Enter name or phone number"
+        :placeholder="$t('clientSearch.enter_name')"
         autocomplete="off"
         v-model="query"
         @keydown.down="down"
@@ -24,9 +24,9 @@
           :key="item.index"
         >
         <div>
-          <span class="search-result-field">Client Name: {{ item.name }}</span>
-          <span class="search-result-field">Client Email: {{ item.email }}</span>
-          <span class="search-result-field">Phone Number: {{ item.phone }}</span>
+          <span class="search-result-field">{{ $t('clientSearch.client_name') }}: {{ item.name }}</span>
+          <span class="search-result-field">{{ $t('clientSearch.client_email') }}: {{ item.email }}</span>
+          <span class="search-result-field">{{ $t('clientSearch.phone_number') }}: {{ item.phone }}</span>
         </div>
         </li>
       </ul>

@@ -1,3 +1,5 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import axios from 'axios';
 import moxios from 'moxios';
 import moment from 'moment';
@@ -6,12 +8,16 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Quotes from '@/views/quotes.vue';
 import './localStorage';
 
+Vue.use(VueI18n);
+const i18n = new VueI18n({});
+
 const localVue = createLocalVue();
 
 describe('Quotes.vue', () => {
   const wrapper = shallowMount(Quotes, {
     sync: false,
     localVue,
+    i18n,
   });
   const d = new Date();
   const order = [

@@ -27,24 +27,24 @@ const truckValidationMixin = {
       const size = parseInt(this.truckSize, 10);
 
       if (this.truckSize.length === 0 && capacity > 0) {
-        this.truckValidationErrorMessage = 'input the size of your truck';
+        this.truckValidationErrorMessage = this.$t('truckValidationMxn.input_truck_size');
         this.truckSizeErrorStatus = true;
         return false;
       }
 
       if (capacity === 0) {
-        this.validationErrorMessage = 'input the loading capacity of the truck';
+        this.validationErrorMessage = this.$t('truckValidationMxn.input_loading_capacity');
         this.loadCapacityErrorStatus = true;
         return false;
       }
       if (capacity > size) {
-        this.validationErrorMessage = 'loading capacity cannot be more than the truck size';
+        this.validationErrorMessage = this.$t('truckValidationMxn.loading_capacity_more_than_truck_size');
         this.loadCapacityErrorStatus = true;
 
         return false;
       }
       if ((capacity < 18 || capacity > 33) && capacity <= size) {
-        this.validationErrorMessage = 'loading capacity cannot be less than 18 tonnes or more than 33 tonnes';
+        this.validationErrorMessage = this.$t('truckValidationMxn.loading_capacity_less_than_or_more_than_33tones');
         this.loadCapacityErrorStatus = true;
         return false;
       }
@@ -57,12 +57,12 @@ const truckValidationMixin = {
       const size = parseInt(this.truckSize, 10);
 
       if (size === 0) {
-        this.truckValidationErrorMessage = 'input the size of your truck';
+        this.truckValidationErrorMessage = this.$t('truckValidationMxn.input_truck_size');
         this.truckSizeErrorStatus = true;
         return false;
       }
       if (size < 18 || size > 33) {
-        this.truckValidationErrorMessage = 'the truck size cannot be less than 18 tonnes or more than 33 tonnes';
+        this.truckValidationErrorMessage = this.$t('truckValidationMxn.truck_size_less_or_more');
         this.truckSizeErrorStatus = true;
         return false;
       }

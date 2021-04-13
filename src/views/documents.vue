@@ -4,11 +4,11 @@
       <div class="rider--stats-menu">
         <div class="secondary-inner">
           <div class="secnav-container rider--stats-section">
-            <span class="secnav-page" :class="activeTab === 'drivingLicense' ? 'active' : ''" @click="activeTab = 'drivingLicense'">Driving License</span>
-            <span class="secnav-page" :class="activeTab === 'insurance' ? 'active' : ''" @click="activeTab = 'insurance'">Insurance</span>
-            <span v-if="pickUpRidersStatus || bikeRidersStatus" class="secnav-page" :class="activeTab === 'vehicleStatus' ? 'active' : ''" @click="activeTab = 'vehicleStatus'">Type of Vehicle</span>
-            <span v-if="bikeRidersStatus" class="secnav-page" :class="activeTab === 'cbdStatus' ? 'active' : ''" @click="activeTab = 'cbdStatus'">Bike CBD License</span>
-            <span class="secnav-page" :class="activeTab === 'refunds' ? 'active' : ''" @click="activeTab = 'refunds'">Refunds</span>
+            <span class="secnav-page" :class="activeTab === 'drivingLicense' ? 'active' : ''" @click="activeTab = 'drivingLicense'"> {{ $t('document.dl') }} </span>
+            <span class="secnav-page" :class="activeTab === 'insurance' ? 'active' : ''" @click="activeTab = 'insurance'">{{ $t('document.insurance') }}</span>
+            <span v-if="pickUpRidersStatus || bikeRidersStatus" class="secnav-page" :class="activeTab === 'vehicleStatus' ? 'active' : ''" @click="activeTab = 'vehicleStatus'"> {{ $t('document.type_of_vehicle') }}</span>
+            <span v-if="bikeRidersStatus" class="secnav-page" :class="activeTab === 'cbdStatus' ? 'active' : ''" @click="activeTab = 'cbdStatus'"> {{ $t('document.bike_cbd_license') }}</span>
+            <span class="secnav-page" :class="activeTab === 'refunds' ? 'active' : ''" @click="activeTab = 'refunds'">{{ $t('document.refunds') }}</span>
           </div>
         </div>
       </div>
@@ -46,6 +46,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       bikeRidersStatus: false,

@@ -586,7 +586,8 @@ input:-ms-input-placeholder {
 }
 
 .vehicle-tool-tip {
-  width: 75px;
+  width: fit-content;
+  height: fit-content;
   color: white;
 }
 
@@ -606,7 +607,7 @@ input:-ms-input-placeholder {
   right: 40px;
   bottom: 40px;
   height: 110px;
-  width: 60px;
+  width: 100px;
   position: fixed;
 }
 
@@ -667,7 +668,7 @@ input:-ms-input-placeholder {
 }
 .fab-buttons__link {
   position: fixed;
-  height: 25px;
+  height: 35px;
   width: 0px;
   color: white;
   background-color: #0000008a;

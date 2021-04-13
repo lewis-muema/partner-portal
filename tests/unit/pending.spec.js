@@ -1,3 +1,5 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import axios from 'axios';
 import moxios from 'moxios';
 import moment from 'moment';
@@ -6,9 +8,13 @@ import { shallowMount } from '@vue/test-utils';
 import Pending from '@/views/pending.vue';
 import './localStorage';
 
+Vue.use(VueI18n);
+const i18n = new VueI18n({});
+
 describe('Pending.vue', () => {
   const wrapper = shallowMount(Pending, {
     sync: false,
+    i18n,
   });
   const sessionData = {
     state: '1',

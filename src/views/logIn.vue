@@ -1,41 +1,48 @@
 <template>
   <div>
-    <div class="login__log-cont" v-if="state === 'login'">
-      <div class="login__log-panel">
-        <p class="login__header-text">Log in to Sendy</p>
-        <div class="control-group">
-          <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
-          </div>
-          <div class="login__element">
-            <input class="login__password-input" type="password" name="password" id="password" placeholder="Password" required v-model="password" />
-          </div>
-          <div id="loggin_error" class="error">{{ loginError }}</div>
-          <div class="login__element">
-            <button class="form-control login__btn" type="submit" value="Log in" id="login" @click="postLogin">Log In</button>
-          </div>
-          <div class="login__inst">
-            <a href="#" @click="forgotPwd()" class="login__forgotPass">Forgot Password?</a>
-          </div>
-          <div class="login__inst">
-            Don't have an account?
-            <a href="#" @click="redirect()" class="login__sign-up">Sign Up</a>
+    <div class="login-outer-content">
+      <div class="">
+        <owners-banner-component />
+      </div>
+      <div class="login-group-card">
+        <div class="login__log-cont" v-if="state === 'login'">
+          <div class="login__log-panel">
+            <p class="login__header-text">{{ $t('login.login_to_sendy') }}</p>
+            <div class="control-group">
+              <div class="login__element">
+                <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
+              </div>
+              <div class="login__element">
+                <input class="login__password-input" type="password" name="password" id="password" :placeholder="$t('login.password')" required v-model="password" />
+              </div>
+              <div id="loggin_error" class="error">{{ loginError }}</div>
+              <div class="login__element">
+                <button class="form-control login__btn" type="submit" value="Log in" id="login" @click="postLogin">{{ $t('login.log_in') }}</button>
+              </div>
+              <div class="login__inst">
+                <a href="#" @click="forgotPwd()" class="login__forgotPass">{{ $t('login.forgot_password') }}</a>
+              </div>
+              <div class="login__inst">
+                {{ $t('login.dont_have_account') }}
+                <a href="#" @click="redirect()" class="login__sign-up">{{ $t('login.sign_up') }}</a>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="login__log-cont" v-if="state === 'reset'">
-      <div class="login__log-panel">
-        <p class="login__header-text">Reset Password</p>
-        <div id="reset_error" class="error">{{ loginError }}</div>
-        <div class="control-group">
-          <div class="login__element">
-            <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
+        <div class="login__log-cont" v-if="state === 'reset'">
+          <div class="login__log-panel">
+            <p class="login__header-text">{{ $t('login.reset_password') }}</p>
+            <div id="reset_error" class="error">{{ loginError }}</div>
+            <div class="control-group">
+              <div class="login__element">
+                <vue-tel-input v-model="tel" v-bind="bindProps" class="login__phone-input" @validate="Valid"></vue-tel-input>
+              </div>
+              <div class="login__element">
+                <button class="form-control reset__btn" type="submit" value="Reset Password" id="reset" @click="postForgot">{{ $t('login.reset_password') }}</button>
+              </div>
+              <a href="#" @click="forgotPwd()" class="login__forgotPass"> {{ $t('login.sign_in') }}</a>
+            </div>
           </div>
-          <div class="login__element">
-            <button class="form-control reset__btn" type="submit" value="Reset Password" id="reset" @click="postForgot">Reset Password</button>
-          </div>
-          <a href="#" @click="forgotPwd()" class="login__forgotPass">Sign In</a>
         </div>
       </div>
     </div>
@@ -50,6 +57,7 @@ import axios from 'axios';
 import sha1 from 'js-sha1';
 import Mixpanel from 'mixpanel';
 import { Base64 } from 'js-base64';
+import ownersBannerComponent from './ownersBannerComponent.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
@@ -57,6 +65,7 @@ export default {
   title: 'Partner Portal - Log In',
   components: {
     VueTelInput,
+    ownersBannerComponent,
   },
   data() {
     return {
@@ -69,7 +78,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Enter a phone number',
+        placeholder: this.$t('login.enter_phone_number'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -171,33 +180,33 @@ export default {
       const payload = {
         phone: this.tel,
       };
-      axios.post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/account`, payload).then(response => {
+      axios.post(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-user/reset-password`, payload).then(response => {
         if (response.data.status) {
-          this.handleButton('Reset Password');
+          this.handleButton(this.$t('login.reset_password'));
           this.error(response.data.message, 7000);
         } else {
-          this.handleButton('Reset Password');
-          this.error('Please try again', 7000);
+          this.handleButton(this.$t('login.reset_password'));
+          this.error(this.$t('login.please_try_again'), 7000);
         }
       }).catch(error => {
-        this.handleButton('Reset Password');
+        this.handleButton(this.$t('login.reset_password'));
         this.error(error.response.data.message, 7000);
       });
     },
     postLogin() {
       // eslint-disable-next-line quotes
-      this.handleButton(`<div class='loading-spinner'></div> Please Wait`);
+      this.handleButton(`<div class='loading-spinner'></div> ${this.$t('login.please_wait')}`);
       this.tel = this.tel.replace(/ /g, '');
-      const payload = JSON.stringify({
+      const payload = {
         phone: this.tel,
-        password: sha1(this.password),
-      });
-      axios.post(`${process.env.VUE_APP_AUTH}rideradmin/login`, payload).then(response => {
+        password: this.password,
+      };
+      axios.post(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-user/login`, payload).then(response => {
         if (response.status === 200) {
           this.handleResponse(response);
         } else {
-          this.handleButton('LOG IN');
-          this.error('Please try again', 7000);
+          this.handleButton(this.$t('login.log_in_capital'));
+          this.error(this.$t('login.please_try_again'), 7000);
         }
       });
     },
@@ -227,8 +236,8 @@ export default {
         this.TrackLogin(parsedData.payload);
         this.fetchSignatureStatus(parsedData.payload.phone);
       } else {
-        this.handleButton('LOG IN');
-        this.error('Sorry, your details did not match!', 7000);
+        this.handleButton(this.$t('login.log_in_capital'));
+        this.error(this.$t('login.sorry_details_not_match'), 7000);
       }
     },
     handleButton(data) {
@@ -262,6 +271,11 @@ export default {
 </script>
 
 <style>
+@media (max-width: 1036px) {
+  .login-outer-content , .login-group-card {
+    display: contents !important;
+  }
+}
 p {
   font-size: 24px;
   color: #666;
@@ -275,5 +289,19 @@ a:hover {
 }
 .login__phone-input .dropdown .selection {
   margin-left: 15px;
+}
+.login-group-card{
+  -webkit-box-flex: 2;
+  flex: 1;
+  padding-right: 1%;
+  -webkit-box-orient: vertical;
+  flex-direction: column;
+  display: flex;
+  -webkit-box-direction: normal;
+}
+.login-outer-content
+{
+  display: flex;
+  flex-direction: row !important;
 }
 </style>

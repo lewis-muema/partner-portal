@@ -22,6 +22,9 @@ const state = {
   cop_user_id: null,
   create_order: false,
   freight_status: '',
+  language: 'en',
+  recipient_code: '',
+  recipient_phone: '',
 };
 
 export default {

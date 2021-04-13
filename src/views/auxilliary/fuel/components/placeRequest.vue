@@ -3,15 +3,15 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="orders__list-toprow table-head">
-      <div class="orders__col-head pickup">pickup location</div>
-      <div class="orders__col-head destination">destination</div>
-      <div class="orders__col-head distance">distance</div>
-      <div class="orders__col-head pick-date">pickup date</div>
-      <div class="orders__col-head orderNo">order number</div>
-      <div class="orders__col-head truck">truck</div>
-      <div class="orders__col-head orderNo">price</div>
-      <div class="orders__col-head price-align">VAT</div>
-      <div class="orders__col-head center-action">action</div>
+      <div class="orders__col-head pickup">{{ $t('placeRequest.pickup_location') }}</div>
+      <div class="orders__col-head destination">{{ $t('placeRequest.destination') }}</div>
+      <div class="orders__col-head distance">{{ $t('placeRequest.distance') }}</div>
+      <div class="orders__col-head pick-date">{{ $t('placeRequest.pickup_date') }}</div>
+      <div class="orders__col-head orderNo">{{ $t('placeRequest.order_number') }}</div>
+      <div class="orders__col-head truck">{{ $t('placeRequest.truck') }}</div>
+      <div class="orders__col-head orderNo">{{ $t('placeRequest.price') }}</div>
+      <div class="orders__col-head price-align">{{ $t('placeRequest.vat') }}</div>
+      <div class="orders__col-head center-action">{{ $t('placeRequest.action') }}</div>
     </div>
     <div :class="orders.length === 0 ? 'container-height-override' : ''" v-loading="loadingStatus">
       <div v-for="(order, index) in orders" :key="index">
@@ -20,7 +20,7 @@
         @click="toggle(index)"
       >
         <div class="orders__list-col pickup">
-          <p class="orders__mobile-col">Pickup</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.pickup') }}</p>
           <p
             class="row1"
             @mouseover="showFromTooltip(index)"
@@ -31,7 +31,7 @@
           >{{ order.order_details.pick_up }}</span>
         </div>
         <div class="orders__list-col destination">
-          <p class="orders__mobile-col">Destination</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.destination_capital') }}</p>
           <p
             class="row2"
             @mouseover="showToTooltip(index)"
@@ -42,33 +42,33 @@
           >{{ order.order_details.destination }}</span>
         </div>
         <div class="orders__list-col distance">
-          <p class="orders__mobile-col">Distance</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.distance') }}</p>
           <p class="orders__mobile-col--distance">{{ formatDistance(index) }} km</p>
         </div>
         <div class="orders__list-col pick-date">
-          <p class="orders__mobile-col">Pick-up date</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.pick_up_date') }}</p>
           <p>{{ timeFormat(index) }}</p>
         </div>
         <div class="orders__list-col orderNo">
-          <p class="orders__mobile-col">Order number</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.order_number') }}</p>
           <p>{{ order.order_details.order_no }}</p>
         </div>
         <div class="orders__list-col truck">
-          <p class="orders__mobile-col">Vendor</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.vendor') }}</p>
           <p class="row3">{{ order.order_details.vendor }}</p>
         </div>
 
         <div class="orders__list-col orderNo">
-          <p class="orders__mobile-col">Amount</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.amount') }}</p>
           <p>{{ order.order_details.currency }} {{ currencyFormat(index) }}</p>
         </div>
         <div class="orders__list-col price-align">
-          <p class="orders__mobile-col">VAT</p>
+          <p class="orders__mobile-col">{{ $t('placeRequest.vat') }}</p>
           <p>{{ order.order_details.currency }} {{ order.order_details.vat ? order.order_details.vat : 0 }}</p>
         </div>
         <div class="orders__list-col center-action uppercase">
           <span>
-            <p class="orders__confirm-icon in-transitButton orders__buttons">in transit</p>
+            <p class="orders__confirm-icon in-transitButton orders__buttons">{{ $t('placeRequest.in_transit') }}</p>
           </span>
           <span>
             <i class="material-icons icon arrow in-transitButton" v-if="opened.includes(index)">keyboard_arrow_down</i>
@@ -79,10 +79,10 @@
       <div v-if="opened.includes(index)">
         <div class="place-request-inputs-container">
           <div class="place-request-inputs-header">
-            You can request a maximum of {{ order.order_details.currency }} {{ parseFloat(order.max_advance).toFixed(2) }}
+            {{ $t('placeRequest.maximum_of') }} {{ order.order_details.currency }} {{ parseFloat(order.max_advance).toFixed(2) }}
           </div>
           <div>
-            Total amount <br />
+            {{ $t('placeRequest.total_amount') }} <br />
             <el-input
               type="text"
               class="place-request-inputs"
@@ -95,7 +95,7 @@
             </el-input>
           </div>
           <div>
-            Choose fueling Station <br />
+            {{ $t('placeRequest.choose_fueling_station') }}<br />
             <el-select
               class="place-request-inputs"
               v-model="station"
@@ -110,7 +110,7 @@
             </el-select>
           </div>
           <div>
-            Station address <br />
+           {{ $t('placeRequest.station_address') }}<br />
             <el-select
               class="place-request-inputs"
               v-model="address"
@@ -126,7 +126,7 @@
             </el-select>
           </div>
           <div>
-            Fuel type <br />
+            {{ $t('placeRequest.fuel_type') }} <br />
             <el-select
               class="place-request-inputs"
               v-model="fuel"
@@ -148,7 +148,7 @@
       </div>
     </div>
     <div v-if="orders.length === 0 && !loadingStatus" class="no-requests-tab">
-      There are no orders
+      {{ $t('placeRequest.no_requests') }}
     </div>
     </div>
     <notify />
@@ -192,6 +192,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       pollActive: false,
