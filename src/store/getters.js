@@ -41,4 +41,10 @@ export default {
   getLanguage(state) {
     return state.language;
   },
+  getNotificationRecipientCode(state) {
+    return state.recipient_code;
+  },
+  getNotificationRecipientPhone(state) {
+    return state.recipient_phone;
+  },
 };
