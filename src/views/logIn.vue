@@ -151,13 +151,16 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/management/get_partner_details`, payload)
         .then(response => {
-          if (!response.data.documents.signature) {
+          const sessionData = JSON.parse(localStorage.sessionData).payload;
+          if (!response.data.documents.signature && sessionData.role === 1) {
             this.$router.push({ path: '/signature' });
           } else {
             if (localStorage.externalURL) {
               const URL = localStorage.externalURL;
               localStorage.removeItem('externalURL');
               this.$router.push({ path: URL });
+            } else if (sessionData.role === 2 && sessionData.freight_status === 2) {
+              this.$router.push({ path: '/freight/orders' });
             } else {
               this.$router.push({ path: '/' });
             }

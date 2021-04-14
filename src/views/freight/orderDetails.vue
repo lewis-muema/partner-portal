@@ -85,7 +85,7 @@
                 <div v-html="$t('orderDetails.cash_advance')"></div>
               </div>
             </div>
-            <div>
+            <div v-if="checkUserPermission('aux_services')">
               <button :class="fuelActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-fuel-advance')">{{ $t('orderDetails.request_fuel_advance') }}</button>
               <button :class="cashActiveStatus ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="$modal.show('request-cash-advance')">{{ $t('orderDetails.request_cash_advance') }}</button>
             </div>
@@ -291,6 +291,7 @@ import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
+import userPermissionMixin from '../../mixins/userPermissionMixin';
 
 let s3 = '';
 
@@ -301,7 +302,7 @@ export default {
     errorHandler,
     notify,
   },
-  mixins: [timezone],
+  mixins: [timezone, userPermissionMixin],
   data() {
     return {
       auth: process.env.VUE_APP_AUTH,
