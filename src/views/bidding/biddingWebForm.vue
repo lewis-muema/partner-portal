@@ -349,7 +349,6 @@ export default {
     },
     async bidOffer(i) {
       this.hide('bid-details-modal');
-      const bidStatus = 0;
       const decliners = [];
       if (i === 1) {
         this.bidInfo = {
@@ -377,11 +376,53 @@ export default {
       }
 
       const payload = JSON.stringify(this.bidInfo);
+      console.log(payload);
       this.initialSubmit = true;
+
+      if (payload.status === -1) {
+        mixpanel.track('Shipment Request Rejected', {
+          transporterId: parseInt(this.$route.params.owner_id, 0),
+          phone: res.data.client_phone,
+          email: null,
+          name: res.data.quotation.name,
+          source: this.$route.query.utm_source,
+          shipmentId: parseInt(this.$route.params.shipment_id, 0),
+          quotationId: this.data.id,
+          pickup: res.data.pickup.name,
+          destination: res.destination.name,
+          carrierType: res.data.carrier_type,
+          cargoType: res.data.cargo_type,
+          pickupFacility: res.data.pickup_facility,
+          trucksNeeded: res.data.total_trucks,
+          reason: null,
+          reasonId: null,
+          clientType: 'Web',
+          device: this.$route.query.utm_source === email ? 'email' : 'sms',
+        });
+      } else if (payload.status === 1) {
+        mixpanel.track('Bids Placed', {
+          transporterId: parseInt(this.$route.params.owner_id, 0),
+          phone: res.data.client_phone,
+          email: null,
+          name: res.data.quotation.name,
+          source: this.$route.query.utm_source,
+          shipmentId: parseInt(this.$route.params.shipment_id, 0),
+          quotationId: parseInt(this.data.id, 0),
+          pickup: res.data.pickup.name,
+          destination: res.destination.name,
+          carrierType: res.data.carrier_type,
+          cargoType: res.data.cargo_type,
+          pickupFacility: res.data.pickup_facility,
+          trucksNeeded: parseInt(res.data.total_trucks, 0),
+          clientType: 'Web',
+          device: this.$route.query.utm_source === email ? 'email' : 'sms',
+        });
+      }
       await axios
         .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
+            console.log(res);
             this.success = true;
           }
         })
@@ -395,10 +436,31 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
+
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
           } else {
             this.submitted = true;
+          }
+
+          if (res.status === 200) {
+            mixpanel.track('Shipments Request Viewed', {
+              transporterId: res.quotation.transporter_id,
+              phone: res.data.transporter_user_phone,
+              email: res.data.transporter_user_email,
+              name: res.data.quotation.name,
+              source: this.$route.query.utm_source,
+              shipmentId: parseInt(this.$route.params.shipment_id, 0),
+              quotationId: this.data.id,
+              pickup: res.pickup.name,
+              destination: res.destination.name,
+              carrierType: res.carrier_type,
+              cargoType: res.cargo_type,
+              pickupFacility: res.pickup_facility,
+              trucksNeeded: res.total_trucks,
+              clientType: 'Web',
+              device: this.$route.query.utm_source === email ? 'email' : 'sms',
+            });
           }
         })
         .catch(error => {
