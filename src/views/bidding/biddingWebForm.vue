@@ -402,7 +402,7 @@ export default {
           reason: this.bidInfo.rejection_reasons.reason,
           reasonId: this.bidInfo.rejection_reasons.reason.id,
           clientType: 'Web',
-          device: this.isMobile() === true ? 'mobile' : 'web',
+          device: this.isMobile() ? 'mobile' : 'web',
         });
       } else if (payload.status === 1) {
         mixpanel.track('Bids Placed', {
@@ -420,7 +420,7 @@ export default {
           pickupFacility: this.formData.pickup_facility,
           trucksNeeded: parseInt(this.formData.total_trucks, 0),
           clientType: 'Web',
-          device: this.isMobile() === true ? 'mobile' : 'web',
+          device: this.isMobile() ? 'mobile' : 'web',
         });
       }
       await axios
@@ -463,7 +463,7 @@ export default {
               pickupFacility: res.data.pickup_facility,
               trucksNeeded: res.data.total_trucks,
               clientType: 'Web',
-              device: this.isMobile() === true ? 'mobile' : 'web',
+              device: this.isMobile() ? 'mobile' : 'web',
             });
           }
         })
