@@ -384,6 +384,7 @@ import notify from '../components/notification';
 import timezone from '../mixins/timezone';
 import errorHandler from '../components/errorHandler';
 import verifier from '../components/verifier';
+import userPermissionMixin from '../mixins/userPermissionMixin';
 // import truckValidationMixin from '../mixins/truckValidationMixin';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
@@ -396,7 +397,7 @@ export default {
     errorHandler,
     notify,
   },
-  mixins: [timezone],
+  mixins: [timezone, userPermissionMixin],
   data() {
     return {
       allVehicles: '',
@@ -501,6 +502,9 @@ export default {
       this.fetchOwnerDrivers().then(res1 => {
         this.fetchOwnerVehicles().then(res2 => {});
       });
+      if (this.sessionInfo.role === 1 && !this.checkUserPermission('transport')) {
+        this.$router.push({ path: '/freight/orders' });
+      }
     }
   },
   beforeDestroy() {
