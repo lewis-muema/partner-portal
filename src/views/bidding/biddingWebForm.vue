@@ -284,6 +284,13 @@ export default {
       this.rejectBid = false;
       this.$modal.show('bid-details-modal');
     },
+    isMobile() {
+      if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     hide(name) {
       this.rejectBid = false;
       this.$modal.hide(name);
@@ -352,6 +359,46 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.success = true;
+
+            if (payload.status === -1) {
+              mixpanel.track('Shipment Request Rejected', {
+                transporterId: parseInt(this.$route.params.owner_id, 0),
+                phone: parseInt(this.formData.client_phone, 0),
+                email: this.formData.transporter_user_email,
+                name: this.formData.quotation.name,
+                source: this.$route.query.utm_source,
+                shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                quotationId: parseInt(thisformData.id, 0),
+                pickup: this.formData.pickup.name,
+                destination: this.formData.destination.name,
+                carrierType: this.formData.carrier_type,
+                cargoType: this.formData.cargo_type,
+                pickupFacility: this.formData.pickup_facility,
+                trucksNeeded: this.formData.total_trucks,
+                // reason: this.bidInfo.rejection_reasons.reason,
+                // reasonId: this.bidInfo.rejection_reasons.reason.id,
+                clientType: 'Web',
+                device: this.isMobile() ? 'mobile' : 'web',
+              });
+            } else if (payload.status === 1) {
+              mixpanel.track('Bids Placed', {
+                transporterId: parseInt(this.$route.params.owner_id, 0),
+                phone: parseInt(this.formData.client_phone, 0),
+                email: this.formData.transporter_user_email,
+                name: this.formData.quotation.name,
+                source: this.$route.query.utm_source,
+                shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                quotationId: parseInt(this.formData.id, 0),
+                pickup: this.formData.pickup.name,
+                destination: this.formData.destination.name,
+                carrierType: this.formData.arrier_type,
+                cargoType: this.formData.cargo_type,
+                pickupFacility: this.formData.pickup_facility,
+                trucksNeeded: parseInt(this.formData.total_trucks, 0),
+                clientType: 'Web',
+                device: this.isMobile() ? 'mobile' : 'web',
+              });
+            }
           }
         })
         .catch((err) => {
@@ -368,6 +415,25 @@ export default {
             this.submitted = false;
           } else {
             this.submitted = true;
+          }
+          if (res.status === 200) {
+            mixpanel.track('Shipments Request Viewed', {
+              transporterId: res.data.quotation.transporter_id,
+              phone: parseInt(res.data.transporter_user_phone, 0),
+              email: res.data.transporter_user_email,
+              name: res.data.quotation.name,
+              source: this.$route.query.utm_source,
+              shipmentId: parseInt(this.$route.params.shipment_id, 0),
+              quotationId: parseInt(res.data.id, 0),
+              pickup: res.data.pickup.name,
+              destination: res.data.destination.name,
+              carrierType: res.data.carrier_type,
+              cargoType: res.data.cargo_type,
+              pickupFacility: res.data.pickup_facility,
+              trucksNeeded: res.data.total_trucks,
+              clientType: 'Web',
+              device: this.isMobile() ? 'mobile' : 'web',
+            });
           }
         })
         .catch((error) => {
