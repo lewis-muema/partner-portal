@@ -15,7 +15,7 @@
         <p>{{ time.message }}</p>
         <p @click="showDocument(time.data.url)" v-if="time.actionable" class="freight-dashboard-links">{{ $t('freightDashboard.view_document') }} <i class="el-icon-arrow-right"></i></p>
         <p @click="showOrder(time.data.order_id)" class="freight-dashboard-links" v-else>{{ $t('freightDashboard.view_order') }} <i class="el-icon-arrow-right"></i></p>
-        <div v-if="time.actionable && time.data.created_by !== 'OWNER'" class="freight-dashboard-buttons">
+        <div v-if="time.actionable && time.data.created_by !== 'OWNER' && checkUserPermission('bids')" class="freight-dashboard-buttons">
           <button class="partner-documents-approve-button" @click="approve(time.data, 2)">{{ $t('freightDashboard.approve') }}</button>
           <button class="partner-documents-decline-button" @click="decline(time.data, 3)">{{ $t('freightDashboard.reject') }}</button>
         </div>
@@ -38,7 +38,7 @@
           <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('reject-documents')"></i>
         </div>
       <textarea name="" id="" cols="30" rows="10" placeholder="Please write a reason why you want to decline this document" class="reject-documents-textarea" v-model="declineReason"></textarea>
-      <div class="reject-documents-buttons">
+      <div class="reject-documents-buttons" v-if="checkUserPermission('documents')">
         <button class="partner-documents-approve-button" @click="actionDocument()">{{ $t('freightDashboard.decline') }}</button>
         <button class="partner-documents-decline-button" @click="$modal.hide('reject-documents')">{{ $t('freightDashboard.cancel') }}</button>
       </div>
@@ -54,6 +54,7 @@ import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
+import userPermissionMixin from '../../mixins/userPermissionMixin';
 
 export default {
   title: 'Partner Portal - Freight Dashboard',
@@ -62,7 +63,7 @@ export default {
     errorHandler,
     notify,
   },
-  mixins: [timezone],
+  mixins: [timezone, userPermissionMixin],
   data() {
     return {
       auth: process.env.VUE_APP_AUTH,

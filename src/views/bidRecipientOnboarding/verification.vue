@@ -128,7 +128,7 @@ export default {
         localStorage.sessionData = sessionData;
         this.trackLogin(parsedData.payload);
         setTimeout(() => {
-          this.$router.push({ path: '/' });
+          this.$router.push({ path: '/freight/orders' });
         }, 4000);
       } else {
         this.notify(3, 0, 'Automatic login failed , you will be directed to the login page');
