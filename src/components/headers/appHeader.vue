@@ -7,7 +7,7 @@
           <div class="inner-left">
             <img class="logo-icon" src="https://images.sendyit.com/web_platform/logo/sendy_main_white.png" @click="location.href = 'https://sendyit.com/'" />
             <div class="inner-left-toggles" v-if="$store.getters.getFreightStatus === 2">
-              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')"> {{ $t('appHeader.transportation') }}</span>
+              <span class="inner-left-toggle-links" :class="getFlow === 'logistics' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('logistics')" v-if="checkUserPermission('transport')"> {{ $t('appHeader.transportation') }}</span>
               <span class="inner-left-toggle-links" :class="getFlow === 'freight' ? 'inner-left-toggle-links-active' : 'inner-left-toggle-links-inactive'" @click="setFlow('freight')"> {{ $t('appHeader.freight') }}</span>
             </div>
           </div>
@@ -19,34 +19,37 @@
                   <i class="material-icons">arrow_drop_down</i>
                 </span>
                 <div class="dropdown-menu dropdown-menu-right" v-if="dropdown" @mouseover="timeout = 1000" @mouseleave="timeout = 0">
-                  <router-link to="/vehicles" class="dropdown-link">
-                    <p class="dropdown-item">{{ $t('appHeader.vehicles') }}</p>
-                  </router-link>
-                  <router-link to="/tracking" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.tracking') }} </p>
-                  </router-link>
-                  <router-link to="/statement" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.statement') }} </p>
-                  </router-link>
-                  <router-link to="/banks" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.banks') }} </p>
-                  </router-link>
+                  <div v-if="getSessionInfo.role === 1">
+                    <router-link to="/vehicles" class="dropdown-link">
+                      <p class="dropdown-item">{{ $t('appHeader.vehicles') }}</p>
+                    </router-link>
+                    <router-link to="/tracking" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.tracking') }} </p>
+                    </router-link>
+                    <router-link to="/statement" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.statement') }} </p>
+                    </router-link>
+                    <router-link to="/banks" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.banks') }} </p>
+                    </router-link>
+                  </div>
                   <router-link to="/change_language" class="dropdown-link">
                     <p class="dropdown-item"> {{ $t('appHeader.change_language') }} </p>
                   </router-link>
-                  <router-link to="/loans" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.loans') }} </p>
-                  </router-link>
-                  <router-link to="/savings" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.saving') }} </p>
-                  </router-link>
-                  <router-link to="/documents" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.document') }} </p>
-                  </router-link>
-
-                  <router-link v-if="show_performance" to="/performance" class="dropdown-link">
-                    <p class="dropdown-item"> {{ $t('appHeader.performance') }} </p>
-                  </router-link>
+                  <div v-if="getSessionInfo.role === 1">
+                    <router-link to="/loans" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.loans') }} </p>
+                    </router-link>
+                    <router-link to="/savings" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.saving') }} </p>
+                    </router-link>
+                    <router-link to="/documents" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.document') }} </p>
+                    </router-link>
+                    <router-link v-if="show_performance" to="/performance" class="dropdown-link">
+                      <p class="dropdown-item"> {{ $t('appHeader.performance') }} </p>
+                    </router-link>
+                  </div>
                   <div @click="trainingRedirect()" class="dropdown-link">
                     <p class="dropdown-item"> {{ $t('appHeader.support') }} </p>
                   </div>
@@ -79,9 +82,9 @@
       <div class="header-secondary header-secondary-freight" id="header-secondary" v-if="getFlow === 'freight'">
         <div class="secondary-inner">
           <div class="secnav-container">
-            <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()">{{ $t('appHeader.activity_log') }}</router-link>
-            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()">{{ $t('appHeader.shipment') }}</router-link>
-            <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()">{{ $t('appHeader.preference') }}</router-link>
+            <router-link to="/freight/dashboard" class="secnav-page" :class="showActiveFreightDashboard()" v-if="checkUserPermission('activity_log')">{{ $t('appHeader.activity_log') }}</router-link>
+            <router-link to="/freight/orders" class="secnav-page" :class="showActiveFreightOrders()" v-if="checkUserPermission('shipments')">{{ $t('appHeader.shipment') }}</router-link>
+            <router-link to="/freight/preferences" class="secnav-page" :class="showActiveFreightPreferences()" v-if="checkUserPermission('preferences')">{{ $t('appHeader.preference') }}</router-link>
           </div>
         </div>
       </div>
@@ -93,12 +96,14 @@
 import axios from 'axios';
 import surveyFooter from './footer.vue';
 import errorHandler from '../errorHandler';
+import userPermissionMixin from '../../mixins/userPermissionMixin';
 
 export default {
   components: {
     surveyFooter,
     errorHandler,
   },
+  mixins: [userPermissionMixin],
   data() {
     return {
       dropdown: false,
@@ -128,6 +133,9 @@ export default {
     },
     getFlow() {
       return this.$store.getters.getFlow;
+    },
+    getSessionInfo() {
+      return JSON.parse(localStorage.sessionData).payload;
     },
   },
   watch: {
