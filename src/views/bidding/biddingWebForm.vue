@@ -381,7 +381,7 @@ export default {
         mixpanel.track('Shipment Request Rejected', {
           transporterId: parseInt(this.$route.params.owner_id, 0),
           phone: parseInt(this.formData.client_phone, 0),
-          email: null,
+          email: this.formData.transporter_user_email,
           name: this.formData.quotation.name,
           source: this.$route.query.utm_source,
           shipmentId: parseInt(this.$route.params.shipment_id, 0),
@@ -393,7 +393,7 @@ export default {
           pickupFacility: this.formData.pickup_facility,
           trucksNeeded: this.formData.total_trucks,
           reason: this.bidInfo.rejection_reasons.reason,
-          reasonId: his.bidInfo.rejection_reasons.reasonPid,
+          reasonId: this.bidInfo.rejection_reasons.reasonPid,
           clientType: 'Web',
           device: this.$route.query.utm_source === email ? 'email' : 'sms',
         });
