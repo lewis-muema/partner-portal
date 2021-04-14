@@ -28,6 +28,7 @@ export default {
   components: {
     notify,
   },
+  props: ['recipient'],
   data() {
     return {
       code: '',
@@ -54,16 +55,35 @@ export default {
           .then(res => {
             if (res.data.status === true) {
               this.notify(3, 1, 'Phone verification was successful! You will be automatically logged in your account ...');
-              this.handleUserLogin();
+              this.handleUserStatusUpdate();
             } else {
               this.notify(3, 0, res.data.message);
             }
           })
           .catch(error => {
-            this.notify(3, 0, 'Verification code Error , Unable to connect to the server . Please try again');
-            resolve(error);
+            this.notify(3, 0, error.response.data.message);
           });
       }
+    },
+    handleUserStatusUpdate() {
+      const payload = {
+        uuid: this.recipient.uuid,
+        password: this.$store.getters.getNotificationRecipientCode,
+        status: 2,
+      };
+      axios
+        .post(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-user/verify?authkey=${process.env.BIDDING_API_KEY}`, payload)
+        .then(res => {
+          if (res.status === 200) {
+             this.handleUserLogin();
+          } else {
+            this.notify(3, 0, res.data.message);
+          }
+        })
+        .catch(err => {
+          this.notify(3, 0, 'Check password and try again');
+          resolve(err);
+        });
     },
     handleUserLogin() {
       const tel = this.$store.getters.getNotificationRecipientPhone.replace(/ /g, '');
@@ -107,7 +127,9 @@ export default {
         localStorage.expiryDate = expiry;
         localStorage.sessionData = sessionData;
         this.trackLogin(parsedData.payload);
-        this.$router.push({ path: '/' });
+        setTimeout(() => {
+          this.$router.push({ path: '/' });
+        }, 4000);
       } else {
         this.notify(3, 0, 'Automatic login failed , you will be directed to the login page');
         setTimeout(() => {

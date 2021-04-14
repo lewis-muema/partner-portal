@@ -5,7 +5,7 @@
     </div>
     <div class="landingPage__content">
       <div v-if="this.$route.fullPath === '/recipient/verification'">
-        <Verification />
+        <Verification :recipient="recipient" />
       </div>
       <div v-else>
         <Signup :recipient="recipient" />
