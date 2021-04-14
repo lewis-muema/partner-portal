@@ -379,6 +379,7 @@ export default {
       console.log(payload);
       this.initialSubmit = true;
 
+      console.log(res);
       if (payload.status === -1) {
         mixpanel.track('Shipment Request Rejected', {
           transporterId: parseInt(this.$route.params.owner_id, 0),
