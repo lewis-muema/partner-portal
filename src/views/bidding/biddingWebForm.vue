@@ -231,6 +231,8 @@ import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
 
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
+
 export default {
   title: 'Partner Portal - Freight Bidding Webform',
   components: {
