@@ -11,20 +11,20 @@
               <i class="fas fa-times icon"></i>
             </button>
           </div>
-          <h2 class="card-subheading"> {{ $t('biddingWebForm.how_many_trucks') }} </h2>
+          <h2 class="card-subheading">{{ $t('biddingWebForm.how_many_trucks') }}</h2>
           <p class="card-content">{{ bidDetails.available_trucks }} {{ $t('biddingWebForm.trucks') }}</p>
           <div v-if="formData.is_negotiable === false">
             <h2 class="card-subheading">{{ $t('biddingWebForm.clients_price_offer_per_truck') }}</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
             </p>
-            <h2 class="card-subheading"> {{ $t('biddingWebForm.total_shipment_amount') }} </h2>
+            <h2 class="card-subheading">{{ $t('biddingWebForm.total_shipment_amount') }}</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ bidDetails.available_trucks * formData.offer_amount }}
             </p>
           </div>
           <div v-else>
-            <h2 class="card-subheading"> {{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
+            <h2 class="card-subheading">{{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
             <p class="card-content">
               <b>{{ formData.currency }}</b> {{ bidDetails.amount_per_truck }}
             </p>
@@ -69,9 +69,13 @@
             <div class="bid-details-shipment">
               <div class="bid-information">
                 <div v-if="formData.quotation.status === 1"><p title="Hang tight! your bid is yet to be reviewed" class="status status-review">Under Review</p></div>
-                <div v-else-if="formData.quotation.status === 2"><p class="status status-awarded">{{ $t('biddingWebForm.awarded') }}</p></div>
-                <div v-else-if="formData.quotation.status === -1"><p class="status status-rejected">{{ $t('biddingWebForm.failed') }}</p></div>
-                <h2 class="bid-details-subheading"> {{ $t('biddingWebForm.pickup') }}</h2>
+                <div v-else-if="formData.quotation.status === 2">
+                  <p class="status status-awarded">{{ $t('biddingWebForm.awarded') }}</p>
+                </div>
+                <div v-else-if="formData.quotation.status === -1">
+                  <p class="status status-rejected">{{ $t('biddingWebForm.failed') }}</p>
+                </div>
+                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.pickup') }}</h2>
                 <p class="bid-details-content">{{ formData.pickup.name }}</p>
                 <h2 class="bid-details-content">{{ $t('biddingWebForm.load_picked_at') }} {{ formData.pickup_facility }}</h2>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.destination') }}</h2>
@@ -88,10 +92,17 @@
                 <p class="bid-details-content">{{ formData.total_trucks }} {{ $t('biddingWebForm.trucks') }}</p>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.type_of_truck') }}</h2>
                 <p class="bid-details-content">{{ formData.cargo_type }}</p>
-                <h2 class="bid-details-subheading"> {{ $t('biddingWebForm.weight_of_load') }}</h2>
+                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.weight_of_load') }}</h2>
                 <p class="bid-details-content">{{ formData.tonnes_per_truck }} {{ $t('biddingWebForm.tonnes') }}</p>
-                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
-                <p class="bid-details-content">{{ formData.is_return === true ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
+
+                <div v-if="formData.cargo_type_options.length > 1">
+                  <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
+                  <p class="bid-details-content">{{ formData.cargo_type_options[0].value === true ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
+                  <p class="bid-details-subheading">Number of 20ft containers being moved</p>
+                  <h2 class="bid-details-content">{{ formData.cargo_type_options[1].value }}</h2>
+                  <p class="bid-details-subheading">Number of 40ft containers being moved</p>
+                  <h2 class="bid-details-content">{{ formData.cargo_type_options[2].value }}</h2>
+                </div>
                 <div v-if="formData.offer_amount > 0 && formData.is_negotiable">
                   <h2 class="bid-details-subheading">{{ $t('biddingWebForm.clients_price_offer') }}</h2>
                   <p class="bid-details-content">{{ formData.currency }} {{ formData.offer_amount }}</p>
@@ -104,12 +115,12 @@
             <!-- Initial bid -->
             <div v-if="initialSubmit === true && rejected === false">
               <h2 class="bid-submitted-heading">{{ $t('biddingWebForm.your_bids') }}</h2>
-              <h2 class="bid-details-subheading"> {{ $t('biddingWebForm.trucks_available') }}</h2>
+              <h2 class="bid-details-subheading">{{ $t('biddingWebForm.trucks_available') }}</h2>
               <p class="bid-details-content">{{ bidInfo.available_trucks }} {{ bidInfo.available_trucks === 1 ? 'Truck' : 'Trucks' }}</p>
               <h2 class="bid-details-subheading">{{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
               <div v-if="formData.is_negotiable === false">
                 <p class="bid-details-content">{{ formData.currency }} {{ formData.offer_amount }}</p>
-                <h2 class="bid-details-subheading"> {{ $t('biddingWebForm.total_bid_amount') }} </h2>
+                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.total_bid_amount') }}</h2>
                 <p class="bid-details-content">{{ formData.currency }} {{ bidInfo.available_trucks * formData.offer_amount }}</p>
               </div>
               <div v-else>
@@ -119,18 +130,18 @@
               </div>
             </div>
             <div v-else-if="rejected">
-              <p class="bid-details-content"> {{ $t('biddingWebForm.successfully_rejected_bid') }}</p>
+              <p class="bid-details-content">{{ $t('biddingWebForm.successfully_rejected_bid') }}</p>
               <i>
-                <p class="timestamp"> {{ $t('biddingWebForm.forfeit_submitted') }} {{ formData.quotation.date_created }}</p>
+                <p class="timestamp">{{ $t('biddingWebForm.forfeit_submitted') }} {{ formData.quotation.date_created }}</p>
               </i>
             </div>
             <!-- BID IS NEGOTIABLE AND HAS OFFER AMOUNT OR WHEN THERE IS NO OFFER_AMOUNT  -->
             <div v-else-if="formData.quotation.status === 0">
               <div class="bid-details" v-if="formData.status === 0">
                 <div v-if="(formData.is_negotiable && formData.offer_amount > 0) || formData.offer_amount === null" class="bid-section">
-                  <h2 class="bid-details-heading">{{ $t('biddingWebForm.enter_your_bid') }} </h2>
+                  <h2 class="bid-details-heading">{{ $t('biddingWebForm.enter_your_bid') }}</h2>
                   <div class="bidding-form">
-                    <h2 class="bid-details-content"> {{ $t('biddingWebForm.trucks_available') }}</h2>
+                    <h2 class="bid-details-content">{{ $t('biddingWebForm.trucks_available') }}</h2>
                     <small class="truck-validate" v-show="truckValidate"> {{ $t('biddingWebForm.truck_cannot_be_less') }}</small>
                     <div class="bidding-form-trucks">
                       <button :disabled="bidDetails.available_trucks <= 0" @click.prevent="truckValidation" class="bidding-form-trucks-button border-radius__left"><i class="fas fa-minus"></i></button>
@@ -153,7 +164,7 @@
                 <!-- BID WHEN OFFER IS NON-NEGOTIABLE AND HAS AN OFFER AMOUNT -->
                 <div v-if="formData.offer_amount > 0 && formData.is_negotiable === false">
                   <h2 class="bid-details-heading">{{ $t('biddingWebForm.offer') }}</h2>
-                  <p class="bid-details-content"> {{ $t('biddingWebForm.clients_price_offer') }}</p>
+                  <p class="bid-details-content">{{ $t('biddingWebForm.clients_price_offer') }}</p>
                   <form>
                     <p class="bid-details-content black">{{ formData.currency }} {{ formData.offer_amount }} {{ $t('biddingWebForm.per_truck') }}</p>
                     <span class="truck-validate" v-show="truckValidate">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
@@ -226,10 +237,13 @@
 
 <script>
 import axios from 'axios';
+import Mixpanel from 'mixpanel';
 import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
+
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   title: 'Partner Portal - Freight Bidding Webform',
@@ -369,6 +383,63 @@ export default {
             this.submitted = false;
           } else {
             this.submitted = true;
+          }
+          if (res.data.quotation.status === 0) {
+            mixpanel.track('Shipments Request Viewed', {
+              transporterId: parseInt(this.$route.params.owner_id, 0),
+              phone: res.data.client_phone,
+              email: null,
+              name: res.data.quotation.name,
+              source: this.$route.query.utm_source,
+              shipmentId: parseInt(this.$route.params.shipment_id, 0),
+              quotationId: this.data.id,
+              pickup: res.data.pickup.name,
+              destination: res.destination.name,
+              carrierType: res.data.carrier_type,
+              cargoType: res.data.cargo_type,
+              pickupFacility: res.data.pickup_facility,
+              trucksNeeded: res.data.total_trucks,
+              clientType: 'Web',
+              device: this.$route.query.utm_source === email ? 'email' : 'sms',
+            });
+          } else if (res.data.quotation.status === 1) {
+            mixpanel.track('Bids Placed', {
+              transporterId: parseInt(this.$route.params.owner_id, 0),
+              phone: res.data.client_phone,
+              email: null,
+              name: res.data.quotation.name,
+              source: this.$route.query.utm_source,
+              shipmentId: parseInt(this.$route.params.shipment_id, 0),
+              quotationId: this.data.id,
+              pickup: res.data.pickup.name,
+              destination: res.destination.name,
+              carrierType: res.data.carrier_type,
+              cargoType: res.data.cargo_type,
+              pickupFacility: res.data.pickup_facility,
+              trucksNeeded: res.data.total_trucks,
+              clientType: 'Web',
+              device: this.$route.query.utm_source === email ? 'email' : 'sms',
+            });
+          } else if (res.data.quotation.status === -1) {
+            mixpanel.track('Shipment Request Rejected', {
+              transporterId: parseInt(this.$route.params.owner_id, 0),
+              phone: res.data.client_phone,
+              email: null,
+              name: res.data.quotation.name,
+              source: this.$route.query.utm_source,
+              shipmentId: parseInt(this.$route.params.shipment_id, 0),
+              quotationId: this.data.id,
+              pickup: res.data.pickup.name,
+              destination: res.destination.name,
+              carrierType: res.data.carrier_type,
+              cargoType: res.data.cargo_type,
+              pickupFacility: res.data.pickup_facility,
+              trucksNeeded: res.data.total_trucks,
+              reason: null,
+              reasonId: null,
+              clientType: 'Web',
+              device: this.$route.query.utm_source === email ? 'email' : 'sms',
+            });
           }
         })
         .catch(error => {
