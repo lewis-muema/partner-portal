@@ -10,7 +10,7 @@
             <span @click="success = false"> <i class="fas fa-check-circle"></i> </span>
             <span class="success-message">{{ $t('biddingWebForm.bid_successfully_submitted') }} </span>
           </div>
-          <span @click="success = false"> <i class="fas fa-times"></i> </span>
+          <span @click="success = false"> <i class="fas fa-times lg"></i> </span>
         </div>
 
         <!-- BID DETAILS -->
