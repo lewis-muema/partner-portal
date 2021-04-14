@@ -384,50 +384,50 @@ export default {
 
       const payload = JSON.stringify(this.bidInfo);
 
-      if (payload.status === -1) {
-        mixpanel.track('Shipment Request Rejected', {
-          transporterId: parseInt(this.$route.params.owner_id, 0),
-          phone: parseInt(this.formData.client_phone, 0),
-          email: this.formData.transporter_user_email,
-          name: this.formData.quotation.name,
-          source: this.$route.query.utm_source,
-          shipmentId: parseInt(this.$route.params.shipment_id, 0),
-          quotationId: parseInt(thisformData.id, 0),
-          pickup: this.formData.pickup.name,
-          destination: this.formData.destination.name,
-          carrierType: this.formData.carrier_type,
-          cargoType: this.formData.cargo_type,
-          pickupFacility: this.formData.pickup_facility,
-          trucksNeeded: this.formData.total_trucks,
-          reason: this.bidInfo.rejection_reasons.reason,
-          reasonId: this.bidInfo.rejection_reasons.reason.id,
-          clientType: 'Web',
-          device: this.isMobile() ? 'mobile' : 'web',
-        });
-      } else if (payload.status === 1) {
-        mixpanel.track('Bids Placed', {
-          transporterId: parseInt(this.$route.params.owner_id, 0),
-          phone: parseInt(this.formData.client_phone, 0),
-          email: this.formData.transporter_user_email,
-          name: this.formData.quotation.name,
-          source: this.$route.query.utm_source,
-          shipmentId: parseInt(this.$route.params.shipment_id, 0),
-          quotationId: parseInt(this.formData.id, 0),
-          pickup: this.formData.pickup.name,
-          destination: this.formData.destination.name,
-          carrierType: this.formData.arrier_type,
-          cargoType: this.formData.cargo_type,
-          pickupFacility: this.formData.pickup_facility,
-          trucksNeeded: parseInt(this.formData.total_trucks, 0),
-          clientType: 'Web',
-          device: this.isMobile() ? 'mobile' : 'web',
-        });
-      }
       await axios
         .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
             this.success = true;
+            if (payload.status === -1) {
+              mixpanel.track('Shipment Request Rejected', {
+                transporterId: parseInt(this.$route.params.owner_id, 0),
+                phone: parseInt(this.formData.client_phone, 0),
+                email: this.formData.transporter_user_email,
+                name: this.formData.quotation.name,
+                source: this.$route.query.utm_source,
+                shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                quotationId: parseInt(thisformData.id, 0),
+                pickup: this.formData.pickup.name,
+                destination: this.formData.destination.name,
+                carrierType: this.formData.carrier_type,
+                cargoType: this.formData.cargo_type,
+                pickupFacility: this.formData.pickup_facility,
+                trucksNeeded: this.formData.total_trucks,
+                reason: this.bidInfo.rejection_reasons.reason,
+                reasonId: this.bidInfo.rejection_reasons.reason.id,
+                clientType: 'Web',
+                device: this.isMobile() ? 'mobile' : 'web',
+              });
+            } else if (payload.status === 1) {
+              mixpanel.track('Bids Placed', {
+                transporterId: parseInt(this.$route.params.owner_id, 0),
+                phone: parseInt(this.formData.client_phone, 0),
+                email: this.formData.transporter_user_email,
+                name: this.formData.quotation.name,
+                source: this.$route.query.utm_source,
+                shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                quotationId: parseInt(this.formData.id, 0),
+                pickup: this.formData.pickup.name,
+                destination: this.formData.destination.name,
+                carrierType: this.formData.arrier_type,
+                cargoType: this.formData.cargo_type,
+                pickupFacility: this.formData.pickup_facility,
+                trucksNeeded: parseInt(this.formData.total_trucks, 0),
+                clientType: 'Web',
+                device: this.isMobile() ? 'mobile' : 'web',
+              });
+            }
           }
         })
         .catch(err => {
