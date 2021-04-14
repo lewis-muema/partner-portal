@@ -361,14 +361,10 @@ export default {
         };
       } else if (i === -1 && this.declineRes.length > 0) {
         for (let r = 0; r < this.declineRes.length; r++) {
-          if (this.declineRes[r] === 'The price is too low') {
-            decliners.push({ reason_id: 1, reason: null });
-          } else if (this.declineRes[r] === "I don't have any available trucks") {
-            decliners.push({ reason_id: 2, reason: null });
-          } else if (this.declineRes[r] === 'Client did not provide sufficient information') {
-            decliners.push({ reason_id: 3, reason: null });
-          } else if (this.declineRes[r] === 'Other reason') {
-            decliners.push({ reason_id: 4, reason: this.openReason });
+          if (this.declineRes[r] === 'Other reason') {
+            decliners.push({ reason_id: r++, reason: this.openReason });
+          } else {
+            decliners.push({ reason_id: r++, reason: null });
           }
         }
 
