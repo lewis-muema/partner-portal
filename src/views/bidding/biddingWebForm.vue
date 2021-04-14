@@ -362,9 +362,9 @@ export default {
       } else if (i === -1 && this.declineRes.length > 0) {
         for (let r = 0; r < this.declineRes.length; r++) {
           if (this.declineRes[r] === 'Other reason') {
-            decliners.push({ reason_id: r++, reason: this.openReason });
+            decliners.push({ reason_id: r + 1, reason: this.openReason });
           } else {
-            decliners.push({ reason_id: r++, reason: null });
+            decliners.push({ reason_id: r + 1, reason: null });
           }
         }
 
