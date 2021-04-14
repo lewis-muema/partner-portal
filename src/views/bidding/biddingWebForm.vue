@@ -422,7 +422,6 @@ export default {
         .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
-            console.log(res);
             this.success = true;
           }
         })
