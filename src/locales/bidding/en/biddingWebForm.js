@@ -1,6 +1,6 @@
 const translation = {
   confirm_offer: 'Confirm Offer',
-  how_many_trucks: 'How many trucks do you have available for this order?',
+  how_many_trucks: 'How many trucks do you want to avail for this order?',
   trucks: 'Trucks',
   truck: 'Truck',
   clients_price_offer_per_truck: 'The client’s price offer per truck',
@@ -26,6 +26,7 @@ const translation = {
   no_containers_returned: 'No, containers will not be returned',
   clients_price_offer: "The client's price offer",
   your_bids: 'Your Bid',
+  your_offer: 'Your Offer',
   trucks_available: 'How many trucks do you have available for this order?',
   bid_amount_per_truck: 'What is your bid amount per truck?',
   total_bid_amount: 'Your total bid amount',
@@ -46,6 +47,12 @@ const translation = {
   accept_offer: 'Accept Offer',
   reason_for_declining: 'Please let us know the reason for declining this bid',
   cancel: 'Cancel',
+  no_of_20_containers_moved: 'Number of 20ft containers being moved',
+  no_of_40_containers_moved: 'Number of 40ft containers being moved',
+  per_truck: 'Per Truck',
+  rejected: 'Rejected Offer',
+  unfortunately_rejected: 'Unfortunately, offer was rejected',
+  experience_is_better: 'This experience is better on the Sendy Freight App',
 };
 
 export default translation;

@@ -23,7 +23,6 @@
           <div class="bid-details">
             <span v-if="formData.quotation.status === 1" class="request-status review">{{ $t('biddingWebForm.under_review') }}</span>
             <span v-else-if="formData.quotation.status === 2" class="request-status accepted">{{ $t('biddingWebForm.awarded') }}</span>
-            <span v-else-if="formData.quotation.status === -1" class="request-status failed">{{ $t('biddingWebForm.failed') }}</span>
 
             <div class="bid-details-shipment">
               <div class="bid-information">
@@ -56,9 +55,9 @@
                 <div v-if="formData.cargo_type_options.length > 1">
                   <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
                   <p class="bid-details-content">{{ formData.cargo_type_options[0].value === true ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
-                  <p class="bid-details-subheading">Number of 20ft containers being moved</p>
+                  <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_20_containers_moved') }}</p>
                   <h2 class="bid-details-content">{{ formData.cargo_type_options[1].value }}</h2>
-                  <p class="bid-details-subheading">Number of 40ft containers being moved</p>
+                  <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_40_containers_moved') }}</p>
                   <h2 class="bid-details-content">{{ formData.cargo_type_options[2].value }}</h2>
                 </div>
                 <div v-if="formData.offer_amount > 0 && formData.is_negotiable">
@@ -91,7 +90,7 @@
                   <span v-if="formData.is_negotiable !== false">{{ formData.currency }} {{ bidInfo.available_trucks * bidInfo.amount_per_truck }}</span> <span v-else>{{ formData.currency }} {{ bidInfo.available_trucks * formData.offer_amount }} </span>
                 </p>
                 <p class="shipment-heading">
-                  <i>Bid submitted on {{ new Date().toLocaleString() }}</i>
+                  <i>B{{ $t('biddingWebForm.bid_submitted_on') }}{{ new Date().toLocaleString() }}</i>
                 </p>
               </div>
             </div>
@@ -106,7 +105,7 @@
                     <div v-show="formData.offer_amount != null">
                       <p class="bid-details-content">{{ $t('biddingWebForm.clients_price_offer') }}</p>
                       <p class="bid-details-content bold pb-3">
-                        <b>{{ formData.currency }}</b> {{ formData.offer_amount }} Per Truck
+                        <b>{{ formData.currency }}</b> {{ formData.offer_amount }} {{ $t('biddingWebForm.per_truck') }}
                       </p>
                     </div>
                   </div>
@@ -139,16 +138,20 @@
               </div>
               <div v-else>
                 <div v-if="formData.quotation.status !== -1">
-                  <h2 class="submitted__card "><span class=" bid-details-content orange" v-if="formData.is_negotiable !== false">Your offer</span><span class="bid-submitted-heading" v-else>Your Bid</span></h2>
-                  <p><span v-if="formData.is_negotiable != false" class="bid-details-content">What is your bid amount per truck?</span><span v-else class="bid-details-content">The client’s price offer </span></p>
+                  <h2 class="submitted__card ">
+                    <span class=" bid-details-content orange" v-if="formData.is_negotiable !== false">{{ $t('biddingWebForm.your_offer') }}</span><span class="bid-submitted-heading" v-else>{{ $t('biddingWebForm.no_of_containers_moved') }}</span>
+                  </h2>
+                  <p>
+                    <span v-if="formData.is_negotiable != false" class="bid-details-content">{{ $t('biddingWebForm.bid_amount_per_truck') }}</span><span v-else class="bid-details-content">{{ $t('biddingWebForm.clients_price_offer_per_truck') }} </span>
+                  </p>
                   <p class="bid-details-subheading bold pb-3">
                     {{ formData.currency }}
                     <span class="bid-details-content bold pb-3" v-if="formData.is_negotiable !== false">{{ bidDetails.amount_per_truck }}</span>
                     <span class="bid-details-content bold pb-3" v-else>{{ formData.offer_amount }}</span>
                   </p>
-                  <p class="bid-details-content">How many trucks do you want to avail for this order?</p>
-                  <p class="bid-details-subheading bold pb-3">{{ formData.available_trucks }} Trucks</p>
-                  <p class="bid-details-content">Your total bid amount</p>
+                  <p class="bid-details-content">{{ $t('biddingWebForm.how_many_trucks') }}</p>
+                  <p class="bid-details-subheading bold pb-3">{{ formData.available_trucks }}{{ $t('biddingWebForm.trucks') }}</p>
+                  <p class="bid-details-content">{{ $t('biddingWebForm.total_bid_amount') }}</p>
                   <p class="bid-details-subheading bold pb-3">
                     {{ formData.currency }} <span v-if="formData.is_negotiable != false">{{ formData.available_trucks * bidDetails.amount_per_truck }}</span> <span v-else> {{ formData.available_trucks * formData.offer_amount }}</span>
                   </p>
@@ -157,8 +160,10 @@
                   </p>
                 </div>
                 <div v-else>
-                  <p class="bid-submitted-heading">Rejected Offer</p>
-                  <p class="bid-details-subheading"><i>Unfortunately, offer was rejceted</i></p>
+                  <p class="bid-submitted-heading">{{ $t('biddingWebForm.rejected') }}</p>
+                  <p class="bid-details-subheading">
+                    <i>{{ $t('biddingWebForm.unfortunately_rejected') }}</i>
+                  </p>
                 </div>
               </div>
             </div>
@@ -219,10 +224,10 @@
       <div class="banner">
         <div class="banner-section">
           <i @click="mobilebanner = false" class="fas fa-times fa-lg mobile_banner-icon"></i>
-          <p class="mobile-banner_msg">This experience is better on the Sendy Freight App</p>
+          <p class="mobile-banner_msg">{{ $t('biddingWebForm.experience_is_better') }}</p>
         </div>
         <button class="mobile-banner-btn">
-          <span> <a href="https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider">Open App</a> </span>
+          <span> <a :href="link">Open App</a> </span>
         </button>
       </div>
     </div>
@@ -260,6 +265,7 @@ export default {
       otherReason: false,
       mobilebanner: false,
       declineRes: [],
+      link: '',
       declineOptions: [],
       reasonsErr: false,
       openReason: '',
@@ -287,6 +293,7 @@ export default {
     if (this.$route.params.shipment_id !== undefined && this.$route.params.owner_id !== undefined) {
       this.getBid();
       this.declineReasons();
+      this.isAndroid();
     }
   },
   methods: {
@@ -298,6 +305,21 @@ export default {
     },
     show() {
       this.$modal.show('bid-details-modal');
+    },
+    isAndroid() {
+      let device = null;
+      const platform = ['Android', 'iOS'];
+      for (let i = 0; i < platform.length; i++) {
+        if (navigator.platform.indexOf(platform[i]) > -1) {
+          device = platform[i];
+          return device;
+        }
+      }
+      if (device === 'Android') {
+        this.link = 'https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider';
+      } else if (device === 'iOS') {
+        this.link = 'https://apps.apple.com/us/app/sendy-transport/id1088688361';
+      }
     },
     isMobile() {
       if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {

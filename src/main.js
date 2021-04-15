@@ -60,7 +60,6 @@ Vue.use(Dialog);
 Vue.use(Upload);
 Vue.use(Radio);
 Vue.use(RadioGroup);
-Vue.use(RadioButton);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Icon);
