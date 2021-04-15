@@ -70,8 +70,8 @@
               <div class="orders__col-head distance uppercase">{{ $t('pending.distance') }}</div>
               <div class="orders__col-head pick-date uppercase">{{ $t('pending.pickup_date') }}</div>
               <div class="orders__col-head truck uppercase">{{ $t('pending.truck') }}</div>
-              <div class="orders__col-head orderNo">{{ $t('pending.order_number') }}r</div>
-              <div class="orders__col-head price-align uppercase">{{ $t('pending.quotation') }}</div>
+              <div class="orders__col-head orderNo">{{ $t('pending.order_number') }}</div>
+              <div class="orders__col-head price-align uppercase"> {{ $t('pending.quotation') }}</div>
               <div class="orders__col-head bid-in uppercase"></div>
               <div class="orders__col-head center-action uppercase">{{ $t('pending.action') }}</div>
             </div>
