@@ -46,6 +46,12 @@ const translation = {
   accept_bid: 'FR_Accept Bid',
   reason_for_declining: 'FR_Please let us know the reason for declining this bid',
   cancel: 'FR_Cancel',
+  no_of_20_containers_moved: 'FR_Number of 20ft containers being moved',
+  no_of_40_containers_moved: 'FR_Number of 40ft containers being moved',
+  per_truck: 'FR_Per Truck',
+  rejected: 'FR_Rejected Offer',
+  unfortunately_rejected: 'FR_Unfortunately, offer was rejected',
+  experience_is_better: 'FR_This experience is better on the Sendy Freight App',
 };
 
 export default translation;
