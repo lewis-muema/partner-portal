@@ -688,21 +688,25 @@ export default {
         .post(`${this.auth}v1/list_owner_orders/`, orderPayload, this.config)
         .then(response => {
           const unescaped = response.data;
-          if (this.ordercount.length === 0) {
-            const multiplier = response.data.count / 100;
-            for (let i = 0; i < Math.floor(multiplier); i++) {
-              this.ordercount.push(`${i * 100} - ${(i + 1) * 100}`);
+          if (response.data.status) {
+            if (this.ordercount.length === 0) {
+              const multiplier = response.data.count / 100;
+              for (let i = 0; i < Math.floor(multiplier); i++) {
+                this.ordercount.push(`${i * 100} - ${(i + 1) * 100}`);
+              }
+              this.ordercount.push(`${Math.floor(multiplier) * 100} - ${response.data.count}`);
+              this.orderRange = this.ordercount[0];
             }
-            this.ordercount.push(`${Math.floor(multiplier) * 100} - ${response.data.count}`);
-            this.orderRange = this.ordercount[0];
-          }
-          unescaped.data.forEach((row, i) => {
-            this.orders.push(this.populateOrders(row, i));
-            this.responseNo = 1;
+            unescaped.data.forEach((row, i) => {
+              this.orders.push(this.populateOrders(row, i));
+              this.responseNo = 1;
+              this.loadingStatus = false;
+            });
+            if (this.$route.path === '/orders') {
+              this.refreshOrders(ordpayload);
+            }
+          } else {
             this.loadingStatus = false;
-          });
-          if (this.$route.path === '/orders') {
-            this.refreshOrders(ordpayload);
           }
         })
         .catch(error => {
