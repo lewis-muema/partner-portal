@@ -1,43 +1,43 @@
 <template>
   <div>
-    <p class="order-creation-title">Place Order</p>
+    <p class="order-creation-title">{{ $t('orderCreation.place_order') }}</p>
     <div>
-      <p class="request-advance-input-labels">Pick up location</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.pickup_location') }}</p>
       <gmap-autocomplete
         id="pickup"
         :options="map_options"
-        placeholder="Enter a pickup location"
+        :placeholder="$t('orderCreation.enter_pickup_location')"
         :select-first-on-enter="true"
         class="request-advance-inputs order-creation-location-inputs"
         @place_changed="setLocation($event, 0)"
       />
     </div>
     <div>
-      <p class="request-advance-input-labels">Destination</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.destination') }}</p>
       <gmap-autocomplete
         id="destination"
         :options="map_options"
-        placeholder="Enter a pickup location"
+        :placeholder="$t('orderCreation.enter_pickup_location')"
         :select-first-on-enter="true"
         class="request-advance-inputs order-creation-location-inputs"
         @place_changed="setLocation($event, 1)"
       />
     </div>
     <div>
-      <p class="request-advance-input-labels">Pick up time for your order</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.pickup_time_for_order') }}</p>
       <el-date-picker
         v-model="schedule_time"
         class="request-advance-inputs"
         type="datetime"
         format="dd-MM-yyyy h:mm a"
-        placeholder="As soon as possible"
+        :placeholder="$t('orderCreation.asap')"
         prefix-icon="el-icon-date"
         :default-time="default_value"
         :picker-options="dueDatePickerOptions"
       />
     </div>
     <div>
-      <p class="request-advance-input-labels">What is the weight of the load</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.weight_load') }}</p>
       <el-input
         type="text"
         class="request-advance-inputs"
@@ -45,12 +45,12 @@
         onkeypress="return (event.charCode >= 48 && event.charCode <= 57) || event.charCode == 46"
       >
         <template class="pricing-prepend" slot="append">
-          Tonnes
+          {{ $t('orderCreation.tonnes') }}
         </template>
       </el-input>
     </div>
     <div>
-      <p class="request-advance-input-labels">What is the cost for this order?</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.cost_for_order') }}</p>
       <el-input
         type="text"
         class="request-advance-inputs"
@@ -63,11 +63,11 @@
       </el-input>
     </div>
     <div>
-      <p class="request-advance-input-labels">Select the client to assign this order</p>
+      <p class="request-advance-input-labels"> {{ $t('orderCreation.select_client_assign') }}</p>
       <clientSearch :type="'biz'" />
     </div>
     <div>
-      <p class="request-advance-input-labels">Select the carrier type</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.select_carrier_type') }}</p>
       <el-select
         name=""
         id="request-advance-input-carrier"
@@ -78,28 +78,28 @@
       </el-select>
     </div>
     <div>
-      <p class="request-advance-input-labels">Will the container be returned?</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.container_returned') }}</p>
       <el-select
         name=""
         id="request-advance-input-return"
         class="request-advance-inputs"
         v-model="containerReturn"
       >
-        <el-option value="Yes">Yes</el-option>
-        <el-option value="No">No</el-option>
+        <el-option value="Yes">{{ $t('orderCreation.yes') }}</el-option>
+        <el-option value="No">{{ $t('orderCreation.no') }}</el-option>
       </el-select>
     </div>
     <div>
-      <p class="request-advance-input-labels">Upload the {{ documentNameFilter(0) }}</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.upload_the') }} {{ documentNameFilter(0) }}</p>
       <div class="partner-upload-module" @click="transfer(documents[0].id)" v-if="documents[0].percentage === 0">
-        <p class="upload-documents-modal-click-text"><i class="el-icon-upload upload-documents-modal-click-icon"></i> Upload document</p>
+        <p class="upload-documents-modal-click-text"><i class="el-icon-upload upload-documents-modal-click-icon"></i> {{ $t('orderCreation.upload_document') }}</p>
       </div>
       <input
         type="file"
         name
         value
         class="form-control"
-        placeholder="Log Book"
+        :placeholder="$t('orderCreation.log_book') "
         accept="application/pdf"
         style="display:none;"
         id="upload-terms-doc"
@@ -116,16 +116,16 @@
       </div>
     </div>
     <div>
-      <p class="request-advance-input-labels">Upload the {{ documentNameFilter(1) }}</p>
+      <p class="request-advance-input-labels">{{ $t('orderCreation.upload_the') }} {{ documentNameFilter(1) }}</p>
       <div class="partner-upload-module" @click="transfer(documents[1].id)" v-if="documents[1].percentage === 0">
-        <p class="upload-documents-modal-click-text"><i class="el-icon-upload upload-documents-modal-click-icon"></i> Upload document</p>
+        <p class="upload-documents-modal-click-text"><i class="el-icon-upload upload-documents-modal-click-icon"></i> {{ $t('orderCreation.upload_document') }}</p>
       </div>
       <input
         type="file"
         name
         value
         class="form-control"
-        placeholder="Log Book"
+        :placeholder="$t('orderCreation.log_book')"
         accept="application/pdf"
         style="display:none;"
         id="upload-bill-doc"
@@ -143,7 +143,7 @@
     </div>
     <div v-for="(doc, index) in documents" :key="index">
       <div v-if="index > 1">
-        <p class="request-advance-input-labels">Upload {{ doc.document_name }}</p>
+        <p class="request-advance-input-labels">{{ $t('orderCreation.upload') }} {{ doc.document_name }}</p>
         <div class="order-creation-porgress" v-if="doc.percentage > 0">
           <div>
             <i class="fa fa-file-pdf pdf-icon"></i>
@@ -156,32 +156,32 @@
       </div>
     </div>
     <div class="upload-documents-add-trigger" @click="$modal.show('upload-documents')">
-      <i class="el-icon-circle-plus upload-documents-add-trigger-icon" @click="$modal.hide('upload-documents')"></i> Add document
+      <i class="el-icon-circle-plus upload-documents-add-trigger-icon" @click="$modal.hide('upload-documents')"></i> {{ $t('orderCreation.add_document') }}
     </div>
     <modal name="upload-documents" :height="400" :width="400" transition="slide" :pivot-y="0.5">
       <div class="upload-documents-modal">
         <div class="upload-documents-modal-top-row">
-          <p class="upload-documents-modal-top-row-title">Upload document</p>
+          <p class="upload-documents-modal-top-row-title">{{ $t('orderCreation.upload_document') }}</p>
           <i class="el-icon-close upload-documents-modal-top-row-close" @click="$modal.hide('upload-documents')"></i>
         </div>
-        <p class="upload-documents-modal-top-input-labels">Select type of document</p>
+        <p class="upload-documents-modal-top-input-labels">{{ $t('orderCreation.select_type') }}</p>
         <select name="" id="" class="upload-documents-modal-top-inputs" v-model="documentType">
           <option v-for="(document, index) in uploadDocuments" :key="index" :value="document.document_name">
             {{ document.document_name }}
           </option>
         </select>
-        <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">Name of the document</p>
+        <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">{{ $t('orderCreation.name_document') }}</p>
         <input type="text" class="upload-documents-modal-top-inputs" v-if="documentType === 'Other'" v-model="documentTitle">
-        <p class="upload-documents-modal-top-input-labels">Upload document</p>
+        <p class="upload-documents-modal-top-input-labels">{{ $t('orderCreation.upload_document') }}</p>
         <div class="partner-upload-module" @click="transfer('upload-doc')">
-          <p class="upload-documents-modal-click-text"><i class="el-icon-upload upload-documents-modal-click-icon"></i> Upload document</p>
+          <p class="upload-documents-modal-click-text"><i class="el-icon-upload upload-documents-modal-click-icon"></i> {{ $t('orderCreation.upload_document') }}</p>
         </div>
         <input
           type="file"
           name
           value
           class="form-control"
-          placeholder="Log Book"
+          :placeholder="$t('orderCreation.log_Book')"
           accept="application/pdf"
           style="display:none;"
           id="upload-doc"
@@ -192,7 +192,7 @@
     <div>
       <button class="order-creation-button" :class="submitStatus && !uploadProgress ? 'partner-request-advance-button-active' : 'partner-request-advance-button-inactive'" @click="submitRequest">
         <i class="el-icon-loading" v-if="uploadProgress"></i>
-        Place Order
+        {{ $t('orderCreation.place_order') }}
       </button>
     </div>
     <notify />
@@ -229,6 +229,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       containerReturn: '',
@@ -371,7 +372,7 @@ export default {
       const files = document.getElementById('upload-doc')['files'];
       if (!files.length) {
         // eslint-disable-next-line no-alert
-        return alert('Please choose a file to upload first.');
+        return alert(this.$t('orderCreation.choose_file_upload'));
       }
       const file = files[0];
       const fileType = files[0]['type'];
@@ -409,10 +410,10 @@ export default {
           clearInterval(this.intervals[index]);
           if (this.documents[index]) {
             if (err) {
-              this.notify(3, 0, `There was an error uploading your document: ${err.message}`);
+              this.notify(3, 0, `${this.$t('orderCreation.error_uploading_document')}: ${err.message}`);
               this.documents[index].percentage = 0;
             } else {
-              this.notify(3, 1, 'Successfully uploaded document.');
+              this.notify(3, 1, this.$t('orderCreation.successfully_uploaded_doc'));
               this.documents[index].percentage = 100;
               this.documentTitle = '';
             }
@@ -425,7 +426,7 @@ export default {
       const files = document.getElementById(this.documents[index].id)['files'];
       if (!files.length) {
         // eslint-disable-next-line no-alert
-        return alert('Please choose a file to upload first.');
+        return alert(this.$t('orderCreation.choose_file_upload'));
       }
       interval = setInterval(() => {
         this.documents.forEach((row, i) => {
@@ -455,10 +456,10 @@ export default {
           clearInterval(this.intervals[index]);
           if (this.documentName(this.documents[index].id)) {
             if (err) {
-              this.notify(3, 0, `There was an error uploading your document: ${err.message}`);
+              this.notify(3, 0, `${this.$t('orderCreation.error_uploading_document')}: ${err.message}`);
               this.documents[index].percentage = 0;
             } else {
-              this.notify(3, 1, 'Successfully uploaded document.');
+              this.notify(3, 1, this.$t('orderCreation.successfully_uploaded_doc'));
               this.documents[index].percentage = 100;
             }
           }
@@ -561,7 +562,7 @@ export default {
       if ((this.documentTitle && this.documentType === 'Other') || this.documentType !== 'Other' || id === 'upload-terms-doc' || id === 'upload-bill-doc') {
         document.getElementById(id).click();
       } else {
-        this.notify(3, 0, 'Please enter the name of the document');
+        this.notify(3, 0, this.$t('orderCreation.enter_document_name'));
       }
     },
   },

@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     stats_loading_title() {
-      return 'Fetching Data ....';
+      return this.$t('document.fetching');
     },
   },
   methods: {},

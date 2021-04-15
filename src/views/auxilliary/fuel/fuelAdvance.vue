@@ -1,11 +1,11 @@
 <template>
   <div class="fuel-advance-container">
-    <div class="fuel-advance-heading">Fuel Advance</div>
+    <div class="fuel-advance-heading">{{ $t('fuelAdvance.fuel_advance') }}</div>
     <div class="fuel-advance-menu">
-      <div class="fuel-advance-menu-tabs" :class="activeTab === 'pending' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'pending'">Pending</div>
-      <div class="fuel-advance-menu-tabs" :class="activeTab === 'approved' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'approved'">Approved</div>
-      <div class="fuel-advance-menu-tabs" :class="activeTab === 'rejected' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'rejected'">Rejected</div>
-      <div class="fuel-advance-menu-tabs" :class="activeTab === 'placerequest' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'placerequest'">Place Request</div>
+      <div class="fuel-advance-menu-tabs" :class="activeTab === 'pending' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'pending'">{{ $t('fuelAdvance.pending') }}</div>
+      <div class="fuel-advance-menu-tabs" :class="activeTab === 'approved' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'approved'">{{ $t('fuelAdvance.approved') }}</div>
+      <div class="fuel-advance-menu-tabs" :class="activeTab === 'rejected' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'rejected'">{{ $t('fuelAdvance.rejected') }}</div>
+      <div class="fuel-advance-menu-tabs" :class="activeTab === 'placerequest' ? 'fuel-advance-menu-tabs-active' : ''" @click="activeTab = 'placerequest'">{{ $t('fuelAdvance.place_request') }}</div>
     </div>
     <div class="fuel-advance-components">
       <Pending v-if="activeTab === 'pending'" />

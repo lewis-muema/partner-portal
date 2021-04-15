@@ -30,7 +30,7 @@
           <el-table-column>
             <template slot-scope="scope">
               <el-button size="mini" class="update-license" @click="openUpdateDialog(insuranceData[scope.$index])">
-                Update
+                {{ $t('insurance.update') }}
               </el-button>
             </template>
           </el-table-column>
@@ -44,11 +44,11 @@
                 <img class="upload_image" src="https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg" id="imagePreview" />
                 <i class="el-icon-upload"></i>
                 <div v-if="fileName !== ''">{{ uploading_text }}</div>
-                <div v-else>Drop file here or <em>click to upload</em></div>
+                <div v-else> {{ $t('insurance.drop_files') }}<em> {{ $t('insurance.click_to_upload') }}</em></div>
               </el-upload>
               <div v-if="fileName !== ''">
                 <span class="reward-upload-label">
-                  Document uploaded successfully .
+                  {{ $t('insurance.document_uploaded_successfully') }}
                 </span>
               </div>
             </div>
@@ -56,21 +56,21 @@
           <div class="main-dialog">
             <div class="request-refund-inputs">
               <p>
-                Insurance certificate number
+                {{ $t('insurance.insurance_certificate_number') }}
               </p>
               <input type="text" class="request_refund-inputs" v-model="certificate_no" />
             </div>
             <div class="request-refund-inputs">
               <p>
-                Policy number
+                {{ $t('insurance.policy_number') }}
               </p>
               <input type="text" class="request_refund-inputs" v-model="policy_no" />
             </div>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-          <el-button @click="closeDialog()" class="cancel-refund">Cancel</el-button>
-          <el-button type="primary" @click="initiateUpload()" class="confirm-refund">Update</el-button>
+          <el-button @click="closeDialog()" class="cancel-refund">{{ $t('insurance.cancel') }}</el-button>
+          <el-button type="primary" @click="initiateUpload()" class="confirm-refund"> {{ $t('insurance.update') }}</el-button>
         </span>
       </el-dialog>
       <notify />
@@ -100,6 +100,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       insuranceImageData: {},
@@ -110,7 +111,7 @@ export default {
       rider: '',
       fileName: '',
       errorObj: '',
-      uploading_text: 'Change',
+      uploading_text: this.$t('insurance.change'),
     };
   },
   created() {
@@ -162,9 +163,9 @@ export default {
     },
     uploadInsuarance() {
       if (Object.keys(this.insuranceImageData).length === 0) {
-        this.notify(3, 0, 'Kindly upload insurance document');
+        this.notify(3, 0, this.$t('insurance.kindly_upload_insurance'));
       } else {
-        this.uploading_text = 'Loading Preview ...';
+        this.uploading_text = this.$t('insurance.loading_preview');
         const file = this.insuranceImageData.file;
         const fileType = file.type;
         const fileName = this.sanitizeFilename(file.name);
@@ -181,13 +182,13 @@ export default {
           },
           (err, data) => {
             if (err) {
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('insurance.change');
               console.log('There was an error uploading your photo: ', err.message);
             } else {
               const imageId = 'imagePreview';
               const src = `https://sendy-partner-docs.s3-eu-west-1.amazonaws.com/${this.fileName}`;
               $(`#${imageId}`).attr('src', src);
-              this.uploading_text = 'Change';
+              this.uploading_text = this.$t('insurance.change');
             }
             // eslint-disable-next-line comma-dangle
           }
@@ -196,7 +197,7 @@ export default {
     },
     initiateUpload() {
       if (Object.keys(this.insuranceImageData).length === 0 || this.certificate_no === '' || this.policy_no === '') {
-        this.notify(3, 0, 'Kindly provide all values');
+        this.notify(3, 0, this.$t('insurance.provide_all'));
       } else {
         const payload = {
           riderId: parseInt(this.rider, 10),
@@ -210,7 +211,7 @@ export default {
         axios
           .post(`${process.env.NODE_PARTNER_API}partner_portal/update_document`, payload, this.config)
           .then(res => {
-            this.notify(3, 1, 'Insurance document submitted');
+            this.notify(3, 1, this.$t('insurance.insurance_document_submitted'));
             this.dialogVisible = false;
             this.show_loading = true;
             this.getInsuranceData();
@@ -218,7 +219,7 @@ export default {
           })
           .catch(error => {
             this.errorObj = error.response;
-            this.notify(3, 0, 'Request Refund Error . Try again');
+            this.notify(3, 0, this.$t('insurance.request_refund_error'));
           });
       }
     },
@@ -237,10 +238,10 @@ export default {
       this.fileName = '';
       const src = 'https://s3-eu-west-1.amazonaws.com/sendy-promo-images/frontend_apps/grey_bg_01.jpg';
       $(`#${imageId}`).attr('src', src);
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('insurance.change');
     },
     handleClose(done) {
-      this.$confirm('Are you sure to close this dialog?')
+      this.$confirm(this.$t('insurance.sure_close_dialog'))
         .then(_ => {
           done();
           this.closeDialog();
@@ -253,7 +254,7 @@ export default {
     },
     handleRemove(file, fileList) {
       this.insuranceImageData = {};
-      this.uploading_text = 'Change';
+      this.uploading_text = this.$t('insurance.change');
     },
     insuaranceIconStatus(data) {
       const currentTime = moment();
@@ -289,15 +290,15 @@ export default {
       const currentTime = moment();
       let text = '';
       if ((data.insurance.expiry_date === null || data.insurance.expiry_date === '') && data.insurance.renewal_status === -1) {
-        text = 'Kindly upload insurance document';
+        text = this.$t('insurance.kindly_upload_insurance');
       } else if (data.insurance.renewal_status === 0) {
-        text = 'Pending approval';
+        text = this.$t('insurance.pending_approval');
       } else if (data.insurance.renewal_status === 2) {
-        text = 'Document declined : Kindy re-upload or contact Customer Support';
+        text = this.$t('insurance.document_declined');
       } else if (currentTime.diff(data.insurance.expiry_date, 'days') >= 0) {
-        text = `Insurance document expires on ${data.insurance.expiry_date} `;
+        text = this.$t('insurance.insurance_document_expires', { expiry_date: data.insurance.expiry_date });
       } else {
-        text = `Insurance document expires on ${data.insurance.expiry_date} `;
+        text = this.$t('insurance.insurance_document_expires', { expiry_date: data.insurance.expiry_date });
       }
       return text;
     },
