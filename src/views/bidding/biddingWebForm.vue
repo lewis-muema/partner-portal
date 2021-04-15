@@ -295,7 +295,7 @@ export default {
     if (this.$route.params.shipment_id !== undefined && this.$route.params.owner_id !== undefined) {
       this.getBid();
       this.declineReasons();
-      this.isAndroid();
+      this.detectMobileDevice();
     }
   },
   methods: {
@@ -308,17 +308,12 @@ export default {
     show() {
       this.$modal.show('bid-details-modal');
     },
-    isAndroid() {
-      let device = null;
-      const platform = ['Android', 'iOS'];
-      for (let i = 0; i < platform.length; i++) {
-        if (navigator.platform.indexOf(platform[i]) > -1) {
-          device = platform[i];
-        }
-      }
-      if (device === 'Android') {
+    detectMobileDevice() {
+      if (this.isAndroid) {
         this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
-      } else if (device === 'iOS') {
+      }
+
+      if (this.detectIOS) {
         this.link = 'https://apps.apple.com/ke/app/sendy-freight/id1558197723';
       }
     },
@@ -328,6 +323,20 @@ export default {
       } else {
         return false;
       }
+    },
+    isAndroid() {
+      let resp = false;
+      if (navigator.userAgent.match(/Android/i)) {
+        resp = true;
+      }
+      return resp;
+    },
+    detectIOS() {
+      let resp = false;
+      if (navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) || navigator.userAgent.match(/iPod/i)) {
+        resp = true;
+      }
+      return resp;
     },
     hide(name) {
       this.rejectBid = false;
@@ -345,7 +354,7 @@ export default {
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
     async declineReasons() {
-      axios.get('https://authtest.sendyit.com/freight-service/rejection_reasons?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8').then(res => {
+      axios.get(`${this.auth}freight-service/rejection_reasons?authkey=${process.env.BIDDING_API_KEY}`).then(res => {
         this.declineOptions = res.data.data;
       });
     },
