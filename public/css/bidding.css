@@ -22,7 +22,10 @@
 }
 .webForm__map {
   justify-self: center;
-  width: 40%;
+  width: 100%;
+}
+#map {
+  margin-bottom: 20px;
 }
 .bid-details-shipment {
   display: flex;
@@ -147,8 +150,8 @@ input[type='number'] {
   color: #ff7900;
   border: 1px solid #ff7900;
 }
-.bidForm__submitBtn--decline,
-span {
+
+.span-font {
   font-size: 18px;
 }
 .bidForm__submitBtn--accept {
@@ -234,7 +237,7 @@ input[type='radio'] {
 .bid-details-modal {
   padding: 20px 0px;
 }
-span {
+.span-icon {
   cursor: pointer;
 }
 
@@ -330,7 +333,10 @@ span {
     width: 80%;
     margin: auto;
   }
-
+  .webForm__map {
+    padding-bottom: 200px;
+    width: 40%;
+  }
   .bid-details-modal {
     width: 100%;
   }
