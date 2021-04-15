@@ -10,13 +10,13 @@
         <label class="verificationForm__label">{{ $t('signup.enter_verification_code') }}</label>
         <input class="verificationForm__input" type="number" :placeholder="$t('signup.enter_code')" v-model="code" />
         <span v-show="info" class="info">Invalid code, please confirm and try again</span>
-        <button class="verificationForm__btn" @click.once.prevent="show()">{{ $t('signup.verify_code') }}</button>
+        <button class="verificationForm__btn" @click.prevent="verifyCode">{{ $t('signup.verify_code') }}</button>
       </form>
       <modal name="verification-modal" class="verification-modal" :click-to-close="false" transition="slide" :height="600" :pivot-y="0.45" :pivot-x="0.5">
         <div class="app_modal">
           <div class="modal-head">
             <h3 class="app_modal-heading-text">A better experience for you!</h3>
-            <i class="fas fa-times  fa-2x modal-icon" @click="verifyCode"></i>
+            <i class="fas fa-times  fa-2x modal-icon" @click="handleUserStatusUpdate"></i>
           </div>
           <img class="modal-banner" src="https://images.sendyit.com/partner_portal/images/details_banner.svg" alt="" />
           <div class="modal-store">
@@ -84,7 +84,7 @@ export default {
           .then(res => {
             if (res.data.status === true) {
               this.notify(3, 1, 'Phone verification was successful! You will be automatically logged in your account ...');
-              this.handleUserStatusUpdate();
+              this.show();
             } else {
               this.notify(3, 0, res.data.message);
             }
@@ -95,6 +95,7 @@ export default {
       }
     },
     handleUserStatusUpdate() {
+      this.hide();
       const payload = {
         uuid: this.recipient.uuid,
         password: this.$store.getters.getNotificationRecipientCode,
