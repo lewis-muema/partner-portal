@@ -147,9 +147,10 @@ input[type='number'] {
   color: #ff7900;
   border: 1px solid #ff7900;
 }
-.bidForm__submitBtn--decline,
-span {
+
+.span-font{
   font-size: 18px;
+
 }
 .bidForm__submitBtn--accept {
   background: #ff7900;
@@ -234,7 +235,7 @@ input[type='radio'] {
 .bid-details-modal {
   padding: 20px 0px;
 }
-span {
+.span-icon {
   cursor: pointer;
 }
 

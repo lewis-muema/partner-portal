@@ -72,26 +72,27 @@
 
             <hr />
             <div v-if="initialSubmit === true">
-              <h2 class="bid-submitted-heading">{{ $t('biddingWebForm.your_bids') }}</h2>
-              <h2 class="bid-details-subheading">{{ $t('biddingWebForm.trucks_available') }}</h2>
-              <p class="bid-details-content">{{ bidInfo.available_trucks }} {{ bidInfo.available_trucks === 1 ? 'Truck' : 'Trucks' }}</p>
-              <h2 class="bid-details-subheading">{{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
-              <div v-if="formData.is_negotiable === false">
-                <p class="bid-details-content">{{ formData.currency }} {{ formData.offer_amount }}</p>
-                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.total_bid_amount') }}</h2>
-                <p class="bid-details-content">{{ formData.currency }} {{ bidInfo.available_trucks * formData.offer_amount }}</p>
-              </div>
-              <div v-else>
-                <p class="bid-details-content">{{ formData.currency }} {{ bidInfo.amount_per_truck }}</p>
-                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.total_bid_amount') }}</h2>
-                <p class="bid-details-content">{{ formData.currency }} {{ bidInfo.available_trucks * bidInfo.amount_per_truck }}</p>
-              </div>
-
               <div v-if="rejected">
                 <p class="bid-details-content">{{ $t('biddingWebForm.successfully_rejected_bid') }}</p>
                 <i>
                   <p class="timestamp">{{ $t('biddingWebForm.forfeit_submitted') }} {{ new Date().toLocaleString() }}</p>
                 </i>
+              </div>
+              <div v-else>
+                <h2 class="bid-submitted-heading">{{ $t('biddingWebForm.your_bids') }}</h2>
+                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.trucks_available') }}</h2>
+                <p class="bid-details-content">{{ bidInfo.available_trucks }} {{ bidInfo.available_trucks === 1 ? 'Truck' : 'Trucks' }}</p>
+                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
+                <p class="bid-details-content">
+                  {{ formData.currency }} <span v-if="formData.is_negotiable !== false">{{ bidInfo.amount_per_truck }}</span><span v-else> {{ formData.offer_amount }}</span>
+                </p>
+                <h2 class="bid-details-subheading">{{ $t('biddingWebForm.total_bid_amount') }}</h2>
+                <p class="bid-details-content">
+                  <span v-if="formData.is_negotiable !== false">{{ formData.currency }} {{ bidInfo.available_trucks * bidInfo.amount_per_truck }}</span> <span v-else>{{ formData.currency }} {{ bidInfo.available_trucks * formData.offer_amount }} </span>
+                </p>
+                <p class="shipment-heading">
+                  <i>Bid submitted on {{ new Date().toLocaleString() }}</i>
+                </p>
               </div>
             </div>
             <div v-else>
@@ -124,7 +125,7 @@
                       </select>
                       <input class="bidForm__input right-radius" type="number" v-model="bidDetails.amount_per_truck" />
                     </div>
-                    <span v-show="amountError" class="alert">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
+                    <span v-show="bidDetails.trucks_available < 1" class="alert">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
                   </div>
                 </div>
                 <div class="bidForm__btn">
@@ -140,9 +141,9 @@
                 <div v-if="formData.quotation.status !== -1">
                   <h2 class="submitted__card "><span class=" bid-details-content orange" v-if="formData.is_negotiable !== false">Your offer</span><span class="bid-submitted-heading" v-else>Your Bid</span></h2>
                   <p><span v-if="formData.is_negotiable != false" class="bid-details-content">What is your bid amount per truck?</span><span v-else class="bid-details-content">The client’s price offer </span></p>
-                  <p>
+                  <p class="bid-details-subheading bold pb-3">
                     {{ formData.currency }}
-                    <span class="bid-details-content bold pb-3" v-if="formData.is_negotiable != false">{{ bidDetails.amount_per_truck }}</span>
+                    <span class="bid-details-content bold pb-3" v-if="formData.is_negotiable !== false">{{ bidDetails.amount_per_truck }}</span>
                     <span class="bid-details-content bold pb-3" v-else>{{ formData.offer_amount }}</span>
                   </p>
                   <p class="bid-details-content">How many trucks do you want to avail for this order?</p>
@@ -152,7 +153,7 @@
                     {{ formData.currency }} <span v-if="formData.is_negotiable != false">{{ formData.available_trucks * bidDetails.amount_per_truck }}</span> <span v-else> {{ formData.available_trucks * formData.offer_amount }}</span>
                   </p>
                   <p class="shipment-heading">
-                    <i>Bid submitted on {{ new Date().toLocaleString() }}</i>
+                    <i>Bid submitted on {{ formData.quotation.date_bid }}</i>
                   </p>
                 </div>
                 <div v-else>
@@ -204,12 +205,11 @@
                   </el-checkbox-group>
                   <textarea v-show="otherReason" class="reason_textarea" name="" id="" cols="30" rows="5" v-model="openReason" placeholder="Please enter reason"></textarea>
                 </div>
-
-                <div class="modal__btns">
-                  <button class="bidForm__submitBtn bidForm__submitBtn--accept" @click="bidOffer(-1)">{{ $t('biddingWebForm.decline_bid') }}</button>
-                  <span @click="hide('bid-details-modal-2')" class="orange">{{ $t('biddingWebForm.cancel') }}</span>
-                </div>
               </ul>
+              <div class="modal__btns">
+                <button class="bidForm__submitBtn bidForm__submitBtn--accept" @click="bidOffer(-1)">{{ $t('biddingWebForm.decline_bid') }}</button>
+                <span @click="hide('bid-details-modal-2')" class="orange">{{ $t('biddingWebForm.cancel') }}</span>
+              </div>
             </div>
           </div>
         </modal>
@@ -246,20 +246,16 @@ export default {
       trucks: 0,
       bid_amount: null,
       total_amount: 0,
-      errorMessage: '',
       otherReason: false,
-      amountError: false,
       declineRes: [],
       declineOptions: [],
+      reasonsErr: false,
       openReason: '',
       rejectBid: null,
       rejected: false,
       bidInfo: {},
       submitted: false,
-      confirmed: false,
-      truckValidate: false,
       initialSubmit: false,
-      amountValidate: false,
       success: false,
       date: '',
       errObj: '',
@@ -289,14 +285,7 @@ export default {
       this.$modal.show('bid-details-modal-2');
     },
     show() {
-      if ((this.bidDetails.available_trucks > 0 && (this.formData.offer_amount > 0 || this.bidDetails.amount_per_truck > 0)) || (this.formData.is_negotiable === true && this.bidDetails.amount_per_truck > 0)) {
-        this.$modal.show('bid-details-modal');
-      } else {
-        this.amountError = true;
-        setTimeout(() => {
-          this.amountError = false;
-        }, 3000);
-      }
+      this.$modal.show('bid-details-modal');
     },
     isMobile() {
       if (navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/webOS/i) || navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i)) {
@@ -309,25 +298,7 @@ export default {
       this.rejectBid = false;
       this.$modal.hide(name);
     },
-    truckValidation() {
-      this.bidDetails.available_trucks--;
-      this.truckValidate = true;
-      if (this.bidDetails.available_trucks <= 0) {
-        setTimeout(() => {
-          this.truckValidate = false;
-        }, 2000);
-      }
-    },
-    formValidation() {
-      this.acceptOffer();
 
-      if (this.bidDetails.available_trucks <= 0 || this.bidDetails.available_trucks <= 0) {
-        this.formValidate = true;
-        setTimeout(() => {
-          this.amountValidate = false;
-        }, 2000);
-      }
-    },
     submitBid() {
       this.hide('bid-details-modal');
     },
@@ -338,17 +309,6 @@ export default {
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=300x250&markers=color:0xF17F3A%7Clabel:P%7C
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
-    acceptOffer() {
-      this.$modal.show('bid-details-modal');
-    },
-    rejectedOffer() {
-      this.$modal.show('bid-details-modal');
-      this.rejectBid = true;
-    },
-    rejectOffer() {
-      this.rejected = true;
-      this.bidOffer();
-    },
     async declineReasons() {
       axios.get('https://authtest.sendyit.com/freight-service/rejection_reasons?authkey=VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8').then(res => {
         this.declineOptions = res.data.data;
@@ -356,6 +316,8 @@ export default {
     },
     async bidOffer(i) {
       this.hide('bid-details-modal');
+      this.hide('bid-details-modal-2');
+      this.initialSubmit = true;
       const decliners = [];
       if (i === 1) {
         this.bidInfo = {
@@ -365,7 +327,9 @@ export default {
           transporter_id: this.$route.params.owner_id,
           status: 1,
         };
-      } else if (i === -1 && this.declineRes.length > 0) {
+      } else if (i === -1) {
+        this.rejected = true;
+
         for (let r = 0; r < this.declineRes.length; r++) {
           if (this.declineRes[r] === 'Other reason') {
             decliners.push({ reason_id: r + 1, reason: this.openReason });
@@ -383,9 +347,9 @@ export default {
       }
 
       const payload = JSON.stringify(this.bidInfo);
-
+      console.log(payload);
       await axios
-        .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
+        // .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
             this.success = true;
@@ -440,6 +404,7 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
+          this.formData.quotation.status = 0;
 
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
@@ -475,6 +440,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import '../../../public/css/bidding.css';
 </style>
