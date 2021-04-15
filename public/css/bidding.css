@@ -80,20 +80,20 @@
   align-items: center;
   padding: 4px 0px 10px 0px;
 }
-input {
+.bid-input {
   font-size: 18px;
   font-weight: 600;
   border: 0.7px solid #b6b5b4;
 }
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
+.bid-input::-webkit-outer-spin-button,
+.bid-input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
 /* Firefox */
-input[type='number'] {
+.bid-input[type='number'] {
   -moz-appearance: textfield;
 }
 
@@ -215,7 +215,7 @@ input[type='number'] {
   align-items: center;
   width: 90%;
 }
-input[type='radio'] {
+.bid.input[type='radio'] {
   height: 25px;
   width: 16px;
   vertical-align: middle;
@@ -328,7 +328,84 @@ input[type='radio'] {
 .orange {
   color: #ff7900;
 }
+
+.mobile-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  color: #f5f6fa;
+  padding: 0 5px;
+  box-shadow: 0 -2px 16px rgba(47, 54, 64, 0.39);
+  transition: 400ms;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.banner {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.banner-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+}
+.mobile_banner-icon {
+  color: rgb(65, 61, 61);
+}
+.mobile-banner_msg {
+  color: #fff;
+  font-size: 15px;
+  color: #6f6a6a;
+  padding-left: 10px;
+}
+.mobile-banner a {
+  color: #f5f6fa;
+}
+
+.mobile-banner-btn {
+  background: rgba(103, 183, 248, 1);
+  padding: 2px 2px;
+  font-size: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+}
+
 @media only screen and (min-width: 653px) {
+  .banner {
+    width: 90%;
+  }
+  .mobile-banner_msg {
+    padding-left: 20px;
+  }
+
+  .mobile-banner {
+    width: 40%;
+    margin: auto;
+    border-radius: 5px;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+  }
+  .banner-section {
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mobile-banner-btn {
+    background: rgba(103, 183, 248, 1);
+    padding: 10px 10px;
+    width: 40%;
+  }
   #bidding {
     width: 80%;
     margin: auto;
