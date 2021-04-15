@@ -11,12 +11,12 @@
                 v-model="from"
                 input-class="filtIn"
                 id="dtfrom"
-                placeholder="From"
+                :placeholder="$t('savings.from')"
                 name="from"
               ></datepicker>
             </div>
             <div class="col-5">
-              <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+              <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('savings.to')" name="to"></datepicker>
             </div>
             <div class="subFilt col-2">
               <button
@@ -37,7 +37,7 @@
             class="savings__row"
             :columns="columns"
             :rows="rows"
-            :title="`Savings for ${this.sessionInfo.name} for ${monthPeriod}`"
+            :title="$t('savings.saving_for', { name: this.sessionInfo.name, monthPeriod: monthPeriod })"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -45,6 +45,7 @@
             :sortable="true"
             :exact-search="true"
             :exportable="true"
+            :locale="getLanguage"
           ></datatable>
         </table>
       </div>
@@ -54,12 +55,12 @@
             v-model="from"
             input-class="filtIn"
             id="dtfrom"
-            placeholder="From"
+            :placeholder="$t('savings.from')"
             name="from"
           ></datepicker>
         </div>
         <div class="col-12 padding margin-bottom">
-          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+          <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('savings.to')" name="to"></datepicker>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
           <button
@@ -73,13 +74,13 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No savings found for this period</p>
+        <p v-if="rows.length === 0" class="no-loans">{{ $t('savings.no_savings') }}</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
-                <th>Amount</th>
-                <th>Balance</th>
+                <th>{{ $t('savings.amount') }}</th>
+                <th>{{ $t('savings.balance') }}</th>
               </tr>
             </thead>
             <tr class="divider">
@@ -103,6 +104,7 @@ import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 import timezone from '../mixins/timezone';
@@ -123,9 +125,10 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
-      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }],
+      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: this.$t('savings.date'), field: 'pay_time' }, { label: this.$t('savings.amount'), field: 'amount' }, { label: this.$t('savings.balance'), field: 'running_balance' }, { label: this.$t('savings.narrative'), field: 'pay_narrative' }],
       page: 1,
       rows: [],
       from: '',
@@ -135,6 +138,9 @@ export default {
       monthPeriod: '',
       errorObj: '',
     };
+  },
+  computed: {
+    ...mapGetters(['getLanguage']),
   },
   created() {
     if (localStorage.sessionData) {
@@ -158,7 +164,7 @@ export default {
     },
     filt() {
       if (this.to === '' || this.from === '') {
-        this.error = 'Please select both a from and to date';
+        this.error = this.$t('savings.please_select_both');
         setTimeout(() => {
           this.error = '';
         }, 4000);
@@ -169,7 +175,7 @@ export default {
     },
     fetchSavings(requestType) {
       const payload = this.definePayload(requestType);
-      this.displayFetchingStatus('Fetching savings', 0);
+      this.displayFetchingStatus(this.$t('savings.fetch_savings'), 0);
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/savings`, payload, this.config)
         .then(response => {

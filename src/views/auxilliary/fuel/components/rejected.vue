@@ -43,7 +43,7 @@
             "
             @click="changeTab(index, 'details')"
           >
-            Details
+            {{ $t('fuelPending.details') }}
           </div>
           <div
             class="declined-requests-actions-menu-items"
@@ -52,22 +52,22 @@
             "
             @click="changeTab(index, 'reason')"
           >
-            Reason
+            {{ $t('fuelPending.reason') }}
           </div>
         </div>
         <div class="declined-requests-actions-tabs">
           <div v-if="order.activeMenuTab === 'details'">
             <div class="declined-requests-actions-table-header">
               <div class="declined-requests-standard-column-adv">DD/TT</div>
-              <div class="declined-requests-large-column-adv">Order</div>
-              <div class="declined-requests-standard-column-adv">Amount</div>
-              <div class="declined-requests-standard-column-adv">Station</div>
-              <div class="declined-requests-standard-column-adv">Fuel type</div>
+              <div class="declined-requests-large-column-adv">{{ $t('fuelPending.order') }}</div>
+              <div class="declined-requests-standard-column-adv">{{ $t('fuelPending.amount') }}</div>
+              <div class="declined-requests-standard-column-adv">{{ $t('fuelPending.station') }}</div>
+              <div class="declined-requests-standard-column-adv">{{ $t('fuelPending.fuel_type') }}</div>
               <div class="declined-requests-standard-column-adv">
-                Order type
+                {{ $t('fuelPending.order_type') }}
               </div>
               <div class="declined-requests-standard-column-adv">
-                Percentage
+                {{ $t('fuelPending.percentage') }}
               </div>
             </div>
             <div class="declined-requests-actions-table-body">
@@ -132,7 +132,7 @@
                   {{ order.admin_details.reason }}
                 </span>
                 <span v-else>
-                  No reason given
+                  {{ $t('fuelPending.no_reason_given') }}
                 </span>
               </div>
             </div>
@@ -141,7 +141,7 @@
       </div>
     </div>
     <div v-if="orders.length === 0 && !loadingStatus" class="no-requests-tab">
-      There are no requests
+      {{ $t('fuelPending.no_requests') }}
     </div>
   </div>
 </template>
@@ -170,6 +170,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       pollActive: false,

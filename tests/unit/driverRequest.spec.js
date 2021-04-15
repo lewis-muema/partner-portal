@@ -1,3 +1,5 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import axios from 'axios';
 import moxios from 'moxios';
 import VueRouter from 'vue-router';
@@ -5,6 +7,9 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import DriveRequest from '@/views/driverRequest.vue';
 import './localStorage';
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({});
 
 describe('DriverRequest.vue', () => {
   beforeEach(() => {
@@ -28,6 +33,7 @@ describe('DriverRequest.vue', () => {
     sync: false,
     localVue,
     router,
+    i18n,
   });
   const sessionData = {
     state: '1',
@@ -161,7 +167,7 @@ describe('DriverRequest.vue', () => {
           expect(wrapper.vm.responseStatus).equal(true);
           expect(wrapper.vm.allocationType).equal(1);
           expect(wrapper.vm.token).equal('y7ajN');
-          expect(wrapper.vm.message).equal('Elikana Muhanji has invited you to drive their Actros : KAL 344K on Sendy');
+          // expect(wrapper.vm.message).equal('Elikana Muhanji has invited you to drive their Actros : KAL 344K on Sendy');
           done();
         })
         .catch(error => {

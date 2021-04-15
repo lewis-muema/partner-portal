@@ -38,4 +38,13 @@ export default {
   setFreightStatus(state, freight_status) {
     state.freight_status = freight_status;
   },
+  setLanguage(state, language) {
+    state.language = language;
+  },
+  setNotificationRecipientCode(state, val) {
+    state.recipient_code = val;
+  },
+  setNotificationRecipientPhone(state, val) {
+    state.recipient_phone = val;
+  },
 };

@@ -12,13 +12,14 @@ import VuePageTitle from 'vue-page-title';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
-import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, Input, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, Icon, RadioButton } from 'element-ui';
+import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, Input, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, Icon, RadioButton, CheckboxGroup, Checkbox } from 'element-ui';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import VueSignaturePad from 'vue-signature-pad';
 import * as VueGoogleMaps from 'vue2-google-maps';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import i18n from './i18n';
 
 // configure language
 locale.use(lang);
@@ -63,6 +64,8 @@ Vue.use(RadioButton);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Icon);
+Vue.use(CheckboxGroup);
+Vue.use(Checkbox);
 Vue.use(Loading.directive);
 
 Vue.prototype.$confirm = MessageBox.confirm;
@@ -81,5 +84,6 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
+  i18n,
   render: h => h(App),
 }).$mount('#app');

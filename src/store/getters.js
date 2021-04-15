@@ -38,4 +38,13 @@ export default {
   getFreightStatus(state) {
     return state.freight_status;
   },
+  getLanguage(state) {
+    return state.language;
+  },
+  getNotificationRecipientCode(state) {
+    return state.recipient_code;
+  },
+  getNotificationRecipientPhone(state) {
+    return state.recipient_phone;
+  },
 };

@@ -3,38 +3,38 @@
     <verifier />
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div v-if="phase === 1">
-      <p class="signature--intro__header">Welcome to Sendy</p>
-      <p class="signature--body__par">Welcome to Sendy! Before you get started here are the terms and conditions for <br />using our service. It is important to us that both partners(you) and customers <br />have the best possible experience</p>
-      <p class="signature--body__par">By checking on the boxes you acknowledge you have <br />read and agree with the following terms:</p>
+      <p class="signature--intro__header">{{ $t('signature.welcome') }} </p>
+      <p class="signature--body__par" v-html="$t('signature.welcome_to_sendy')"></p>
+      <p class="signature--body__par" v-html="$t('signature.by_checking_on_boxes')"></p>
       <div class="signature--terms">
         <div class="signature--options">
           <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="partnerStatus" />
-          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/partner-contract/service-agreement-ke">Partner Contract</a> This states the driver responsibilities, Payment terms and penalties</span>
+          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/partner-contract/service-agreement-ke" > {{ $t('signature.partner_contract') }}</a> {{ $t('signature.states_driver_responsibility') }}</span>
         </div>
         <div class="signature--options">
           <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="termStatus" />
-          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/terms">Terms and conditions</a></span>
+          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/terms"> {{ $t('signature.terms_and_conditions') }}</a></span>
         </div>
         <div class="signature--options">
           <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="privacyStatus" />
-          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/privacy">Data and Privacy</a></span>
+          <span class="doc-link"><a class="doc-title" target="”_blank”" href="https://www.sendyit.com/privacy"> {{ $t('signature.data_and_privacy') }}</a></span>
         </div>
         <br />
       </div>
       <div class="signature--terms signature--buttons">
-        <button class="decline-button interaction-buttons" @click="decline()">DECLINE</button>
-        <button class="interaction-buttons" :class="acceptStatus ? 'accept-button' : 'accept-button-inactive'" @click="phase = 2">ACCEPT</button>
+        <button class="decline-button interaction-buttons" @click="decline()">{{ $t('signature.decline') }}</button>
+        <button class="interaction-buttons" :class="acceptStatus ? 'accept-button' : 'accept-button-inactive'" @click="phase = 2">{{ $t('signature.accept') }}</button>
       </div>
     </div>
     <div v-else>
       <div class="back-arrow" @click="phase = 1">
         <i class="material-icons">arrow_back</i>
       </div>
-      <p class="signature--body__par">Sign to acknowledge that you have read, understood and accepted the partner terms and conditions for the use of Sendy</p>
+      <p class="signature--body__par">{{ $t('signature.sign_to_acknowledge') }}</p>
       <VueSignaturePad class="signature-pad" width="400px" height="400px" ref="signaturePad" :options="{ onEnd }" />
       <div class="signature--terms signature--buttons">
-        <button class="decline-button interaction-buttons" @click="undo()">CLEAR</button>
-        <button class="interaction-buttons" :class="submitStatus ? 'accept-button' : 'accept-button-inactive'" @click="save()">SUBMIT</button>
+        <button class="decline-button interaction-buttons" @click="undo()">{{ $t('signature.clear') }}</button>
+        <button class="interaction-buttons" :class="submitStatus ? 'accept-button' : 'accept-button-inactive'" @click="save()">{{ $t('signature.submit') }}</button>
       </div>
     </div>
     <notify />
@@ -69,6 +69,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
     };
@@ -162,9 +163,9 @@ export default {
         (err, data) => {
           this.submitStatus = true;
           if (err) {
-            this.notify(3, 0, `There was an error uploading your photo: ${err.message}`);
+            this.notify(3, 0, this.$t('signature.error_uploading_photo', { message: err.message }));
           } else {
-            this.notify(3, 1, 'Signature submitted');
+            this.notify(3, 1, this.$t('signature.signature_submitted'));
             this.submitSignature(`t&c_owner_${this.sessionInfo.id}.png`);
           }
           // eslint-disable-next-line comma-dangle
@@ -181,11 +182,11 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/management/post_partner_documents`, payload, this.config)
         .then(response => {
-          this.notify(3, 1, 'Contract signed successfully');
+          this.notify(3, 1, this.$t('signature.signature_submitted'));
           this.$router.push({ path: '/' });
         })
         .catch(error => {
-          this.notify(3, 0, 'Failed to sign contract');
+          this.notify(3, 0, this.$t('signature.failed_sign_contract'));
         });
     },
   },

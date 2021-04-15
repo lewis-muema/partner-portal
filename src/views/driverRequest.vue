@@ -11,11 +11,11 @@
         >
           <div class="driverRequest__request-radio">
             <input type="radio" name="choice" value="1" v-model="statValue" id="req-accept" />
-            <span>Accept</span>
+            <span>{{ $t('driverRequest.accept') }}</span>
           </div>
           <div class="driverRequest__request-radio">
             <input type="radio" name="choice" value="2" v-model="statValue" id="req-reject" />
-            <span>Reject</span>
+            <span>{{ $t('driverRequest.reject') }}</span>
           </div>
         </div>
         <div
@@ -28,14 +28,14 @@
             class="btn btn-primary"
             @click="submitResponse();"
             v-if="allocationType !== 3"
-          >Submit</button>
+          >{{ $t('driverRequest.submit') }}</button>
           <button
             type="button"
             name="button"
             class="btn btn-primary"
             @click="submitResponse();"
             v-else
-          >Sign up with Sendy</button>
+          > {{ $t('driverRequest.signup_with_sendy') }}</button>
         </div>
       </div>
     </div>
@@ -61,6 +61,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
     };
@@ -89,13 +90,13 @@ export default {
               if (response.data.data.vehicle_details.registration_no) {
                 vehicleRegistration = response.data.data.vehicle_details.registration_no;
               }
-              this.message = `${response.data.data.owner_details.name} has invited you to drive their ${vehicleModel} : ${vehicleRegistration} on Sendy`;
+              this.message = this.$t('driverRequest.owner_has_invited', { owner: response.data.data.owner_details.name, vehicleModel, vehicleRegistration });
             } else if (this.allocationStatus === 2) {
-              this.message = 'Rider invite accepted';
+              this.message = this.$t('driverRequest.rider_invite_accepted');
             } else if (this.allocationStatus === 3) {
-              this.message = 'Rider invite rejected';
+              this.message = this.$t('driverRequest.rider_invite_rejected');
             } else if (this.allocationStatus === 4) {
-              this.message = 'Rider invite cancelled by the owner';
+              this.message = this.$t('driverRequest.rider_invite_cancelled');
             }
           } else {
             this.message = response.data.msg;
@@ -104,7 +105,7 @@ export default {
           this.message = err.response.data.message;
         });
       } else {
-        this.message = 'The link is invalid, Please ask the owner to re-invite you';
+        this.message = this.$t('driverRequest.link_invalid');
       }
     },
     submitResponse() {
