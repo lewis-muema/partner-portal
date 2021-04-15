@@ -347,9 +347,8 @@ export default {
       }
 
       const payload = JSON.stringify(this.bidInfo);
-      console.log(payload);
       await axios
-        // .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
+        .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
             this.success = true;
