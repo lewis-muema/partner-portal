@@ -195,13 +195,14 @@
             </div>
           </div>
         </modal>
-        <modal name="bid-details-modal-2" class="bid-details-modal" :height="600" transition="slide" :pivot-y="0" :pivot-x="0.45">
+        <modal name="bid-details-modal-2" class="bid-details-modal" :height="700" transition="slide" :pivot-y="0" :pivot-x="0.45">
           <div class="decline__modal">
             <div class="modal-head">
               <h2 class="modal__heading">{{ $t('biddingWebForm.decline_bid') }}</h2>
               <i @click="hide('bid-details-modal-2')" class="fas fa-times fa-2x"></i>
             </div>
             <p class="shipment__details">{{ $t('biddingWebForm.reason_for_declining') }}</p>
+            <span v-show="reasonNo" class="alert">Kindly select atleast one reason</span>
             <div>
               <ul class="decline__reasons">
                 <div class="decline__reasons">
@@ -212,7 +213,7 @@
                 </div>
               </ul>
               <div class="modal__btns">
-                <button class="bidForm__submitBtn bidForm__submitBtn--accept" @click="bidOffer(-1)">{{ $t('biddingWebForm.decline_bid') }}</button>
+                <button class="bidForm__submitBtn bidForm__submitBtn--accept" @click="declineRes.length < 1 ? (reasonNo = true) : bidOffer(-1)">{{ $t('biddingWebForm.decline_bid') }}</button>
                 <span @click="hide('bid-details-modal-2')" class="orange">{{ $t('biddingWebForm.cancel') }}</span>
               </div>
             </div>
@@ -272,6 +273,7 @@ export default {
       rejectBid: null,
       rejected: false,
       bidInfo: {},
+      reasonNo: false,
       submitted: false,
       initialSubmit: false,
       success: false,
@@ -436,7 +438,9 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
-          this.mobilebanner = true;
+          if (this.isMobile) {
+            this.mobilebanner = true;
+          }
 
           if (this.formData.quotation.status === 0) {
             this.submitted = false;

@@ -62,9 +62,9 @@ export default {
     },
     viewApps(i) {
       if (i === 1) {
-        this.link = 'https://apps.apple.com/us/app/sendy-transport/id1088688361';
+        this.link = 'https://apps.apple.com/ke/app/sendy-freight/id1558197723';
       } else if (i === 2) {
-        this.link = 'https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider';
+        this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
       }
     },
     async verifyCode() {
