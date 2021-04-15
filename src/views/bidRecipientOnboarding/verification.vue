@@ -12,6 +12,20 @@
         <span v-show="info" class="info">Invalid code, please confirm and try again</span>
         <button class="verificationForm__btn" @click.prevent="verifyCode">{{ $t('signup.verify_code') }}</button>
       </form>
+      <modal name="verification-modal" class="verification-modal" :click-to-close="false" transition="slide" :height="600" :pivot-y="0.45" :pivot-x="0.5">
+        <div class="app_modal">
+          <div class="modal-head">
+            <h3 class="app_modal-heading-text">A better experience for you!</h3>
+            <i class="fas fa-times  fa-2x modal-icon" @click="handleUserStatusUpdate"></i>
+          </div>
+          <img class="modal-banner" src="https://images.sendyit.com/partner_portal/images/details_banner.svg" alt="" />
+          <div class="modal-store">
+            <a :href="link" @click="viewApps(1)" class="modal-app-links"> <img class="modal-img-store" src="https://images.sendyit.com/partner_portal/images/app_store.svg" alt="" /> </a>
+            <a :href="link" @click="viewApps(2)" class="modal-app-links"> <img class="modal-img-store" src="https://images.sendyit.com/partner_portal/images/google_play.svg" alt="" /> </a>
+          </div>
+        </div>
+        <p class="app_modal-downlaod">Download the Sendy Freight app to have the best experience on your phone.</p>
+      </modal>
     </div>
     <notify />
   </div>
@@ -33,11 +47,25 @@ export default {
     return {
       code: '',
       info: false,
+      link: '',
     };
   },
   methods: {
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
+    },
+    show() {
+      this.$modal.show('verification-modal');
+    },
+    hide() {
+      this.$modal.hide('verification-modal');
+    },
+    viewApps(i) {
+      if (i === 1) {
+        this.link = 'https://apps.apple.com/ke/app/sendy-freight/id1558197723';
+      } else if (i === 2) {
+        this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
+      }
     },
     async verifyCode() {
       if (this.code.length < 4) {
@@ -55,7 +83,7 @@ export default {
           .then(res => {
             if (res.data.status === true) {
               this.notify(3, 1, 'Phone verification was successful! You will be automatically logged in your account ...');
-              this.handleUserStatusUpdate();
+              this.show();
             } else {
               this.notify(3, 0, res.data.message);
             }
@@ -66,6 +94,7 @@ export default {
       }
     },
     handleUserStatusUpdate() {
+      this.hide();
       const payload = {
         uuid: this.recipient.uuid,
         password: this.$store.getters.getNotificationRecipientCode,
@@ -75,7 +104,7 @@ export default {
         .post(`${process.env.VUE_APP_AUTH}partner-api/parcel/partner-user/verify?authkey=${process.env.BIDDING_API_KEY}`, payload)
         .then(res => {
           if (res.status === 200) {
-             this.handleUserLogin();
+            this.handleUserLogin();
           } else {
             this.notify(3, 0, res.data.message);
           }
@@ -195,6 +224,7 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.6);
 }
 .verificationForm__btn {
+  width: 100%;
   background: #ea7125;
   color: #fff;
   padding: 14px 0px;
@@ -210,11 +240,76 @@ a {
   padding: 10px 0px;
   line-height: 0;
 }
+
+.app_modal {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 30px 20px 30px 20px;
+}
+.app-modal-heading {
+  font-size: 20px;
+  font-weight: 900;
+}
+.modal-icon {
+  justify-self: end;
+}
+.app_modal-downlaod {
+  font-size: 17px;
+  text-align: center;
+  padding: 0px 30px;
+}
+.modal-banner {
+  width: 60%;
+  margin: auto;
+  padding: 20px 0px;
+}
+.modal-img-store {
+  margin: auto;
+  padding: 30px 0px;
+}
+.modal-store {
+  display: flex;
+  flex-direction: row-row;
+  justify-content: space-evenly;
+}
+.modal-head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  text-align: center;
+}
+.modal-icon {
+  color: rgb(111, 108, 108);
+}
+.app_modal-heading-text {
+  width: 90%;
+}
+
 @media only screen and (max-width: 700px) {
   .verification__backIcon {
     position: relative;
     bottom: 50px;
     cursor: pointer;
+  }
+  .app_modal {
+    padding: 10px 10px;
+    width: 100%;
+  }
+  .app-modal-heading {
+    font-size: 10px;
+  }
+  .modal-head {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    text-align: center;
+  }
+  .modal-icon {
+    align-self: flex-end;
+    padding: 10px 0px;
   }
 }
 </style>

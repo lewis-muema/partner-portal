@@ -161,11 +161,6 @@ export default new Router({
       component: bidding,
     },
     {
-      path: '/webform/:shipment_id/:owner_id/',
-      name: 'webform',
-      component: webform,
-    },
-    {
       path: '/recipient/:recipient_id',
       name: 'recipient',
       component: recipient,

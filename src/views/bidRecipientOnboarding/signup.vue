@@ -185,6 +185,7 @@ export default {
   color: #909399;
 }
 .password__btn {
+  width: 100%;
   background: #ea7125;
   color: #fff;
   padding: 10px 0px;
