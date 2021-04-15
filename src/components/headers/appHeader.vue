@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-      <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath && getFlow === 'logistics' && $router.name === 'change_language'">
+      <div class="header-secondary" id="header-secondary" v-if="!showDocumentsPath && getFlow === 'logistics' && $route.name !== 'change_language'">
         <div class="secondary-inner">
           <div class="secnav-container">
             <router-link to="/dashboard" class="secnav-page" :class="showActiveDashboard()">{{ $t('appHeader.dashboard') }} </router-link>
