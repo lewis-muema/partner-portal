@@ -312,7 +312,6 @@ export default {
       for (let i = 0; i < platform.length; i++) {
         if (navigator.platform.indexOf(platform[i]) > -1) {
           device = platform[i];
-          return device;
         }
       }
       if (device === 'Android') {
