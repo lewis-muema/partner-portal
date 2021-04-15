@@ -317,9 +317,9 @@ export default {
         }
       }
       if (device === 'Android') {
-        this.link = 'https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider';
+        this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
       } else if (device === 'iOS') {
-        this.link = 'https://apps.apple.com/us/app/sendy-transport/id1088688361';
+        this.link = 'https://apps.apple.com/ke/app/sendy-freight/id1558197723';
       }
     },
     isMobile() {
