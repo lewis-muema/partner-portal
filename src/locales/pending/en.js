@@ -68,6 +68,7 @@ const translation = {
     bid_update: 'bid updated',
     not_awarded: 'not awarded',
     awarded: 'awarded',
+    cancelled: 'Cancelled',
     sure_cancel_quote: 'Are you sure you want to cancel this quote?',
     yes_cancel_quote: 'yes, cancel quote',
     no: 'no',
