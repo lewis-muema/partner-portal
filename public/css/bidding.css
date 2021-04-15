@@ -22,7 +22,10 @@
 }
 .webForm__map {
   justify-self: center;
-  width: 40%;
+  width: 100%;
+}
+#map {
+  margin-bottom: 20px;
 }
 .bid-details-shipment {
   display: flex;
@@ -148,9 +151,8 @@ input[type='number'] {
   border: 1px solid #ff7900;
 }
 
-.span-font{
+.span-font {
   font-size: 18px;
-
 }
 .bidForm__submitBtn--accept {
   background: #ff7900;
@@ -331,7 +333,10 @@ input[type='radio'] {
     width: 80%;
     margin: auto;
   }
-
+  .webForm__map {
+    padding-bottom: 200px;
+    width: 40%;
+  }
   .bid-details-modal {
     width: 100%;
   }

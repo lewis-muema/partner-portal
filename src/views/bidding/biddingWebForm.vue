@@ -17,7 +17,7 @@
         <h1 class="bid-heading">{{ $t('biddingWebForm.shipment_details') }}</h1>
         <div class="bid" v-if="Object.keys(formData).length > 0">
           <div class="webForm__map">
-            <img :src="createStaticMapUrl()" class="map" />
+            <img :src="createStaticMapUrl()" class="map" id="map" />
           </div>
 
           <div class="bid-details">
@@ -403,7 +403,6 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
-          this.formData.quotation.status = 0;
 
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
