@@ -965,27 +965,13 @@ describe('Statement.vue', () => {
               owner_id: 3, txn: 'AR788B369-82J', payment_method: 12, amount: 60, running_balance: 3779948.2, currency: 'KES', pay_narrative: 'AR788B369-82J-Sale-Auto', pay_time: '2020-04-07T08:38:45.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
               }, {
               owner_id: 3, txn: 'AR788B369-82J', payment_method: 12, amount: -300, running_balance: 3779888.2, currency: 'KES', pay_narrative: 'AR788B369-82J-Sale-Auto', pay_time: '2020-04-07T08:38:45.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'AR71FG198-V4T', payment_method: 12, amount: 60, running_balance: 3779988.2, currency: 'KES', pay_narrative: 'AR71FG198-V4T-Sale-Auto', pay_time: '2020-04-03T12:00:06.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'AR71FG198-V4T', payment_method: 12, amount: -300, running_balance: 3779928.2, currency: 'KES', pay_narrative: 'AR71FG198-V4T-Sale-Auto', pay_time: '2020-04-03T12:00:06.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'AR75A8715-UP2', payment_method: 13, amount: 50, running_balance: 3780228.2, currency: 'KES', pay_narrative: 'AR75A8715-UP2-Sale-Auto', pay_time: '2020-04-03T11:13:07.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'AR75A8715-UP2', payment_method: 0, amount: -250, running_balance: 3780178.2, currency: 'KES', pay_narrative: 'AR75A8715-UP2-Sale-Auto', pay_time: '2020-04-03T11:13:07.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'AR65EX948-D2M', payment_method: 13, amount: 50, running_balance: 3780428.2, currency: 'KES', pay_narrative: 'AR65EX948-D2M-Sale-Auto', pay_time: '2020-04-03T11:09:46.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'AR65EX948-D2M', payment_method: 0, amount: -250, running_balance: 3780378.2, currency: 'KES', pay_narrative: 'AR65EX948-D2M-Sale-Auto', pay_time: '2020-04-03T11:09:46.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
-              }, {
-              owner_id: 3, txn: 'test', payment_method: 11, amount: -400, running_balance: 3780228.2, currency: 'KES', pay_narrative: 'test-Others-Others-test', pay_time: '2020-04-02T04:35:45.000Z', rider_name: 'Sendy Rider', rider_id: 1, vehicle_id: 1347,
             }],
             owner_balance: { rb: [{ currency: 'KES', running_balance: -77857925.8 }], is_withdrawal_day: true, currencies: ['KES'] },
             },
           },
         })
         .then(() => {
-          expect(wrapper.vm.rows.length).equal(9);
+          expect(wrapper.vm.rows.length).equal(2);
           expect(wrapper.vm.rows[0].txn).equal('AR788B369-82J');
           expect(wrapper.vm.rows[0].pay_narrative).equal('AR788B369-82J-Sale-Auto');
           done();

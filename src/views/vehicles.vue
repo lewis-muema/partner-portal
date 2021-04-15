@@ -460,7 +460,7 @@
                 id="vehImgFake"
                 class="btn btn-outline-primary btn-fake"
                 @click="transfer('vehImag')"
-              >{{ $t('vehicles.click_here') }} Click here to upload image</button>
+              >{{ $t('vehicles.click_here') }} </button>
             </div>
             <input
               type="file"

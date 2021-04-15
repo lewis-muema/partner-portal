@@ -43,7 +43,7 @@
         <div class="inner-dialog">
           <div class="drag-image">
             <div v-if="vehicleDialogData.update_carrier_type === 1">
-              <p class="dialog-inner-label"> {{ $t('vehicleStatus.type__of_your') }} {{ vehicleDialogData.vendor_disp_name }}?</p>
+              <p class="dialog-inner-label"> {{ $t('vehicleStatus.type_of_your') }} {{ vehicleDialogData.vendor_disp_name }}?</p>
               <div class="carrier-upper-padding">
                 <div class="vendors-final-outerline">
                   <div class="vendor-final-cards" :class="{ vendor_active_final: activeTab === 'no-box' }" @click="selectCard('no-box', 0)">
