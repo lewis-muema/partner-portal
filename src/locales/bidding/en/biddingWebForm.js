@@ -29,7 +29,7 @@ const translation = {
   trucks_available: 'How many trucks do you have available for this order?',
   bid_amount_per_truck: 'What is your bid amount per truck?',
   total_bid_amount: 'Your total bid amount',
-  successfully_rejected_bid: 'You successfully rejected the bid',
+  successfully_rejected_bid: 'You successfully rejected the shipment request',
   forfeit_submitted: 'Forfeit submitted on',
   enter_your_bid: 'Enter your bid',
   truck_cannot_be_less: 'Truck cannot be less than one',
