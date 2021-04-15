@@ -518,6 +518,7 @@ export default {
         fuel_type_id: this.fuel,
         fuel_station_id: this.address,
         amount: this.amount,
+        partner_user_uuid: this.sessionInfo.uuid,
       };
       return new Promise((resolve, reject) => {
         axios
@@ -545,6 +546,7 @@ export default {
       const payload = {
         quotation_id: this.data.quotation.quotation_id,
         amount: this.amount,
+        partner_user_uuid: this.sessionInfo.uuid,
       };
       return new Promise((resolve, reject) => {
         axios
