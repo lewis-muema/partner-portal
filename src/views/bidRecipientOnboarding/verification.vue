@@ -10,7 +10,7 @@
         <label class="verificationForm__label">{{ $t('signup.enter_verification_code') }}</label>
         <input class="verificationForm__input" type="number" :placeholder="$t('signup.enter_code')" v-model="code" />
         <span v-show="info" class="info">Invalid code, please confirm and try again</span>
-        <button class="verificationForm__btn" @click.prevent="show()">{{ $t('signup.verify_code') }}</button>
+        <button class="verificationForm__btn" @click.prevent.once="show()">{{ $t('signup.verify_code') }}</button>
       </form>
       <modal name="verification-modal" class="verification-modal" :click-to-close="false" transition="slide" :height="600" :pivot-y="0.45" :pivot-x="0.5">
         <div class="app_modal">
