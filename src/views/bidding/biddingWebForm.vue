@@ -113,7 +113,7 @@
                   <p class="bid-details-content">{{ $t('biddingWebForm.trucks_available') }}</p>
                   <div class="bidForm__trucks">
                     <button class="bidForm__truckbtn left-radius" :disabled="bidDetails.available_trucks === 0" @click="bidDetails.available_trucks--"><i class="fas fa-minus"></i></button>
-                    <input class="bidding-form-trucks-input" type="number" placeholder="0" :value="bidDetails.available_trucks" />
+                    <input class="bidding-form-trucks-input bid-input" type="number" placeholder="0" :value="bidDetails.available_trucks" />
                     <button class="bidForm__truckbtn right-radius" @click="bidDetails.available_trucks++"><i class="fas fa-plus"></i></button>
                   </div>
                   <span v-show="bidDetails.available_trucks < 1" class="alert">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
@@ -123,7 +123,7 @@
                       <select class="bidForm__selector" name="currency" id="currency">
                         <option>{{ formData.currency }}</option>
                       </select>
-                      <input class="bidForm__input right-radius" type="number" v-model="bidDetails.amount_per_truck" />
+                      <input class="bidForm__input right-radius bid-input" type="number" v-model="bidDetails.amount_per_truck" />
                     </div>
                     <span v-show="bidDetails.trucks_available < 1" class="alert">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
                   </div>
@@ -215,6 +215,17 @@
         </modal>
       </div>
     </div>
+    <div v-show="mobilebanner" class="mobile-banner ">
+      <div class="banner">
+        <div class="banner-section">
+          <i @click="mobilebanner = false" class="fas fa-times fa-lg mobile_banner-icon"></i>
+          <p class="mobile-banner_msg">This experience is better on the Sendy Freight App</p>
+        </div>
+        <button class="mobile-banner-btn">
+          <span> <a href="https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider">Open App</a> </span>
+        </button>
+      </div>
+    </div>
     <notify />
   </div>
 </template>
@@ -247,6 +258,7 @@ export default {
       bid_amount: null,
       total_amount: 0,
       otherReason: false,
+      mobilebanner: false,
       declineRes: [],
       declineOptions: [],
       reasonsErr: false,
@@ -403,6 +415,7 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
+          this.mobilebanner = true;
 
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
