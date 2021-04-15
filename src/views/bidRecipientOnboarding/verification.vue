@@ -10,7 +10,7 @@
         <label class="verificationForm__label">{{ $t('signup.enter_verification_code') }}</label>
         <input class="verificationForm__input" type="number" :placeholder="$t('signup.enter_code')" v-model="code" />
         <span v-show="info" class="info">Invalid code, please confirm and try again</span>
-        <button class="verificationForm__btn" @click.prevent.once="show()">{{ $t('signup.verify_code') }}</button>
+        <button class="verificationForm__btn" @click.once.prevent="show()">{{ $t('signup.verify_code') }}</button>
       </form>
       <modal name="verification-modal" class="verification-modal" :click-to-close="false" transition="slide" :height="600" :pivot-y="0.45" :pivot-x="0.5">
         <div class="app_modal">
@@ -20,8 +20,8 @@
           </div>
           <img class="modal-banner" src="https://images.sendyit.com/partner_portal/images/details_banner.svg" alt="" />
           <div class="modal-store">
-            <a href="https://apps.apple.com/us/app/sendy-transport/id1088688361" class="modal-app-links"> <img class="modal-img-store" src="https://images.sendyit.com/partner_portal/images/app_store.svg" alt="" /> </a>
-            <a href="https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider" class="modal-app-links"> <img class="modal-img-store" src="https://images.sendyit.com/partner_portal/images/google_play.svg" alt="" /> </a>
+            <a :href="link" @click="viewApps(1)" class="modal-app-links"> <img class="modal-img-store" src="https://images.sendyit.com/partner_portal/images/app_store.svg" alt="" /> </a>
+            <a :href="link" @click="viewApps(2)" class="modal-app-links"> <img class="modal-img-store" src="https://images.sendyit.com/partner_portal/images/google_play.svg" alt="" /> </a>
           </div>
         </div>
         <p class="app_modal-downlaod">Download the Sendy Freight app to have the best experience on your phone.</p>
@@ -47,6 +47,7 @@ export default {
     return {
       code: '',
       info: false,
+      link: '',
     };
   },
   methods: {
@@ -58,6 +59,13 @@ export default {
     },
     hide() {
       this.$modal.hide('verification-modal');
+    },
+    viewApps(i) {
+      if (i === 1) {
+        this.link = 'https://apps.apple.com/us/app/sendy-transport/id1088688361';
+      } else if (i === 2) {
+        this.link = 'https://play.google.com/store/apps/details?id=com.sendy.co.ke.rider';
+      }
     },
     async verifyCode() {
       this.hide();
