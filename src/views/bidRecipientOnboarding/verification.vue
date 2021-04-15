@@ -68,7 +68,6 @@ export default {
       }
     },
     async verifyCode() {
-      this.hide();
       if (this.code.length < 4) {
         this.info = true;
         setTimeout(() => {
