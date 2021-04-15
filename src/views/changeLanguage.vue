@@ -101,18 +101,8 @@ export default {
       const session = this.getSessionInfo;
       const payload = {
         preferred_language: this.locale,
+        owner_id: session.id,
       };
-      switch (this.partner_type) {
-        case 1:
-          payload['rider_id'] = session.id;
-          break;
-        case 2:
-          payload['owner_id'] = session.id;
-          break;
-        default:
-          payload['owner_id'] = session.id;
-          break;
-      }
       axios.post(`${process.env.ADONIS_PRIVATE_API}user-preferences`, payload, this.config).then((response) => {
         this.message = response.status ? this.$t('changeLanguage.language_changed') : this.$t('changeLanguage.something_went_wrong');
         this.notify(3, 1, this.message);
