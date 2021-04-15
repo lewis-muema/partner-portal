@@ -309,11 +309,11 @@ export default {
       this.$modal.show('bid-details-modal');
     },
     detectMobileDevice() {
-      if (this.isAndroid) {
+      if (this.isAndroid()) {
         this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
       }
 
-      if (this.detectIOS) {
+      if (this.detectIOS()) {
         this.link = 'https://apps.apple.com/ke/app/sendy-freight/id1558197723';
       }
     },
@@ -447,7 +447,7 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
-          if (this.isMobile) {
+          if (this.isMobile()) {
             this.mobilebanner = true;
           }
 
