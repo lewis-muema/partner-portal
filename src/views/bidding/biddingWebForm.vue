@@ -226,6 +226,7 @@
 
 <script>
 import axios from 'axios';
+import Mixpanel from 'mixpanel';
 import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
