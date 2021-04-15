@@ -23,7 +23,6 @@ const translation = {
     change: 'change',
     upload: 'Upload',
     uploading: 'Uploading',
-    revenue: 'revenue',
     choose_file_upload: 'Please choose a file to upload first.',
 };
 
