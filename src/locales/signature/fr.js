@@ -8,6 +8,7 @@ const translation = {
     data_and_privacy: 'FR_Data and Privacy',
     sign_to_acknowledge: 'FR_Sign to acknowledge that you have read, understood and accepted the partner terms and conditions for the use of Sendy',
     decline: 'FR_DECLINE',
+    accept: 'FR_ACCEPT',
     clear: 'FR_CLEAR',
     submit: 'FR_SUBMIT',
     error_uploading_photo: 'FR_There was an error uploading your photo: {message}',
