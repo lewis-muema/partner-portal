@@ -412,7 +412,6 @@ export default {
                 pickupFacility: this.formData.pickup_facility,
                 trucksNeeded: parseInt(this.formData.total_trucks, 0),
                 reason: this.bidInfo.rejection_reasons,
-                reasonId: this.bidInfo.rejection_reasons,
                 clientType: 'Web',
                 device: this.isMobile() ? 'mobile' : 'web',
               });
