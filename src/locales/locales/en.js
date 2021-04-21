@@ -35,7 +35,7 @@ import placeRequest from '../auxilliary/en/components/placeRequest';
 import clientSearch from '../freight/en/clientSearch';
 import freightDashboard from '../freight/en/dashboard';
 import orderCreation from '../freight/en/orderCreation';
-import OrderDetails from '../freight/en/orderDetails';
+import orderDetails from '../freight/en/orderDetails';
 import freightOrders from '../freight/en/orders';
 import preferences from '../freight/en/preferences';
 import changeLanguage from '../changeLanguage/en';
@@ -78,7 +78,7 @@ const translation = {
     clientSearch,
     freightDashboard,
     orderCreation,
-    OrderDetails,
+    orderDetails,
     freightOrders,
     preferences,
     changeLanguage,
