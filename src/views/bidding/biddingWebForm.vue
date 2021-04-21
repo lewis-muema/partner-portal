@@ -243,6 +243,7 @@ import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
 import errorHandler from '../../components/errorHandler';
+import logInHeaderVue from '../../components/headers/logInHeader.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
@@ -399,18 +400,18 @@ export default {
             if (payload.status === -1) {
               mixpanel.track('Shipment Request Rejected', {
                 transporterId: parseInt(this.$route.params.owner_id, 0),
-                phone: parseInt(this.formData.client_phone, 0),
+                phone: this.formData.client_phone,
                 email: this.formData.transporter_user_email,
                 name: this.formData.quotation.name,
                 source: this.$route.query.utm_source,
                 shipmentId: parseInt(this.$route.params.shipment_id, 0),
-                quotationId: parseInt(thisformData.id, 0),
+                quotationId: parseInt(this.formData.id, 0),
                 pickup: this.formData.pickup.name,
                 destination: this.formData.destination.name,
                 carrierType: this.formData.carrier_type,
                 cargoType: this.formData.cargo_type,
                 pickupFacility: this.formData.pickup_facility,
-                trucksNeeded: this.formData.total_trucks,
+                trucksNeeded: parseInt(this.formData.total_trucks, 0),
                 reason: this.bidInfo.rejection_reasons.reason,
                 reasonId: this.bidInfo.rejection_reasons.reason.id,
                 clientType: 'Web',
@@ -419,7 +420,7 @@ export default {
             } else if (payload.status === 1) {
               mixpanel.track('Bids Placed', {
                 transporterId: parseInt(this.$route.params.owner_id, 0),
-                phone: parseInt(this.formData.client_phone, 0),
+                phone: this.formData.client_phone,
                 email: this.formData.transporter_user_email,
                 name: this.formData.quotation.name,
                 source: this.$route.query.utm_source,
@@ -427,7 +428,7 @@ export default {
                 quotationId: parseInt(this.formData.id, 0),
                 pickup: this.formData.pickup.name,
                 destination: this.formData.destination.name,
-                carrierType: this.formData.arrier_type,
+                carrierType: this.formData.carrier_type,
                 cargoType: this.formData.cargo_type,
                 pickupFacility: this.formData.pickup_facility,
                 trucksNeeded: parseInt(this.formData.total_trucks, 0),
@@ -460,7 +461,7 @@ export default {
           if (res.status === 200) {
             mixpanel.track('Shipments Request Viewed', {
               transporterId: res.data.quotation.transporter_id,
-              phone: parseInt(res.data.transporter_user_phone, 0),
+              phone: res.data.transporter_user_phone,
               email: res.data.transporter_user_email,
               name: res.data.quotation.name,
               source: this.$route.query.utm_source,
