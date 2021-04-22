@@ -170,7 +170,7 @@
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">{{ $t('preferences.type_of_truck') }}</p>
+              <p class="request-advance-input-labels"> {{ $t('preferences.type_of_truck') }} </p>
               <el-select v-model="vehicle_data[0].carrier_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.carrier_type" v-for="(item, index) in freight_carrier_types" :key="index"></el-option>
               </el-select>
@@ -305,8 +305,7 @@
               <input class="add-vehicle-input" v-model="recipient_data[n].email" />
             </div>
             <div class="vehicle-inner-detail" @click="removeRecipient(n)">
-              <i class="el-icon-close el-icon-delete-vehicle">
-                <span class="remove-vehicle">{{ $t('preferences.remove_user') }}</span></i>
+              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">{{ $t('preferences.remove_user') }}</span></i>
             </div>
           </div>
           <div class="vehicle-inner-detail" @click="addRecipient()" v-if="extra_recipient < 7">
