@@ -552,6 +552,9 @@ export default {
       this.fetchCarrierTypes();
     }
   },
+  mounted() {
+     this.getCountries();
+  },
   methods: {
     getCountries() {
       axios.get(`${this.auth}staffapi/countries`).then(res => {
@@ -685,7 +688,6 @@ export default {
       this.$modal.show('add-vehicle');
     },
     addRecipientsDialog() {
-      this.getCountries();
       this.$modal.show('add-recipient-dialog');
     },
     nextTab(val) {
