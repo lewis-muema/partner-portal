@@ -689,7 +689,6 @@ export default {
       this.$modal.show('add-vehicle');
     },
     addRecipientsDialog() {
-      this.getCountries();
       this.$modal.show('add-recipient-dialog');
     },
     nextTab(val) {
