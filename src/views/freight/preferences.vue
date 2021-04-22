@@ -550,10 +550,8 @@ export default {
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
       this.fetchCarrierTypes();
+      this.getCountries();
     }
-  },
-  mounted() {
-     this.getCountries();
   },
   methods: {
     getCountries() {
