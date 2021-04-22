@@ -492,7 +492,7 @@ export default {
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
-        preferredCountries: ['KE', 'UG', 'TZ'],
+        preferredCountries: [],
         onlyCountries: [],
         ignoredCountries: [],
         autocomplete: 'off',
@@ -550,9 +550,16 @@ export default {
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
       this.fetchCarrierTypes();
+      this.getCountries();
     }
   },
   methods: {
+    getCountries() {
+      axios.get(`${this.auth}staffapi/countries`).then(res => {
+        const countries = res.data.map(country => country.country_code);
+        this.bindProps.onlyCountries = countries;
+      });
+    },
     notify(status, type, message) {
       this.$root.$emit('Notification', status, type, message);
     },
