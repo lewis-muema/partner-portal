@@ -553,9 +553,6 @@ export default {
       this.getCountries();
     }
   },
-  mounted() {
-     this.getCountries();
-  },
   methods: {
     getCountries() {
       axios.get(`${this.auth}staffapi/countries`).then(res => {
