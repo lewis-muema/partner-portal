@@ -50,19 +50,6 @@ export default {
   },
   created() {
     this.fetchWithdrawals();
-    axios
-        .post(`${process.env.VUE_APP_AUTH}partners/owner_withdrawals`, { owner_id: 779 }, this.config)
-        .then(response => {
-          console.log('res', response);
-          const parsedResponse = response.data;
-          if (parsedResponse.status && parsedResponse.owner_withdrawals.length > 0) {
-            this.withdrawals = parsedResponse.owner_withdrawals;
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-          resolve(error);
-        });
   },
   mounted() {
     this.getFailed();
