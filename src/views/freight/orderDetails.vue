@@ -55,11 +55,11 @@
           </div>
           <div class="partner-documents-container">
             <p class="partner-documents-upload-title">{{ $t('orderDetails.documents') }}</p>
-            <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">{{ $t('orderDetails.upload_document') }}</button>
+            <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">{{ $t('orderDetails.upload_documents') }}</button>
             <div class="partner-documents-upload-rows" v-if="data.quotation.documents.length">
-              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.type_of_document') }}</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.type_of_documents') }}</span>
               <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.date') }}</span>
-              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.action') }}</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.actions') }}</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">{{ $t('orderDetails.status') }}</span>
             </div>
             <div class="partner-documents-upload-rows" v-for="(document, index) in data.quotation.documents" :key="`${document.document_name}-${index}`">
