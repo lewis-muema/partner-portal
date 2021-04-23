@@ -27,7 +27,8 @@ const i18n = new VueI18n({
 });
 
 function fetchCountry() {
-  axios('https://extreme-ip-lookup.com/json')
+  const { EXTREME_IP_KEY } = process.env;
+  axios(`https://extreme-ip-lookup.com/json/?key=${EXTREME_IP_KEY}`)
     .then((response) => {
       i18n.locale = response.data.countryCode === 'FR' || response.data.countryCode === 'CI' ? 'fr' : 'en';
       const lang = response.data.countryCode === 'FR' || response.data.countryCode === 'CI' ? `fr-${response.data.countryCode}` : 'en-US,en;q=0.9';
