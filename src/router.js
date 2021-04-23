@@ -28,6 +28,9 @@ import bidding from './views/bidding/biddingWebForm';
 import changeLanguage from './views/changeLanguage';
 import webform from './views/bidding/biddingWebForm.vue';
 import recipient from './views/bidRecipientOnboarding/landing.vue';
+import withdrawalStatus from './views/withdrawalStatus.vue';
+import myWithdrawals from './views/myWithdrawals.vue';
+
 
 Vue.use(Router);
 
@@ -187,6 +190,16 @@ export default new Router({
           component: freightPreferences,
         },
       ],
+    },
+    {
+      path: '/withdrawal-status/:id',
+      name: 'withdrawal-status',
+      component: withdrawalStatus,
+    },
+    {
+      path: '/myWithdrawals',
+      name: 'myWithdrawals',
+      component: myWithdrawals,
     },
   ],
 });

@@ -12,7 +12,7 @@ import VuePageTitle from 'vue-page-title';
 import lang from 'element-ui/lib/locale/lang/en';
 import locale from 'element-ui/lib/locale';
 import 'element-ui/lib/theme-chalk/index.css';
-import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, Input, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, Icon, RadioButton, CheckboxGroup, Checkbox } from 'element-ui';
+import { Rate, Dropdown, DropdownMenu, DropdownItem, Menu, Submenu, MenuItem, Progress, Input, DatePicker, Table, TableColumn, Button, Dialog, ButtonGroup, Upload, MessageBox, Message, Loading, Radio, RadioGroup, Select, Option, Icon, RadioButton, CheckboxGroup, Checkbox, Breadcrumb, BreadcrumbItem, Steps, Step, Tabs, TabPane, Collapse, CollapseItem } from 'element-ui';
 import { ApmVuePlugin } from '@elastic/apm-rum-vue';
 import VueSignaturePad from 'vue-signature-pad';
 import * as VueGoogleMaps from 'vue2-google-maps';
@@ -67,6 +67,15 @@ Vue.use(Icon);
 Vue.use(CheckboxGroup);
 Vue.use(Checkbox);
 Vue.use(Loading.directive);
+Vue.use(Breadcrumb);
+Vue.use(BreadcrumbItem);
+Vue.use(Steps);
+Vue.use(Step);
+Vue.use(Tabs);
+Vue.use(TabPane);
+Vue.use(Collapse);
+Vue.use(CollapseItem);
+
 
 Vue.prototype.$confirm = MessageBox.confirm;
 
