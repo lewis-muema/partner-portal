@@ -97,30 +97,23 @@
               </div>
             </div>
           </div>
-          <div class="stat-cards col-4">
-            <div class="row" style="justify-content: flex-end;">
-              <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                <div class="statement__dash-box dashboard__dash-box">
-                  <span class="dashboard__box-icon statement__box-icon dashboard__box-icon-orange">
-                    <font-awesome-icon :icon="['fas', 'money-bill-alt']" />
-                  </span>
-                  <div class="statement__box-content">
-                    <span class="statement__box-text">{{ $t('statement.can_withdraw') }} :</span>
-                    <br />
-                    <span class="statement__box-number" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
-                  </div>
-                </div>
-              </div>
+          <div class="stat-cards col-6 d-flex flex-column justify-content-between">
+            <div class="d-flex justify-content-end items-align-end">
+              <p style="font-size:14px">
+                {{ $t('statement.can_withdraw') }} <span class="font-weigth-bold text-success" style="font-weigth:600" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
+              </p>
             </div>
-          </div>
-          <div class="stat-cards col-2">
-            <div class="subFilt">
-              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">{{ $t('statement.withdraw_cash') }}</button>
-              <button type="button" id="filtSub" name="button" class="btn btn_primary fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>{{ $t('statement.withdraw_cash') }}</button>
-              <p class="hidden-btn-error"> {{ $t('statement.button_disabled') }}</p>
+            <div class="subFilt d-flex justify-content-end items-align-end">
+              <button type="button" id="filtSub" name="button" class="btn btn_primary col-4 fil-sub fil-sub-1 active-btn" @click="closePopup()" v-if="activeStatus">{{ $t('statement.withdraw_cash') }}</button>
+              <button type="button" id="filtSub" name="button" class="btn btn_primary col-4 fil-sub-disabled fil-sub-1 inactive-btn" @mouseover="showErr(true)" @mouseleave="showErr(false)" v-else>{{ $t('statement.withdraw_cash') }}</button>
+              <p class="hidden-btn-error">{{ $t('statement.button_disabled') }}</p>
+            </div>
+            <div class="d-flex justify-content-end items-align-end mt-2">
+              <router-link to="/myWithdrawals"><p style="color:#EE7D00">View <span v-show="activeStatus">previous</span> withdrawals</p></router-link>
             </div>
           </div>
         </div>
+
         <div class="search-error" id="err">{{ error }}</div>
         <div class="orders__list-currency-filter">
           <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">

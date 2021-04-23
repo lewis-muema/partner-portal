@@ -1,0 +1,166 @@
+<template>
+  <div class="container dash">
+    <el-breadcrumb separator-class="el-icon-arrow-right">
+      <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/statement'}">Statement</el-breadcrumb-item>
+      <el-breadcrumb-item>My Withdrawals</el-breadcrumb-item>
+    </el-breadcrumb>
+    <div class="parent">
+      <div class="child">
+        <h1>My Withdrawals</h1>
+      </div>
+    </div>
+    <div class="tabs">
+      <el-tabs v-model="activeName" >
+        <el-tab-pane label="In Progress" name="first">
+          <withdrawal-item :withdrawals="withdrawals"></withdrawal-item>
+        </el-tab-pane>
+        <el-tab-pane label="Failed" name="second">
+          <withdrawal-item :withdrawals="failed"></withdrawal-item>
+        </el-tab-pane>
+        <el-tab-pane label="Completed" name="third">
+          <withdrawal-item :withdrawals="completed"></withdrawal-item>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
+  </div>
+</template>
+
+<script>
+import withdrawalItem from './withdrawalItem.vue';
+
+export default {
+  components: { withdrawalItem },
+    data() {
+      return {
+        activeName: 'first',
+        processing: [],
+        failed: [],
+        ownerWithdrawals: [],
+        completed: [],
+        withdrawals: [
+          {
+            amount: 900.0,
+            created_at: '2021-04-22 00:34:45.0',
+            currency: 'KES',
+            payment_id: 466367674,
+            payment_method: 'mpesa',
+            ref_no: '14LY2C8M786',
+            status: 'processing',
+          },
+          {
+              amount: 950.0,
+              created_at: '2021-04-22 11:11:44.0',
+              currency: 'KES',
+              payment_id: 0,
+              payment_method: 'mpesa',
+              ref_no: '6AFG6TAIYAA',
+              status: 'failed',
+          },
+          {
+              amount: 950.0,
+              created_at: '2021-04-22 11:15:29.0',
+              currency: 'KES',
+              payment_id: 0,
+              payment_method: 'mpesa',
+              ref_no: '6AFG6TAIYAA',
+              status: 'failed',
+          },
+          {
+              amount: 950.0,
+              created_at: '2021-04-22 11:15:36.0',
+              currency: 'KES',
+              payment_id: 0,
+              payment_method: 'mpesa',
+              ref_no: '6AFG6TAIYAA',
+              status: 'failed',
+          },
+          {
+              amount: 900.0,
+              created_at: '2021-04-22 11:15:44.0',
+              currency: 'KES',
+              payment_id: 0,
+              payment_method: 'mpesa',
+              ref_no: '6AFG6TAIYAA',
+              status: 'failed',
+          },
+          {
+              amount: 900.0,
+              created_at: '2021-04-22 11:16:56.0',
+              currency: 'KES',
+              payment_id: 0,
+              payment_method: 'mpesa',
+              ref_no: '6AFG6TAIYAA',
+              status: 'failed',
+          },
+          {
+              amount: 910.0,
+              created_at: '2021-04-22 11:17:02.0',
+              currency: 'KES',
+              payment_id: 0,
+              payment_method: 'mpesa',
+              ref_no: '6AFG6TAIYAA',
+              status: 'completed',
+          },
+        ],
+      };
+    },
+    created() {
+      this.fetchWithdrawals();
+      this.getFailed();
+      this.getProcessing();
+      this.getCompleted();
+    },
+    methods: {
+      getFailed() {
+        this.failed = this.withdrawals.filter(el => el.status.toLowerCase() === 'failed');
+      },
+      getProcessing() {
+        this.processing = this.withdrawals.filter(el => el.status.toLowerCase() === 'processing');
+      },
+      getCompleted() {
+        this.completed = this.withdrawals.filter(el => el.status.toLowerCase() === 'completed');
+      },
+    },
+    fetchWithdrawals() {
+      return new Promise((resolve, reject) => {
+        /* eslint-disable */
+        const payload = {
+          'owner_Id': this.sessionInfo.id
+        }
+        axios
+          .post(`${process.env.PARTNERS_APP}owner_withdrawals`, payload, this.config)
+          .then(response => {
+            const parsedResponse = response.data;
+            console.log('ownre = ', parsedResponse);
+            if (parsedResponse.status && parsedResponse.owner_withdrawals.length > 0) {
+              this.ownerWithdrawals = parsedResponse.owner_withdrawals;
+            }
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+  };
+</script>
+<style>
+.dash{
+  width: 80%;
+  margin: 5px auto;
+  padding:20px;
+}
+.parent{
+  padding-top: 40px ;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-content: center;
+}
+
+.tabs{
+  padding-top: 40px;
+}
+</style>
