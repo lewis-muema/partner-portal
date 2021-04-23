@@ -1,11 +1,20 @@
 <template lang="html">
   <div>
     <div v-for="(withdrawal, index) in withdrawals" :key="index">
-      <router-link :to="'/withdrawal-status/'+withdrawal.ref_no">
-      <div class="parent">
-        <div class="child1">
-          <h4>{{ withdrawal.created_at }}</h4>
-          <p>{{ withdrawal.payment_method }} - {{ withdrawal.amount }}</p>
+      <router-link class="router" :to="'/withdrawal-status/' + withdrawal.ref_no">
+        <div class="item">
+          <div class="item__info">
+            <h4 class="item__heading">
+              {{ new Date(withdrawal.created_at).toDateString() }}
+            </h4>
+            <p class="item__content">{{ withdrawal.payment_method }} - {{ withdrawal.currency }} {{ withdrawal.amount }}</p>
+          </div>
+          <div class="item__indicator">
+            <p class="item__status">{{ withdrawal.status }}</p>
+            <i v-if="withdrawal.status === 'processing'" class="fas fa-clock icon icon-proc"></i>
+            <i v-else-if="withdrawal.status === 'failed'" class="fas fa-exclamation-circle icon icon-fail"></i>
+            <i v-else-if="withdrawal.status === 'completed'" class="fas fa-check-circle icon icon-comp"></i>
+          </div>
         </div>
         <div class="child2">
           <p>{{ withdrawal.status }}</p>
