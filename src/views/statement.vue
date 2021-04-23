@@ -564,6 +564,9 @@ export default {
       }
     },
     closePopup() {
+      if (this.expiredDocuments.length > 0 || this.disputedOrders.length > 0) {
+        console.log('testing');
+      }
       this.sendWithdrawStatus = false;
       this.payable_amount = true;
       this.payment_options = false;
