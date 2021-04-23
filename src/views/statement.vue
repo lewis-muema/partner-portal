@@ -121,6 +121,7 @@
             </div>
           </div>
         </div>
+
         <div class="search-error" id="err">{{ error }}</div>
         <div class="orders__list-currency-filter">
           <div class="orders__list-currencies" v-for="(currency, index) in currencies" :key="index" @click="activeCurrency = currency" :class="activeCurrency === currency ? 'active-currency' : ''">
