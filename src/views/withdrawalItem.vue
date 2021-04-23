@@ -7,7 +7,7 @@
             <h4 class="item__heading">
               {{ new Date(withdrawal.created_at).toDateString() }}
             </h4>
-            <p class="item__content">{{ withdrawal.payment_method }} - KES {{ withdrawal.amount }}</p>
+            <p class="item__content">{{ withdrawal.payment_method }} - {{ withdrawal.currency }} {{ withdrawal.amount }}</p>
           </div>
           <div class="item__indicator">
             <p class="item__status">{{ withdrawal.status }}</p>
