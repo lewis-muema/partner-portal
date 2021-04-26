@@ -25,4 +25,6 @@ module.exports = {
   VEHICLE_SEARCH: 'https://gate.sendyit.com/solr/vehiclestaging/',
   SOLR_JWT: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJyV01HZVR2WWZMVnlBSWwxOHFPVGFWMnRxMnFDVmpJZiIsIm5hbWUiOiJzb2xyIn0.p7uW30OQBaSEduNerbIaSbaQTdUAa-VkVMQUF4LAPFQ&wt=json&indent=true&row=10&sort=order_id%20desc',
   BIDDING_API_KEY: 'VbgJTYDPsfXGbERAMVeSWHu7uZHwzKW32X27mAStmN6vXEHKm8',
+  EXTREME_IP_KEY: '"dmmw1HciGEhld0FiG2ID"',
+
 };
