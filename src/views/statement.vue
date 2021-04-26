@@ -13,7 +13,7 @@
         <div v-if="hasExpiredDocuments || hasDisputedOrder" class="expired__docs">
           <div class="expired__message">
             <i class="el-icon-warning expired__icon"></i>
-            <p><span v-if="hasDisputedOrder">Sorry, we cannot process your withdrawal request because there is a problem with the order shown below: </span> <span v-else-if="hasExpiredDocuments">Sorry, we cannot process your withdrawal request because the following document(s) need to be renewed:</span></p>
+            <p><span v-if="hasDisputedOrder">{{ $t('statement.order_dispute_msg') }}</span> <span v-else-if="hasExpiredDocuments">{{ $t('statement.expired_doc_msg') }}</span></p>
           </div>
           <div class="expired__body">
             <div v-if="hasDisputedOrder" class="dispute__panel">
@@ -23,17 +23,17 @@
             </div>
             <div v-else-if="hasExpiredDocuments" class="expired__panel">
               <div>
-                <p>Driving License</p>
+                <p>{{ $t('statement.driving_licences') }}</p>
                 <p>{{ expiredDocuments[0].rider_name }}</p>
                 <p style="color:rgba(188, 80, 0, 1)">
-                  Expired on: {{ expiredDate }}
+                  {{ $t('statement.exp_date') }} {{ expiredDate }}
                 </p>
               </div>
-              <router-link to="/documents"><button class="btn btn-primary text-capitalize">Update</button></router-link>
+              <router-link to="/documents"><button class="btn btn-primary text-capitalize">{{ $t('statement.btn_update') }}</button></router-link>
             </div>
           </div>
-          <span v-if="hasDisputedOrder"><a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">Contact Support</button></a></span>
-          <p v-else-if="hasExpiredDocuments" class="expired__text">Still having trouble?<a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span style="color:rgba(238, 125, 0, 1)">Contact Support</span></a></p>
+          <span v-if="hasDisputedOrder"><a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">{{ $t('statement.contact_support') }}</button></a></span>
+          <p v-else-if="hasExpiredDocuments" class="expired__text">{{ $t('statement.trouble') }}<a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span style="color:rgba(238, 125, 0, 1)">{{ $t('statement.contact_support') }}</span></a></p>
         </div>
         <div v-else>
           <div v-if="payable_amount" class="withdraw-modal-screen">
@@ -136,7 +136,7 @@
               <p class="hidden-btn-error">{{ $t('statement.button_disabled') }}</p>
             </div>
             <div class="d-flex justify-content-end items-align-end mt-2">
-              <router-link to="/myWithdrawals"><p style="color:#EE7D00">View <span v-show="activeStatus">previous</span> withdrawals</p></router-link>
+              <router-link to="/myWithdrawals"><p style="color:#EE7D00">{{ $t('statement.view') }} <span v-show="activeStatus">{{ $t('statement.previous') }}</span> {{ $t('statement.withdrawals') }}</p></router-link>
             </div>
           </div>
         </div>
