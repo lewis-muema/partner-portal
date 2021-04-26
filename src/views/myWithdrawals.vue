@@ -1,5 +1,6 @@
 <template>
   <div class="withdrawals">
+    <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="container dash">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item class="withdrawals__crum" :to="{ path: '/' }">Home</el-breadcrumb-item>
@@ -29,16 +30,15 @@
 <script>
 import axios from 'axios';
 import withdrawalItem from './withdrawalItem.vue';
+import errorHandler from '../components/errorHandler';
 
 export default {
-  components: { withdrawalItem },
+  components: { withdrawalItem, errorHandler },
   data() {
     return {
       activeName: 'first',
-      processing: [],
-      failed: [],
       withdrawals: [],
-      completed: [],
+      sessionInfo: '',
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -46,26 +46,27 @@ export default {
           'Accept-Language': localStorage.getItem('language'),
         },
       },
+      errorObj: '',
     };
   },
+  computed: {
+    failed() {
+      return this.withdrawals.filter(el => el.status.toLowerCase() === 'failed');
+    },
+    processing() {
+      return this.withdrawals.filter(el => el.status.toLowerCase() === 'processing');
+    },
+    completed() {
+      return this.withdrawals.filter(el => el.status.toLowerCase() === 'completed');
+    },
+  },
   created() {
+    if (localStorage.sessionData) {
+      this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
+    }
     this.fetchWithdrawals();
   },
-  mounted() {
-    this.getFailed();
-    this.getProcessing();
-    this.getCompleted();
-  },
   methods: {
-    getFailed() {
-      this.failed = this.withdrawals.filter(el => el.status.toLowerCase() === 'failed');
-    },
-    getProcessing() {
-      this.processing = this.withdrawals.filter(el => el.status.toLowerCase() === 'processing');
-    },
-    getCompleted() {
-      this.completed = this.withdrawals.filter(el => el.status.toLowerCase() === 'completed');
-    },
     fetchWithdrawals() {
     return new Promise((resolve, reject) => {
       /* eslint-disable */
