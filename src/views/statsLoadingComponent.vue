@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     stats_loading_title() {
-      return 'Fetching Daily Rider Statistics';
+      return this.$t('statement.fetching_daily_stats');
     },
   },
   methods: {},

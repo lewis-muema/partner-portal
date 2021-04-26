@@ -4,60 +4,60 @@
     <div class="row dashboard__row">
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
-          <span class="dashboard__box-number dashboard-header">Orders completed </span>
+          <span class="dashboard__box-number dashboard-header"> {{ $t('riderTodayStats.orders_completed') }}</span>
           <div class="completed--order--stats">
-            <span class="dashboard__box-number completed--order-inner"> {{ this.rider_stats.dispatch_info.completed }} orders</span>
+            <span class="dashboard__box-number completed--order-inner"> {{ this.rider_stats.dispatch_info.completed }} {{ $t('riderTodayStats.orders') }}</span>
             <el-progress type="line" :percentage="completeRate()" :stroke-width="10" :color="colors" :show-text="false"></el-progress>
           </div>
           <div class="riderstats__box-extra completed--order--extra">
             <div v-if="!target_reached">
-              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i> {{ orderTarget() }} orders to go to reach your daily target</span>
+              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i> {{ orderTarget() }} {{ $t('riderTodayStats.orders_reach_target') }}</span>
             </div>
             <div v-else>
-              <span class="dashboard__box-text"><i class="fas fa-check-circle" style="color:#00b800"></i> Daily target of {{ this.rider_stats.completion_target }} orders achieved</span>
+              <span class="dashboard__box-text"><i class="fas fa-check-circle" style="color:#00b800"></i>{{ $t('riderTodayStats.daily_target_achieved', { completion_target: this.rider_stats.completion_target }) }} </span>
             </div>
           </div>
         </div>
       </div>
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
-          <span class="dashboard__box-number dashboard-header">Orders acceptance rate </span>
+          <span class="dashboard__box-number dashboard-header">{{ $t('riderTodayStats.acceptance_rate') }} </span>
           <div class="row order--acceptance-inner">
             <el-progress type="circle" :percentage="acceptanceRate()" :stroke-width="10" :color="colors"></el-progress>
             <div class="dashboard--progress">
               <div class="row row--extra-align">
                 <div class="completed--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.confirmed }} orders confirmed</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.confirmed }} {{ $t('riderTodayStats.orders_confirmed') }} </span>
               </div>
               <div class="row row--extra-align">
                 <div class="uncompleted--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.rejected }} orders rejected</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.rejected }} {{ $t('riderTodayStats.orders_rejected') }} </span>
               </div>
             </div>
           </div>
           <div class="riderstats__box-extra">
-            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> Confirm all orders to make more money </span>
+            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> {{ $t('riderTodayStats.confirm_all_orders') }}  </span>
           </div>
         </div>
       </div>
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
-          <span class="dashboard__box-number dashboard-header">Orders completion rate </span>
+          <span class="dashboard__box-number dashboard-header">{{ $t('riderTodayStats.orders_completion_rate') }}  </span>
           <div class="row rider--stats-extra">
             <el-progress type="circle" :percentage="completionRate()" :stroke-width="10" :color="colors"></el-progress>
             <div class="dashboard--progress">
               <div class="row row--extra-align">
                 <div class="completed--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.completed }} orders completed</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.completed }} {{ $t('riderTodayStats.orders_completed') }} </span>
               </div>
               <div class="row row--extra-align">
                 <div class="uncompleted--checker"></div>
-                <span>{{ this.rider_stats.dispatch_info.cancelled }} orders cancelled</span>
+                <span class="align_performance_rate">{{ this.rider_stats.dispatch_info.cancelled }} {{ $t('riderTodayStats.orders_cancelled') }} </span>
               </div>
             </div>
           </div>
           <div class="riderstats__box-extra">
-            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> Complete all confirmed orders </span>
+            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> {{ $t('riderTodayStats.complete_all_confirmed_orders') }}  </span>
           </div>
         </div>
       </div>
@@ -66,40 +66,56 @@
     <div class="row dashboard__row">
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
-          <span class="dashboard__box-number dashboard-header">Time spent online </span>
-          <div class="" style="margin-left: 4%; padding-top: 37px;width:86%; !important">
+          <span class="dashboard__box-number dashboard-header">{{ $t('riderTodayStats.time_spent_online') }}</span>
+          <div class="online-time--outer">
             <span class="dashboard__box-number online--time-inner"> {{ this.onlineTime() }}</span>
             <el-progress type="line" :percentage="onlineRate()" :stroke-width="10" :color="colors" :show-text="false"></el-progress>
           </div>
           <div class="riderstats__box-extra online--time--extra">
             <div v-if="!online_target_reached">
-              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i><a class="active-target-hours"> {{ onlineTarget() }} </a>to go to reach your daily target</span>
+              <span class="dashboard__box-text"><i class="far fa-lightbulb"></i><a class="active-target-hours"> {{ onlineTarget() }} </a> {{ $t('riderTodayStats.reach_daily_target') }}</span>
             </div>
             <div v-else>
-              <span class="dashboard__box-text"><i class="fas fa-check-circle checked-daily-target"></i> Daily target of <a>{{ this.rider_stats.online_target/3600 }} hours</a> achieved</span>
+              <span class="dashboard__box-text"><i class="fas fa-check-circle checked-daily-target"></i> {{ $t('riderTodayStats.daily_target_of') }}<a>{{ this.rider_stats.online_target / 3600 }} {{ $t('riderTodayStats.hours') }}</a> {{ $t('riderTodayStats.achieved') }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
-          <span class="dashboard__box-number dashboard-header">Delays in pickup </span>
+          <span class="dashboard__box-number dashboard-header">{{ $t('riderTodayStats.delays_in_pickup') }} </span>
           <div class="riderstats__box-content delay-inner">
-            <span class="dashboard__box-number">{{ this.rider_stats.delay_info.pickup }} Delays</span>
+            <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.delay_info.pickup }}  {{ $t('riderTodayStats.delays') }}</span>
           </div>
           <div class="riderstats__box-extra delay--extra">
-            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are picked in {{ this.rider_stats.avg_pickup_time }} minutes</span>
+            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> {{ $t('riderTodayStats.eighty_of_all_orders', { avg_pickup_time: this.rider_stats.avg_pickup_time }) }}</span>
           </div>
         </div>
       </div>
       <div class="dashboard__box-container stats-container">
         <div class="dashboard__dash-box stats--dashboard">
-          <span class="dashboard__box-number dashboard-header">Delays in delivery</span>
+          <span class="dashboard__box-number dashboard-header"> {{ $t('riderTodayStats.delays_in_delivery') }}</span>
           <div class="riderstats__box-content delay-inner">
-            <span class="dashboard__box-number">{{ this.rider_stats.delay_info.delivery }} Delays</span>
+            <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.delay_info.delivery }}  {{ $t('riderTodayStats.delays') }}</span>
           </div>
           <div class="riderstats__box-extra delay--extra">
-            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> 80% of all orders are delivered n {{ this.rider_stats.avg_delivery_time }} minutes</span>
+            <span class="dashboard__box-text"><i class="fas fa-exclamation-circle"></i> {{ $t('riderTodayStats.eighty_of_all_orders_delivered', { avg_delivery_time: this.rider_stats.avg_delivery_time }) }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row dashboard__row">
+      <div class="dashboard__box-container stats-container">
+        <div class="dashboard__dash-box stats--dashboard">
+          <span class="dashboard__box-number dashboard-header"> {{ $t('riderTodayStats.order_reassigned') }}</span>
+          <div class="riderstats__box-content delay-inner">
+            <span class="dashboard__box-number delay--inner-text">{{ this.rider_stats.dispatch_info.cancelled }}  {{ $t('riderTodayStats.orders') }}</span>
+          </div>
+          <div v-if="this.rider_stats.dispatch_info.reassign_reasons.length > 0" class="riderstats__box-extra top-reasons-section">
+            <span class="dashboard__box-text top-reasons-header"> {{ $t('riderTodayStats.top_reasons') }}</span>
+            <div v-for="(reassign_reasons, index) in this.rider_stats.dispatch_info.reassign_reasons" :key="index">
+              <span class="dashboard__box-text" style="">{{ reassign_reasons.reason }} <a class="reassign-count">{{ reassign_reasons.count }}</a></span>
+            </div>
           </div>
         </div>
       </div>
@@ -118,11 +134,12 @@ export default {
   data() {
     return {
       show_loading: true,
-      colors: '#F57E20',
+      colors: '#EE7D00',
       config: {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       rider_stats: {},
@@ -179,13 +196,13 @@ export default {
       const completed = this.rider_stats.dispatch_info.completed;
       const target = this.rider_stats.completion_target;
 
-      return (completed / target) * 100;
+      return Math.ceil((completed / target) * 100);
     },
     onlineRate() {
       const online = this.rider_stats.online_time;
       const target = this.rider_stats.online_target;
 
-      return (online / target) * 100;
+      return Math.ceil((online / target) * 100);
     },
     onlineTime() {
       let time = this.rider_stats.online_time;
@@ -199,13 +216,7 @@ export default {
 
       const timeDifferenceSec = onlineTarget - onlineTime;
 
-      const timeDifference = Math.floor(moment.duration(timeDifferenceSec, 'seconds').asHours());
-
-        if (timeDifference > 0) {
-           return `${timeDifference} Hrs`;
-        } else {
-          return `${Math.floor(moment.duration(timeDifferenceSec, 'seconds').asMinutes())} Minutes`;
-        }
+      return `${Math.floor(moment.duration(timeDifferenceSec, 'seconds').asHours())} Hrs ${moment.duration(timeDifferenceSec, 'seconds').minutes()} Min`;
     },
     orderTarget() {
       const completed = parseInt(this.rider_stats.dispatch_info.completed, 10);
@@ -224,11 +235,8 @@ export default {
       }
     },
     onlineTargetReached() {
-      let onlineTime = parseInt(this.rider_stats.online_time, 10);
-      onlineTime = Math.floor(moment.duration(onlineTime, 'seconds').asHours());
-
-      let onlineTarget = parseInt(this.rider_stats.online_target, 10);
-      onlineTarget = Math.floor(moment.duration(onlineTarget, 'seconds').asHours());
+      const onlineTime = parseInt(this.rider_stats.online_time, 10);
+      const onlineTarget = parseInt(this.rider_stats.online_target, 10);
 
       if (onlineTime >= onlineTarget) {
         this.online_target_reached = true;

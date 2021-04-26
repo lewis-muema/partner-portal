@@ -8,7 +8,7 @@
         v-for="ridersWithTracker in ridersWithTrackers"
         :key="ridersWithTracker.rider_id"
       >
-        <p class="track-label">Start Date</p>
+        <p class="track-label">{{ $t('tracking.start_date') }}</p>
         <span class="fromdate">
           <datetime
             v-model="dateRange[ridersWithTracker.indexer].from"
@@ -17,7 +17,7 @@
             placeholder="From"
           ></datetime>
         </span>
-        <p class="track-label">End Date</p>
+        <p class="track-label">{{ $t('tracking.start_date') }}</p>
         <span class="todate">
           <datetime
             v-model="dateRange[ridersWithTracker.indexer].to"
@@ -27,7 +27,7 @@
           ></datetime>
         </span>
         <span class="track">
-          <button class="track-button" @click="redirect(ridersWithTracker.indexer)">Track History</button>
+          <button class="track-button" @click="redirect(ridersWithTracker.indexer)">{{ $t('tracking.track_history') }}</button>
         </span>
       </div>
     </div>
@@ -54,7 +54,7 @@
           </label>
         </span>
       </div>
-      <div class="selector--title selector--title__left" v-else>Vehicle Tracking</div>
+      <div class="selector--title selector--title__left" v-else>{{ $t('tracking.vehicle_tracking') }}</div>
       <div class="selector--content">
         <div v-if="ridersWithTrackers.length > 0">
           <div
@@ -63,7 +63,7 @@
             v-for="ridersWithTracker in ridersWithTrackers"
             :key="ridersWithTracker.rider_id"
           >
-            <p class="hide" :class="`vehicle-index${ridersWithTracker.indexer}`">true</p>
+            <p class="hide" :class="`vehicle-index${ridersWithTracker.indexer}`">{{ $t('tracking.true') }}</p>
             <img
               :src="`https://s3-eu-west-1.amazonaws.com/images.sendyit.com/web_platform/vendor_type/side/${ridersWithTracker.rider_details.vendor_type}.svg`"
               class="truck-img"
@@ -80,7 +80,7 @@
               >{{ ridersWithTracker.rider_details.registration_no }}</span>
             </label>
             <span class="selector--checkbox-info font-14">
-              Driver:
+              {{ $t('tracking.driver') }}:
               <label class="spacer"></label>
               {{ ridersWithTracker.rider_details.f_name }} {{ ridersWithTracker.rider_details.s_name }}; {{ ridersWithTracker.rider_details.phone_no }}
             </span>
@@ -88,7 +88,7 @@
               class="selector--checkbox-info font-14"
               :class="`speed${ridersWithTracker.indexer}`"
             >
-              Speed:
+              {{ $t('tracking.speed') }}:
               <label class="spacer2"></label>
               {{ ridersWithTracker.speed }} Kmph
             </span>
@@ -96,7 +96,7 @@
               class="selector--checkbox-info font-14 checkbox-time"
               :class="`time${ridersWithTracker.indexer}`"
             >
-              Tracker:
+              {{ $t('tracking.tracker') }}:
               <label class="spacer3"></label>
               {{ getTrackerStatus(ridersWithTracker.time, ridersWithTracker.indexer) }}
               <p
@@ -106,12 +106,12 @@
           </div>
         </div>
         <div class="vehicle-tracking-info" v-else>
-          You do not currently have a Sendy issued tracker installed on your vehicle.
-          <br />Get in touch with our
+          {{ $t('tracking.dont_have_sendy_tracker') }}
+          <br /> {{ $t('tracking.get_in_touch') }}
           <a
             href="mailto:support@sendyit.com"
             class="color-orange"
-          >Partner Management Team</a> to get one today.
+          >{{ $t('tracking.partner_management_team') }}</a>  {{ $t('tracking.to_get_one_day') }}
         </div>
       </div>
     </div>
@@ -134,7 +134,7 @@ import datetime from 'vuejs-datetimepicker';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let client = '';
 let map = '';
 let bounds = '';
@@ -160,6 +160,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       errorObj: '',
@@ -249,7 +250,7 @@ export default {
         script.onload = () => {
           this.initMap();
         };
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyChEOAbj_2URQWRkL8N0p07vk6foBfHXGI';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`;
         document.head.appendChild(script);
       }
     },
@@ -267,11 +268,11 @@ export default {
     getTrackerStatus(time, i) {
       const timeDiff = new Date().getTime() - new Date(time);
       if (timeDiff / 1000 < 1800) {
-        return 'Online';
+        return this.$t('tracking.online');
       } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
-        return `Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
+        return this.$t('tracking.last_seen', { minutes: Math.round(timeDiff / 60 / 1000, 10) });
       } else {
-        return 'Offline';
+        return this.$t('tracking.offline');
       }
     },
     addTrackerStatusInfo(time) {
@@ -281,7 +282,7 @@ export default {
       } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
         // return `Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
       } else {
-        return '(This could be due to network issues)';
+        return `(${this.$t('tracking.network_issues')})`;
       }
     },
     setMarkers() {
@@ -501,7 +502,7 @@ export default {
         if (timeDiff / 1000 < 1800) {
           timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Online';
         } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
-          timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
+          timeEl.innerHTML = `Tracker: <label class="spacer3"></label>${this.$t('tracking.last_seen', { minutes: Math.round(timeDiff / 60 / 1000, 10) })}`;
         } else {
           timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
         }
@@ -518,7 +519,7 @@ export default {
         } else if (timeDiff / 1000 > 1800 && timeDiff / 1000 < 3600) {
           timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Last seen ${Math.round(timeDiff / 60 / 1000, 10)} minutes ago`;
         } else {
-          timeEl.innerHTML = 'Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(This could be due to network issues)</p>';
+          timeEl.innerHTML = `Tracker: <label class="spacer3"></label>Offline <p class="font-14 checkbox-time extra-info">(${this.$t('tracking.offline')})</p>`;
         }
       }
     },
@@ -551,7 +552,7 @@ export default {
     },
     mixpanelTrackVehicles() {
       const sessionInfo = JSON.parse(localStorage.sessionData);
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner tracking Web', {
           'Number of vehicles with trackers': this.ridersWithTrackers.length,
           'Id number': sessionInfo.payload.id,

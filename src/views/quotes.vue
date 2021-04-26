@@ -10,7 +10,7 @@
               type="text"
               class="container__search-element"
               id="inp"
-              placeholder="Enter pickup"
+              :placeholder="$t('pending.enter_pickup')"
               @input="filterPickup()"
               @keyup.delete="refresh()"
             />
@@ -20,7 +20,7 @@
               type="text"
               class="container__search-element"
               id="dst"
-              placeholder="Enter destination"
+              :placeholder="$t('pending.enter_destination')"
               @input="filterDest()"
               @keyup.delete="refresh()"
             />
@@ -32,13 +32,13 @@
               @change="filterVendor()"
               id="vend"
             >
-              <option value selected>Select type of truck</option>
-              <option value="3T Truck">3 Tonne Truck</option>
-              <option value="5T Truck">5 Tonne Truck</option>
-              <option value="10T Truck">10 Tonne Truck</option>
-              <option value="14T Truck">14 Tonne Truck</option>
-              <option value="20T Truck">20 Tonne Truck</option>
-              <option value="28T Truck">28 Tonne Truck</option>
+              <option value selected>{{ $t('pending.select_type_truck') }}</option>
+              <option value="3T Truck">3 {{ $t('pending.tonne_truck') }}</option>
+              <option value="5T Truck">5 {{ $t('pending.tonne_truck') }}</option>
+              <option value="10T Truck">10 {{ $t('pending.tonne_truck') }}</option>
+              <option value="14T Truck">14 {{ $t('pending.tonne_truck') }}</option>
+              <option value="20T Truck">20 {{ $t('pending.tonne_truck') }}</option>
+              <option value="28T Truck">28 {{ $t('pending.tonne_truck') }}</option>
             </select>
           </span>
           <span class="container__search-select" v-if="ordercount.length > 0">
@@ -64,20 +64,20 @@
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
             <div class="orders__list-toprow table-head">
-              <div class="orders__col-head pickup uppercase">pickup location</div>
-              <div class="orders__col-head load uppercase">type of load</div>
-              <div class="orders__col-head destination uppercase">destination</div>
-              <div class="orders__col-head distance uppercase">distance</div>
-              <div class="orders__col-head pick-date uppercase">pickup date</div>
-              <div class="orders__col-head truck uppercase">truck</div>
-              <div class="orders__col-head orderNo">order number</div>
-              <div class="orders__col-head price-align uppercase">quotation</div>
+              <div class="orders__col-head pickup uppercase">{{ $t('pending.pickup_location') }}</div>
+              <div class="orders__col-head load uppercase">{{ $t('pending.type_of_load') }}</div>
+              <div class="orders__col-head destination uppercase">{{ $t('pending.destination') }}</div>
+              <div class="orders__col-head distance uppercase">{{ $t('pending.distance') }}</div>
+              <div class="orders__col-head pick-date uppercase">{{ $t('pending.pickup_date') }}</div>
+              <div class="orders__col-head truck uppercase">{{ $t('pending.truck') }}</div>
+              <div class="orders__col-head orderNo">{{ $t('pending.order_number') }}</div>
+              <div class="orders__col-head price-align uppercase"> {{ $t('pending.quotation') }}</div>
               <div class="orders__col-head bid-in uppercase"></div>
-              <div class="orders__col-head center-action uppercase">action</div>
+              <div class="orders__col-head center-action uppercase">{{ $t('pending.action') }}</div>
             </div>
             <div class="loading" v-if="loadingStatus"></div>
             <div class="no-records" v-if="!loadingStatus && orders.length === 0">
-              <p class="no-records-par">There are no orders</p>
+              <p class="no-records-par">{{ $t('pending.no_orders') }}</p>
             </div>
             <template v-for="order in orders.slice().reverse()">
               <div
@@ -88,7 +88,7 @@
                 :key="order.id"
               >
                 <div class="orders__list-col pickup">
-                  <p class="orders__mobile-col">Pickup</p>
+                  <p class="orders__mobile-col">{{ $t('pending.pickup') }}</p>
                   <p
                     class="row1"
                     @mouseover="showFromTooltip(order.id)"
@@ -99,11 +99,11 @@
                   >{{ order.from_name }}, {{ order.start_address }}</span>
                 </div>
                 <div class="orders__list-col load">
-                  <p class="orders__mobile-col">Load</p>
+                  <p class="orders__mobile-col">{{ $t('pending.load') }}</p>
                   <p>N/A</p>
                 </div>
                 <div class="orders__list-col destination">
-                  <p class="orders__mobile-col">Destination</p>
+                  <p class="orders__mobile-col">{{ $t('pending.destination_capital') }}</p>
                   <p
                     class="row2"
                     @mouseover="showToTooltip(order.id)"
@@ -114,52 +114,52 @@
                   >{{ order.to_name }}, {{ order.end_address }}</span>
                 </div>
                 <div class="orders__list-col distance">
-                  <p class="orders__mobile-col">Distance</p>
+                  <p class="orders__mobile-col">{{ $t('pending.distance') }}</p>
                   <p class="orders__mobile-col--distance">{{ formatDistance(order.id) }} km</p>
                 </div>
                 <div class="orders__list-col pick-date">
-                  <p class="orders__mobile-col">Date</p>
+                  <p class="orders__mobile-col">{{ $t('pending.date') }}</p>
                   <p>{{ timeFormat(order.id) }}</p>
                 </div>
                 <div class="orders__list-col truck">
-                  <p class="orders__mobile-col">Truck</p>
+                  <p class="orders__mobile-col">{{ $t('pending.truck') }}</p>
                   <p class="row3">{{ order.vendorname }}</p>
                 </div>
                 <div class="orders__list-col orderNo">
-                  <p class="orders__mobile-col">order number</p>
+                  <p class="orders__mobile-col">{{ $t('pending.order_number') }}</p>
                   <p>{{ order.orderNo }}</p>
                 </div>
                 <div class="orders__list-col price-align">
-                  <p class="orders__mobile-col">Price</p>
+                  <p class="orders__mobile-col">{{ $t('pending.price_capital') }}</p>
                   <p class="right-align">{{ order.currency }} {{ currencyFormat(order.id) }}</p>
                 </div>
                 <div class="orders__list-col bid-in"></div>
                 <div class="orders__list-col center-action">
-                  <P class="orders__mobile-col uppercase">action</P>
+                  <P class="orders__mobile-col uppercase">{{ $t('pending.action') }}</P>
                   <button
                     class="orders__sendquote-icon button-menu uppercase"
                     v-if="order.bidPlaced === 0 && !opened.includes(order.id) && order.confirmStatus === 0 && order.orderStatus === 1"
-                  >adjust quote</button>
+                  >{{ $t('pending.adjust_quote') }}</button>
                   <button
                     class="orders__hidedetails-icon button-menu uppercase"
                     v-if="order.bidPlaced === 0 && opened.includes(order.id) && order.confirmStatus === 0 && order.orderStatus === 1"
-                  >hide details</button>
+                  > {{ $t('pending.hide_details') }}</button>
                   <button
                     class="orders__bidplaced-icon button-menu uppercase"
                     v-if="order.bidPlaced === 1 && order.confirmStatus === 0 && order.orderStatus === 1"
-                  >bid updated</button>
+                  > {{ $t('pending.bid_updated') }}</button>
                   <button
                     class="confirmed-for-others-button-menu button-menu uppercase"
                     v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.awardStatus === 0"
-                  >not awarded</button>
+                  > {{ $t('pending.not_awarded') }}</button>
                   <button
                     class="cancelled-button-menu button-menu uppercase"
                     v-if="order.orderStatus === 2 || order.orderStatus === 0"
-                  >cancelled</button>
+                  >{{ $t('pending.cancelled') }}</button>
                   <button
                     class="awarded-to-you-button-menu button-menu uppercase"
                     v-if="order.confirmStatus === 1 && order.orderStatus === 1 && order.awardStatus === 1"
-                  >awarded</button>
+                  >{{ $t('pending.awarded') }}</button>
                 </div>
               </div>
               <div
@@ -169,48 +169,48 @@
               >
                 <div class="blinder" v-if="cancelStatus">
                   <div class="confirm-cancel">
-                    <p class="cancel-par">Are you sure you want to cancel this quote?</p>
-                    <button class="yes uppercase" @click="cancelQuote(order.id)">yes, cancel quote</button>
-                    <button class="no uppercase" @click="cancelStatus = false">no</button>
+                    <p class="cancel-par">{{ $t('pending.sure_cancel_quote') }}</p>
+                    <button class="yes uppercase" @click="cancelQuote(order.id)">{{ $t('pending.yes_cancel_quote') }}</button>
+                    <button class="no uppercase" @click="cancelStatus = false">{{ $t('pending.no') }}</button>
                   </div>
                 </div>
                 <div class="expanded-row">
                   <div class="map-details--go-back" @click="toggle(order.id)">
                     <i class="material-icons icon map-details-go-back--icon">arrow_back</i>
-                    <span class="map-details-go-back--span">Back</span>
+                    <span class="map-details-go-back--span">{{ $t('pending.back') }}</span>
                   </div>
                   <div class="map__column">
                     <img :src="createStaticMapUrl(order)" class="map" />
                     <div class="map__details-row">
                       <div class="map__details-col">
-                        <p class="map__details-pickup heading uppercase">pickup location</p>
+                        <p class="map__details-pickup heading uppercase">{{ $t('pending.pickup_location') }}</p>
                         <p class="map__details-pickup par">{{ order.from_name }}</p>
-                        <p class="map__details-date heading uppercase">date and time</p>
+                        <p class="map__details-date heading uppercase">{{ $t('pending.date_and_time') }}</p>
                         <p class="map__details-date par">{{ timeFormat(order.id) }}</p>
                       </div>
                       <div class="map__details-col">
-                        <p class="map__details-dest heading uppercase">destination</p>
+                        <p class="map__details-dest heading uppercase">{{ $t('pending.destination') }}</p>
                         <p class="map__details-dest par">{{ order.to_name }}</p>
-                        <p class="map__details-distance heading uppercase">distance</p>
+                        <p class="map__details-distance heading uppercase">{{ $t('pending.distance') }}</p>
                         <p class="map__details-distance par">{{ order.distance }}</p>
                       </div>
                     </div>
                   </div>
                   <div class="order__column">
-                    <p class="order__weight heading uppercase">weight of the order</p>
-                    <p class="order__weight par" v-if="!weight">Not applicable</p>
+                    <p class="order__weight heading uppercase">{{ $t('pending.approximate_weight_order') }}</p>
+                    <p class="order__weight par" v-if="!weight">{{ $t('pending.not_applicable') }}</p>
                     <p class="order__weight par" v-else>{{ weight }}</p>
-                    <p class="order__loader heading uppercase">loader(s) needed</p>
-                    <p class="order__loader par" v-if="!loaders">Not applicable</p>
+                    <p class="order__loader heading uppercase">l{{ $t('pending.loader_needed') }}</p>
+                    <p class="order__loader par" v-if="!loaders">{{ $t('pending.not_applicable') }}</p>
                     <p class="order__loader par" v-else>{{ loaders }}</p>
-                    <p class="order__loadtype heading uppercase">type of load</p>
-                    <p class="order__loadtype par" v-if="!load">Not applicable</p>
+                    <p class="order__loadtype heading uppercase">{{ $t('pending.type_of_load') }}</p>
+                    <p class="order__loadtype par" v-if="!load">{{ $t('pending.not_applicable') }}</p>
                     <p class="order__loadtype par" v-else>{{ load }}</p>
-                    <p class="order__notes heading uppercase">notes</p>
+                    <p class="order__notes heading uppercase">{{ $t('pending.notes') }}</p>
                     <p class="order__notes par">{{ orderNotes(order.id) }}</p>
                   </div>
                   <div class="order__column">
-                    <p class="order__amount heading uppercase" v-if="order.bid_status === 0">amount</p>
+                    <p class="order__amount heading uppercase" v-if="order.bid_status === 0">{{ $t('pending.amount_small') }}</p>
                     <p
                       class="order__amount par"
                       v-if="order.bid_status === 0"
@@ -220,7 +220,7 @@
                         <span class="order__price-estimate">
                           <p
                             class="order__amount heading uppercase"
-                          >the minimum amount the client is willing to pay is</p>
+                          >{{ $t('pending.minimum_amount') }}</p>
                           <p
                             class="order__estimate-amount par"
                           >{{ order.currency }} {{ bidcurrencyFormat(order.id) }}</p>
@@ -229,31 +229,26 @@
                       </div>
                       <div v-if="order.confirmStatus === 0 && order.orderStatus === 1">
                         <div class="order__quote-amount">
-                          <p class="order__amount heading uppercase">your quote</p>
+                          <p class="order__amount heading uppercase">{{ $t('pending.your_quote') }}</p>
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter quote amount"
+                            placeholder="$t('pending.enter_quote_amount')"
                             @input="confirm(order.id)"
                             v-model="quoteAmount"
                           />
                         </div>
                         <p
                           class="orders__bidvehicle-type heading uppercase"
-                        >select a vehicle to service this order</p>
+                        >{{ $t('pending.select_vehicle_to_service') }}</p>
                         <select
                           class="orders__bidvehicle-type-input par"
                           v-if="!addVehicleStatus"
                           v-model="count"
                           @change="vehicleSelector(order.id)"
                         >
-                          <option class selected value="null">Select a vehicle</option>
-                          <option
-                            class
-                            v-for="vehicle in vehicles"
-                            :value="vehicle.count"
-                            :key="vehicle.count"
-                          >{{ vehicle.make }} {{ vehicle.model }} ({{ vehicle.registration_no }}) {{ vehicle.vendor_disp_name }}</option>
+                          <option class selected value="null">{{ $t('pending.select_vehicle') }}</option>
+                          <option class v-for="vehicle in vehicles" :value="vehicle.count" :key="vehicle.count">{{ vehicle.registration_no }} {{ displayVehicles(vehicle.count) }}</option>
                         </select>
                         <select
                           class="orders__bidvehicle-type-input disabled par"
@@ -261,38 +256,38 @@
                           @click="setVehicleStatus()"
                           readonly
                         >
-                          <option class value selected>Select a vehicle</option>
+                          <option class value selected>{{ $t('pending.select_vehicle') }}</option>
                         </select>
                         <p class="orders__addvehicle link" @click="toggleVehicle(order.id)">
-                          <i class="material-icons icon" v-if="!addVehicleStatus">add</i>
-                          <i class="material-icons icon" v-if="addVehicleStatus">remove</i>&nbsp;&nbsp;Add a vehicle
+                          <i class="material-icons icon-padded" v-if="!addVehicleStatus">{{ $t('pending.add') }}</i>
+                          <i class="material-icons icon-padded" v-if="addVehicleStatus">{{ $t('pending.remove') }}</i>&nbsp;&nbsp;{{ $t('pending.add_vehicle') }}
                         </p>
                         <div class="orders__adddriver-form" v-if="addVehicleStatus">
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter Registration Number"
+                            :placeholder="$t('pending.enter_reg_no')"
                             v-model="regNo"
                             @input="addRegNo(order.id)"
                           />
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter Insurance Number"
+                            :placeholder="$t('pending.enter_insurance_number')"
                             v-model="insuNo"
                             @input="addInsuNo(order.id)"
                           />
                         </div>
                         <p
                           class="orders__assigndriver heading uppercase"
-                        >select a driver to assign to this order</p>
+                        >{{ $t('pending.select_driver_to_assign') }}</p>
                         <select
                           class="orders__assigndriver-input par"
                           v-if="!addDriverStatus"
                           v-model="count1"
                           @change="driverSelector(order.id)"
                         >
-                          <option class selected value="null">Select a driver</option>
+                          <option class selected value="null">{{ $t('pending.select_driver') }}</option>
                           <option
                             class
                             v-for="rider in riders"
@@ -306,27 +301,26 @@
                           @click="setDriverStatus()"
                           readonly
                         >
-                          <option class value selected>Select a driver</option>
+                          <option class value selected>{{ $t('pending.select_driver') }}</option>
                         </select>
                         <p class="orders__add-driver link" @click="toggleDriver()">
-                          <i class="material-icons icon" v-if="!addDriverStatus">add</i>
-                          <i class="material-icons icon" v-if="addDriverStatus">remove</i>&nbsp;&nbsp;Add a driver
+                          <i class="material-icons icon-padded" v-if="!addDriverStatus">{{ $t('pending.add') }}</i>
+                          <i class="material-icons icon-padded" v-if="addDriverStatus">{{ $t('pending.remove') }}</i>&nbsp;&nbsp;{{ $t('pending.add_driver') }}
                         </p>
                         <div class="orders__addvehicle-form" v-if="addDriverStatus">
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="Enter Name"
+                            :placeholder="$t('pending.enter_name')"
                             v-model="driverName"
                             @input="addDriverName(order.id)"
                           />
                           <input
                             type="text"
                             class="input orders__bid-input"
-                            placeholder="ID Number"
+                            :placeholder="$t('pending.id_number')"
                             v-model="ID"
                             @input="addId(order.id)"
-                            maxlength="8"
                           />
                           <vue-tel-input
                             v-model="driverPhone"
@@ -341,64 +335,46 @@
                             class="orders__disabled-button uppercase"
                             v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 0"
                             disabled
-                          >adjust quotes</button>
+                          >{{ $t('pending.adjust_quotes') }}</button>
                           <button
                             class="orders__sendquote-button uppercase"
                             @click="sendBid(order.id)"
                             v-if="order.confirmed === 0 && order.bid_status === 1 && buttonDisabledStatus === 1"
                           >{{ sendQuoteButtonState }}</button>
                         </div>
-                        <p class="cancel-quote" @click="cancelStatus = true">or cancel this quote</p>
+                        <p class="cancel-quote" @click="cancelStatus = true">{{ $t('pending.or_cancel_quote') }}</p>
                       </div>
                     </div>
                     <div class="center-action center-action--lower force-leftalign">
                       <button
                         class="orders__confirmed-button uppercase"
                         v-if="order.confirmed === 1"
-                      >confirmed</button>
+                      >{{ $t('pending.confirmed') }}</button>
                     </div>
                   </div>
                 </div>
               </div>
             </template>
           </div>
-          <div :class="`${notificationName} confirmed`" v-if="message === 1">
-            <p class="message">Order confirmed</p>
-          </div>
-          <div :class="`${notificationName} failed`" v-if="message === 2">
-            <p class="message">{{ error }}</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 3">
-            <p class="message">Please select a driver or vehicle</p>
-          </div>
-          <div :class="`${notificationName} failed`" v-if="message === 4">
-            <p class="message">{{ error }}</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 5">
-            <p class="message">Please enter all details and bid within the range</p>
-          </div>
-          <div :class="`${notificationName} no-selection`" v-if="message === 6">
-            <p class="message">Please bid within the price range</p>
-          </div>
-          <div :class="`${notificationName} bid_placed`" v-if="message === 7">
-            <p class="message">{{ error }}</p>
-          </div>
+          <notify />
         </div>
       </div>
     </div>
   </div>
 </template>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDTsp-JumEjWjNNPjPuH5qJEWdFjtQvTsU&amp;v=3.exp&amp;libraries=places,geometry"></script>
+
 <script>
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
+import timezone from '../mixins/timezone';
+import notify from '../components/notification';
+import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier';
 
-const mixpanel = Mixpanel.init('b36c8592008057290bf5e1186135ca2f');
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let interval = '';
 export default {
   title: 'Partner Portal - My Quotes',
@@ -406,7 +382,9 @@ export default {
     verifier,
     errorHandler,
     VueTelInput,
+    notify,
   },
+  mixins: [timezone],
   data() {
     return {
       allVehicles: '',
@@ -453,8 +431,8 @@ export default {
       riderPayload: [],
       pick: [],
       responseNo: 0,
-      confirmButtonState: 'confirm order',
-      sendQuoteButtonState: 'adjust quote',
+      confirmButtonState: this.$t('pending.confirm_quote'),
+      sendQuoteButtonState: this.$t('pending.adjust_quote'),
       getRiderz: 0,
       getVehiclez: 0,
       quoteAmount: null,
@@ -469,6 +447,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       bindProps: {
@@ -476,7 +455,7 @@ export default {
         disabledFetchingCountry: false,
         disabled: false,
         disabledFormatting: false,
-        placeholder: 'Drivers phone number',
+        placeholder: this.$t('pending.driver_phone_number'),
         required: false,
         enabledCountryCode: false,
         enabledFlags: true,
@@ -485,7 +464,7 @@ export default {
         ignoredCountries: [],
         autocomplete: 'off',
         name: 'phone',
-        maxLen: 13,
+        maxLen: 14,
         wrapperClasses: '',
         inputClasses: '',
         dropdownOptions: {
@@ -510,7 +489,15 @@ export default {
   beforeDestroy() {
     clearInterval(interval); // stop the interval
   },
+  destroyed() {
+    if (localStorage.token && !['orders', 'pending', 'quotes'].includes(this.$route.name) && this.sessionInfo.super_user) {
+      this.$router.push('/quotes');
+    }
+  },
   methods: {
+    notify(status, type, message) {
+      this.$root.$emit('Notification', status, type, message);
+    },
     setDriverStatus() {
       this.addDriverStatus = false;
     },
@@ -520,8 +507,17 @@ export default {
     regcounter(id) {
       this.regOk = id;
     },
+    displayVehicles(id) {
+      if (parseInt(this.vehicles[id].vendor_type, 10) === 25) {
+        return `(${this.vehicles[id].load_capacity} Tonnes)`;
+      } else if (this.vehicles[id].make !== null && this.vehicles[id].make !== '') {
+        return `(${this.vehicles[id].make} ${this.vehicles[id].model})`;
+      } else {
+        return '';
+      }
+    },
     createStaticMapUrl(path) {
-      const google_key = 'AIzaSyDJ_S9JgQJSaHa88SXcPbh9JijQOl8RXpc';
+      const google_key = process.env.GOOGLE_API_KEY;
       const from_cordinates = path.from;
       const to_cordinates = path.to;
       return `https://maps.googleapis.com/maps/api/staticmap?path=color:0x2c82c5|weight:5|${from_cordinates}|${to_cordinates}&size=500x200&markers=color:0xF17F3A%7Clabel:P%7C
@@ -559,15 +555,10 @@ export default {
       this.confirm(id);
     },
     addId(id) {
-      this.ID = this.ID.replace(/[^0-9]/g, '');
       this.confirm(id);
     },
     addPhone(id) {
       this.driverPhone = this.driverPhone.toString().replace(/[^0-9+]/g, '');
-      if (this.driverPhone.toString().startsWith('+') && this.driverPhone.length < 13) {
-        const formattedPhone = this.driverPhone.slice(4, 100);
-        this.driverPhone = `0${formattedPhone}`;
-      }
       setTimeout(() => {
         this.confirm(id);
       }, 200);
@@ -592,14 +583,15 @@ export default {
       if (this.orders[id - 1].orderNotes) {
         return this.orders[id - 1].orderNotes.slice(7, 10000);
       } else {
-        return 'No notes';
+        return this.$t('pending.no_notes');
       }
     },
+    timer(id) {
+      const orderTime = this.orders[id - 1].orderTime;
+      return this.formatedTimer(orderTime);
+    },
     timebar(id) {
-      const timer = moment(this.orders[id - 1].orderTime)
-        .add(0, 'h')
-        .toDate();
-      const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
+      const timer1 = this.timer(id);
       if (timer1.includes('ago')) {
         return '';
       } else {
@@ -613,10 +605,7 @@ export default {
       }
     },
     timebarPrefix(id) {
-      const timer = moment(this.orders[id - 1].orderTime)
-        .add(0, 'h')
-        .toDate();
-      const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
+      const timer1 = this.timer(id);
       if (timer1.includes('ago')) {
         return '';
       } else {
@@ -625,10 +614,7 @@ export default {
       }
     },
     timebarSuffix(id) {
-      const timer = moment(this.orders[id - 1].orderTime)
-        .add(0, 'h')
-        .toDate();
-      const timer1 = moment(timer, 'YYYYMMDD, h:mm:ss a').fromNow();
+      const timer1 = this.timer(id);
       if (timer1.includes('ago')) {
         return '';
       } else {
@@ -643,8 +629,8 @@ export default {
       return id.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
     },
     timeFormat(id) {
-      const timer = moment(this.orders[id - 1].orderTime).format('ddd, Do MMM');
-      return timer;
+      const orderTime = this.orders[id - 1].orderTime;
+      return this.formatedTime(orderTime);
     },
     currencyFormat(id) {
       const amount = this.orders[id - 1].bidAmount;
@@ -705,7 +691,7 @@ export default {
       return this.vehicles[id].vendor_disp_name;
     },
     autoSelectVehicles(id) {
-      const vId = this.orders[id - 1].assignedVehicle.toString();
+      const vId = this.orders[id - 1].assignedVehicle;
       const filterObj1 = this.vehicles.filter(e => e.vehicle_id === vId);
       if (filterObj1.length > 0) {
         this.count = filterObj1[0].count;
@@ -715,7 +701,7 @@ export default {
       this.vehicleSelector(id);
     },
     autoSelectRiders(id) {
-      const rId = this.orders[id - 1].assignedRider.toString();
+      const rId = this.orders[id - 1].assignedRider;
       const filterObj = this.riders.filter(e => e.rider_id === rId);
       if (filterObj.length > 0) {
         this.count1 = filterObj[0].count;
@@ -724,7 +710,6 @@ export default {
       }
       this.driverSelector(id);
     },
-
     toggle(id) {
       const index = this.opened.indexOf(id);
       if (index > -1) {
@@ -745,8 +730,9 @@ export default {
         this.vehicles = [];
         this.getVehiclez = 0;
         this.getRiderz = 0;
-        this.getRiders(id);
-        this.getVehicles(id);
+        this.getVehicles(id).then(response => {
+          this.getRiders(id);
+        });
       }
       this.vendorType = this.orders[id - 1].vendor_type;
       this.ownerId = this.sessionInfo.id;
@@ -759,7 +745,7 @@ export default {
         if (this.orders[id - 1].package_details.load_weight) {
           this.weight = `${this.orders[id - 1].package_details.load_weight} ${this.orders[id - 1].package_details.load_units}`;
         } else {
-          this.weight = 'No weight provided';
+          this.weight = this.$t('pending.no_weight_provided');
         }
         if (this.orders[id - 1].package_details.no_of_loaders) {
           this.loaders = this.orders[id - 1].package_details.no_of_loaders;
@@ -885,21 +871,21 @@ export default {
       }
     },
     detailsCheckForAddingDriversAndAddingVehicles() {
-      if (this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
+      if (this.newRider && this.ID.length > 0 && this.ownerPhone && this.driverPhone.toString().length >= 10 && this.driverName && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.insuNo && this.vendorType && this.box && this.regNo && this.ownerId && this.newVehicle && this.orderNo) {
         return true;
       } else {
         return false;
       }
     },
     detailsCheckForAddingDriverSAndSelectingVehicles() {
-      if (this.vehicleId && this.newRider && this.ID.toString().length >= 8 && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
+      if (this.vehicleId && this.ID.length > 0 && this.newRider && this.ownerPhone && this.driverPhone.toString().length >= 10 && (this.driverPhone.startsWith('+') || this.driverPhone.startsWith('7')) && this.driverName && this.vendorType && this.box && this.ownerId && this.vehicleId && !this.newVehicle && this.orderNo && this.partnerVendor) {
         return true;
       } else {
         return false;
       }
     },
     sendBid(id) {
-      this.sendQuoteButtonState = 'sending quote...';
+      this.sendQuoteButtonState = this.$t('pending.sending_quote');
       const newVehiclePayload = {
         registration_no: this.regNo,
         box: this.box,
@@ -964,14 +950,9 @@ export default {
       axios
         .post(`${this.auth}v1/update_order_bid/`, payload, this.config)
         .then(response => {
-          this.sendQuoteButtonState = 'adjust quote';
+          this.sendQuoteButtonState = this.$t('pending.adjust_quote');
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -983,13 +964,8 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.sendQuoteButtonState = this.$t('pending.adjust_quote');
+            this.notify(3, 0, `${error.response.data.message}`);
           }
         });
     },
@@ -1000,14 +976,9 @@ export default {
       axios
         .post(`${this.auth}v1/cancel_order_bid/`, cancelbidpayload, this.config)
         .then(response => {
-          this.sendQuoteButtonState = 'adjust quote';
+          this.sendQuoteButtonState = this.$t('pending.adjust_quote');
           if (response.data.status) {
-            this.notificationName = 'message-box-up';
-            this.message = 7;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
-            this.error = response.data.message;
+            this.notify(3, 1, response.data.message);
             this.opened = [];
             this.orders = [];
             this.responseNo = 0;
@@ -1019,13 +990,8 @@ export default {
         .catch(error => {
           this.errorObj = error.response;
           if (error.response) {
-            this.sendQuoteButtonState = 'adjust quote';
-            this.error = `${error.response.data.message}`;
-            this.notificationName = 'message-box-up';
-            this.message = 4;
-            setTimeout(() => {
-              this.notificationName = 'message-box-down';
-            }, 4000);
+            this.sendQuoteButtonState = this.$t('pending.adjust_quote');
+            this.notify(3, 0, `${error.response.data.message}`);
           }
         });
     },
@@ -1060,15 +1026,6 @@ export default {
         this.vehicleId = this.vehicles[q].vehicle_id;
         this.refrigirated = this.vehicles[q].refrigerated;
         this.partnerVendor = parseInt(this.vehicles[q].vendor_type, 10);
-        if (this.partnerVendor !== this.orders[id - 1].vendor_type) {
-          this.error = `The order requires a ${this.vehicles[q].vendor_disp_name} yet the vehicle selected is a ${this.orders[id - 1].vendorname}`;
-          this.notificationName = 'message-box-up';
-          this.message = 2;
-          setTimeout(() => {
-            this.notificationName = 'message-box-down';
-          }, 4000);
-          this.partnerVendor = null;
-        }
       }
       setTimeout(() => {
         this.confirm(id);
@@ -1143,40 +1100,46 @@ export default {
       });
     },
     getRiders(id) {
-      const riderload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
+      return new Promise((resolve, reject) => {
+        const riderload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+        });
 
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_riders`, riderload, this.config)
-        .then(response => {
-          if (response.status === 200) {
+        axios
+          .post(`${this.auth}partner/v1/partner_portal/available_riders`, riderload, this.config)
+          .then(response => {
             const unescaped = response.data;
-            unescaped.data.forEach((row, v) => {
+            unescaped.available_riders.forEach((row, v) => {
               row.count = v;
               this.riders.push(row);
             });
             if (this.riders.length !== 0) {
               this.autoSelectRiders(id);
             }
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
     getVehicles(id) {
-      const vehicleload = JSON.stringify({
-        owner_id: this.sessionInfo.id,
-      });
-      axios
-        .post(`${this.auth}rider/admin_partner_api/v5/partner_portal/available_vehicles`, vehicleload, this.config)
-        .then(response => {
-          if (response.status === 200) {
+      return new Promise((resolve, reject) => {
+        const vehicleload = JSON.stringify({
+          owner_id: this.sessionInfo.id,
+        });
+        axios
+          .post(`${this.auth}partner/v1/partner_portal/available_vehicles`, vehicleload, this.config)
+          .then(response => {
             const unescaped = response.data;
             let counter = -1;
-            unescaped.data.forEach((row, v) => {
-              if (row.vendor_type === this.orders[id - 1].vendor_type.toString()) {
+            unescaped.available_vehicles.forEach((row, v) => {
+              if ([20, 25].includes(this.orders[id - 1].vendor_type) && [20, 25].includes(row.vendor_type)) {
+                counter += 1;
+                row.count = counter;
+                this.vehicles.push(row);
+              } else if (row.vendor_type === this.orders[id - 1].vendor_type) {
                 counter += 1;
                 row.count = counter;
                 this.vehicles.push(row);
@@ -1185,11 +1148,13 @@ export default {
             if (this.vehicles.length !== 0) {
               this.autoSelectVehicles(id);
             }
-          }
-        })
-        .catch(error => {
-          this.errorObj = error.response;
-        });
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
     },
     refreshOrders() {
       interval = setInterval(() => {
@@ -1239,7 +1204,7 @@ export default {
         from_date: '2014-02-09',
         limit: `${this.orderRange.split(' ')[0]}, ${100}`,
       };
-      let vendfilter = document.getElementById('vend');
+      const vendfilter = document.getElementById('vend');
       if (vendfilter) {
         vendfilter.value = '';
       }
@@ -1335,12 +1300,12 @@ export default {
       }
     },
     trackCancelBid(payload) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner Order Cancel Bid Web', JSON.parse(payload));
       }
     },
     trackUpdateBid(payload) {
-      if (process.env.VUE_APP_AUTH !== undefined && !process.env.VUE_APP_AUTH.includes('test')) {
+      if (process.env.DOCKER_ENV === 'production') {
         mixpanel.track('Owner Order Update Bid Web', JSON.parse(payload));
       }
     },

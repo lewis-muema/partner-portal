@@ -1,9 +1,9 @@
 .stats--dashboard{
   box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.1) !important;
-  height: 203px !important;
+  min-height: 90%;
 }
 .stats-container{
-  width: 30% !important;
+  width: 32% !important;
 }
 .dashboard-header{
   padding: 5px 10px;
@@ -24,7 +24,7 @@
 .completed--checker{
   width: 10px;
   height: 10px;
-  background: #F57E20;
+  background: #EE7D00;
   margin: 3%;
 }
 .uncompleted--checker{
@@ -38,7 +38,7 @@
   padding-top: 4px;
 }
 .row--extra-align{
-  width: 59%;
+  width: 70%;
   margin-left: 4%;
   padding-top: 9%;
 }
@@ -52,11 +52,12 @@
 }
 .completed--order--stats{
  margin-left: 4%;
- padding-top: 37px;
+ padding-top: 4%;
  width:86% !important;
 }
 .completed--order-inner{
  padding-bottom: 8px;
+ font-weight: 600;
 }
 .completed--order--extra{
  padding-top: 13%;
@@ -67,12 +68,16 @@
 }
 .online--time-inner{
   padding-bottom: 8px;
+  font-weight: 600;
+}
+.delay--inner-text{
+  font-weight: 600;
 }
 .online--time--extra{
-  padding-top: 8%;
+  padding-top: 5%;
 }
 .delay-inner{
-  padding-top: 10%;
+  padding-top: 4%;
 }
 .delay--extra{
   padding-top: 8%;
@@ -94,7 +99,7 @@
   font-size: 10px;
   position: relative;
   text-indent: -9999em;
-  border-top: 1.1em solid #F57E20;
+  border-top: 1.1em solid #EE7D00;
   border-right: 1.1em solid #f3f3f3;
   border-bottom: 1.1em solid #f3f3f3;
   border-left: 1.1em solid #f3f3f3;
@@ -129,4 +134,261 @@
 }
 .checked-daily-target{
   color:#00b800 ;
+}
+.reassign-count{
+  border-radius: 50%;
+  padding: 7px;
+  font-size: 11px;
+  display: inline-block;
+  line-height: 1;
+  background: #EE7D00;
+  border: 1px solid #EE7D00;
+  color: #FFFFFF !important;
+}
+.online-time--outer{
+  margin-left: 4%;
+  padding-top: 4%;
+  width:86% !important;
+}
+.top-reasons-section{
+  padding-top:0% !important;
+}
+.top-reasons-header{
+  font-weight: 600;
+}
+.partner--image {
+  display: inline-block;
+  vertical-align: top;
+  width: 86px;
+  height: 50px;
+}
+.partner-icon {
+  cursor: pointer;
+  padding-left: 15%;
+  float: left;
+  border-radius: 50%;
+  padding: 6px;
+  max-height: 52px;
+  min-height: 50px;
+  width: 50px;
+  padding-bottom: 3px;
+}
+.success-license {
+  font-size: 26px;
+  margin-top: 30%;
+  color: #1B7FC3;
+}
+.update-license {
+  background-color: #635c5c;
+  border-color: #635c5c;
+  color: #fff;
+  width: 90% !important;
+}
+.declined-highlight {
+  color: #ff0000;
+}
+.pending-highlight {
+  color: #EE7D00;
+}
+.approved-highlight {
+  color: #1B7FC3;
+}
+.request-refund--section {
+  margin-left: 2%;
+  margin-bottom: 2%;
+}
+.request-refund-btn {
+  background-color: #EE7D00;
+  border-color: #EE7D00;
+  color: #fff;
+  height: 48px !important;
+  width: 14% !important;
+}
+.inner-dialog {
+  display: flex;
+  flex-wrap: wrap;
+}
+.drag-image {
+  flex: 55%;
+  padding: 0px 20px 20px;
+}
+.main-dialog {
+  flex: 45%;
+  padding: 0px 20px 20px;
+}
+.fakeimg {
+  background-color: #aaa;
+  width: 100%;
+  padding: 20px;
+}
+.request-refund-inputs {
+  padding: 0px 10px 10px;
+}
+.request_refund-inputs {
+  border: 1px solid #999999;
+  height: 40px;
+  border-radius: 5px;
+  width: 100%;
+}
+.drag-image > div > div:nth-child(1) > div > input {
+  display: none;
+}
+.bike-image> div > div:nth-child(1) > div > input {
+  display: none;
+}
+.el-upload--picture-card {
+  width: 96% !important;
+  height: 227px !important;
+}
+.el-upload-dragger {
+  width: 300px !important;
+}
+.el-upload-list__item-name {
+  display: none;
+}
+.reward-upload-label {
+  font-style: italic;
+  font-size: 14px;
+  color: #EE7D00;
+  font-weight: 700;
+  cursor: pointer;
+}
+.dialog-footer {
+  text-align: center !important;
+}
+.cancel-refund {
+  margin-right: 4%;
+  width: 30%;
+}
+.confirm-refund {
+  margin-left: 4%;
+  width: 30%;
+}
+.request-refund-btn:focus,
+.request-refund-btn:hover {
+  color: #fff;
+  background-color: #EE7D00;
+  border-color: #EE7D00;
+  outline: inherit;
+}
+.el-button:focus,
+.el-button:hover {
+  outline: inherit;
+}
+.request-refund-label {
+  font-size: 17px;
+  line-height: 21px;
+  color: #000000;
+}
+.refund-text {
+  font-size: 15px;
+}
+.refund-documents {
+  width: 100%;
+}
+.download-refund-img {
+  height: 200px;
+}
+.refund-main-dialog {
+  width: 100%;
+}
+.dialog-inner-label {
+  font-size: 15px;
+  line-height: 21px;
+  color: #000000;
+}
+.el-dialog__title {
+  margin-left: 3% !important;
+}
+.vendor_active_final {
+  background: #d0ecfd;
+  border: 2px solid #1B7FC3;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  animation: flip-scale-down-diag-2 0.5s linear;
+}
+@keyframes flip-scale-down-diag-2 {
+  0% {
+    transform: scale(1) rotate3d(-1, 1, 0, 0deg);
+  }
+  50% {
+    transform: scale(0.4) rotate3d(-1, 1, 0, -90deg);
+  }
+  100% {
+    transform: scale(1) rotate3d(-1, 1, 0, -180deg);
+  }
+}
+.carrier-upper-padding {
+  padding-top: 2%;
+  margin-bottom: 8%;
+}
+.vendors-final-outerline {
+  display: flex;
+  justify-content: space-between;
+  width: 89%;
+  margin-left: 2%;
+  margin-top: 2%;
+}
+.vendor-final-cards {
+  border: 1.0945px solid #d8d8d8;
+  box-sizing: border-box;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  width: 42%;
+}
+.vendor-types-final {
+  height: 82px;
+  min-width: 74px;
+  padding: 15%;
+  cursor: pointer;
+  margin-left: 14%;
+}
+.vendor-label {
+  text-align: center;
+  font-size: 12px;
+  line-height: 21px;
+  color: #000000;
+}
+.radio-options {
+  color: #000000;
+}
+.documents-table-outer {
+  width: 100%;
+}
+.bike-status-rider-label {
+  padding-top: 3%;
+}
+.insurance-rider-data {
+  padding-top: 3%;
+}
+.refund-rider-info {
+  width: 100% !important;
+}
+button:focus {
+  outline: none !important;
+}
+.declined-license {
+  font-size: 26px;
+  margin-top: 30%;
+  color: #EE7D00;
+}
+.driver-info {
+  padding-top: 5%;
+}
+.pending-license {
+  color: #EE7D00;
+}
+.upload_image {
+  width: 100%;
+  height: 132px;
+}
+.submit-dialog-footer{
+  width: 100%;
+}
+@media (max-width: 599px) {
+  .stats-container {
+    width: 100% !important;
+  }
+}
+.align_performance_rate{
+  padding-top: 0 !important;
 }

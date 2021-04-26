@@ -1,13 +1,25 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import axios from 'axios';
 import moxios from 'moxios';
+import moment from 'moment';
 import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Pending from '@/views/pending.vue';
 import './localStorage';
+import messages from './messages';
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Pending.vue', () => {
   const wrapper = shallowMount(Pending, {
     sync: false,
+    i18n,
   });
   const sessionData = {
     state: '1',
@@ -54,6 +66,7 @@ describe('Pending.vue', () => {
       },
     ],
   };
+  const d = new Date();
   const order = [
     {
       duration_read: 12,
@@ -231,7 +244,10 @@ describe('Pending.vue', () => {
               FlatName: '',
               Address: 'Not Indicated',
               Estate: '',
-              viewport: { southwest: { lng: 36.761785169709, lat: -1.3001272802915 }, northeast: { lng: 36.764483130292, lat: -1.2974293197085 } },
+              viewport: {
+                southwest: { lng: 36.761785169709, lat: -1.3001272802915 },
+                northeast: { lng: 36.764483130292, lat: -1.2974293197085 },
+              },
               Road: 'Junction Mall Parking Hall,  Ngong Rd',
               Vicinity: 'Not Indicated',
               Label: 'Junction Mall Parking Hall',
@@ -253,7 +269,10 @@ describe('Pending.vue', () => {
               FlatName: '',
               Address: 'Not Indicated',
               Estate: '',
-              viewport: { southwest: { lng: 36.786630719708, lat: -1.2943993302915 }, northeast: { lng: 36.789328680291, lat: -1.2917013697085 } },
+              viewport: {
+                southwest: { lng: 36.786630719708, lat: -1.2943993302915 },
+                northeast: { lng: 36.789328680291, lat: -1.2917013697085 },
+              },
               Road: 'Unnamed Road,  Nairobi',
               Vicinity: 'Not Indicated',
               Label: '',
@@ -287,7 +306,10 @@ describe('Pending.vue', () => {
           FlatName: '',
           Address: 'Not Indicated',
           Estate: '',
-          viewport: { southwest: { lng: 36.786630719708, lat: -1.2943993302915 }, northeast: { lng: 36.789328680291, lat: -1.2917013697085 } },
+          viewport: {
+            southwest: { lng: 36.786630719708, lat: -1.2943993302915 },
+            northeast: { lng: 36.789328680291, lat: -1.2917013697085 },
+          },
           Road: 'Unnamed Road,  Nairobi',
           Vicinity: 'Not Indicated',
           Label: '',
@@ -308,7 +330,10 @@ describe('Pending.vue', () => {
           FlatName: '',
           Address: 'Not Indicated',
           Estate: '',
-          viewport: { southwest: { lng: 36.761785169709, lat: -1.3001272802915 }, northeast: { lng: 36.764483130292, lat: -1.2974293197085 } },
+          viewport: {
+            southwest: { lng: 36.761785169709, lat: -1.3001272802915 },
+            northeast: { lng: 36.764483130292, lat: -1.2974293197085 },
+          },
           Road: 'Junction Mall Parking Hall,  Ngong Rd',
           Vicinity: 'Not Indicated',
           Label: 'Junction Mall Parking Hall',
@@ -411,7 +436,7 @@ describe('Pending.vue', () => {
       toCity: 'Nairobi',
       bidPlaced: 0,
       confirmed: 0,
-      orderTime: '2019-08-15T11:20:14.000Z',
+      orderTime: d.setMonth(d.getMonth() - 4),
       takeHome: 3920,
       orderNo: 'AC44AC153-X41',
       min_amount: 3500,
@@ -546,7 +571,10 @@ describe('Pending.vue', () => {
     expect(wrapper.vm.orderNotes(1)).equal('Notes for this order');
   });
   it('Check if the time format function returns the order time in the correct format', () => {
-    expect(wrapper.vm.timeFormat(1)).equal('Thu, 15th Aug');
+    expect(wrapper.vm.timeFormat(1)).equal(moment(d).format('ddd, Do MMM'));
+  });
+  it('Check if the timer function returns the timer in the correct format', () => {
+    expect(wrapper.vm.timer(1)).equal('4 months ago');
   });
   it('Check if the currency format function returns the take home amount with the thousands separator', () => {
     expect(wrapper.vm.currencyFormat(1)).equal('3,920');

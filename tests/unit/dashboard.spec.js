@@ -1,60 +1,124 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import { expect } from 'chai';
 import moment from 'moment';
 import { shallowMount } from '@vue/test-utils';
 import Dashboard from '@/views/dashboard.vue';
 import './localStorage';
+import messages from './messages';
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Dashboard.vue', () => {
   const wrapper = shallowMount(Dashboard, {
     sync: false,
+    i18n,
   });
-  wrapper.vm.dataResponse = {
-    status: true,
-    msg: {
-      Cash_made_this_Month: 'KES -100',
-      Cash_made_this_Week: 'KES -20',
-      Average_Rating_this_Month: 4.1,
-      Average_Rating_this_Week: 2.2,
-      Trips_made_this_Week: '0',
-      Hours_online_this_Month: 400.11,
-      Hours_online_this_Week: 30.8,
-      Trips_made_this_Month: '0',
-      Next_transfer: 'KES -1106385.7500000002',
-      Monthly_earnings: [{ amount: '1090370', month: 'June', default_currency: 'KES' }, { amount: '6878496.749999999', month: 'July', default_currency: 'KES' }, { amount: '285000', month: 'August', default_currency: 'KES' }],
-      Total_Riders: '39',
+  wrapper.vm.activeCurrency = 'KES';
+  wrapper.vm.currencyStats = {
+    KES: {
+      cashMadeThisMonth: 100,
+      cashMadeThisWeek: 200,
+      averageTripsThisMonth: 30,
+      averageTripsThisWeek: 10,
+      nextTransfer: '3779948.20',
+      monthlyEarnings: [
+        {
+          amount: 96978,
+          month: 'February',
+          currency: 'KES',
+        },
+        {
+          amount: 11988,
+          month: 'March',
+          currency: 'KES',
+        },
+        {
+          amount: 1500,
+          month: 'April',
+          currency: 'KES',
+        },
+      ],
+      totalOrders: [
+        {
+          totalOrders: 6,
+          currency: 'KES',
+          month: 'April',
+        },
+        {
+          totalOrders: 15,
+          currency: 'KES',
+          month: 'February',
+        },
+        {
+          totalOrders: 79,
+          currency: 'KES',
+          month: 'January',
+        },
+        {
+          totalOrders: 3,
+          currency: 'KES',
+          month: 'March',
+        },
+        {
+          totalOrders: 222,
+          currency: 'KES',
+          month: 'May',
+        },
+      ],
     },
   };
+  wrapper.vm.ownerStats = {
+    averageRatingThisWeek: 3,
+    averageRatingThisMonth: 4,
+    hoursOnlineThisMonth: 0.023,
+    hoursOnlineThisWeek: 0.023,
+  };
   it('Check whether cash made this month function always returns a positive', () => {
-    expect(wrapper.vm.cashMadeThisMonth()).equal('KES 100');
+    expect(wrapper.vm.cashMadeThisMonth).equal(100);
   });
   it('Check whether cash made this week function always returns a positive', () => {
-    expect(wrapper.vm.cashMadeThisWeek()).equal('KES 20');
+    expect(wrapper.vm.cashMadeThisWeek).equal(200);
   });
   it('Check whether next transfer function always returns a truncated positive', () => {
-    expect(wrapper.vm.nextTransfer()).equal('KES 1,106,385');
+    expect(wrapper.vm.nextTransfer).equal(3779948.2);
   });
-  it('Check whether weekly rating function always truncates the rating value', () => {
-    expect(wrapper.vm.ratingThisWeek()).equal(2);
+  it('Check whether weekly rating function always returns the correct rating array', () => {
+    expect(wrapper.vm.ratingThisWeek()[0]).equal(1);
+    expect(wrapper.vm.ratingThisWeek()[1]).equal(1);
+    expect(wrapper.vm.ratingThisWeek()[2]).equal(1);
+    expect(wrapper.vm.ratingThisWeek()[3]).equal(0);
+    expect(wrapper.vm.ratingThisWeek()[4]).equal(0);
   });
-  it('Check whether monthly rating function always truncates the rating value', () => {
-    expect(wrapper.vm.ratingThisMonth()).equal(4);
+  it('Check whether monthly rating function always returns the correct rating array', () => {
+    expect(wrapper.vm.ratingThisMonth()[0]).equal(1);
+    expect(wrapper.vm.ratingThisMonth()[1]).equal(1);
+    expect(wrapper.vm.ratingThisMonth()[2]).equal(1);
+    expect(wrapper.vm.ratingThisMonth()[3]).equal(1);
+    expect(wrapper.vm.ratingThisMonth()[4]).equal(0);
   });
-  it('Check whether weekly online hours function always truncates the hours', () => {
-    expect(wrapper.vm.hoursOnlineThisWeek()).equal(30);
+  it('Check whether weekly online hours function always returns the correct the hours', () => {
+    expect(wrapper.vm.hoursOnlineThisWeek()).equal('0.02');
   });
-  it('Check whether monthly online hours function always truncates the hours', () => {
-    expect(wrapper.vm.hoursOnlineThisMonth()).equal(400);
+  it('Check whether monthly online hours function always returns the correct the hours', () => {
+    expect(wrapper.vm.hoursOnlineThisMonth()).equal('0.02');
   });
-  it('Check whether weekly rating percentage function always calculates the correct percentage', () => {
-    expect(wrapper.vm.ratingPercentage()).equal(40);
+  it('Check whether currencies function always returns the correct currencies array', () => {
+    expect(wrapper.vm.currencies[0]).equal('KES');
   });
-  it('Check whether monthly rating percentage function always calculates the correct percentage', () => {
-    expect(wrapper.vm.ratingPercentageMonth()).equal(80);
+  it('Check whether ordersDataPoints function always calculates the correct data for the chart', () => {
+    expect(wrapper.vm.ordersDataPoints.datasets[0].label).equal('Total Orders');
+    expect(wrapper.vm.ordersDataPoints.labels[0]).equal('April');
+    expect(wrapper.vm.ordersDataPoints.datasets[0].data[0]).equal(6);
   });
-  it('Check whether weekly hours online percentage function always calculates the correct percentage', () => {
-    expect(wrapper.vm.hoursPercentageWeek()).equal(17);
-  });
-  it('Check whether monthly hours online percentage function always calculates the correct percentage', () => {
-    expect(wrapper.vm.hoursPercentageMonth()).equal(Math.floor((wrapper.vm.dataResponse.msg.Hours_online_this_Month / (moment().daysInMonth() * 24)) * 100));
+  it('Check whether revenueDataPoints function always calculates the correct data for the chart', () => {
+    expect(wrapper.vm.revenueDataPoints.datasets[0].label).equal('Amount earned (KES)');
+    expect(wrapper.vm.revenueDataPoints.labels[0]).equal('February');
+    expect(wrapper.vm.revenueDataPoints.datasets[0].data[0]).equal(96978);
   });
 });

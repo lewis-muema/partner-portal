@@ -11,12 +11,12 @@
                 v-model="from"
                 input-class="filtIn"
                 id="dtfrom"
-                placeholder="From"
+                :placeholder="$t('loans.from')"
                 name="from"
               ></datepicker>
             </div>
             <div class="col-5">
-              <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+              <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('loans.to')" name="to"></datepicker>
             </div>
             <div class="subFilt col-2">
               <button
@@ -32,12 +32,12 @@
           </div>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0">
+        <table id="disp" class="table table-bordered hidden-sm-down" width="100%" cellspacing="0" :key="refKey">
           <div class="divider-top"></div>
           <datatable
             :columns="columns"
             :rows="rows"
-            :title="`Loans for ${this.sessionInfo.name} for ${monthPeriod}`"
+            :title="$t('loans.loans_for', { name: sessionInfo.name, monthPeriod: monthPeriod })"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -54,12 +54,12 @@
             v-model="from"
             input-class="filtIn"
             id="dtfrom"
-            placeholder="From"
+            :placeholder="$t('loans.from')"
             name="from"
           ></datepicker>
         </div>
         <div class="col-12 padding margin-bottom">
-          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="$t('loans.to')" name="to"></datepicker>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
           <button
@@ -73,13 +73,13 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No loans found for this period</p>
+        <p v-if="rows.length === 0" class="no-loans">{{ $t('loans.no_loans') }}</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
-                <th>Amount</th>
-                <th>Balance</th>
+                <th>{{ $t('loans.amount') }}</th>
+                <th> {{ $t('loans.balance') }}</th>
               </tr>
             </thead>
             <tr class="divider">
@@ -105,6 +105,7 @@ import axios from 'axios';
 import moment from 'moment';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
+import timezone from '../mixins/timezone';
 
 export default {
   title: 'Partner Portal - Loans',
@@ -114,6 +115,7 @@ export default {
     datatable: DataTable,
     errorHandler,
   },
+  mixins: [timezone],
   data() {
     return {
       sessionInfo: '',
@@ -121,9 +123,10 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
-      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }],
+      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: this.$t('loans.date'), field: 'pay_time' }, { label: this.$t('loans.amount'), field: 'amount' }, { label: this.$t('loans.balance'), field: 'running_balance' }, { label: this.$t('loans.narrative'), field: 'pay_narrative' }],
       page: 1,
       rows: [
         {
@@ -141,12 +144,13 @@ export default {
       windowWidth: '',
       monthPeriod: '',
       errorObj: '',
+      refKey: 1,
     };
   },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.monthPeriod = moment().format('MMMM YYYY');
+      this.monthPeriod = moment().utc().local().format('MMMM YYYY');
       this.fetchLoans(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -161,7 +165,7 @@ export default {
     },
     filt() {
       if (this.to === '' || this.from === '') {
-        this.error = 'Please select both a from and to date';
+        this.error = this.$t('loans.please_select');
         setTimeout(() => {
           this.error = '';
         }, 4000);
@@ -172,28 +176,20 @@ export default {
     },
     fetchLoans(requestType) {
       const payload = this.definePayload(requestType);
-      this.displayFetchingStatus('Fetching loans', 0);
+      this.displayFetchingStatus(this.$t('loans.fetching_loans'), 0);
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/loans`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/loans`, payload, this.config)
         .then(response => {
-          if (requestType === 2) {
-            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
-          }
-          if (response.data.msg) {
-            this.handleResponse(response);
-          } else {
-            if (requestType === 2) {
-              this.error = 'No loans found for this period';
-              setTimeout(() => {
-                this.error = '';
-              }, 4000);
-            }
-            this.rows = [];
-            this.displayFetchingStatus('No loans found for this period', 0);
-          }
+          $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
+          this.handleResponse(response);
         })
         .catch(error => {
-          this.errorObj = error.response;
+          this.error = error.response.data.message;
+          setTimeout(() => {
+            this.error = '';
+          }, 4000);
+          this.rows = [];
+          this.displayFetchingStatus(error.response.data.message, 0);
         });
     },
     definePayload(requestType) {
@@ -207,7 +203,7 @@ export default {
           .endOf('month')
           .format('YYYY-MM-DD HH:mm:ss');
       } else {
-        $('#filtSub').html('<div class="loading-spinner"></div> LOADING');
+        $('#filtSub').html(`<div class="loading-spinner"></div> ${this.$t('loans.loading')}`);
         firstDay = moment(this.from).format('YYYY-MM-DD HH:mm:ss');
         lastDay = moment(this.to).format('YYYY-MM-DD HH:mm:ss');
         this.rows = [];
@@ -223,10 +219,15 @@ export default {
       });
       return payload;
     },
+    dateFormat(date) {
+        const UTCDate = this.convertToUTC(date);
+        const local = this.convertToLocalTime(UTCDate);
+        return local;
+    },
     handleResponse(response) {
       const record = [];
       let currency = '';
-      response.data.msg.forEach((row, i) => {
+      response.data.loans.forEach((row, i) => {
         this.sessionInfo.riders.forEach((rider, x) => {
           if (rider.rider_id === row.rider_id) {
             currency = rider.default_currency;
@@ -235,7 +236,7 @@ export default {
         record.push({
           rider_id: row.rider_id,
           txn: row.txn,
-          pay_time: row.pay_time,
+          pay_time: this.dateFormat(row.pay_time),
           amount: `${currency} ${row.amount}`,
           running_balance: `${currency} ${row.running_balance}`,
           pay_narrative: row.pay_narrative,
@@ -243,6 +244,7 @@ export default {
       });
       this.removeFetchingStatus();
       this.rows = record;
+      this.refKey += 1;
     },
     displayFetchingStatus(message, time) {
       setTimeout(() => {

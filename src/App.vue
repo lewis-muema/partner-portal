@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <loginHeader
-      v-if="this.$route.name === 'logIn' || this.$route.name === 'driverRequest' || this.$route.name === 'driverRequestBlank' || this.$route.name === 'externalTrackingAll'|| this.$route.name === 'externalTrackingId'|| this.$route.name === 'externalTrackingFrom'|| this.$route.name === 'externalTrackingBlank'"
-    />
+    <loginHeader v-if="this.$route.name === 'logIn' || this.$route.name === 'driverRequest' || this.$route.name === 'driverRequestBlank' || this.$route.name === 'externalTrackingAll' || this.$route.name === 'externalTrackingId' || this.$route.name === 'externalTrackingFrom' || this.$route.name === 'externalTrackingBlank' || this.$route.name === 'externallogin' || this.$route.name === 'authlogin' || this.$route.name === 'signature' || this.$route.name === 'bidding' || this.$route.name === 'webform' || this.$route.name === 'recipient'" />
     <appHeader v-else />
     <router-view />
   </div>
@@ -26,8 +24,14 @@ export default {
   font-weight: 400;
   font-style: normal;
 }
+@font-face {
+  font-family: 'Nunito';
+  src: url('../src/assets/fonts/Nunito-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
 #app {
-  font-family: 'HelveticaNeue';
+  font-family: 'Nunito';
   height: 100%;
 }
 #nav {
@@ -41,5 +45,24 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.el-message-box__headerbtn {
+  text-align: end !important;
+  border-style: none !important;
+}
+.el-button--small {
+  width: 30% !important;
+}
+.el-dialog__headerbtn {
+  text-align: end !important;
+  border-style: none !important;
+}
+.el-dialog {
+  max-height: 75%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.el-dialog__headerbtn :focus {
+  outline: none !important ;
 }
 </style>

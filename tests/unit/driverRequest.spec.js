@@ -1,3 +1,5 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import axios from 'axios';
 import moxios from 'moxios';
 import VueRouter from 'vue-router';
@@ -5,6 +7,14 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import DriveRequest from '@/views/driverRequest.vue';
 import './localStorage';
+import messages from './messages';
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('DriverRequest.vue', () => {
   beforeEach(() => {
@@ -28,6 +38,7 @@ describe('DriverRequest.vue', () => {
     sync: false,
     localVue,
     router,
+    i18n,
   });
   const sessionData = {
     state: '1',
@@ -85,24 +96,24 @@ describe('DriverRequest.vue', () => {
           status: 200,
           response: {
             status: true,
-            msg: {
-              allocation_details: {
-                temp_rider_allocation_id: '247',
+            data: {
+              allocation_details: [{
+                temp_rider_allocation_id: 247,
                 token: 'y7ajN',
-                rider_id: '17162',
-                owner_id: '3',
+                rider_id: 17162,
+                owner_id: 3,
                 rider_phone: '+254795510441',
-                vehicle_id: '1337',
+                vehicle_id: 1337,
                 date_allocated: '2019-09-06 14:48:14',
                 date_completed: null,
-                allocation_status: '1',
-                allocation_type: '1',
-                rider_migrated: '2',
+                allocation_status: 1,
+                allocation_type: 1,
+                rider_migrated: 2,
                 date_time: '2019-09-06 14:48:14',
-                status: '1',
-              },
+                status: 1,
+              }],
               vehicle_details: {
-                id: '1337',
+                id: 1337,
                 model: 'Actros',
                 insurance: null,
                 make: 'Mercedes',
@@ -114,25 +125,25 @@ describe('DriverRequest.vue', () => {
                 log_book: '1552118380083ap34c7712-h2p1-delivery_note-0.jpg',
                 registration_no: 'KAL 344K',
                 photo: '1552118394507download(1).jpeg',
-                box: '0',
-                vendor_type: '20',
+                box: 0,
+                vendor_type: 20,
                 date_added: '2019-03-09 11:00:03',
                 date_time: '2019-03-09 11:00:03',
-                status: '1',
+                status: 1,
                 owner: null,
                 partner: null,
-                owner_id: '3',
-                closed: '0',
-                refrigerated: '1',
-                verified: '0',
+                owner_id: 3,
+                closed: 0,
+                refrigerated: 1,
+                verified: 0,
                 country_code: null,
-                vehicle_type: '0',
-                carrier_type: '0',
+                vehicle_type: 0,
+                carrier_type: 0,
                 load_capacity: null,
-                vehicle_size: '0',
+                vehicle_size: 0,
               },
               owner_details: {
-                id: '3',
+                id: 3,
                 name: 'Elikana Muhanji',
                 id_no: '237078443',
                 kra_pin: 'A212345678909',
@@ -144,24 +155,24 @@ describe('DriverRequest.vue', () => {
                 token: 'm9JBUJfzxK',
                 date_added: '2018-01-18 17:44:05',
                 date_time: '0000-00-00 00:00:00',
-                status: '1',
+                status: 1,
                 country_code: 'KE',
                 default_currency: 'KES',
                 referer: null,
-                stage: '1',
-                state: '1',
+                stage: 1,
+                state: 1,
                 nok_phone: null,
                 nok_name: null,
-                owner_type: '0',
+                owner_type: 0,
               },
             },
           },
         })
         .then(() => {
           expect(wrapper.vm.responseStatus).equal(true);
-          expect(wrapper.vm.allocationType).equal('1');
+          expect(wrapper.vm.allocationType).equal(1);
           expect(wrapper.vm.token).equal('y7ajN');
-          expect(wrapper.vm.message).equal('Elikana Muhanji has invited you to drive their Actros : KAL 344K on Sendy');
+          // expect(wrapper.vm.message).equal('Elikana Muhanji has invited you to drive their Actros : KAL 344K on Sendy');
           done();
         })
         .catch(error => {
@@ -176,11 +187,17 @@ describe('DriverRequest.vue', () => {
       const request = moxios.requests.mostRecent();
       request
         .respondWith({
-          status: 200,
-          response: { status: false, msg: 'Application was accepted on 2019-08-23 10:07:44' },
+          status: 404,
+          response: {
+            code: 404,
+            errorCode: 'NOT_FOUND',
+            message: 'Token provided does not exist in our database',
+            description: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404',
+            language: 'en',
+          },
         })
         .then(() => {
-          expect(wrapper.vm.message).equal('Application was accepted on 2019-08-23 10:07:44');
+          expect(wrapper.vm.message).equal('Token provided does not exist in our database');
           done();
         })
         .catch(error => {

@@ -37,9 +37,9 @@
     </div>
     <div class="performance--header--item__right">
       <div class="rating--section">
-        <a>Rating</a>
+        <a>{{ $t('perfomance.rating') }}</a>
         <p>
-          <span style="padding-top: 3%;">{{ rider.rating }}</span> <el-rate v-model="rider.rating" disabled class="el-rate__icon" disabled-void-color="#C0C4CC" :colors="['#F57E20', '#F57E20', '#F57E20']"> </el-rate>
+          <span style="padding-top: 3%;">{{ rider.rating }}</span> <el-rate v-model="rider.rating" disabled class="el-rate__icon" disabled-void-color="#C0C4CC" :colors="['#EE7D00', '#EE7D00', '#EE7D00']"> </el-rate>
         </p>
       </div>
     </div>
@@ -48,6 +48,9 @@
 
 <script>
 import axios from 'axios';
+import Mixpanel from 'mixpanel';
+
+const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 
 export default {
   name: 'riderPerformanceHeader',
@@ -59,28 +62,56 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
       visible: false,
+      listed_vendors: [1, 2, 3],
     };
   },
   created() {
     this.fetchBikeDrivers();
     this.fetchRiderList();
+    const sessionInfo = JSON.parse(localStorage.sessionData).payload;
+    const mixPanelPayload = {
+      owner_id: sessionInfo.id,
+    };
+    // this tracks all performance page loads
+    this.trackRiderPerformanceLoad(mixPanelPayload);
   },
   methods: {
+    trackRiderPerformanceLoad(payload) {
+      if (process.env.DOCKER_ENV === 'production') {
+        mixpanel.track('Rider Performance Loaded', payload);
+      }
+    },
     fetchBikeDrivers() {
       const sessionInfo = JSON.parse(localStorage.sessionData).payload;
       const riderPayload = {
         owner_id: sessionInfo.id,
-        vendor_type: 1,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_drivers`, riderPayload, this.config)
         .then(res => {
+          const fetched_list = res.data.riders;
+          if (Object.keys(fetched_list).length > 0) {
+            const filtered_list = res.data.riders.filter(obj => this.listed_vendors.includes(obj.vendor_type));
+
+            const setRider = this.$store.getters.getSelectedPartner;
+            if (Object.keys(setRider).length > 0) {
+              this.rider_list.push(setRider);
+              const fetched_data = filtered_list.filter(obj => obj.rider_id !== setRider.rider_id);
+              if (fetched_data.length > 0) {
+                for (let i = 0; i < fetched_data.length; i++) {
+                  this.rider_list.push(fetched_data[i]);
+                }
+              }
+            } else {
+              this.rider_list = filtered_list;
+            }
+          }
           this.$store.commit('setBikeAvailability', true);
-          this.$store.commit('setBikeRiders', res.data.riders);
-          this.rider_list = res.data.riders;
+          this.$store.commit('setBikeRiders', this.rider_list);
           this.singleRiderIdentifier();
           this.riderLengthIdentifier();
         })

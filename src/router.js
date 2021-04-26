@@ -13,7 +13,24 @@ import Vehicles from './views/vehicles.vue';
 import Tracking from './views/tracking.vue';
 import DriverRequest from './views/driverRequest.vue';
 import ExternalTracking from './views/externalTracking.vue';
+import Documents from './views/documents.vue';
 import Performance from './views/performance.vue';
+import PerformanceStats from './views/performanceLoader.vue';
+import ExternalLogin from './views/externalLogin.vue';
+import Signature from './views/signature.vue';
+import auxilliaryServices from './views/auxilliary/auxilliaryServices.vue';
+import freight from './views/freight/freight.vue';
+import freightDashboard from './views/freight/dashboard.vue';
+import freightOrders from './views/freight/orders.vue';
+import freightOrderDetails from './views/freight/orderDetails.vue';
+import freightPreferences from './views/freight/preferences.vue';
+import bidding from './views/bidding/biddingWebForm';
+import changeLanguage from './views/changeLanguage';
+import webform from './views/bidding/biddingWebForm.vue';
+import recipient from './views/bidRecipientOnboarding/landing.vue';
+import withdrawalStatus from './views/withdrawalStatus.vue';
+import myWithdrawals from './views/myWithdrawals.vue';
+
 
 Vue.use(Router);
 
@@ -25,6 +42,11 @@ export default new Router({
       path: '/login',
       name: 'logIn',
       component: Login,
+    },
+    {
+      path: '/signature',
+      name: 'signature',
+      component: Signature,
     },
     {
       path: '/',
@@ -52,6 +74,11 @@ export default new Router({
       component: Banks,
     },
     {
+      path: '/change_language',
+      name: 'change_language',
+      component: changeLanguage,
+    },
+    {
       path: '/loans',
       name: 'loans',
       component: Loans,
@@ -75,6 +102,11 @@ export default new Router({
       path: '/tracking',
       name: 'tracking',
       component: Tracking,
+    },
+    {
+      path: '/external_login',
+      name: 'externallogin',
+      component: ExternalLogin,
     },
     {
       path: '/driveRequest/:token',
@@ -110,6 +142,64 @@ export default new Router({
       path: '/performance',
       name: 'performance',
       component: Performance,
+    },
+    {
+      path: '/performance/partner-stats',
+      name: 'partner-stats',
+      component: PerformanceStats,
+    },
+    {
+      path: '/documents',
+      name: 'documents',
+      component: Documents,
+    },
+    {
+      path: '/auxilliary',
+      name: 'auxilliary',
+      component: auxilliaryServices,
+    },
+    {
+      path: '/bidding/:shipment_id/:owner_id/',
+      name: 'bidding',
+      component: bidding,
+    },
+    {
+      path: '/recipient/:recipient_id',
+      name: 'recipient',
+      component: recipient,
+    },
+    {
+      path: '/freight',
+      name: 'freight',
+      component: freight,
+      children: [
+        {
+          path: 'dashboard',
+          component: freightDashboard,
+        },
+        {
+          path: 'orders',
+          component: freightOrders,
+        },
+        {
+          path: 'orders/:order',
+          component: freightOrderDetails,
+        },
+        {
+          path: 'preferences',
+          component: freightPreferences,
+        },
+      ],
+    },
+    {
+      path: '/withdrawal-status/:id',
+      name: 'withdrawal-status',
+      component: withdrawalStatus,
+    },
+    {
+      path: '/myWithdrawals',
+      name: 'myWithdrawals',
+      component: myWithdrawals,
     },
   ],
 });

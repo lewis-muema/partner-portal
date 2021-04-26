@@ -16,7 +16,7 @@ body.dt-print-view {
 }
 
 .btn-primary:hover {
-  background-color: #f57f20;
+  background-color: #EE7D00;
   color: #1782c5;
 }
 .snap-error {
@@ -28,7 +28,7 @@ body.dt-print-view {
 }
 .add-driver,
 .reassign-driver {
-  color: #f57f20;
+  color: #EE7D00;
   cursor: pointer;
 }
 .cancel-allocation {
@@ -57,8 +57,8 @@ body.dt-print-view {
   border-color: #ff4949 !important;
 }
 .page-item.active .page-link {
-  background-color: #f57f20;
-  border-color: #f57f20;
+  background-color: #EE7D00;
+  border-color: #EE7D00;
 }
 .assign-driver-input {
   background: #ffffff;
@@ -75,13 +75,11 @@ body.dt-print-view {
   padding: 15px;
   margin-bottom: -35px;
 }
-
 .assign-vehicle-option {
   width: 50%;
 }
-
 .statements__blinder {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   left: 0px;
@@ -106,7 +104,6 @@ body.dt-print-view {
   margin-top: 10px;
 }
 .statement__scrollable-row {
-  overflow-y: scroll;
   max-height: 200px;
   display: inline-block;
 }
@@ -302,6 +299,7 @@ tr.shown td.details-control {
 
 .vehicles__mod-up {
   flex-direction: column;
+  padding-top: 40px !important;
 }
 
 .add-driver-modal {
@@ -408,7 +406,7 @@ label {
 
 .fil-sub {
   color: #fff !important;
-  background-color: #f57f20 !important;
+  background-color: #EE7D00 !important;
   font-size: 14px;
   width: 135px;
   padding: 8px !important;
@@ -472,7 +470,7 @@ label {
   border: 0;
 }
 .vehicles__documents-error {
-  color: #f57f20;
+  color: #EE7D00;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -491,10 +489,11 @@ label {
   line-height: 42px;
   height: 42px;
   font-size: 21px;
+  padding: 0px;
 }
 
 .statement__box-icon-orange {
-  background-color: #f57f20;
+  background-color: #EE7D00;
 }
 
 .vehicles__addc-title {
@@ -577,7 +576,7 @@ input:-ms-input-placeholder {
 
 .search-error {
   text-align: center;
-  color: #f57f20;
+  color: #EE7D00;
   padding-bottom: 10px;
   font-size: 15px;
 }
@@ -587,7 +586,8 @@ input:-ms-input-placeholder {
 }
 
 .vehicle-tool-tip {
-  width: 75px;
+  width: fit-content;
+  height: fit-content;
   color: white;
 }
 
@@ -607,12 +607,12 @@ input:-ms-input-placeholder {
   right: 40px;
   bottom: 40px;
   height: 110px;
-  width: 60px;
+  width: 100px;
   position: fixed;
 }
 
 .fab-action-button {
-  background-color: #f57f20;
+  background-color: #EE7D00;
   color: white;
   width: 60px;
   height: 60px;
@@ -668,7 +668,7 @@ input:-ms-input-placeholder {
 }
 .fab-buttons__link {
   position: fixed;
-  height: 25px;
+  height: 35px;
   width: 0px;
   color: white;
   background-color: #0000008a;
@@ -698,13 +698,13 @@ input:-ms-input-placeholder {
 
 .fab-act:hover {
   border-style: solid;
-  border-color: #f57f20;
+  border-color: #EE7D00;
   border-width: 5px 0px 5px 0px;
 }
 
 .modal-header {
   color: #fff;
-  background-color: #f57f20;
+  background-color: #EE7D00;
   border-bottom: 0;
 }
 
@@ -725,8 +725,8 @@ input:-ms-input-placeholder {
 }
 
 .btn-primary {
-  background-color: #f57f20 !important;
-  border-color: #f57f20 !important;
+  background-color: #EE7D00 !important;
+  border-color: #EE7D00 !important;
 }
 
 .btn-secondary {
@@ -755,6 +755,20 @@ input:-ms-input-placeholder {
 
 .ui-widget {
   font-size: 14.9px;
+}
+
+.to-date-selector {
+  display: flex;
+  align-items: center;
+}
+
+.clear-inputs-icon {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.to-date-selector .vdp-datepicker {
+  width: 100%;
 }
 
 .printContain {
@@ -882,7 +896,7 @@ table.dataTable tfoot > tr > th {
 }
 
 .mdshow {
-  color: #f57f20;
+  color: #EE7D00;
 }
 
 .mcshow {
@@ -904,7 +918,7 @@ table.dataTable tfoot > tr > th {
 }
 
 .statement__txt-orange {
-  color: #f57f20;
+  color: #EE7D00;
 }
 
 .statement__txt-blue {
@@ -1048,11 +1062,11 @@ ul {
 }
 
 .fab-orange {
-  background-color: #f57f20;
+  background-color: #EE7D00;
 }
 
 .mdshow {
-  color: #f57f20;
+  color: #EE7D00;
 }
 
 .vehicles__doccard-error {
@@ -1101,8 +1115,8 @@ ul {
 }
 
 .btn-outline-primary {
-  border-color: #f57f20;
-  color: #f57f20;
+  border-color: #EE7D00;
+  color: #EE7D00;
 }
 
 .btn-floating:hover {
@@ -1310,6 +1324,7 @@ button.btn-floating {
   }
   .printContain {
     padding: 10px 10px;
+    min-height: 250px;
   }
   .mobile-tab {
     background-color: #1782c5;
@@ -1378,12 +1393,12 @@ button.btn-floating {
 }
 
 .vehicles__driver-error {
-  color: #f17f3a;
+  color: #EE7D00;
   position: absolute;
   top: 15px;
 }
 .statement__withdraw-button {
-  background-color: #f17f3a;
+  background-color: #EE7D00;
   color: white;
 }
 .statement__add-bank-tab {
@@ -1447,6 +1462,15 @@ button.btn-floating {
     bottom: 20px;
   }
 }
+.notification-popup {
+  width: max-content;
+  padding: 15px;
+  height: max-content;
+  position: fixed;
+  right: 0;
+  margin: 20px;
+  z-index: 5000;
+}
 .pop-up-success {
   background-color: #05c034;
 }
@@ -1454,14 +1478,15 @@ button.btn-floating {
   background-color: red;
 }
 .pop-up-sending {
-  background-color: #f78114;
+  background-color: #EE7D00;
 }
 .message-box {
   display: none;
+  bottom: -140px;
 }
 .loader {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #f78114;
+  border-top: 4px solid #EE7D00;
   border-radius: 50%;
   width: 25px;
   height: 25px;
@@ -1471,6 +1496,19 @@ button.btn-floating {
   position: absolute;
   right: 20px;
   top: 14px;
+}
+.loading-icon {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #EE7D00;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 2s linear infinite;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.icon-container {
+  margin-right: 10px;
 }
 @keyframes spin {
   0% {

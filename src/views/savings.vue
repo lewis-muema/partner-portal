@@ -11,12 +11,12 @@
                 v-model="from"
                 input-class="filtIn"
                 id="dtfrom"
-                placeholder="From"
+                :placeholder="$t('savings.from')"
                 name="from"
               ></datepicker>
             </div>
             <div class="col-5">
-              <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+              <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('savings.to')" name="to"></datepicker>
             </div>
             <div class="subFilt col-2">
               <button
@@ -37,7 +37,7 @@
             class="savings__row"
             :columns="columns"
             :rows="rows"
-            :title="`Savings for ${this.sessionInfo.name} for ${monthPeriod}`"
+            :title="$t('savings.saving_for', { name: this.sessionInfo.name, monthPeriod: monthPeriod })"
             v-if="rows"
             :per-page="[10, 20, 30, 40, 50]"
             :default-per-page="10"
@@ -45,6 +45,7 @@
             :sortable="true"
             :exact-search="true"
             :exportable="true"
+            :locale="getLanguage"
           ></datatable>
         </table>
       </div>
@@ -54,12 +55,12 @@
             v-model="from"
             input-class="filtIn"
             id="dtfrom"
-            placeholder="From"
+            :placeholder="$t('savings.from')"
             name="from"
           ></datepicker>
         </div>
         <div class="col-12 padding margin-bottom">
-          <datepicker v-model="to" input-class="filtIn" id="dtto" placeholder="To" name="to"></datepicker>
+          <datepicker v-model="to" input-class="filtIn" id="dtto" :placeholder="$t('savings.to')" name="to"></datepicker>
         </div>
         <div class="subFilt col-12 padding margin-bottom">
           <button
@@ -73,13 +74,13 @@
           </button>
         </div>
         <div class="search-error" id="err">{{ error }}</div>
-        <p v-if="rows.length === 0" class="no-loans">No savings found for this period</p>
+        <p v-if="rows.length === 0" class="no-loans">{{ $t('savings.no_savings') }}</p>
         <div class="statement__mobile-view" v-for="row in rows" :key="row.pay_narrative">
           <table class="table-responsive mobile-table">
             <thead class="thead-mobile">
               <tr>
-                <th>Amount</th>
-                <th>Balance</th>
+                <th>{{ $t('savings.amount') }}</th>
+                <th>{{ $t('savings.balance') }}</th>
               </tr>
             </thead>
             <tr class="divider">
@@ -103,8 +104,10 @@ import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
 import moment from 'moment';
+import { mapGetters } from 'vuex';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
+import timezone from '../mixins/timezone';
 
 export default {
   title: 'Partner Portal - Savings',
@@ -114,6 +117,7 @@ export default {
     datatable: DataTable,
     errorHandler,
   },
+  mixins: [timezone],
   data() {
     return {
       sessionInfo: '',
@@ -121,9 +125,10 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
         },
       },
-      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: 'Date', field: 'pay_time' }, { label: 'Amount', field: 'amount' }, { label: 'Balance', field: 'running_balance' }, { label: 'Narrative', field: 'pay_narrative' }],
+      columns: [{ label: ' ', field: 'rider_id' }, { label: 'Txn No', field: 'txn' }, { label: this.$t('savings.date'), field: 'pay_time' }, { label: this.$t('savings.amount'), field: 'amount' }, { label: this.$t('savings.balance'), field: 'running_balance' }, { label: this.$t('savings.narrative'), field: 'pay_narrative' }],
       page: 1,
       rows: [],
       from: '',
@@ -134,10 +139,13 @@ export default {
       errorObj: '',
     };
   },
+  computed: {
+    ...mapGetters(['getLanguage']),
+  },
   created() {
     if (localStorage.sessionData) {
       this.sessionInfo = JSON.parse(localStorage.sessionData).payload;
-      this.monthPeriod = moment().format('MMMM YYYY');
+      this.monthPeriod = moment().utc().local().format('MMMM YYYY');
       this.fetchSavings(1);
       window.addEventListener('resize', this.handleResize);
       this.handleResize();
@@ -156,7 +164,7 @@ export default {
     },
     filt() {
       if (this.to === '' || this.from === '') {
-        this.error = 'Please select both a from and to date';
+        this.error = this.$t('savings.please_select_both');
         setTimeout(() => {
           this.error = '';
         }, 4000);
@@ -167,28 +175,20 @@ export default {
     },
     fetchSavings(requestType) {
       const payload = this.definePayload(requestType);
-      this.displayFetchingStatus('Fetching savings', 0);
+      this.displayFetchingStatus(this.$t('savings.fetch_savings'), 0);
       axios
-        .post(`${process.env.VUE_APP_AUTH}rider/admin_partner_api/v5/partner_portal/savings`, payload, this.config)
+        .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/savings`, payload, this.config)
         .then(response => {
-          if (requestType === 2) {
-            $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
-          }
-          if (response.data.msg) {
-            this.handleResponse(response);
-          } else {
-            if (requestType === 2) {
-              this.error = 'No savings found for this period';
-              setTimeout(() => {
-                this.error = '';
-              }, 4000);
-            }
-            this.rows = [];
-            this.displayFetchingStatus('No savings found for this period', 0);
-          }
+          $('#filtSub').html('<i class="fa fa-filter" aria-hidden="true"></i>');
+          this.handleResponse(response);
         })
         .catch(error => {
-          this.errorObj = error.response;
+          this.error = error.response.data.message;
+          setTimeout(() => {
+            this.error = '';
+          }, 4000);
+          this.rows = [];
+          this.displayFetchingStatus(error.response.data.message, 0);
         });
     },
     definePayload(requestType) {
@@ -218,10 +218,15 @@ export default {
       });
       return payload;
     },
+    dateFormat(date) {
+        const UTCDate = this.convertToUTC(date);
+        const local = this.convertToLocalTime(UTCDate);
+        return local;
+    },
     handleResponse(response) {
       const record = [];
       let currency = '';
-      response.data.msg.forEach((row, i) => {
+      response.data.savings.forEach((row, i) => {
         this.sessionInfo.riders.forEach((rider, x) => {
           if (rider.rider_id === row.rider_id) {
             currency = rider.default_currency;
@@ -230,9 +235,9 @@ export default {
         record.push({
           rider_id: row.rider_id,
           txn: row.txn,
-          pay_time: row.pay_time,
-          amount: `${currency} ${row.amount}`,
-          running_balance: `${currency} ${row.running_balance}`,
+          pay_time: this.dateFormat(row.pay_time),
+          amount: `${currency} ${row.amount * -1}`,
+          running_balance: `${currency} ${row.running_balance * -1}`,
           pay_narrative: row.pay_narrative,
         });
       });

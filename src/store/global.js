@@ -12,6 +12,19 @@ const state = {
   bike_availability: false,
   bike_riders: [],
   rider_id: '',
+  owner_id: '',
+  sessionInfo: '',
+  selected_partner: [],
+  flow: 'logistics',
+  freight_orders: [],
+  user_id: null,
+  cop_id: null,
+  cop_user_id: null,
+  create_order: false,
+  freight_status: '',
+  language: 'en',
+  recipient_code: '',
+  recipient_phone: '',
 };
 
 export default {

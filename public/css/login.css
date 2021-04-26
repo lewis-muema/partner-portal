@@ -1,5 +1,5 @@
 .login__header {
-  background-color: #f57f20;
+  background-color: #EE7D00;
   display: block;
   padding-top: 9px;
   padding-bottom: 9px;
@@ -9,16 +9,26 @@
 
 .login__header-text {
   font-size: 24px;
+  text-align: left;
 }
 
 .login__forgotPass,
 .login__sign-up {
-  color: #f57f20;
+  color: #EE7D00;
 }
-
+.sendy--basic-container {
+  text-align: center;
+}
 .login__forgotPass:hover,
 .login__sign-up:hover {
   text-decoration: underline;
+}
+.tel-input {
+  width: 270px;
+  margin: auto;
+}
+.forgot--password-input {
+  width: 100%;
 }
 
 .login__logo {
@@ -31,7 +41,7 @@
 
 .reset__btn,
 .login__btn {
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
 }
@@ -61,9 +71,7 @@ input::-webkit-input-placeholder {
 
 .login__log-panel {
   max-width: 430px;
-  border: 1px solid #d8dfe6;
-  border-radius: 4px;
-  margin: 25px auto;
+  margin: 22% auto;
   padding: 25px;
 }
 
@@ -75,16 +83,21 @@ input::-webkit-input-placeholder {
   padding-top: 15px;
   font-size: 14px;
 }
+.login__phone-input input,
+.login__password-input {
+  font-size: 13px;
+  font-weight: 500;
+}
 
 .control-group button[type='submit'] {
   width: 100%;
-  background-color: #f57f20;
+  background-color: #EE7D00;
   color: #fff;
   letter-spacing: 1.1px !important;
   font-weight: inherit;
   padding: 6px;
   height: 42px;
-  border: 1px solid #f57f20;
+  border: 1px solid #EE7D00;
   text-transform: uppercase;
   font-size: medium !important;
   cursor: pointer;
@@ -136,4 +149,20 @@ input {
 .intl-tel-input .country-list {
   max-width: 378px;
   border-radius: 5px;
+}
+
+.external-login__back-button {
+  cursor: pointer;
+}
+@media (max-width: 1036px) {
+  .login__log-panel {
+    max-width: 430px !important;
+    border: 1px solid #d8dfe6 !important;
+    border-radius: 4px;
+    margin: 25px auto !important;
+    padding: 25px !important;
+  }
+  .login__header-text{
+    text-align: center !important;
+  }
 }

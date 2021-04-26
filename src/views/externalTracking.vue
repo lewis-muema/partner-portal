@@ -6,55 +6,55 @@
       <div class="loading" v-if="loadingStatus" style="margin: 0;"></div>
     </div>
     <div class="controls">
-      <span class="tooltipcontrol Decrease">Decrease speed</span>
-      <span class="tooltipcontrol Rewind">Rewind</span>
-      <span class="tooltipcontrol Play">Play</span>
-      <span class="tooltipcontrol Pause">Pause</span>
-      <span class="tooltipcontrol Fast">Fast forward</span>
-      <span class="tooltipcontrol Increase">Increase speed</span>
+      <span class="tooltipcontrol Decrease"> {{ $t('externalTracking.decrease_speed') }}</span>
+      <span class="tooltipcontrol Rewind">{{ $t('externalTracking.rewind') }}</span>
+      <span class="tooltipcontrol Play">{{ $t('externalTracking.play') }}</span>
+      <span class="tooltipcontrol Pause">{{ $t('externalTracking.pause') }}</span>
+      <span class="tooltipcontrol Fast">{{ $t('externalTracking.fast_forward') }}</span>
+      <span class="tooltipcontrol Increase"> {{ $t('externalTracking.increase_speed') }}</span>
     </div>
     <div class="controls">
       <img
         src="https://images.sendyit.com/partner_portal/images/rewind.png"
         class="decrease-speed tracker-icon"
         @click="markerSlow()"
-        @mouseover="ToolTip('Decrease', 1)"
-        @mouseout="ToolTip('Decrease', 0)"
+        @mouseover="ToolTip($t('externalTracking.decrease'), 1)"
+        @mouseout="ToolTip($t('externalTracking.decrease'), 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/back.png"
         class="previous tracker-icon"
         @click="markerPrevious()"
-        @mouseover="ToolTip('Rewind', 1)"
-        @mouseout="ToolTip('Rewind', 0)"
+        @mouseover="ToolTip($t('externalTracking.rewind'), 1)"
+        @mouseout="ToolTip($t('externalTracking.rewind'), 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/play-button.png"
         class="play tracker-icon"
         @click="markerPlay()"
-        @mouseover="ToolTip('Play', 1)"
-        @mouseout="ToolTip('Play', 0)"
+        @mouseover="ToolTip($t('externalTracking.play'), 1)"
+        @mouseout="ToolTip($t('externalTracking.play'), 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/pause.png"
         class="pause tracker-icon"
         @click="markerPause()"
-        @mouseover="ToolTip('Pause', 1)"
-        @mouseout="ToolTip('Pause', 0)"
+        @mouseover="ToolTip($t('externalTracking.pause'), 1)"
+        @mouseout="ToolTip($t('externalTracking.pause'), 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/next.png"
         class="next tracker-icon"
         @click="markerNext()"
-        @mouseover="ToolTip('Fast', 1)"
-        @mouseout="ToolTip('Fast', 0)"
+        @mouseover="ToolTip($t('externalTracking.fast'), 1)"
+        @mouseout="ToolTip($t('externalTracking.fast'), 0)"
       />
       <img
         src="https://images.sendyit.com/partner_portal/images/fast-forward.png"
         class="increase-speed tracker-icon"
         @click="markerFast()"
-        @mouseover="ToolTip('Increase', 1)"
-        @mouseout="ToolTip('Increase', 0)"
+        @mouseover="ToolTip($t('externalTracking.increase'), 1)"
+        @mouseout="ToolTip($t('externalTracking.increase'), 0)"
       />
     </div>
     <div class="labels name">{{ name }}</div>
@@ -112,13 +112,13 @@ export default {
           if (response.data.reason) {
             this.text = response.data.reason;
           } else {
-            this.text = 'No data has been returned';
+            this.text = this.$t('externalTracking.no_data_returned');
           }
         }
       });
     } else {
       this.loadingStatus = false;
-      this.text = 'Please provide all the parameters';
+      this.text = this.$t('externalTracking.provide_all');
     }
   },
   mounted() {
@@ -135,7 +135,7 @@ export default {
         script.onload = () => {
           this.initMap();
         };
-        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyChEOAbj_2URQWRkL8N0p07vk6foBfHXGI';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_API_KEY}`;
         document.head.appendChild(script);
       }
     },

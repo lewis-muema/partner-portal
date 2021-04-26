@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM sendy-docker-local.jfrog.io/nginx:latest
 
 RUN apt-get update && \
         apt-get install -y sudo curl bzip2 wget git vim gnupg
@@ -28,6 +28,8 @@ ENV DOCKER_ENV=$DOCKER_ENV
 RUN echo ${DOCKER_ENV}
 RUN if [ "$DOCKER_ENV" = "testing" ]; \
         then npm install && npm run staging; \
+        elif [ "$DOCKER_ENV" = "beta" ]; \
+        then npm install && npm run beta; \
         else npm install && npm run build; \
         fi
 

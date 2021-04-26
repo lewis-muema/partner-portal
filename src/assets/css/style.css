@@ -1,14 +1,12 @@
-.withdraw-modal-screen{
-    width: 825% !important;
-    text-align: center !important;
-}
-.withdraw-modal-screen-2 {
-    width: 485% !important;
-    text-align: center !important;
+.withdraw-modal-screen, .withdraw-modal-screen-2 {
+    width: max-content;
+    text-align: center!important;
+    grid-column: span 12;
+    margin: auto;
 }
 .withdraw-payment-options{
     display: inline-block;
-    margin-right: 50px;
+    margin-left: 20px;
     margin-right: 20px;
 }
 .withdraw-buttons{
@@ -25,4 +23,59 @@
 .withdraw-bank-accounts-list {
     max-height: 145px;
     overflow: scroll;
+}
+.el-icon-upload{
+   font-size: 15px !important;
+   margin: 0 !important;
+   line-height: 0 !important;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+.expired__docs{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+.expired__message{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:10px 0px
+}
+.expired__icon{
+    font-size:26px;
+    color:rgba(188, 80, 0, 1);
+    padding-bottom:10px
+}
+.expired__body{
+    background:rgba(247, 249, 252, 1);
+    padding:10px 10px;
+    border-radius:5px
+}
+.dispute__panel{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.expired__panel{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+    align-items:center;
+}
+.expired__text{
+    text-align:center;
+    padding:20px 0px
 }

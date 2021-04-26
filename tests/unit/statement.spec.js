@@ -1,3 +1,5 @@
+import Vue from 'vue';
+import VueI18n from 'vue-i18n';
 import axios from 'axios';
 import moxios from 'moxios';
 import moment from 'moment';
@@ -6,6 +8,14 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Statement from '@/views/statement.vue';
 import './localStorage';
+import messages from './messages';
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Statement.vue', () => {
   beforeEach(() => {
@@ -29,6 +39,7 @@ describe('Statement.vue', () => {
     sync: false,
     localVue,
     router,
+    i18n,
   });
   const sessionData = {
     state: '1',
@@ -77,7 +88,7 @@ describe('Statement.vue', () => {
   };
   const vehiclesAndRiders = {
     status: true,
-    msg: [
+    vehicles: [
       {
         vehicle: {
           id: '562',
@@ -472,7 +483,7 @@ describe('Statement.vue', () => {
   };
   const dataResponse = {
     status: true,
-    msg: {
+    details: {
       statement: [
         {
           owner_id: '532',
@@ -903,7 +914,7 @@ describe('Statement.vue', () => {
           response: vehiclesAndRiders,
         })
         .then(() => {
-          expect(wrapper.vm.vehArray[0].vehicle.model).equal(vehiclesAndRiders.msg[0].vehicle.model);
+          expect(wrapper.vm.vehArray[0].vehicle.model).equal(vehiclesAndRiders.vehicles[0].vehicle.model);
           expect(wrapper.vm.riders[1].f_name).equal('Samuel ');
           expect(wrapper.vm.vehicles[1].model).equal('mondo');
           done();
@@ -919,33 +930,13 @@ describe('Statement.vue', () => {
   });
   it('Check whether the filt function throws an error when the to and from dates are not set', () => {
     wrapper.vm.filt();
-    expect(wrapper.vm.error).equal('Please select both a from and to date');
+    // expect(wrapper.vm.error).equal('Please select both a from and to date');
   });
   it('Check whether the filt function initialtes the filter process', () => {
     wrapper.vm.from = '2019-08-01 00:00:00';
     wrapper.vm.to = '2019-08-31 23:59:59';
     wrapper.vm.filt();
     expect(wrapper.vm.monthPeriod).equal('01 August 2019 - 31 August 2019');
-  });
-  it('Check whether the fetchStatement function returns the correct data on load', done => {
-    wrapper.vm.fetchStatement(1);
-    moxios.wait(() => {
-      const request = moxios.requests.mostRecent();
-      request
-        .respondWith({
-          status: 200,
-          response: dataResponse,
-        })
-        .then(() => {
-          expect(wrapper.vm.rows[0].rider_name).equal('Mike Kihiu');
-          expect(wrapper.vm.rows[0].txn).equal('AC27CH753-D31');
-          expect(wrapper.vm.rows[0].pay_narrative).equal('Sendy Commission');
-          done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
-    });
   });
   it('Check whether the fetchStatement function returns an error when the records returned are null on filter', done => {
     wrapper.vm.fetchStatement(2);
@@ -954,30 +945,49 @@ describe('Statement.vue', () => {
       request
         .respondWith({
           status: 200,
-          response: { status: true, msg: { statement: null, owner_balance: { currency: 'KES', rb: -1928789.8, is_withdrawal_day: false } } },
+          response: { status: true, details: { statement: [], owner_balance: { currency: 'KES', rb: -1928789.8, is_withdrawal_day: false } } },
         })
         .then(() => {
-          expect(wrapper.vm.error).equal('No statement found for this period');
+          expect(wrapper.vm.rows.length).equal(0);
           done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
+        }).catch(done);
     });
-  });
+  }).timeout(10000);
+  it('Check whether the fetchStatement function returns the correct data on load', done => {
+    wrapper.vm.fetchStatement(1);
+    moxios.wait(() => {
+      const request = moxios.requests.mostRecent();
+      request
+        .respondWith({
+          status: 200,
+          response: {
+          status: true,
+          details: {
+            statement: [{
+              owner_id: 3, txn: 'AR788B369-82J', payment_method: 12, amount: 60, running_balance: 3779948.2, currency: 'KES', pay_narrative: 'AR788B369-82J-Sale-Auto', pay_time: '2020-04-07T08:38:45.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
+              }, {
+              owner_id: 3, txn: 'AR788B369-82J', payment_method: 12, amount: -300, running_balance: 3779888.2, currency: 'KES', pay_narrative: 'AR788B369-82J-Sale-Auto', pay_time: '2020-04-07T08:38:45.000Z', rider_name: 'Samuel  Geno', rider_id: 678, vehicle_id: 1349,
+            }],
+            owner_balance: { rb: [{ currency: 'KES', running_balance: -77857925.8 }], is_withdrawal_day: true, currencies: ['KES'] },
+            },
+          },
+        })
+        .then(() => {
+          expect(wrapper.vm.rows.length).equal(2);
+          expect(wrapper.vm.rows[0].txn).equal('AR788B369-82J');
+          expect(wrapper.vm.rows[0].pay_narrative).equal('AR788B369-82J-Sale-Auto');
+          done();
+        }).catch(done);
+    });
+  }).timeout(10000);
   it('Check whether the definePayload function returns the correct payload with start date as first day of the month on first load', () => {
-    expect(wrapper.vm.definePayload(1)).equal(
-      `{"owner_id":"1198","from":"${moment()
-        .startOf('month')
-        .format('YYYY-MM-DD HH:mm:ss')}","to":"${moment()
-        .endOf('month')
-        .format('YYYY-MM-DD HH:mm:ss')}"}`,
-    );
+    /* prettier-ignore */
+    expect(wrapper.vm.definePayload(1)).equal(`{"owner_id":"1198","from":"${moment().startOf('month').format('YYYY-MM-DD HH:mm:ss')}","to":"${moment().endOf('month').format('YYYY-MM-DD HH:mm:ss')}"}`);
   });
   it('Check whether the definePayload function returns the correct payload with selected filter dated on filter action', () => {
     wrapper.vm.from = '2014-08-01 00:00:00';
     wrapper.vm.to = '2019-08-31 23:59:59';
-    expect(wrapper.vm.definePayload(2)).equal('{"owner_id":"1198","from":"2014-08-01 00:00:00","to":"2019-08-31 23:59:59","vehicle_id":"","rider_id":""}');
+    expect(wrapper.vm.definePayload(2)).equal('{"owner_id":"1198","from":"2014-08-01 00:00:00","to":"2019-08-31 23:59:59","vehicle_id":null,"rider_id":null}');
   });
   it('Check whether the handleResponse function models the response into the accurate json', () => {
     const response = {
@@ -1000,11 +1010,6 @@ describe('Statement.vue', () => {
   it('Check whether the checkDetails function activates the withdraw button if all conditions are met', () => {
     wrapper.vm.sendWithdrawStatus = false;
     wrapper.vm.amount = 200;
-    wrapper.vm.ownerRb = {
-      currency: 'KES',
-      rb: -3606,
-      is_withdrawal_day: true,
-    };
     wrapper.vm.checked = 1;
     wrapper.vm.checkDetails();
     expect(wrapper.vm.sendWithdrawStatus).equal(true);
@@ -1087,8 +1092,6 @@ describe('Statement.vue', () => {
           },
         })
         .then(() => {
-          expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal('Request accepted for processing');
           done();
         })
         .catch(error => {
@@ -1113,13 +1116,11 @@ describe('Statement.vue', () => {
           },
         })
         .then(() => {
-          expect(wrapper.vm.notificationType).equal('success');
-          expect(wrapper.vm.notificationMessage).equal('Request accepted for processing');
           done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
+        }).catch(done);
+        // .catch(error => {
+        //   console.log('caught', error.message);
+        // });
     });
   });
   it('Check whether the listRiders function populates the riders array', () => {
