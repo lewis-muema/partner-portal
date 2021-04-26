@@ -5,7 +5,7 @@
         <div class="item">
           <div class="item__info">
             <h4 class="item__heading">
-              {{ new Date(withdrawal.created_at).toDateString() }}
+              {{ timestamp }}
             </h4>
             <p class="item__content">{{ withdrawal.payment_method }} - {{ withdrawal.currency }} {{ withdrawal.amount }}</p>
           </div>
@@ -26,7 +26,11 @@ export default {
   data() {
     return {};
   },
-  computed: {},
+  computed: {
+    timestamp() {
+      return new Date(this.withdrawal.created_at).toDateString();
+    },
+  },
 };
 </script>
 <style scoped>

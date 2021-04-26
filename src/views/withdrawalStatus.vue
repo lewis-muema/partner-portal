@@ -5,12 +5,12 @@
         <el-breadcrumb class="bread-crum" separator-class="el-icon-arrow-right">
           <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
           <el-breadcrumb-item :to="{ path: '/statement' }">Statement</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/statement' }">My Withdrawals</el-breadcrumb-item>
-          <el-breadcrumb-item>{{ withdrawal.withdrawal_timestamp }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/myWithdrawals' }">My Withdrawals</el-breadcrumb-item>
+          <el-breadcrumb-item>{{ timestamp }}</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="withdraw_date">
           <div>
-            <h2 class="dark-grey">{{ withdrawal.withdrawal_timestamp }}</h2>
+            <h2 class="dark-grey">{{ timestamp }}</h2>
           </div>
           <h4 class="withdraw__status">{{ withdrawal.withdrawal_status }}</h4>
         </div>
@@ -52,7 +52,7 @@
         <p class="fail__message">Sorry, We are experiencing some technical difficulties processing your withdrawal.</p>
         <p class="fail__message">Please make a new withdrawal in the next <b>15:00 minutes</b></p>
         <button class="warning_btn">New withdrawal</button>
-        <p class="fail__support">Still having trouble? <span class="orange">Contact Support</span></p>
+        <p class="fail__support">Still having trouble? <a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span class="orange">Contact Support</span></a></p>
       </div>
     </div>
   </div>
@@ -75,7 +75,6 @@ export default {
         withdrawal_timestamp: '2021-04-22 11:17:02.0',
         status: true,
       },
-      sent: 2,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -86,6 +85,12 @@ export default {
     };
   },
   computed: {
+    timestamp() {
+      return new Date(this.withdrawal.withdrawal_timestamp).toDateString();
+    },
+    sent() {
+      return this.withdrawal.withdrawal_status.toLowerCase() === 'processing' ? 2 : 0;
+    },
     isCompleted() {
       return this.withdrawal.withdrawal_status.toLowerCase() === 'completed';
     },
