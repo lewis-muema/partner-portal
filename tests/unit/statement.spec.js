@@ -1089,7 +1089,7 @@ describe('Statement.vue', () => {
           response: {
             status_code: 1,
             message: 'Request accepted for processing',
-            status: true,
+            status: false,
           },
         })
         .then(() => {
@@ -1113,7 +1113,7 @@ describe('Statement.vue', () => {
           response: {
             status_code: 1,
             message: 'Request accepted for processing',
-            status: true,
+            status: false,
           },
         })
         .then(() => {
