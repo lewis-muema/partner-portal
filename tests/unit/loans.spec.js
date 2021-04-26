@@ -7,9 +7,14 @@ import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Loans from '@/views/loans.vue';
 import './localStorage';
+import messages from './messages';
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({});
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Loans.vue', () => {
   beforeEach(() => {

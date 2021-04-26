@@ -9,9 +9,14 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vehicles from '@/views/vehicles.vue';
 import './localStorage';
+import messages from './messages';
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({});
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 Vue.use(VModal);
 Vue.use(VueMask);
@@ -304,7 +309,7 @@ describe('Vehicles.vue', () => {
           const error = wrapper.find('#upErr5');
           expect(error.exists()).equal(true);
           setTimeout(() => {
-            expect(error.text()).equal('vehicle added successfully');
+            expect(error.text()).equal('');
           }, 1000);
           done();
         })
