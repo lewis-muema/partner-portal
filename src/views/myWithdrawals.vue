@@ -71,7 +71,7 @@ export default {
     return new Promise((resolve, reject) => {
       /* eslint-disable */
       const payload = {
-        owner_Id: this.sessionInfo.id,
+        owner_id: this.sessionInfo.id,
       };
       axios
         .post(`${process.env.VUE_APP_AUTH}partners/owner_withdrawals`, payload, this.config)

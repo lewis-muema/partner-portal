@@ -26,14 +26,14 @@
                 <p>Driving License</p>
                 <p>{{ expiredDocuments[0].rider_name }}</p>
                 <p style="color:rgba(188, 80, 0, 1)">
-                  Expired on: {{ new Date(expiredDocuments[0].driving_license.expiry_date) || new Date() }}
+                  Expired on: {{ expiredDate }}
                 </p>
               </div>
               <router-link to="/documents"><button class="btn btn-primary text-capitalize">Update</button></router-link>
             </div>
           </div>
-          <span v-if="hasDisputedOrder"><router-link to="/myWithdrawals"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">Contact Support</button></router-link></span>
-          <p v-else-if="hasExpiredDocuments" class="expired__text">Still having trouble?<span style="color:rgba(238, 125, 0, 1)">Contact Support</span></p>
+          <span v-if="hasDisputedOrder"><a href="http://support.sendyit.com/collection/66-customer-support"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">Contact Support</button></a></span>
+          <p v-else-if="hasExpiredDocuments" class="expired__text">Still having trouble?<a href="http://support.sendyit.com/collection/66-customer-support"><span style="color:rgba(238, 125, 0, 1)">Contact Support</span></a></p>
         </div>
         <div v-else>
           <div v-if="payable_amount" class="withdraw-modal-screen">
@@ -373,6 +373,9 @@ export default {
         return rb;
       }
       return '';
+    },
+    expiredDate() {
+      return new Date(expiredDocuments[0].driving_license.expiry_date).toDateString() || new Date().toDateString();
     },
   },
   watch: {
