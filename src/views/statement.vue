@@ -375,7 +375,7 @@ export default {
       return '';
     },
     expiredDate() {
-      return new Date(this.expiredDocuments[0].driving_license.expiry_date).toDateString() || new Date().toDateString();
+      return new Date(this.expiredDocuments[0].driving_license.expiry_date).toDateString() || '';
     },
   },
   watch: {
