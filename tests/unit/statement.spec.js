@@ -1088,7 +1088,7 @@ describe('Statement.vue', () => {
           response: {
             status_code: 1,
             message: 'Request accepted for processing',
-            status: true,
+            status: false,
           },
         })
         .then(() => {
@@ -1112,12 +1112,15 @@ describe('Statement.vue', () => {
           response: {
             status_code: 1,
             message: 'Request accepted for processing',
-            status: true,
+            status: false,
           },
         })
         .then(() => {
           done();
-        }).catch(done);
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
     });
   });
   it('Check whether the listRiders function populates the riders array', () => {

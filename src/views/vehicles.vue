@@ -611,7 +611,7 @@
             :sortable="true"
             :exact-search="true"
             :exportable="true"
-            :locale="getLanguage"
+            :locale="language"
           ></datatable>
         </table>
       </div>
@@ -676,7 +676,6 @@ import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
 import axios from 'axios';
 import moment from 'moment';
-import { mapGetters } from 'vuex';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -753,7 +752,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(['getLanguage']),
+    language() {
+      if (localStorage.getItem('language')) {
+        return localStorage.getItem('language').split('-')[0];
+      }
+      return 'en';
+    },
   },
   created() {
     if (localStorage.sessionData) {

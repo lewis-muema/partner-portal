@@ -309,7 +309,7 @@ describe('Vehicles.vue', () => {
           const error = wrapper.find('#upErr5');
           expect(error.exists()).equal(true);
           setTimeout(() => {
-            expect(error.text()).equal('');
+            expect(error.text()).equal('vehicle added successfully');
           }, 1000);
           done();
         })
