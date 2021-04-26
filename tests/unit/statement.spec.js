@@ -951,9 +951,6 @@ describe('Statement.vue', () => {
           expect(wrapper.vm.rows.length).equal(0);
           done();
         }).catch(done);
-        // .catch(error => {
-        //   console.log('caught', error.message);
-        // });
     });
   }).timeout(10000);
   it('Check whether the fetchStatement function returns the correct data on load', done => {
@@ -981,9 +978,6 @@ describe('Statement.vue', () => {
           expect(wrapper.vm.rows[0].pay_narrative).equal('AR788B369-82J-Sale-Auto');
           done();
         }).catch(done);
-        // .catch(error => {
-        //   console.log('caught', error.message);
-        // });
     });
   }).timeout(10000);
   it('Check whether the definePayload function returns the correct payload with start date as first day of the month on first load', () => {
