@@ -52,7 +52,7 @@
         <p class="fail__message">Sorry, We are experiencing some technical difficulties processing your withdrawal.</p>
         <p class="fail__message">Please make a new withdrawal in the next <b>15:00 minutes</b></p>
         <button class="warning_btn">New withdrawal</button>
-        <p class="fail__support">Still having trouble? <a href="http://support.sendyit.com/collection/66-customer-support"><span class="orange">Contact Support</span></a></p>
+        <p class="fail__support">Still having trouble? <a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span class="orange">Contact Support</span></a></p>
       </div>
     </div>
   </div>
