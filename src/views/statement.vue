@@ -4,35 +4,62 @@
     <errorHandler :error="errorObj" v-if="errorObj" />
     <div class="statements__blinder">
       <div class="statement__withdraw-popup statement__row">
-        <div class="popup-row statement__row">
+        <div class="statement__row">
           <span>{{ $t('statement.withdraw_cash') }}</span>
           <span>
             <i class="material-icons statement__cancel-icon" @click="closePopup">{{ $t('statement.cancel') }}</i>
           </span>
         </div>
-        <div v-if="payable_amount" class="withdraw-modal-screen">
-          <div class="statement__row statement__add-bank-tab">
-            <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
-            <p class="small-margin color-white">{{ withdrawError }}</p>
-            <router-link to="/banks" v-if="addAccountStatus">
-              <p class="small-margin statement__bg-orange">+ {{ $t('statement.add_bank_account') }}</p>
-            </router-link>
+        <div v-if="hasExpiredDocuments || hasDisputedOrder" class="expired__docs">
+          <div class="expired__message">
+            <i class="el-icon-warning expired__icon"></i>
+            <p><span v-if="hasDisputedOrder">Sorry, we cannot process your withdrawal request because there is a problem with the order shown below: </span> <span v-else-if="hasExpiredDocuments">Sorry, we cannot process your withdrawal request because the following document(s) need to be renewed:</span></p>
           </div>
-          <div class="statement__row statement__divided-row">
-            <span class="statement__column-3">
-              <i class="material-icons statement__wallet">account_balance_wallet</i>
-            </span>
-            <span class="statement__column-9">
-              <p class="no-margin large-font">{{ $t('statement.balance') }}</p>
-              <p class="no-margin large-font">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</p>
-            </span>
+          <div class="expired__body">
+            <div v-if="hasDisputedOrder" class="dispute__panel">
+              <p>{{ disputedOrders[0].order_no }}</p>
+              <p>{{ disputedOrders[0].date }}</p>
+              <p>{{ disputedOrders[0].pick_up_location }}</p>
+            </div>
+            <div v-else-if="hasExpiredDocuments" class="expired__panel">
+              <div>
+                <p>Driving License</p>
+                <p>{{ expiredDocuments[0].rider_name }}</p>
+                <p style="color:rgba(188, 80, 0, 1)">
+                  Expired on: {{ new Date(expiredDocuments[0].driving_license.expiry_date) || new Date() }}
+                </p>
+              </div>
+              <router-link to="/documents"><button class="btn btn-primary text-capitalize">Update</button></router-link>
+            </div>
           </div>
-          <div class="statement__row">
-            <input id="withdrawalAmount" type="text" placeholder="Enter amount" class="full-width input-height input-border" v-model="amount" @input="checkDetails()" @keyup.delete="checkDetails()" :maxlength="amountLength" />
-          </div>
-          <div class="statement__row">
-            <button id="continue" class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="sendWithdrawStatus" @click="goNext()">{{ $t('statement.next') }}</button>
-            <button class="continue full-width input-height withdraw-buttons" disabled v-else>{{ $t('statement.next') }}</button>
+          <span v-if="hasDisputedOrder"><router-link to="/myWithdrawals"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">Contact Support</button></router-link></span>
+          <p v-else-if="hasExpiredDocuments" class="expired__text">Still having trouble?<span style="color:rgba(238, 125, 0, 1)">Contact Support</span></p>
+        </div>
+        <div v-else>
+          <div v-if="payable_amount" class="withdraw-modal-screen">
+            <div class="statement__row statement__add-bank-tab">
+              <p class="small-margin statement__error-box-header color-white">{{ withdrawHead }}</p>
+              <p class="small-margin color-white">{{ withdrawError }}</p>
+              <router-link to="/banks" v-if="addAccountStatus">
+                <p class="small-margin statement__bg-orange">+ {{ $t('statement.add_bank_account') }}</p>
+              </router-link>
+            </div>
+            <div class="statement__row statement__divided-row">
+              <span class="statement__column-3">
+                <i class="material-icons statement__wallet">account_balance_wallet</i>
+              </span>
+              <span class="statement__column-9">
+                <p class="no-margin large-font">{{ $t('statement.balance') }}</p>
+                <p class="no-margin large-font">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</p>
+              </span>
+            </div>
+            <div class="statement__row">
+              <input id="withdrawalAmount" type="text" placeholder="Enter amount" class="full-width input-height input-border" v-model="amount" @input="checkDetails()" @keyup.delete="checkDetails()" :maxlength="amountLength" />
+            </div>
+            <div class="statement__row">
+              <button id="continue" class="full-width input-height withdraw-buttons statement__withdraw-button" v-if="sendWithdrawStatus" @click="goNext()">{{ $t('statement.next') }}</button>
+              <button class="continue full-width input-height withdraw-buttons" disabled v-else>{{ $t('statement.next') }}</button>
+            </div>
           </div>
         </div>
         <div class="withdraw-modal-screen-2" v-if="payment_options">
@@ -287,6 +314,10 @@ export default {
       fetchingStatus: false,
       currencies: [],
       activeCurrency: '',
+      hasDisputedOrder: false,
+      hasExpiredDocuments: false,
+      disputedOrders: [],
+      expiredDocuments: [],
     };
   },
   computed: {
@@ -374,6 +405,8 @@ export default {
         });
       });
     }
+    this.fetchExpiredDocuments();
+    this.fetchDisputedOrders();
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize);
@@ -641,6 +674,7 @@ export default {
         .then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status) {
+            this.$router.push({ name: 'withdrawal-status', params: { id: parsedResponse.reference_no } });
             this.notify(1, 1, response.data.message);
             this.from = '';
             this.to = '';
@@ -707,6 +741,49 @@ export default {
             parsedResponse.data.forEach((row, i) => {
               this.allBanks.push(row);
             });
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    fetchDisputedOrders() {
+      return new Promise((resolve, reject) => {
+        /* eslint-disable */
+        const payload = {
+          owner_id: this.sessionInfo.id,
+        };
+        axios
+          .post(`${process.env.VUE_APP_AUTH}/orders/owner_disputed_orders`, payload, this.config)
+          .then(response => {
+            const parsedResponse = response.data;
+            if (parsedResponse.status && parsedResponse.disputed_orders.length > 0) {
+              this.hasDisputedOrders = parsedResponse.status;
+              this.disputedOrders = parsedResponse.disputed_orders;
+            }
+            resolve(response);
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            resolve(error);
+          });
+      });
+    },
+    fetchExpiredDocuments() {
+      return new Promise((resolve, reject) => {
+        const payload = JSON.stringify({
+          ownerId: this.sessionInfo.id,
+        });
+        axios
+          .post(`${process.env.VUE_APP_AUTH}partner/v1/partner_portal/owner_documents`, payload, this.config)
+          .then(response => {
+            const parsedResponse = response.data;
+            if (parsedResponse.status && parsedResponse.data.length > 0) {
+              this.expiredDocuments = parsedResponse.data;
+              this.hasExpiredDocuments = parsedResponse.status;
+            }
             resolve(response);
           })
           .catch(error => {
