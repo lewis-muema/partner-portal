@@ -32,8 +32,8 @@
               <router-link to="/documents"><button class="btn btn-primary text-capitalize">Update</button></router-link>
             </div>
           </div>
-          <span v-if="hasDisputedOrder"><a href="http://support.sendyit.com/collection/66-customer-support"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">Contact Support</button></a></span>
-          <p v-else-if="hasExpiredDocuments" class="expired__text">Still having trouble?<a href="http://support.sendyit.com/collection/66-customer-support"><span style="color:rgba(238, 125, 0, 1)">Contact Support</span></a></p>
+          <span v-if="hasDisputedOrder"><a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><button style="margin:20px 0px" class="btn btn-primary text-capitalize">Contact Support</button></a></span>
+          <p v-else-if="hasExpiredDocuments" class="expired__text">Still having trouble?<a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span style="color:rgba(238, 125, 0, 1)">Contact Support</span></a></p>
         </div>
         <div v-else>
           <div v-if="payable_amount" class="withdraw-modal-screen">
