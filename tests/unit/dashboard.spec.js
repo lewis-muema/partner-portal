@@ -5,9 +5,14 @@ import moment from 'moment';
 import { shallowMount } from '@vue/test-utils';
 import Dashboard from '@/views/dashboard.vue';
 import './localStorage';
+import messages from './messages';
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({});
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Dashboard.vue', () => {
   const wrapper = shallowMount(Dashboard, {

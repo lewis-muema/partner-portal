@@ -7,9 +7,14 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import DriveRequest from '@/views/driverRequest.vue';
 import './localStorage';
+import messages from './messages';
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({});
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('DriverRequest.vue', () => {
   beforeEach(() => {
