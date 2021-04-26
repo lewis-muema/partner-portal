@@ -3,9 +3,9 @@
     <div class="container ">
       <div class="withdrawal">
         <el-breadcrumb class="bread-crum" separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">Home</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/statement' }">Statement</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/myWithdrawals' }">My Withdrawals</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/' }">{{ $t('withdrawalStatus.home') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/statement' }">{{ $t('withdrawalStatus.statement') }}</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/myWithdrawals' }">{{ $t('withdrawalStatus.mywithdrawal') }}</el-breadcrumb-item>
           <el-breadcrumb-item>{{ timestamp }}</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="withdraw_date">
@@ -16,18 +16,18 @@
         </div>
         <div class="payment_method">
           <div>
-            <p class="payment-method__heading">PAYMENT METHOD</p>
+            <p class="payment-method__heading">{{ $t('withdrawalStatus.pay_method') }}</p>
             <h3 class="dark-grey">{{ withdrawal.payment_method }}</h3>
           </div>
           <div class="payment-method__amount">
-            <p class="payment-method__heading">AMOUNT</p>
+            <p class="payment-method__heading">{{ $t('withdrawalStatus.amount') }}</p>
             <h3 class="dark-grey">{{ withdrawal.currency }} {{ withdrawal.amount }}</h3>
           </div>
         </div>
         <hr />
         <div>
           <div class="withdrawal__progress" v-if="inProgress">
-            <h3 class=" withdrawal__heading dark-grey">Progress</h3>
+            <h3 class=" withdrawal__heading dark-grey">{{ $t('withdrawalStatus.progress') }}</h3>
             <div>
               <el-steps class="step" :space="900" :active="sent" align-center finish-status="success">
                 <el-step title="Request Sent"></el-step>
@@ -39,20 +39,20 @@
           <div v-else class="notification__head">
             <div class="notification__heading" v-if="isCompleted">
               <i class="el-icon-success icon-success"></i>
-              <h3 class="notification__statement">Withdrawal Successful</h3>
+              <h3 class="notification__statement">{{ $t('withdrawalStatus.withdraw_success') }}</h3>
             </div>
             <div class="notification__heading" v-else>
               <i class="el-icon-warning icon-fail"></i>
-              <h3 class="notification__statement">Withdrawal Failed</h3>
+              <h3 class="notification__statement">{{ $t('withdrawalStatus.withdraw_fail') }}</h3>
             </div>
           </div>
         </div>
       </div>
       <div class="fail" v-if="!inProgress && !isCompleted">
-        <p class="fail__message">Sorry, We are experiencing some technical difficulties processing your withdrawal.</p>
-        <p class="fail__message">Please make a new withdrawal in the next <b>15:00 minutes</b></p>
-        <button class="warning_btn">New withdrawal</button>
-        <p class="fail__support">Still having trouble? <a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span class="orange">Contact Support</span></a></p>
+        <p class="fail__message">{{ $t('withdrawalStatus.fail_msg1') }}</p>
+        <p class="fail__message">{{ $t('withdrawalStatus.fail_msg2') }}</p>
+        <button class="warning_btn">{{ $t('withdrawalStatus.btn_with') }}</button>
+        <p class="fail__support">{{ $t('withdrawalStatus.btn_with') }}<a target="_blank" href="http://support.sendyit.com/collection/66-customer-support"><span class="orange">{{ $t('statement.contact_support') }}</span></a></p>
       </div>
     </div>
   </div>
