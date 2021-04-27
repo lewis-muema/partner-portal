@@ -7,9 +7,14 @@ import { expect } from 'chai';
 import { shallowMount } from '@vue/test-utils';
 import Pending from '@/views/pending.vue';
 import './localStorage';
+import messages from '@/mixins/messages';
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({});
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Pending.vue', () => {
   const wrapper = shallowMount(Pending, {

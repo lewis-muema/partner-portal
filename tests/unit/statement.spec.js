@@ -8,9 +8,14 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Statement from '@/views/statement.vue';
 import './localStorage';
+import messages from '@/mixins/messages';
 
 Vue.use(VueI18n);
-const i18n = new VueI18n({});
+const i18n = new VueI18n({
+  locale: 'en',
+  fallbackLocale: 'en',
+  messages,
+});
 
 describe('Statement.vue', () => {
   beforeEach(() => {
@@ -945,12 +950,9 @@ describe('Statement.vue', () => {
         .then(() => {
           expect(wrapper.vm.rows.length).equal(0);
           done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
+        }).catch(done);
     });
-  });
+  }).timeout(10000);
   it('Check whether the fetchStatement function returns the correct data on load', done => {
     wrapper.vm.fetchStatement(1);
     moxios.wait(() => {
@@ -975,12 +977,9 @@ describe('Statement.vue', () => {
           expect(wrapper.vm.rows[0].txn).equal('AR788B369-82J');
           expect(wrapper.vm.rows[0].pay_narrative).equal('AR788B369-82J-Sale-Auto');
           done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
+        }).catch(done);
     });
-  });
+  }).timeout(10000);
   it('Check whether the definePayload function returns the correct payload with start date as first day of the month on first load', () => {
     /* prettier-ignore */
     expect(wrapper.vm.definePayload(1)).equal(`{"owner_id":"1198","from":"${moment().startOf('month').format('YYYY-MM-DD HH:mm:ss')}","to":"${moment().endOf('month').format('YYYY-MM-DD HH:mm:ss')}"}`);
@@ -1118,10 +1117,7 @@ describe('Statement.vue', () => {
         })
         .then(() => {
           done();
-        })
-        .catch(error => {
-          console.log('caught', error.message);
-        });
+        }).catch(done);
     });
   });
   it('Check whether the listRiders function populates the riders array', () => {
