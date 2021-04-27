@@ -9,7 +9,7 @@ import { expect } from 'chai';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Tracking from '../../src/views/tracking.vue';
 import './localStorage';
-import messages from './messages';
+import messages from '@/mixins/messages';
 
 Vue.use(VueI18n);
 const i18n = new VueI18n({
