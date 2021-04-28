@@ -759,7 +759,7 @@ export default {
           owner_id: this.sessionInfo.id,
         };
         axios
-          .post(`${process.env.VUE_APP_AUTH}/orders/owner_disputed_orders`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}orders/owner_disputed_orders`, payload, this.config)
           .then(response => {
             const parsedResponse = response.data;
             if (parsedResponse.status && parsedResponse.disputed_orders.length > 0) {
