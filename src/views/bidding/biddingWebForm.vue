@@ -458,6 +458,15 @@ export default {
           }
 
           if (res.status === 200) {
+            mixpanel.people.set_once({
+              name: res.data.data.quotation.name,
+              email: res.data.data.transporter_user_email,
+              phone: res.data.data.transporter_user_phone,
+              transporterId: res.data.data.quotation.transporter_id,
+            });
+
+            mixpanel.identify(res.data.data.quotation.transporter_id);
+
             mixpanel.track('Shipments Request Viewed', {
               transporterId: res.data.data.quotation.transporter_id,
               phone: res.data.data.transporter_user_phone,
