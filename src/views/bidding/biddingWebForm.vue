@@ -416,13 +416,6 @@ export default {
                 clientType: 'Web',
                 device: this.isMobile() ? 'mobile' : 'web',
               });
-              mixpanel.people.set({
-                $name: this.formData.quotation.name,
-                $email: this.formData.transporter_user_email,
-                $phone: this.formData.client_phone,
-                $distinct_id: this.formData.quotation.transporter_id,
-              });
-              mixpanel.identify(this.formData.quotation.transporter_id);
             } else if (payload.status === 1) {
               mixpanel.track('Bids Placed', {
                 transporterId: this.formData.quotation.transporter_id,
@@ -441,13 +434,6 @@ export default {
                 clientType: 'Web',
                 device: this.isMobile() ? 'mobile' : 'web',
               });
-              mixpanel.people.set({
-                $name: this.formData.quotation.name,
-                $email: this.formData.transporter_user_email,
-                $phone: this.formData.client_phone,
-                $distinct_id: this.formData.quotation.transporter_id,
-              });
-              mixpanel.identify(this.formData.quotation.transporter_id);
             }
           }
         })
@@ -467,6 +453,15 @@ export default {
 
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
+
+            mixpanel.people.set({
+              $distinct_id: res.data.data.quotation.transporter_id,
+              $name: res.data.data.quotation.name,
+              $email: res.data.data.transporter_user_email,
+              $phone: res.data.data.transporter_user_phone,
+            });
+            
+            mixpanel.identify(res.data.data.quotation.transporter_id);
           } else {
             this.submitted = true;
           }
@@ -489,14 +484,6 @@ export default {
               clientType: 'Web',
               device: this.isMobile() ? 'mobile' : 'web',
             });
-
-            mixpanel.people.set({
-              $distinct_id: res.data.data.quotation.transporter_id,
-              $name: res.data.data.quotation.name,
-              $email: res.data.data.transporter_user_email,
-              $phone: res.data.data.transporter_user_phone,
-            });
-            mixpanel.identify(res.data.data.quotation.transporter_id);
           }
         })
         .catch(error => {
