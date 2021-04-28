@@ -249,9 +249,7 @@
               <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">{{ $t('preferences.remove_vehicle') }}</span></i>
             </div>
           </div>
-          <div class="vehicle-inner-detail" @click="addVehicle()">
-            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">{{ $t('preferences.add_vehicle') }}</span></i>
-          </div>
+         <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span></div>
         </div>
       <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span></div>
         <button class="partner-request-advance-button-active upload-documents-modal-button" @click="submitVehicle">
