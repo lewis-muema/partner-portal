@@ -164,7 +164,7 @@
         <div class="add-vehicles-outer">
           <div class="vehicle-details-borderline">
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">{{ $t('preferences.type_of_vehicle') }}</p>
+              <p class="request-advance-input-labels"> {{ $t('preferences.type_of_vehicle') }}</p>
               <el-select v-model="vehicle_data[0].vendor_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.label" v-for="(item, index) in vendor_type" :key="index"></el-option>
               </el-select>
@@ -246,15 +246,14 @@
               <input class="add-vehicle-input" v-model="vehicle_data[n].policy_no" />
             </div>
             <div class="vehicle-inner-detail" @click="removeVehicle(n)">
-           <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span></div>
+              <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">{{ $t('preferences.remove_vehicle') }}</span></i>
+            </div>
           </div>
           <div class="vehicle-inner-detail" @click="addVehicle()">
             <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">{{ $t('preferences.add_vehicle') }}</span></i>
           </div>
         </div>
-        <div class="vehicle-inner-detail">
-          <input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span>
-        </div>
+      <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span></div>
         <button class="partner-request-advance-button-active upload-documents-modal-button" @click="submitVehicle">
           <i class="el-icon-loading" v-if="submitStatus"></i>
           {{ $t('preferences.add_vehicles') }}
@@ -633,7 +632,6 @@ export default {
         cargo_type_id: this.preference,
       }
       : this.location;
-
       return new Promise((resolve, reject) => {
         axios
           .post(`${this.auth}partners/transporter_preferences`, payload, this.config)
