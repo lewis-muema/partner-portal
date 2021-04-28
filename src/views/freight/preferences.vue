@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="preferences-container-sections">
-      <p class="request-advance-input-labels">{{ $t('preferences.load_type_not_deliver') }}</p>
+      <p class="request-advance-input-labels"> {{ $t('preferences.load_type_not_deliver') }}</p>
       <button class="partner-request-advance-button-active preferences-buttons" @click="addPreference('load')">{{ $t('preferences.add_loads') }}</button>
       <div v-if="loadData.length > 0" class="preferences-table">
         <div class="preferences-table-row">
@@ -133,7 +133,15 @@
         </div>
         <div>
           <p class="request-advance-input-labels">{{ $t('preferences.select') }} {{ type }}</p>
-          <gmap-autocomplete v-if="type === 'location'" id="location" :options="map_options" :placeholder="$t('preferences.enter_location')" :select-first-on-enter="true" class="request-advance-inputs order-creation-location-inputs" @place_changed="setLocation($event)" />
+          <gmap-autocomplete
+            v-if="type === 'location'"
+            id="location"
+            :options="map_options"
+            :placeholder="$t('preferences.enter_location')"
+            :select-first-on-enter="true"
+            class="request-advance-inputs order-creation-location-inputs"
+            @place_changed="setLocation($event)"
+          />
           <el-select v-model="preference" class="request-advance-inputs" v-if="type === 'load'">
             <el-option :value="item.id" :label="item.cargo_type" v-for="(item, index) in cargo_types" :key="index"></el-option>
           </el-select>
@@ -162,7 +170,7 @@
               </el-select>
             </div>
             <div class="vehicle-inner-detail">
-              <p class="request-advance-input-labels">{{ $t('preferences.type_of_truck') }}</p>
+              <p class="request-advance-input-labels"> {{ $t('preferences.type_of_truck') }} </p>
               <el-select v-model="vehicle_data[0].carrier_type" class="request-advance-inputs">
                 <el-option :value="item.id" :label="item.carrier_type" v-for="(item, index) in freight_carrier_types" :key="index"></el-option>
               </el-select>
@@ -238,13 +246,10 @@
               <input class="add-vehicle-input" v-model="vehicle_data[n].policy_no" />
             </div>
             <div class="vehicle-inner-detail" @click="removeVehicle(n)">
-              <i class="el-icon-close el-icon-delete-vehicle">
-                <span class="remove-vehicle">{{ $t('preferences.remove_vehicle') }}</span></i>
-            </div>
+           <div class="vehicle-inner-detail"><input type="checkbox" class="signature--checkbox" name="" value="false" v-model="verify_consent" /><span> {{ $t('preferences.allow_sendy_verify') }}</span></div>
           </div>
           <div class="vehicle-inner-detail" @click="addVehicle()">
-            <i class="el-icon-plus el-icon-add-vehicle">
-              <span class="add-vehicle">{{ $t('preferences.add_vehicle') }}</span></i>
+            <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">{{ $t('preferences.add_vehicle') }}</span></i>
           </div>
         </div>
         <div class="vehicle-inner-detail">
@@ -301,13 +306,11 @@
               <input class="add-vehicle-input" v-model="recipient_data[n].email" />
             </div>
             <div class="vehicle-inner-detail" @click="removeRecipient(n)">
-              <i class="el-icon-close el-icon-delete-vehicle">
-                <span class="remove-vehicle">{{ $t('preferences.remove_user') }}</span></i>
+             <i class="el-icon-close el-icon-delete-vehicle"> <span class="remove-vehicle">{{ $t('preferences.remove_user') }}</span></i>
             </div>
           </div>
           <div class="vehicle-inner-detail" @click="addRecipient()" v-if="extra_recipient < 7">
-            <i class="el-icon-plus el-icon-add-vehicle">
-              <span class="add-vehicle">{{ $t('preferences.add_another_user') }}</span></i>
+           <i class="el-icon-plus el-icon-add-vehicle"> <span class="add-vehicle">{{ $t('preferences.add_another_user') }}</span></i>
           </div>
         </div>
 
@@ -625,13 +628,12 @@ export default {
     },
     submitPreference() {
       this.submitStatus = true;
-      const payload =
-        this.type === 'load'
-          ? {
-              owner_id: parseInt(this.sessionInfo.id, 10),
-              cargo_type_id: this.preference,
-            }
-          : this.location;
+      const payload = this.type === 'load' ? {
+        owner_id: parseInt(this.sessionInfo.id, 10),
+        cargo_type_id: this.preference,
+      }
+      : this.location;
+
       return new Promise((resolve, reject) => {
         axios
           .post(`${this.auth}partners/transporter_preferences`, payload, this.config)
