@@ -65,16 +65,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      withdrawal: {
-        code: 200,
-        amount: 3000,
-        currency: 'KES',
-        message: 'some message',
-        payment_method: 'Mpesa',
-        withdrawal_status: 'processing',
-        withdrawal_timestamp: '2021-04-22 11:17:02.0',
-        status: true,
-      },
+      withdrawal: {},
       config: {
         headers: {
           'Content-Type': 'application/json',

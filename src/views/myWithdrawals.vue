@@ -37,7 +37,9 @@ export default {
   data() {
     return {
       activeName: 'first',
-      withdrawals: [],
+      failed: [],
+      completed: [],
+      processing: [],
       sessionInfo: '',
       config: {
         headers: {
@@ -51,17 +53,6 @@ export default {
       fail: this.$t('withdrawalStatus.failed'),
       complete: this.$t('withdrawalStatus.completed'),
     };
-  },
-  computed: {
-    failed() {
-      return this.withdrawals.filter(el => el.status.toLowerCase() === 'failed');
-    },
-    processing() {
-      return this.withdrawals.filter(el => el.status.toLowerCase() === 'processing');
-    },
-    completed() {
-      return this.withdrawals.filter(el => el.status.toLowerCase() === 'completed');
-    },
   },
   created() {
     if (localStorage.sessionData) {
@@ -81,7 +72,9 @@ export default {
         .then(response => {
           const parsedResponse = response.data;
           if (parsedResponse.status && parsedResponse.owner_withdrawals.length > 0) {
-            this.withdrawals = parsedResponse.owner_withdrawals;
+            this.failed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'failed');
+            this.processing = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'processing');
+            this.completed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'completed');
           }
           resolve(response);
         })
