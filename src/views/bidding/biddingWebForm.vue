@@ -398,42 +398,46 @@ export default {
           if (res.status === 200) {
             this.success = true;
             if (payload.status === -1) {
-              mixpanel.track('Shipment Request Rejected', {
-                transporterId: this.formData.quotation.transporter_id,
-                phone: this.formData.client_phone,
-                email: this.formData.transporter_user_email,
-                name: this.formData.quotation.name,
-                source: this.$route.query.utm_source,
-                shipmentId: parseInt(this.$route.params.shipment_id, 0),
-                quotationId: parseInt(this.formData.id, 0),
-                pickup: this.formData.pickup.name,
-                destination: this.formData.destination.name,
-                carrierType: this.formData.carrier_type,
-                cargoType: this.formData.cargo_type,
-                pickupFacility: this.formData.pickup_facility,
-                trucksNeeded: parseInt(this.formData.total_trucks, 0),
-                reason: this.bidInfo.rejection_reasons,
-                clientType: 'Web',
-                device: this.isMobile() ? 'mobile' : 'web',
-              });
+              if (process.env.DOCKER_ENV === 'production') {
+                mixpanel.track('Shipment Request Rejected', {
+                  transporterId: this.formData.quotation.transporter_id,
+                  phone: this.formData.client_phone,
+                  email: this.formData.transporter_user_email,
+                  name: this.formData.quotation.name,
+                  source: this.$route.query.utm_source,
+                  shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                  quotationId: parseInt(this.formData.id, 0),
+                  pickup: this.formData.pickup.name,
+                  destination: this.formData.destination.name,
+                  carrierType: this.formData.carrier_type,
+                  cargoType: this.formData.cargo_type,
+                  pickupFacility: this.formData.pickup_facility,
+                  trucksNeeded: parseInt(this.formData.total_trucks, 0),
+                  reason: this.bidInfo.rejection_reasons,
+                  clientType: 'Web',
+                  device: this.isMobile() ? 'mobile' : 'web',
+                });
+              }
             } else if (payload.status === 1) {
-              mixpanel.track('Bids Placed', {
-                transporterId: this.formData.quotation.transporter_id,
-                phone: this.formData.client_phone,
-                email: this.formData.transporter_user_email,
-                name: this.formData.quotation.name,
-                source: this.$route.query.utm_source,
-                shipmentId: parseInt(this.$route.params.shipment_id, 0),
-                quotationId: parseInt(this.formData.id, 0),
-                pickup: this.formData.pickup.name,
-                destination: this.formData.destination.name,
-                carrierType: this.formData.carrier_type,
-                cargoType: this.formData.cargo_type,
-                pickupFacility: this.formData.pickup_facility,
-                trucksNeeded: parseInt(this.formData.total_trucks, 0),
-                clientType: 'Web',
-                device: this.isMobile() ? 'mobile' : 'web',
-              });
+              if (process.env.DOCKER_ENV === 'production') {
+                mixpanel.track('Bids Placed', {
+                  transporterId: this.formData.quotation.transporter_id,
+                  phone: this.formData.client_phone,
+                  email: this.formData.transporter_user_email,
+                  name: this.formData.quotation.name,
+                  source: this.$route.query.utm_source,
+                  shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                  quotationId: parseInt(this.formData.id, 0),
+                  pickup: this.formData.pickup.name,
+                  destination: this.formData.destination.name,
+                  carrierType: this.formData.carrier_type,
+                  cargoType: this.formData.cargo_type,
+                  pickupFacility: this.formData.pickup_facility,
+                  trucksNeeded: parseInt(this.formData.total_trucks, 0),
+                  clientType: 'Web',
+                  device: this.isMobile() ? 'mobile' : 'web',
+                });
+              }
             }
           }
         })
@@ -453,28 +457,40 @@ export default {
 
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
+            if (process.env.DOCKER_ENV === 'production') {
+              mixpanel.people.set_once({
+                'Transporter Id': res.data.data.quotation.transporter_id,
+                $name: res.data.data.quotation.name,
+                $email: res.data.data.transporter_user_email,
+                $phone: res.data.data.transporter_user_phone,
+              });
+
+              mixpanel.identify(res.data.data.transporter_user_email);
+            }
           } else {
             this.submitted = true;
           }
 
           if (res.status === 200) {
-            mixpanel.track('Shipments Request Viewed', {
-              transporterId: res.data.data.quotation.transporter_id,
-              phone: res.data.data.transporter_user_phone,
-              email: res.data.data.transporter_user_email,
-              name: res.data.data.quotation.name,
-              source: this.$route.query.utm_source,
-              shipmentId: parseInt(this.$route.params.shipment_id, 0),
-              quotationId: parseInt(res.data.data.id, 0),
-              pickup: res.data.data.pickup.name,
-              destination: res.data.data.destination.name,
-              carrierType: res.data.data.carrier_type,
-              cargoType: res.data.data.cargo_type,
-              pickupFacility: res.data.data.pickup_facility,
-              trucksNeeded: res.data.data.total_trucks,
-              clientType: 'Web',
-              device: this.isMobile() ? 'mobile' : 'web',
-            });
+            if (process.env.DOCKER_ENV === 'production') {
+              mixpanel.track('Shipments Request Viewed', {
+                transporterId: res.data.data.quotation.transporter_id,
+                phone: res.data.data.transporter_user_phone,
+                email: res.data.data.transporter_user_email,
+                name: res.data.data.quotation.name,
+                source: this.$route.query.utm_source,
+                shipmentId: parseInt(this.$route.params.shipment_id, 0),
+                quotationId: parseInt(res.data.data.id, 0),
+                pickup: res.data.data.pickup.name,
+                destination: res.data.data.destination.name,
+                carrierType: res.data.data.carrier_type,
+                cargoType: res.data.data.cargo_type,
+                pickupFacility: res.data.data.pickup_facility,
+                trucksNeeded: res.data.data.total_trucks,
+                clientType: 'Web',
+                device: this.isMobile() ? 'mobile' : 'web',
+              });
+            }
           }
         })
         .catch(error => {
