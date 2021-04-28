@@ -453,13 +453,13 @@ export default {
           if (this.formData.quotation.status === 0) {
             this.submitted = false;
 
-            mixpanel.people.set({
+            mixpanel.people.set_once({
               $distinct_id: res.data.data.quotation.transporter_id,
               $name: res.data.data.quotation.name,
               $email: res.data.data.transporter_user_email,
               $phone: res.data.data.transporter_user_phone,
             });
-            
+
             mixpanel.identify(res.data.data.quotation.transporter_id);
           } else {
             this.submitted = true;
