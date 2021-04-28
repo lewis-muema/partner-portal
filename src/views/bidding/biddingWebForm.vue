@@ -459,7 +459,7 @@ export default {
             this.submitted = false;
             if (process.env.DOCKER_ENV === 'production') {
               mixpanel.people.set_once({
-                TransporterId: res.data.data.quotation.transporter_id,
+                'Transporter Id': res.data.data.quotation.transporter_id,
                 $name: res.data.data.quotation.name,
                 $email: res.data.data.transporter_user_email,
                 $phone: res.data.data.transporter_user_phone,
