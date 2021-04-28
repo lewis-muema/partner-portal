@@ -1,11 +1,12 @@
 <template lang="html">
   <div>
-    <div v-for="(withdrawal, index) in withdrawals" :key="index">
+     <div v-if="withdrawals.length > 0">
+      <div v-for="(withdrawal, index) in withdrawals" :key="index">
       <router-link class="router" :to="'/withdrawal-status/' + withdrawal.ref_no">
         <div class="item">
           <div class="item__info">
             <h4 class="item__heading">
-              {{ timestamp }}
+              {{ new Date(withdrawal.created_at).toDateString() }}
             </h4>
             <p class="item__content">{{ withdrawal.payment_method }} - {{ withdrawal.currency }} {{ withdrawal.amount }}</p>
           </div>
@@ -18,18 +19,15 @@
         </div>
       </router-link>
     </div>
+    </div>
   </div>
 </template>
 <script>
 export default {
+  name: 'withdrawalItem',
   props: ['withdrawals'],
   data() {
     return {};
-  },
-  computed: {
-    timestamp() {
-      return new Date(this.withdrawal.created_at).toDateString();
-    },
   },
 };
 </script>
