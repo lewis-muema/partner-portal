@@ -127,7 +127,7 @@
           <div class="stat-cards col-6 d-flex flex-column justify-content-between">
             <div class="d-flex justify-content-end items-align-end">
               <p style="font-size:14px">
-                {{ $t('statement.can_withdraw') }} <span class="font-weigth-bold text-success" style="font-weigth:600" v-if="this.ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
+                {{ $t('statement.can_withdraw') }} <span class="font-weigth-bold text-success" style="font-weigth:600" v-if="ownerRb">{{ ownerRb.currency }} {{ Math.floor(ownerRb.running_balance * -1) }}</span>
               </p>
             </div>
             <div class="subFilt d-flex justify-content-end items-align-end">
@@ -764,7 +764,7 @@ export default {
           owner_id: this.sessionInfo.id,
         };
         axios
-          .post(`${process.env.VUE_APP_AUTH}/orders/owner_disputed_orders`, payload, this.config)
+          .post(`${process.env.VUE_APP_AUTH}orders/owner_disputed_orders`, payload, this.config)
           .then(response => {
             const parsedResponse = response.data;
             if (parsedResponse.status && parsedResponse.disputed_orders.length > 0) {
@@ -789,8 +789,11 @@ export default {
           .then(response => {
             const parsedResponse = response.data;
             if (parsedResponse.status && parsedResponse.data.length > 0) {
-              this.expiredDocuments = parsedResponse.data;
-              this.hasExpiredDocuments = parsedResponse.status;
+              const currentTime = moment();
+              if (currentTime.diff(parsedResponse.data.driving_license.expiry_date, 'days') >= 0 || currentTime.diff(parsedResponse.data.driving_license.expiry_date, 'days') < 0) {
+                this.expiredDocuments = parsedResponse.data;
+                this.hasExpiredDocuments = parsedResponse.status;
+              }
             }
             resolve(response);
           })
