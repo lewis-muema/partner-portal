@@ -422,7 +422,7 @@ export default {
                 $phone: this.formData.client_phone,
                 $distinct_id: this.formData.quotation.transporter_id,
               });
-              mixpanel.identify(res.data.data.quotation.transporter_id);
+              mixpanel.identify(this.formData.quotation.transporter_id);
             } else if (payload.status === 1) {
               mixpanel.track('Bids Placed', {
                 transporterId: this.formData.quotation.transporter_id,
@@ -447,7 +447,7 @@ export default {
                 $phone: this.formData.client_phone,
                 $distinct_id: this.formData.quotation.transporter_id,
               });
-              mixpanel.identify(res.data.data.quotation.transporter_id);
+              mixpanel.identify(this.formData.quotation.transporter_id);
             }
           }
         })
