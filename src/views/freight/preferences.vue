@@ -360,7 +360,7 @@
           <p class="upload-documents-modal-top-row-title">Delete User</p>
         </div>
         <div>
-          <div v-if="sessionInfo.email === singleRecipientData.email">
+          <div v-if="sessionInfo.phone === singleRecipientData.phone">
             Sorry, you can not delete this user
           </div>
           <div v-else>
