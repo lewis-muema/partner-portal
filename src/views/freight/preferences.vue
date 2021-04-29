@@ -359,19 +359,26 @@
         <div class="upload-documents-modal-top-row">
           <p class="upload-documents-modal-top-row-title">Delete User</p>
         </div>
-        <div class="remove-recipient-info">
-          <div class="">
-            Are you sure you want to delete<span>{{ singleRecipientData.name }} ?</span>
+        <div>
+          <div v-if="sessionInfo.phone === singleRecipientData.phone">
+            Sorry, you can not delete this user
           </div>
-        </div>
-        <div class="add-recipient-btn-outer">
-          <div class="set-div-flex"></div>
-          <div class="close-recipients-dialog cancel-notification" @click="closeDeleteRecipientDialog()">
-            No
+          <div v-else>
+            <div class="remove-recipient-info">
+              <div class="">
+                Are you sure you want to delete<span>{{ singleRecipientData.name }} ?</span>
+              </div>
+            </div>
+            <div class="add-recipient-btn-outer">
+              <div class="set-div-flex"></div>
+              <div class="close-recipients-dialog cancel-notification" @click="closeDeleteRecipientDialog()">
+                No
+              </div>
+              <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitDeleteRequest()">
+                Yes , Delete User
+              </button>
+            </div>
           </div>
-          <button class="partner-request-advance-button-active add-recipients-modal-button" @click="submitDeleteRequest()">
-            Yes , Delete User
-          </button>
         </div>
       </div>
     </modal>
