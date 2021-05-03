@@ -12,7 +12,7 @@
           <div>
             <h2 class="dark-grey">{{ timestamp }}</h2>
           </div>
-          <h4 class="withdraw__status">{{ withdrawal.withdrawal_status }}</h4>
+          <h4 class="withdraw__status" :class="{'text-success':isCompleted}">{{ status }}</h4>
         </div>
         <div class="payment_method">
           <div>
@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-      <div class="fail" v-if="!inProgress && !isCompleted">
+      <div class="fail" v-if="failed">
         <p class="fail__message">{{ $t('withdrawalStatus.fail_msg1') }}</p>
         <p class="fail__message">{{ $t('withdrawalStatus.fail_msg2') }}</p>
         <button class="warning_btn">{{ $t('withdrawalStatus.btn_with') }}</button>
@@ -66,6 +66,7 @@ export default {
   data() {
     return {
       withdrawal: {},
+      withdrawalStatus: '',
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -76,6 +77,18 @@ export default {
     };
   },
   computed: {
+    status() {
+      let status = '';
+      if (this.withdrawal.withdrawal_status.toLowerCase() === 'success') {
+        status = this.$t('withdrawalStatus.completed');
+      } else if (this.withdrawal.withdrawal_status.toLowerCase() === 'failed') {
+        status = this.$t('withdrawalStatus.failed');
+      } else {
+        status = this.$t('withdrawalStatus.inprogress');
+      }
+
+      return status;
+    },
     timestamp() {
       return new Date(this.withdrawal.withdrawal_timestamp).toDateString();
     },
@@ -83,13 +96,13 @@ export default {
       return this.withdrawal.withdrawal_status.toLowerCase() === 'processing' ? 2 : 0;
     },
     isCompleted() {
-      return this.withdrawal.withdrawal_status.toLowerCase() === 'completed';
+      return this.withdrawal.withdrawal_status.toLowerCase() === 'success';
     },
     failed() {
       return this.withdrawal.withdrawal_status.toLowerCase() === 'failed';
     },
     inProgress() {
-      return this.withdrawal.withdrawal_status.toLowerCase() === 'processing';
+      return this.withdrawal.withdrawal_status.toLowerCase() === ('processing' || 'request sent');
     },
   },
   created() {
@@ -113,6 +126,7 @@ export default {
             resolve(response);
           })
           .catch(error => {
+            this.$router.push({ name: 'myWithdrawals' });
             this.errorObj = error.response;
             resolve(error);
           });
