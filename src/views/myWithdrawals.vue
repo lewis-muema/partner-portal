@@ -103,12 +103,6 @@ export default {
 .withdrawals__bread {
   width: 50%;
 }
-.tabs {
-  padding: 10px 0px;
-}
-.el-tabs__item {
-  color: rgba(238, 125, 0, 1);
-}
 .withdrawal__heading {
   font-size: 30px;
   color: rgba(96, 98, 102, 1);
