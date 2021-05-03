@@ -403,7 +403,7 @@ export default {
                   phone: this.formData.client_phone,
                   email: this.formData.transporter_user_email,
                   name: this.formData.quotation.name,
-                  source: this.$route.query.utm_source,
+                  source: this.$route.query.utm_source.length < 1 ? this.$route.query.utm_source : 'not_provided',
                   shipmentId: parseInt(this.$route.params.shipment_id, 0),
                   quotationId: parseInt(this.formData.id, 0),
                   pickup: this.formData.pickup.name,
