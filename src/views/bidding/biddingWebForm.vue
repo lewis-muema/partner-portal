@@ -389,13 +389,13 @@ export default {
           rejection_reasons: decliners,
         };
       }
-      this.success = true;
 
       const payload = JSON.stringify(this.bidInfo);
       await axios
         .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
+            this.success = true;
             if (payload.status === -1) {
               if (process.env.DOCKER_ENV === 'production') {
                 mixpanel.track('Shipment Request Rejected', {
