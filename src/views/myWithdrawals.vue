@@ -74,7 +74,7 @@ export default {
           if (parsedResponse.status && parsedResponse.owner_withdrawals.length > 0) {
             this.failed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'failed');
             this.processing = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'processing');
-            this.completed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'completed');
+            this.completed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'success');
           }
           resolve(response);
         })
