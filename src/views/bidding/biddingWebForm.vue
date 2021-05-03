@@ -389,13 +389,13 @@ export default {
           rejection_reasons: decliners,
         };
       }
+      this.success = true;
 
       const payload = JSON.stringify(this.bidInfo);
       await axios
-        .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
+        // .patch(`${this.auth}freight-service/shipments/quotations?authkey=${process.env.BIDDING_API_KEY}`, payload, this.config)
         .then(res => {
           if (res.status === 200) {
-            this.success = true;
             if (payload.status === -1) {
               if (process.env.DOCKER_ENV === 'production') {
                 mixpanel.track('Shipment Request Rejected', {
@@ -414,17 +414,17 @@ export default {
                   trucksNeeded: parseInt(this.formData.total_trucks, 0),
                   reason: this.bidInfo.rejection_reasons,
                   clientType: 'Web',
-                  device: this.isMobile() ? 'mobile' : 'web',
+                  device: this.isMobile() ? 'mobile' : 'desktop',
                 });
               }
             } else if (payload.status === 1) {
               if (process.env.DOCKER_ENV === 'production') {
-                mixpanel.track('Bids Placed', {
+                mixpanel.track('Bid Placed', {
                   transporterId: this.formData.quotation.transporter_id,
                   phone: this.formData.client_phone,
                   email: this.formData.transporter_user_email,
                   name: this.formData.quotation.name,
-                  source: this.$route.query.utm_source,
+                  source: this.$route.query.utm_source.length < 1 ? this.$route.query.utm_source : 'not_provided',
                   shipmentId: parseInt(this.$route.params.shipment_id, 0),
                   quotationId: parseInt(this.formData.id, 0),
                   pickup: this.formData.pickup.name,
@@ -434,7 +434,7 @@ export default {
                   pickupFacility: this.formData.pickup_facility,
                   trucksNeeded: parseInt(this.formData.total_trucks, 0),
                   clientType: 'Web',
-                  device: this.isMobile() ? 'mobile' : 'web',
+                  device: this.isMobile() ? 'mobile' : 'desktop',
                 });
               }
             }
@@ -471,13 +471,13 @@ export default {
           }
 
           if (res.status === 200) {
-            if (process.env.DOCKER_ENV === 'production') {
-              mixpanel.track('Shipments Request Viewed', {
+            if (process.env.DOCKER_ENV === 'development') {
+              mixpanel.track('Shipment Request Viewed', {
                 transporterId: res.data.data.quotation.transporter_id,
                 phone: res.data.data.transporter_user_phone,
                 email: res.data.data.transporter_user_email,
                 name: res.data.data.quotation.name,
-                source: this.$route.query.utm_source,
+                source: this.$route.query.utm_source.length < 1 ? this.$route.query.utm_source : 'not_provided',
                 shipmentId: parseInt(this.$route.params.shipment_id, 0),
                 quotationId: parseInt(res.data.data.id, 0),
                 pickup: res.data.data.pickup.name,
@@ -485,9 +485,9 @@ export default {
                 carrierType: res.data.data.carrier_type,
                 cargoType: res.data.data.cargo_type,
                 pickupFacility: res.data.data.pickup_facility,
-                trucksNeeded: res.data.data.total_trucks,
+                trucksNeeded: parseInt(res.data.data.total_trucks, 0),
                 clientType: 'Web',
-                device: this.isMobile() ? 'mobile' : 'web',
+                device: this.isMobile() ? 'mobile' : 'desktop',
               });
             }
           }
