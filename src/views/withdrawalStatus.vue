@@ -155,14 +155,6 @@ export default {
   border: none;
   border-radius: 10px;
 }
-.el-breadcrumb__inner a,
-.el-breadcrumb__inner.is-link {
-  color: #ea7125;
-  background: red;
-}
-.el-step {
-  color: #ee7d00;
-}
 .error-message {
   display: flex;
   flex-direction: column;
