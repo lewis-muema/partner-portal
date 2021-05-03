@@ -469,9 +469,10 @@ export default {
           } else {
             this.submitted = true;
           }
-
           if (res.status === 200) {
-            if (process.env.DOCKER_ENV === 'development') {
+            console.log('inside');
+            console.log(process.env.DOCKER_ENV);
+            if (process.env.DOCKER_ENV === 'production') {
               mixpanel.track('Shipment Request Viewed', {
                 transporterId: res.data.data.quotation.transporter_id,
                 phone: res.data.data.transporter_user_phone,
