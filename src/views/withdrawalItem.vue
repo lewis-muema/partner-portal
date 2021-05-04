@@ -12,46 +12,57 @@
           </div>
           <div class="item__indicator">
             <p class="item__status">{{ withdrawal.status }}</p>
-            <i v-if="withdrawal.status === 'processing'" class="fas fa-clock icon icon-proc"></i>
+            <i v-if="withdrawal.status === ('processing' || 'request sent')" class="fas fa-clock icon icon-proc"></i>
             <i v-else-if="withdrawal.status === 'failed'" class="fas fa-exclamation-circle icon icon-fail"></i>
-            <i v-else-if="withdrawal.status === 'completed'" class="fas fa-check-circle icon icon-comp"></i>
+            <i v-else-if="withdrawal.status === 'success'" class="fas fa-check-circle icon icon-comp"></i>
           </div>
         </div>
-        <div class="child2">
-          <p>{{ withdrawal.status }}</p>
-          <i class=""></i>
-        </div>
-      </div>
       </router-link>
     </div>
     </div>
   </div>
 </template>
 <script>
-
 export default {
   name: 'withdrawalItem',
   props: ['withdrawals'],
   data() {
-    return {
-
-    };
+    return {};
   },
 };
 </script>
 <style scoped>
-.parent{
-  padding-top: 40px ;
+.item {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
-.child1{
-  justify-content: flex-start;
+.item__content {
+  color: rgba(144, 147, 153, 1);
+  font-size: 14px;
 }
-
-.child2{
-  justify-content: flex-end;
+.item__indicator {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
-
+.item__status {
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(144, 147, 153, 1);
+}
+.icon {
+  font-size: 14px;
+  padding: 4px 8px 0px 4px;
+}
+.icon-proc {
+  color: rgba(238, 125, 0, 1);
+}
+.icon-fail {
+  color: #bc5000;
+}
+.icon-comp {
+  color: #51a65b;
+}
 </style>

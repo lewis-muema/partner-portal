@@ -73,7 +73,7 @@ export default {
           const parsedResponse = response.data;
           if (parsedResponse.status && parsedResponse.owner_withdrawals.length > 0) {
             this.failed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'failed');
-            this.processing = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'processing');
+            this.processing = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === ('processing' || 'request sent'));
             this.completed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'success');
           }
           resolve(response);
