@@ -34,6 +34,16 @@ const translation = {
     sending_request: 'FR_Sending request',
     fetching_daily_stats: 'FR_Fetching Daily Rider Statistics',
     statement_for: 'FR_Statement for {name} for {monthPeriod}',
+    order_dispute_msg: 'FR_Sorry, we cannot process your withdrawal request because there is a problem with the order shown below: ',
+    expired_doc_msg: 'FR_Sorry, we cannot process your withdrawal request because the following document(s) need to be renewed:',
+    driving_licences: 'FR_Driving License',
+    exp_date: 'FR_Expired on: ',
+    btn_update: 'FR_Update',
+    trouble: 'FR_Still having trouble?',
+    contact_support: 'FR_Contact Support',
+    view: 'FR_View',
+    previous: 'FR_previous',
+    withdrawals: 'FR_withdrawals',
 
 };
 

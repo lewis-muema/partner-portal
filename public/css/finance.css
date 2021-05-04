@@ -1542,3 +1542,19 @@ button.btn-floating {
   margin-right: auto;
   display: block;
 }
+.el-tabs__item.is-active {
+  color:#ee7d00 !important;
+}
+.el-tabs__item:hover {
+  color:#ee7d00 !important;
+  cursor: pointer !important;
+}
+.el-tabs__item {
+  padding: 10px 0px;
+}
+.el-breadcrumb__inner a, .el-breadcrumb__inner.is-link {
+  color: #ea7125 !important;
+}
+.el-step {
+  color: #ee7d00 !important;
+}
