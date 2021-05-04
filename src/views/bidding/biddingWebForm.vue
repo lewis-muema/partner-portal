@@ -398,7 +398,7 @@ export default {
             this.success = true;
             const declineResponse = JSON.parse(payload);
             if (declineResponse.status === -1) {
-              if (process.env.DOCKER_ENV === 'development') {
+              if (process.env.DOCKER_ENV === 'production') {
                 mixpanel.track('Shipment Request Rejected', {
                   transporterId: this.formData.quotation.transporter_id,
                   phone: this.formData.client_phone,
@@ -419,7 +419,7 @@ export default {
                 });
               }
             } else if (declineResponse.status === 1) {
-              if (process.env.DOCKER_ENV === 'development') {
+              if (process.env.DOCKER_ENV === 'production') {
                 mixpanel.track('Bid Placed', {
                   transporterId: this.formData.quotation.transporter_id,
                   phone: this.formData.client_phone,
