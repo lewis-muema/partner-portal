@@ -401,11 +401,11 @@ export default {
             if (declineResponse.status === -1) {
               if (process.env.DOCKER_ENV === 'production') {
                 mixpanel.track('Shipment Request Rejected', {
-                  transporterId: this.formData.quotation.transporter_id,
+                  transporterId: this.$route.params.owner_id,
                   phone: this.formData.client_phone,
                   email: this.formData.transporter_user_email,
                   name: this.formData.quotation.name,
-                  source: this.$route.query.utm_source.length < 1 ? this.$route.query.utm_source : 'not_provided',
+                  source: this.$route.query.utm_source,
                   shipmentId: parseInt(this.$route.params.shipment_id, 0),
                   quotationId: parseInt(this.formData.id, 0),
                   pickup: this.formData.pickup.name,
@@ -422,11 +422,11 @@ export default {
             } else if (declineResponse.status === 1) {
               if (process.env.DOCKER_ENV === 'production') {
                 mixpanel.track('Bid Placed', {
-                  transporterId: this.formData.quotation.transporter_id,
+                  transporterId: this.$route.params.owner_id,
                   phone: this.formData.client_phone,
                   email: this.formData.transporter_user_email,
                   name: this.formData.quotation.name,
-                  source: this.$route.query.utm_source.length < 1 ? this.$route.query.utm_source : 'not_provided',
+                  source: this.$route.query.utm_source,
                   shipmentId: parseInt(this.$route.params.shipment_id, 0),
                   quotationId: parseInt(this.formData.id, 0),
                   pickup: this.formData.pickup.name,
@@ -459,13 +459,13 @@ export default {
             this.submitted = false;
             if (process.env.DOCKER_ENV === 'production') {
               mixpanel.people.set_once({
-                'Transporter Id': res.data.data.quotation.transporter_id,
+                'Transporter Id': this.$route.params.owner_id,
                 $name: res.data.data.quotation.name,
                 $email: res.data.data.transporter_user_email,
                 $phone: res.data.data.transporter_user_phone,
               });
 
-              mixpanel.identify(res.data.data.transporter_user_email);
+              mixpanel.identify(this.$route.params.owner_id);
             }
           } else {
             this.submitted = true;
@@ -473,11 +473,11 @@ export default {
           if (res.status === 200) {
             if (process.env.DOCKER_ENV === 'production') {
               mixpanel.track('Shipment Request Viewed', {
-                transporterId: res.data.data.quotation.transporter_id,
+                transporterId: this.$route.params.owner_id,
                 phone: res.data.data.transporter_user_phone,
                 email: res.data.data.transporter_user_email,
                 name: res.data.data.quotation.name,
-                source: this.$route.query.utm_source.length < 1 ? this.$route.query.utm_source : 'not_provided',
+                source: this.$route.query.utm_source,
                 shipmentId: parseInt(this.$route.params.shipment_id, 0),
                 quotationId: parseInt(res.data.data.id, 0),
                 pickup: res.data.data.pickup.name,
