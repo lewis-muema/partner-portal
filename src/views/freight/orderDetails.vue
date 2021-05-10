@@ -121,8 +121,8 @@
               </div>
               <p class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.select_type_of_doc') }}</p>
               <select name="" id="" class="upload-documents-modal-top-inputs" v-model="documentType">
-                <option v-for="(document, index) in documents" :key="index" :value="document.documentType">
-                  {{ document.documentType }}
+                <option v-for="(document, index) in documents" :key="index" :value="document.document_type">
+                  {{ document.document_type }}
                 </option>
               </select>
               <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.name_of_document') }}</p>
@@ -340,7 +340,7 @@ export default {
   },
   computed: {
     document_type() {
-      const document = this.documents.filter(obj => obj.documentType === this.documentType);
+      const document = this.documents.filter(obj => obj.document_type === this.documentType);
       return document[0].id;
     },
     fuelSubmitStatus() {
