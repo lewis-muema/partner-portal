@@ -382,7 +382,6 @@ export default {
             decliners.push({ reason_id: r + 1, reason: null });
           }
         }
-
         this.bidInfo = {
           quotation_id: parseInt(this.$route.params.shipment_id, 0),
           transporter_id: this.$route.params.owner_id,

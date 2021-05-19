@@ -1117,7 +1117,10 @@ describe('Statement.vue', () => {
         })
         .then(() => {
           done();
-        }).catch(done);
+        })
+        .catch(error => {
+          console.log('caught', error.message);
+        });
     });
   });
   it('Check whether the listRiders function populates the riders array', () => {
