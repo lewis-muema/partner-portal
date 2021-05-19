@@ -15,12 +15,12 @@ RUN npm install
 
 RUN npm run build
 
-# RUN if [ "$DOCKER_ENV" = "testing" ]; \
-#         then npm install && npm run staging; \
-#         elif [ "$DOCKER_ENV" = "beta" ]; \
-#         then npm install && npm run beta; \
-#         else npm install && npm run build; \
-#         fi
+RUN if [ "$DOCKER_ENV" = "testing" ]; \
+        then npm install && npm run staging; \
+        elif [ "$DOCKER_ENV" = "beta" ]; \
+        then npm install && npm run beta; \
+        else npm install && npm run build; \
+        fi
 
 
 #############################
