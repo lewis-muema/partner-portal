@@ -12,12 +12,15 @@ RUN npm config set registry https://registry.npmjs.org/
 COPY package*.json ./ 
 RUN npm install 
 
-RUN if [ "$DOCKER_ENV" = "testing" ]; \
-        then npm install && npm run staging; \
-        elif [ "$DOCKER_ENV" = "beta" ]; \
-        then npm install && npm run beta; \
-        else npm install && npm run build; \
-        fi
+
+RUN npm run build
+
+# RUN if [ "$DOCKER_ENV" = "testing" ]; \
+#         then npm install && npm run staging; \
+#         elif [ "$DOCKER_ENV" = "beta" ]; \
+#         then npm install && npm run beta; \
+#         else npm install && npm run build; \
+#         fi
 
 
 #############################
