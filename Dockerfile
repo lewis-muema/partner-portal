@@ -7,21 +7,17 @@ ARG DOCKER_ENV
 ENV DOCKER_ENV=$DOCKER_ENV
 RUN echo ${DOCKER_ENV}
 
-RUN npm config set registry https://registry.npmjs.org/
-
 COPY package*.json ./ 
 RUN npm install 
 
 COPY . .
 
-RUN npm run build 
-
-# RUN if [ "$DOCKER_ENV" = "testing" ]; \
-#         then npm install && npm run staging; \
-#         elif [ "$DOCKER_ENV" = "beta" ]; \
-#         then npm run beta; \
-#         else npm run build; \
-#         fi
+RUN if [ "$DOCKER_ENV" = "testing" ]; \
+        then npm run staging; \
+        elif [ "$DOCKER_ENV" = "beta" ]; \
+        then npm run beta; \
+        else npm run build; \
+        fi
 
 
 #############################
