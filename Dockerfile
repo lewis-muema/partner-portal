@@ -46,7 +46,7 @@ RUN chmod +x /usr/local/bin/dumb-init
 
 USER sendy:sendy
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["dumb-init", "nginx", "-g", "daemon off;"]
 
