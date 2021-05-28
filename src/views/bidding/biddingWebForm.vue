@@ -54,7 +54,7 @@
 
                 <div v-if="formData.cargo_type_options.length > 1">
                   <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
-                  <p class="bid-details-content">{{ formData.cargo_type_options[0].value === true ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
+                  <p class="bid-details-content">{{ formData.cargo_type_options[0].value === 'true' ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
                   <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_20_containers_moved') }}</p>
                   <h2 class="bid-details-content">{{ formData.cargo_type_options[1].value }}</h2>
                   <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_40_containers_moved') }}</p>
