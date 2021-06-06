@@ -93,7 +93,7 @@ buildpushprod:
     - shell
   script:
     - docker build --build-arg DOCKER_ENV=prod --pull -t $PROD_IMAGE_NAME -f Dockerfile .
-    - docker build --build-arg DOCKER_ENV=prod --pull -t $FLUX_IMAGE_NANE -f Dockerfile . 
+    - docker build --build-arg DOCKER_ENV=prod --pull -t $FLUX_IMAGE_NAME -f Dockerfile . 
     - docker push $PROD_IMAGE_NAME
     - docker push $FLUX_IMAGE_NAME
   only:
