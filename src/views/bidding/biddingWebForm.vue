@@ -124,6 +124,7 @@
                       </select>
                       <input class="bidForm__input right-radius bid-input" type="number" v-model="bidDetails.amount_per_truck" />
                     </div>
+                       <span v-show="amountAlert" class="alert">Kindly enter a valid amount</span>
                     <span v-show="bidDetails.trucks_available < 1" class="alert">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
                   </div>
                 </div>
@@ -183,7 +184,7 @@
               <p class="bid-details-subheading" v-else>{{ $t('biddingWebForm.clients_price_offer_per_truck') }}</p>
             </div>
             <p class="bid-details-content bold">
-              <b>{{ formData.currency }}</b><span v-if="(formData.is_negotiable === null && formData.offer_amount === null) || (formData.is_negotiable === true && formData.offer_amount > 1)">{{ bidDetails.amount_per_truck }}</span> <span v-else>{{ formData.offer_amount }}</span>
+              <b>{{ formData.currency }}</b><span v-if="formData.is_negotiable === true">{{ bidDetails.amount_per_truck }}</span><span v-else>{{ formData.offer_amount }}</span>
             </p>
             <p class="bid-details-subheading">{{ $t('biddingWebForm.total_shipment_amount') }}</p>
             <p class="bid-details-content bold">
@@ -262,6 +263,7 @@ export default {
         available_trucks: 1,
       },
       trucks: 0,
+      amountAlert: false,
       bid_amount: null,
       total_amount: 0,
       otherReason: false,
@@ -307,7 +309,14 @@ export default {
       this.$modal.show('bid-details-modal-2');
     },
     show() {
-      this.$modal.show('bid-details-modal');
+      if (this.formData.is_negotiable === true && this.bidDetails.amount_per_truck < 10) {
+        this.amountAlert = true;
+        setTimeout(() => {
+          this.amountAlert = false;
+       }, 2000);
+      } else {
+        this.$modal.show('bid-details-modal');
+      }
     },
     detectMobileDevice() {
       if (this.isAndroid()) {
