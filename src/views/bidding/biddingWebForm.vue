@@ -309,7 +309,7 @@ export default {
     formLang() {
       const lang = new Intl.Locale(this.$route.query.locale);
       const finalLang = lang.language;
-      this.val = finLang;
+      this.val = finalLang;
       this.detectLanguage();
     },
     notify(status, type, message) {
@@ -328,7 +328,6 @@ export default {
         this.$modal.show('bid-details-modal');
       }
     },
-
     detectMobileDevice() {
       if (this.isAndroid()) {
         this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
@@ -476,7 +475,6 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
-          this.formData.quotation.status = 0;
           if (this.isMobile()) {
             this.mobilebanner = true;
           }
