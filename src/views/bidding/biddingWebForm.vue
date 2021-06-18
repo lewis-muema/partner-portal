@@ -286,7 +286,7 @@ export default {
       formData: {},
       requests: {},
       url: '',
-      val: 'fr',
+      val: 'en',
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -308,8 +308,8 @@ export default {
   methods: {
     formLang() {
       const lang = new Intl.Locale(this.$route.query.locale);
-      const fin = lang.language;
-      this.val = fin;
+      const finalLang = lang.language;
+      this.val = finLang;
       this.detectLanguage();
     },
     notify(status, type, message) {
