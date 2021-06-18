@@ -19,7 +19,6 @@ function loadLocaleMessages() {
   return messages;
 }
 
-
 const i18n = new VueI18n({
   locale: 'en',
   fallbackLocale: 'en',
@@ -41,6 +40,8 @@ function fetchCountry() {
     .catch(error => error);
 }
 
-fetchCountry();
+if (window.location.pathname.split('/')[1] !== 'bidding') {
+  fetchCountry();
+}
 
 export default i18n;
