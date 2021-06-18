@@ -54,7 +54,7 @@
 
                 <div v-if="formData.cargo_type_options.length > 1">
                   <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
-                  <p class="bid-details-content">{{ formData.cargo_type_options[0].value === 'true' ? this.$t('biddingWebForm.yes_container_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
+                  <p class="bid-details-content">{{ formData.cargo_type_options[0].value === 'true' ? this.$t('biddingWebForm.yes_containers_returned') : this.$t('biddingWebForm.no_containers_returned') }}</p>
                   <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_20_containers_moved') }}</p>
                   <h2 class="bid-details-content">{{ formData.cargo_type_options[1].value }}</h2>
                   <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_40_containers_moved') }}</p>
@@ -309,7 +309,7 @@ export default {
     formLang() {
       const lang = new Intl.Locale(this.$route.query.locale);
       const finalLang = lang.language;
-      this.val = finLang;
+      this.val = finalLang;
       this.detectLanguage();
     },
     notify(status, type, message) {
@@ -328,7 +328,6 @@ export default {
         this.$modal.show('bid-details-modal');
       }
     },
-
     detectMobileDevice() {
       if (this.isAndroid()) {
         this.link = 'https://play.google.com/store/apps/details?id=com.sendyit.freight';
@@ -476,7 +475,6 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
-          this.formData.quotation.status = 0;
           if (this.isMobile()) {
             this.mobilebanner = true;
           }
