@@ -46,6 +46,7 @@ const translation = {
   decline_offer: 'Decline Offer',
   accept_offer: 'Accept Offer',
   reason_for_declining: 'Please let us know the reason for declining this bid',
+  select_reason: 'Kindly select atleast one reason',
   cancel: 'Cancel',
   no_of_20_containers_moved: 'Number of 20ft containers being moved',
   no_of_40_containers_moved: 'Number of 40ft containers being moved',
@@ -53,6 +54,8 @@ const translation = {
   rejected: 'Rejected Offer',
   unfortunately_rejected: 'Unfortunately, offer was rejected',
   experience_is_better: 'This experience is better on the Sendy Freight App',
+  open_app: 'Open App',
+  valid_amount: 'Kindly enter a valid amount',
 };
 
 export default translation;
