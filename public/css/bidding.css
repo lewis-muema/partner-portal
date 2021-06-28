@@ -18,7 +18,7 @@
 }
 .bid-heading {
   font-size: 18px;
-  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .webForm__map {
   justify-self: center;
@@ -34,13 +34,12 @@
 }
 .bid-information {
   border-bottom: 1px solid rgba(184, 184, 184, 0.28);
-  border-width: 50%;
 }
 .bid-details-subheading {
   font-size: 16px;
   color: #6f6a6a;
   margin: 0;
-  padding-top: 20px;
+  padding-top: 14px;
 }
 .small-font {
   font-size: 16px;
@@ -106,7 +105,7 @@
 }
 .bidding-form-trucks-input {
   max-width: 80px;
-  padding: 7.2px 0px;
+  padding: 7px 0px;
   text-align: center;
 }
 .bidForm__selector {
@@ -185,7 +184,7 @@
   padding-top: 0;
 }
 .bid_description {
-  font-weight: 600;
+  font-weight: 400;
   font-size: 22px;
 }
 .alert {
@@ -386,9 +385,25 @@
 .btn_txt {
   padding: 0;
 }
+.expired {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.expired_icon {
+  font-size: 24px;
+  color: #6f6a6a;
+  padding-bottom: 10px;
+}
+.expired_msg {
+  font-size: 16px;
+  padding: 0px 10px;
+  color: #6f6a6a;
+}
 @media screen and (min-device-width: 1025px) and (-webkit-min-device-pixel-ratio: 1) {
   #bidding {
-    width: 90%;
+    width: 80%;
+    max-width: 1200px;
     margin: auto;
   }
   .map {
@@ -414,13 +429,14 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 90%;
   }
   .success-card {
     width: 30%;
   }
   .bid-heading {
     font-size: 24px;
-    padding: 10px 0px;
+    padding-bottom: 10px;
   }
   .bidForm {
     width: 70%;
@@ -453,9 +469,9 @@
   }
 }
 /* TABLET MEDIA QUERY */
-@media only screen and (min-device-width: 600px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
-  #bidding {
-    width: 100%;
+@media only screen and (min-device-width: 475px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 1) {
+  .bid-heading {
+    font-size: 20px;
   }
   .bid {
     display: flex;
@@ -469,8 +485,8 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
-    max-width: 800px;
+    width: 90%;
+    max-width: 700px;
   }
   .map {
     width: 100%;
@@ -484,5 +500,8 @@
     border-radius: 5px;
     max-width: 46%;
     margin: auto;
+  }
+  .bid-information {
+    border: none;
   }
 }
