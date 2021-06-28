@@ -100,7 +100,9 @@
               <div class="bidForm" v-if="formData.quotation.status === 0">
                 <div class="expired" v-if="expired">
                   <i class="far fa-clock expired_icon"></i>
-                  <p class="expired_msg"><i>Unfortunately this bid has expired.</i></p>
+                  <p class="expired_msg">
+                    <i>{{ $t('biddingWebForm.expired') }}</i>
+                  </p>
                 </div>
                 <div v-else>
                   <div v-if="!formData.is_negotiable === false || formData.is_negotiable === null">

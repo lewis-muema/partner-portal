@@ -56,6 +56,7 @@ const translation = {
   experience_is_better: 'This experience is better on the Sendy Freight App',
   open_app: 'Open App',
   valid_amount: 'Kindly enter a valid amount',
+  expired: 'Unfortunately this bid has expired.',
 };
 
 export default translation;
