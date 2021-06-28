@@ -16,9 +16,9 @@ const translation = {
   load_picked_at: 'The load will be picked at',
   destination: 'Destination',
   type_of_load: 'Type of load',
-  date_of_pickup: 'Date of Pick up',
-  number_of_trucks_wanted: 'Number of Trucks wanted',
-  type_of_truck: 'Type of Truck',
+  date_of_pickup: 'Date of pick up',
+  number_of_trucks_wanted: 'Number of trucks wanted',
+  type_of_truck: 'Type of truck',
   weight_of_load: 'Weight of load per truck',
   tonnes: 'Tonnes',
   return_container: 'Return container?',
@@ -56,6 +56,7 @@ const translation = {
   experience_is_better: 'This experience is better on the Sendy Freight App',
   open_app: 'Open App',
   valid_amount: 'Kindly enter a valid amount',
+  expired: 'Unfortunately this bid has expired.',
 };
 
 export default translation;

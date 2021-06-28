@@ -98,7 +98,13 @@
             </div>
             <div v-else>
               <div class="bidForm" v-if="formData.quotation.status === 0">
-                <div>
+                <div class="expired" v-if="expired">
+                  <i class="far fa-clock expired_icon"></i>
+                  <p class="expired_msg">
+                    <i>{{ $t('biddingWebForm.expired') }}</i>
+                  </p>
+                </div>
+                <div v-else>
                   <div v-if="!formData.is_negotiable === false || formData.is_negotiable === null">
                     <h2 class="bid-details-content bid_description orange bold">{{ $t('biddingWebForm.enter_your_bid') }}</h2>
                   </div>
@@ -130,7 +136,7 @@
                     <span v-show="bidDetails.trucks_available < 1" class="alert">{{ $t('biddingWebForm.truck_cannot_be_less') }}</span>
                   </div>
                 </div>
-                <div class="bidForm__btn">
+                <div v-show="!expired" class="bidForm__btn">
                   <button @click="show" class="bidForm__submitBtn bidForm__submitBtn--accept">
                     <span v-show="formData.is_negotiable === false">{{ $t('biddingWebForm.accept_offer') }}</span> <span v-show="formData.is_negotiable === true || formData.is_negotiable === null">{{ $t('biddingWebForm.accept_bid') }}</span>
                   </button>
@@ -285,6 +291,7 @@ export default {
       errObj: '',
       formData: {},
       requests: {},
+      expired: false,
       url: '',
       val: 'en',
       config: {
@@ -475,6 +482,9 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
+          if (new Date(this.formData.bidding_deadline).getTime() - new Date().getTime() < 0) {
+            this.expired = true;
+          }
           if (this.isMobile()) {
             this.mobilebanner = true;
           }
