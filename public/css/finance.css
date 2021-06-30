@@ -589,6 +589,7 @@ input:-ms-input-placeholder {
   width: fit-content;
   height: fit-content;
   color: white;
+  margin: 0px;
 }
 
 .fab {
@@ -599,13 +600,13 @@ input:-ms-input-placeholder {
   width: 60px;
   height: 60px;
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  bottom: 100px;
+  right: 20px;
 }
 
 .fab-container {
-  right: 40px;
-  bottom: 40px;
+  right: 20px;
+  bottom: 100px;
   height: 110px;
   width: 100px;
   position: fixed;
@@ -641,7 +642,7 @@ input:-ms-input-placeholder {
   padding: 0;
   z-index: 50;
   transition: linear 0.3s;
-  bottom: 50px;
+  bottom: 100px;
   background-color: white;
   box-shadow: 0px 0px 4px 1px #69696985;
   border-radius: 100px;
@@ -653,7 +654,7 @@ input:-ms-input-placeholder {
 }
 
 .fab-container:hover .fab-buttons {
-  bottom: 105px;
+  bottom: 170px;
 }
 
 .fab-actions {
@@ -676,12 +677,16 @@ input:-ms-input-placeholder {
   font-weight: 600;
   font-family: HelveticaNeue;
   text-align: center;
-  padding-top: 5px;
   overflow: hidden;
   transition-property: width;
   transition-duration: 0.1s;
   transition-delay: 0s;
   right: 105px;
+  padding: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
 }
 
 .fab-container:hover .fab-buttons__link {
