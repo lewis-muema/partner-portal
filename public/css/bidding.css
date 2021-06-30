@@ -26,6 +26,7 @@
 }
 #map {
   margin-bottom: 20px;
+  border-radius: 8px;
 }
 .bid-details-shipment {
   display: flex;
@@ -409,6 +410,7 @@
   }
   .map {
     height: 230px;
+    border-radius: 8px;
   }
   .webForm__map {
     padding-bottom: 200px;
@@ -493,6 +495,7 @@
     width: 100%;
     max-width: 450px;
     height: 250px;
+    border-radius: 8px;
   }
   .bidForm {
     max-width: 60%;
