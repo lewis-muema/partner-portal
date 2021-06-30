@@ -298,7 +298,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
-          'Accept-Language': localStorage.getItem('language'),
+          'Accept-Language': this.$route.query.locale,
         },
       },
       errorObj: '',
@@ -381,7 +381,7 @@ export default {
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
     async declineReasons() {
-      axios.get(`${this.auth}freight-service/rejection_reasons?authkey=${process.env.BIDDING_API_KEY}`).then(res => {
+      axios.get(`${this.auth}freight-service/rejection_reasons?authkey=${process.env.BIDDING_API_KEY}`, this.config).then(res => {
         this.declineOptions = res.data.data;
       });
     },

@@ -56,7 +56,7 @@ const translation = {
   experience_is_better: 'Cette expérience est meilleure sur l’application Sendy Freight',
   open_app: "Ouvrir l'Application",
   valid_amount: 'Veuillez entrer un montant valide',
-  expired: 'FR_Unfortunately this bid has expired.',
+  expired: 'Malheureusement, cette offre a expiré.',
 };
 
 export default translation;
