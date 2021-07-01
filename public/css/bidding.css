@@ -26,6 +26,7 @@
 }
 #map {
   margin-bottom: 20px;
+  border-radius: 8px;
 }
 .bid-details-shipment {
   display: flex;
@@ -39,7 +40,7 @@
   font-size: 16px;
   color: #6f6a6a;
   margin: 0;
-  padding-top: 14px;
+  padding-top: 10px;
 }
 .small-font {
   font-size: 16px;
@@ -47,7 +48,7 @@
 }
 .bid-details-content {
   color: #303133;
-  font-size: 18px;
+  font-size: 16px;
   margin: 0;
   padding: 6px 0px;
 }
@@ -105,7 +106,7 @@
 }
 .bidding-form-trucks-input {
   max-width: 80px;
-  padding: 7px 0px;
+  padding: 7.5px 0px;
   text-align: center;
 }
 .bidForm__selector {
@@ -408,7 +409,8 @@
     margin: auto;
   }
   .map {
-    height: 250px;
+    height: 230px;
+    border-radius: 8px;
   }
   .webForm__map {
     padding-bottom: 200px;
@@ -493,6 +495,7 @@
     width: 100%;
     max-width: 450px;
     height: 250px;
+    border-radius: 8px;
   }
   .bidForm {
     max-width: 60%;
