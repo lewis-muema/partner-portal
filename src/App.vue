@@ -6,8 +6,11 @@
   </div>
 </template>
 <script>
+import axios from 'axios';
 import appHeader from './components/headers/appHeader';
 import loginHeader from './components/headers/logInHeader';
+
+let session = null;
 
 export default {
   components: {
@@ -16,7 +19,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      if ((from.path === '/login' && to.path === '/') || to.path === '/login') {
+      if ((from.path === '/login' && to.path === '/') || (from.path === '/login' && to.path === '/signature') || to.path === '/login') {
         this.initializeFreshChat();
       }
     },
@@ -26,27 +29,45 @@ export default {
   },
   methods: {
     initializeFreshChat() {
-      let session = null;
-      if (localStorage.sessionData) {
-        session = JSON.parse(localStorage.sessionData).payload;
-      }
-      const restoreIds = localStorage.userRestoreIds ? JSON.parse(localStorage.userRestoreIds) : [];
       if (document.getElementById('Freshchat-js-sdk')) {
         window.fcWidget.user.clear();
         window.fcWidget.destroy();
         document.getElementById('Freshchat-js-sdk').remove();
       }
       setTimeout(() => {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: localStorage.token,
+            'Accept-Language': localStorage.getItem('language'),
+          },
+        };
+        if (localStorage.sessionData) {
+          session = JSON.parse(localStorage.sessionData).payload;
+        }
         if (session && this.$route.path !== '/login') {
-          const idArray = restoreIds.filter(data => data.email === session.email);
-          const id = idArray.length > 0 ? idArray[0].id : null;
-          this.createFreshChatScript(session.email, id, session);
+        axios
+          .get(`${process.env.ADONIS_PRIVATE_API}user-preferences?owner_id=${session.owner_id}`, config)
+          .then(response => {
+            if (response.data.preferences.data[0].freshchat_id) {
+              this.createFreshChatScript(
+                session.email,
+                response.data.preferences.data[0].freshchat_id,
+              );
+            } else {
+              this.createFreshChatScript(session.email);
+            }
+          })
+          .catch(error => {
+            this.errorObj = error.response;
+            this.createFreshChatScript(session.email);
+          });
         } else {
           this.createFreshChatScript();
         }
       }, 1000);
     },
-    createFreshChatScript(userEmail, restoreID, session) {
+    createFreshChatScript(userEmail, restoreID) {
       const script = document.createElement('script');
         script.id = 'Freshchat-js-sdk';
         script.onload = () => {
@@ -62,45 +83,45 @@ export default {
               },
             },
           };
-          if (this.$route.path === '/login') {
+          if (session) {
             window.fcWidget.init(payload);
+            this.setFreshChatRestoreIds(restoreID);
           } else {
             window.fcWidget.init(payload);
-            this.setFreshChatRestoreIds(session, restoreID);
           }
         };
         script.src = 'https://wchat.freshchat.com/js/widget.js';
         document.head.appendChild(script);
     },
-    setFreshChatRestoreIds(session, restoreID) {
-      if (!restoreID && session) {
-        window.fcWidget.user.setProperties({
-          firstName: session.name,
-          email: session.email,
-          phone: session.phone,
-        });
+    setFreshChatRestoreIds(restoreID) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.token,
+          'Accept-Language': localStorage.getItem('language'),
+        },
+      };
+      if (localStorage.sessionData) {
+        session = JSON.parse(localStorage.sessionData).payload;
       }
+      window.fcWidget.user.setProperties({
+        firstName: session.name,
+        email: session.email,
+        phone: session.phone,
+      });
       window.fcWidget.on('user:created', (resp) => {
         const status = resp && resp.status;
-            const data = resp && resp.data;
+        const data = resp && resp.data;
         if (status === 200) {
-          if (data.restoreId) {
-            if (localStorage.userRestoreIds) {
-              const ids = JSON.parse(localStorage.userRestoreIds);
-              const states = ids.filter(info => info.id === data.restoreId);
-              if (states.length === 0) {
-                ids.push({
-                  email: session.email,
-                  id: data.restoreId,
-                });
-              }
-              localStorage.userRestoreIds = JSON.stringify(ids);
-            } else {
-              localStorage.userRestoreIds = JSON.stringify([{
-                email: session.email,
-                id: data.restoreId,
-              }]);
-            }
+          if (data.restoreId && restoreID !== data.restoreId) {
+            const payload = {
+              owner_id: session.owner_id,
+              freshchat_id: data.restoreId,
+            };
+            axios
+              .post(`${process.env.ADONIS_PRIVATE_API}user-preferences`, payload, config)
+              .then(response => response)
+              .catch(err => err);
           }
         }
       });
