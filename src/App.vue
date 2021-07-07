@@ -108,6 +108,7 @@ export default {
         firstName: session.name,
         email: session.email,
         phone: session.phone,
+        partnerType: 'owner',
       });
       window.fcWidget.on('user:created', (resp) => {
         const status = resp && resp.status;
