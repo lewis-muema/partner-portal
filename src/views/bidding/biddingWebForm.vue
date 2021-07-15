@@ -80,9 +80,7 @@
               <div v-else>
                 <h2 class="bid-submitted-heading">{{ $t('biddingWebForm.your_bids') }}</h2>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.trucks_available') }}</h2>
-                <p class="bid-details-content">
-                  <span v-if="formData.is_negotiable !== true">{{ formData.quotation.trucks_available }}</span><span v-else>{{ bidInfo.available_trucks }}</span> {{ bidInfo.available_trucks === 1 ? 'Truck' : 'Trucks' }}
-                </p>
+                <p class="bid-details-content">{{ bidInfo.available_trucks }} {{ bidInfo.available_trucks === 1 ? $t('biddingWebForm.truck') : $t('biddingWebForm.trucks') }}</p>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
                 <p class="bid-details-content">
                   {{ formData.currency }} <span v-if="formData.is_negotiable !== false">{{ bidInfo.amount_per_truck }}</span><span v-else> {{ formData.offer_amount }}</span>
@@ -158,7 +156,9 @@
                     <span class="bid-details-content bold pb-3">{{ formData.quotation.price_per_truck }}</span>
                   </p>
                   <p class="bid-details-content">{{ $t('biddingWebForm.how_many_trucks') }}</p>
-                  <p class="bid-details-content bold pb-3">{{ formData.quotation.trucks_available }} {{ $t('biddingWebForm.trucks') }}</p>
+                  <p class="bid-details-content bold pb-3">
+                    {{ formData.quotation.trucks_available }} <span v-if="formData.quotation.trucks_available === 1">{{ $t('biddingWebForm.truck') }}</span> <span v-else>{{ $t('biddingWebForm.trucks') }}</span>
+                  </p>
                   <p class="bid-details-content">{{ $t('biddingWebForm.total_bid_amount') }}</p>
                   <p class="bid-details-content bold pb-3">{{ formData.currency }} {{ formData.quotation.price_per_truck * formData.quotation.trucks_available }}</p>
                 </div>
