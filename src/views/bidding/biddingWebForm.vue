@@ -213,7 +213,7 @@
                   <el-checkbox-group v-model="declineRes" class="decline__reason" v-for="(decline, i) in declineOptions" :key="i">
                     <el-checkbox class="shipment__heading" :label="decline.reason" @change="i === 3 ? (otherReason = !otherReason) : ''"></el-checkbox>
                   </el-checkbox-group>
-                  <textarea v-show="otherReason" class="reason_textarea" name="" id="" cols="30" rows="5" v-model="openReason" placeholder="Please enter reason"></textarea>
+                  <textarea v-show="otherReason" class="reason_textarea" name="" id="" cols="30" rows="5" v-model="openReason" :placeholder="$t('biddingWebForm.enter_reason')"></textarea>
                 </div>
               </ul>
               <div class="modal__btns">
@@ -482,6 +482,7 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
+          this.formData.quotation.status = 0;
           if (new Date(this.formData.bidding_deadline).getTime() - new Date().getTime() < 0) {
             this.expired = true;
           }
