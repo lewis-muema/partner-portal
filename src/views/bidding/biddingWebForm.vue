@@ -298,7 +298,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
-          'Accept-Language': this.$route.query.locale,
+          'Accept-language': this.$route.query.locale === undefined || this.$route.query.locale.length < 1 ? 'en-KE' : this.$route.query.locale,
         },
       },
       errorObj: '',
