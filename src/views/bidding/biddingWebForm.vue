@@ -482,7 +482,6 @@ export default {
         .then(res => {
           this.requests = res;
           this.formData = res.data.data;
-          this.formData.quotation.status = 0;
           if (new Date(this.formData.bidding_deadline).getTime() - new Date().getTime() < 0) {
             this.expired = true;
           }
