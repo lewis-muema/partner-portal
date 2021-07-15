@@ -80,9 +80,7 @@
               <div v-else>
                 <h2 class="bid-submitted-heading">{{ $t('biddingWebForm.your_bids') }}</h2>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.trucks_available') }}</h2>
-                <p class="bid-details-content">
-                  <span v-if="formData.is_negotiable !== true">{{ formData.quotation.trucks_available }}</span><span v-else>{{ bidInfo.available_trucks }}</span> {{ bidInfo.available_trucks === 1 ? 'Truck' : 'Trucks' }}
-                </p>
+                <p class="bid-details-content">{{ bidInfo.available_trucks }} {{ bidInfo.available_trucks === 1 ? $t('biddingWebForm.truck') : $t('biddingWebForm.trucks') }}</p>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.bid_amount_per_truck') }}</h2>
                 <p class="bid-details-content">
                   {{ formData.currency }} <span v-if="formData.is_negotiable !== false">{{ bidInfo.amount_per_truck }}</span><span v-else> {{ formData.offer_amount }}</span>
@@ -158,7 +156,7 @@
                     <span class="bid-details-content bold pb-3">{{ formData.quotation.price_per_truck }}</span>
                   </p>
                   <p class="bid-details-content">{{ $t('biddingWebForm.how_many_trucks') }}</p>
-                  <p class="bid-details-content bold pb-3">{{ formData.quotation.trucks_available }} {{ $t('biddingWebForm.trucks') }}</p>
+                  <p class="bid-details-content bold pb-3">{{ formData.quotation.trucks_available }} {{ formData.quotation.trucks_available === 1 ? $t('biddingWebForm.truck') : $t('biddingWebForm.trucks') }}</p>
                   <p class="bid-details-content">{{ $t('biddingWebForm.total_bid_amount') }}</p>
                   <p class="bid-details-content bold pb-3">{{ formData.currency }} {{ formData.quotation.price_per_truck * formData.quotation.trucks_available }}</p>
                 </div>
@@ -213,7 +211,7 @@
                   <el-checkbox-group v-model="declineRes" class="decline__reason" v-for="(decline, i) in declineOptions" :key="i">
                     <el-checkbox class="shipment__heading" :label="decline.reason" @change="i === 3 ? (otherReason = !otherReason) : ''"></el-checkbox>
                   </el-checkbox-group>
-                  <textarea v-show="otherReason" class="reason_textarea" name="" id="" cols="30" rows="5" v-model="openReason" placeholder="Please enter reason"></textarea>
+                  <textarea v-show="otherReason" class="reason_textarea" name="" id="" cols="30" rows="5" v-model="openReason" :placeholder="$t('biddingWebForm.enter_reason')"></textarea>
                 </div>
               </ul>
               <div class="modal__btns">
@@ -298,7 +296,7 @@ export default {
         headers: {
           'Content-Type': 'application/json',
           Authorization: localStorage.token,
-          'Accept-Language': this.$route.query.locale,
+          'Accept-language': this.$route.query.locale === undefined || this.$route.query.locale.length < 1 ? 'en-KE' : this.$route.query.locale,
         },
       },
       errorObj: '',
