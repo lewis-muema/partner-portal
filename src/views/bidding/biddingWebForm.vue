@@ -156,9 +156,7 @@
                     <span class="bid-details-content bold pb-3">{{ formData.quotation.price_per_truck }}</span>
                   </p>
                   <p class="bid-details-content">{{ $t('biddingWebForm.how_many_trucks') }}</p>
-                  <p class="bid-details-content bold pb-3">
-                    {{ formData.quotation.trucks_available }} <span v-if="formData.quotation.trucks_available === 1">{{ $t('biddingWebForm.truck') }}</span> <span v-else>{{ $t('biddingWebForm.trucks') }}</span>
-                  </p>
+                  <p class="bid-details-content bold pb-3">{{ formData.quotation.trucks_available }} {{ formData.quotation.trucks_available === 1 ? $t('biddingWebForm.truck') : $t('biddingWebForm.trucks') }}</p>
                   <p class="bid-details-content">{{ $t('biddingWebForm.total_bid_amount') }}</p>
                   <p class="bid-details-content bold pb-3">{{ formData.currency }} {{ formData.quotation.price_per_truck * formData.quotation.trucks_available }}</p>
                 </div>
