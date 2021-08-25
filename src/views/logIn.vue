@@ -57,7 +57,6 @@ import axios from 'axios';
 import sha1 from 'js-sha1';
 import Mixpanel from 'mixpanel';
 import { Base64 } from 'js-base64';
-import validator from '@sendyit/validation';
 import ownersBannerComponent from './ownersBannerComponent.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
@@ -122,10 +121,9 @@ export default {
   methods: {
     /* eslint-disable */
     Valid: function({ number, isValid, country }) {
-      const phoneValid = validator('phone', this.tel, localStorage.countryCode.toLowerCase());
       this.phoneValidity = isValid;
       if (this.tel) {
-        if (isValid && phoneValid) {
+        if (isValid) {
           $('.login__phone-input').css({ 'border-color': 'rgb(34, 255, 112)', 'box-shadow': '0px 1px 5px 1px #00ff5a' });
         } else {
           $('.login__phone-input').css({ 'border-color': 'rgb(255, 160, 160)', 'box-shadow': 'rgba(255, 0, 0, 0.58) 0px 1px 5px 1px' });
