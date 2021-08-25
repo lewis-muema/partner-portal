@@ -30,7 +30,7 @@
     "jsdom": "^15.1.1",
     "jsdom-global": "^3.0.2",
     "mixpanel": "^0.10.3",
-    "mocha-webpack": "^1.1.0",
+    "mocha-webpack": "^2.0.0-beta.0",
     "moment": "^2.24.0",
     "moxios": "^0.4.0",
     "mqtt": "^3.0.0",
@@ -53,6 +53,7 @@
     "vuejs-datepicker": "^1.6.2",
     "vuejs-datetimepicker": "^1.1.13",
     "vuex": "^3.0.1",
+    "webpack": "^4.41.5",
     "webpack-merge": "^4.2.1"
   },
   "devDependencies": {
