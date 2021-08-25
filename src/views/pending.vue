@@ -285,14 +285,14 @@
                         <div class="orders__addvehicle-form" v-if="addVehicleStatus">
                           <input
                             type="text"
-                            class="input orders__bid-input"
+                            class="input orders__bid-input reg-no"
                             :placeholder="$t('pending.enter_reg_no')"
                             v-model="regNo"
                             @input="addRegNo(order.id)"
                           />
                           <input
                             type="text"
-                            class="input orders__bid-input"
+                            class="input orders__bid-input insu-no"
                             :placeholder="$t('pending.enter_insurance_number')"
                             v-model="insuNo"
                             @input="addInsuNo(order.id)"
@@ -328,8 +328,8 @@
                           <i class="material-icons icon-padded" v-if="addDriverStatus">{{ $t('pending.remove') }}</i>&nbsp;&nbsp; {{ $t('pending.add_driver') }}
                         </p>
                         <div class="orders__adddriver-form" v-if="addDriverStatus">
-                          <input type="text" class="input orders__bid-input" :placeholder="$t('pending.enter_name')" v-model="driverName" @input="addDriverName(order.id)" />
-                          <input type="text" class="input orders__bid-input" :placeholder="$t('pending.id_number')" v-model="ID" @input="addId(order.id)" />
+                          <input type="text" class="input orders__bid-input name" :placeholder="$t('pending.enter_name')" v-model="driverName" @input="addDriverName(order.id)" />
+                          <input type="text" class="input orders__bid-input id-no" :placeholder="$t('pending.id_number')" v-model="ID" @input="addId(order.id)" />
                           <vue-tel-input v-model="driverPhone" v-bind="bindProps" id="phone" class="input orders__bid-input" @input="addPhone(order.id)"></vue-tel-input>
                         </div>
                         <div class="center-action center-action--lower force-leftalign">
@@ -380,6 +380,7 @@ import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
+import validator from '@sendyit/validation';
 import notify from '../components/notification';
 import timezone from '../mixins/timezone';
 import errorHandler from '../components/errorHandler';
@@ -597,28 +598,11 @@ export default {
             ${from_cordinates}&markers=color:0x2c82c5%7Clabel:D%7C${to_cordinates}&key=${google_key}`;
     },
     addRegNo(id) {
-      if (this.regNo.charAt(0) === ' ') {
-        this.regNo = this.regNo.replace(/^\s+|\s+$/g, '');
-      } else if (this.regNo.charAt(0).match(/[^A-Z]/g)) {
-        this.regNo = this.regNo.toUpperCase();
-        this.regNo = this.regNo.replace(/[^A-Z]/g, '');
-      } else if (this.regNo.charAt(1).match(/[^A-Z]/g)) {
-        this.regNo = this.regNo.toUpperCase();
-        this.regNo = this.regNo.replace(/[^A-Z]/g, '');
-      } else if (this.regNo.charAt(2).match(/[^A-Z]/g)) {
-        this.regNo = this.regNo.toUpperCase();
-        this.regNo = this.regNo.replace(/[^A-Z]/g, '');
-        this.regNo = `${this.regNo} `;
-      }
+      this.regNo = this.regNo.toUpperCase();
       this.confirm(id);
     },
     addInsuNo(id) {
-      if (this.insuNo.charAt(0) === ' ') {
-        this.insuNo = this.insuNo.replace(/^\s+|\s+$/g, '');
-      } else if (this.insuNo.charAt(0).match(/[^A-Z]/g)) {
-        this.insuNo = this.insuNo.toUpperCase();
-        this.insuNo = this.insuNo.replace(/[^A-Z]/g, '');
-      }
+      this.insuNo = this.insuNo.toUpperCase();
       this.confirm(id);
     },
     addDriverName(id) {
@@ -854,6 +838,11 @@ export default {
       }
     },
     confirm(id) {
+      const phoneValid = validator('phone', this.driverPhone.toString(), localStorage.countryCode.toLowerCase(), '#phone');
+      const regNoValid = validator('EBUNumberPlate', this.regNo, localStorage.countryCode.toLowerCase(), '.reg-no');
+      const insuNoValid = validator('InsuranceCertificate', this.insuNo, localStorage.countryCode.toLowerCase(), '.insu-no');
+      const nameValid = validator('name', this.driverName, localStorage.countryCode.toLowerCase(), '.name');
+      const idNoValid = validator('NationalId', this.ID, localStorage.countryCode.toLowerCase(), '.id-no');
       if (!this.addDriverStatus && !this.addVehicleStatus) {
         if (this.detailsCheckForSelectingDriversAndSelectingVehicles()) {
           if (this.orders[id - 1].bid_status === 1) {
@@ -870,7 +859,7 @@ export default {
           this.buttonDisabledStatus = 0;
         }
       } else if (!this.addDriverStatus && this.addVehicleStatus) {
-        if (this.detailsCheckForSelectingDriversAndAddingVehicles()) {
+        if (this.detailsCheckForSelectingDriversAndAddingVehicles() && regNoValid && insuNoValid) {
           if (this.orders[id - 1].bid_status === 1) {
             // if the order bidding
             if (this.quoteAmount >= this.orders[id - 1].min_amount) {
@@ -885,7 +874,7 @@ export default {
           this.buttonDisabledStatus = 0;
         }
       } else if (this.addDriverStatus && this.addVehicleStatus) {
-        if (this.detailsCheckForAddingDriversAndAddingVehicles()) {
+        if (this.detailsCheckForAddingDriversAndAddingVehicles() && phoneValid && regNoValid && insuNoValid && nameValid && idNoValid) {
           if (this.orders[id - 1].bid_status === 1) {
             // if the order bidding
             if (this.quoteAmount >= this.orders[id - 1].min_amount) {
@@ -900,7 +889,7 @@ export default {
           this.buttonDisabledStatus = 0;
         }
       } else if (this.addDriverStatus && !this.addVehicleStatus) {
-        if (this.detailsCheckForAddingDriverSAndSelectingVehicles()) {
+        if (this.detailsCheckForAddingDriverSAndSelectingVehicles() && phoneValid && nameValid && idNoValid) {
           if (this.orders[id - 1].bid_status === 1) {
             // if the order bidding
             if (this.quoteAmount >= this.orders[id - 1].min_amount) {
