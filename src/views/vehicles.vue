@@ -316,7 +316,7 @@
             type="text"
             name
             value
-            class="form-control log-book"
+            class="form-control"
            :placeholder="$t('vehicles.log_book_number')"
             id="selLog"
             v-model="logBook"
@@ -326,7 +326,7 @@
             type="text"
             name
             value
-            class="form-control reg-no"
+            class="form-control"
             :placeholder="$t('vehicles.reg_no')"
             id="selReg"
             v-model="regNo"
@@ -336,7 +336,7 @@
             type="text"
             name
             value
-            class="form-control insu-no"
+            class="form-control"
             :placeholder="$t('vehicles.insurance_number')"
             id="selInsu"
             v-model="insuNo"
@@ -350,7 +350,7 @@
             id="clearInp"
             @click="$modal.hide('add-vehicle-modal')"
           >{{ $t('vehicles.cancel') }}</button>
-          <button type="button" class="btn btn-primary modBtn" id="addNext" @click="logDocs();" :disabled="!(insuValid && logBookValid && regNoValid)">{{ $t('vehicles.next') }}</button>
+          <button type="button" class="btn btn-primary modBtn" id="addNext" @click="logDocs();">{{ $t('vehicles.next') }}</button>
         </div>
       </div>
     </modal>
@@ -676,7 +676,6 @@ import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
 import axios from 'axios';
 import moment from 'moment';
-import validator from '@sendyit/validation';
 import verifier from '../components/verifier';
 import errorHandler from '../components/errorHandler';
 
@@ -750,9 +749,6 @@ export default {
       driverTel: '',
       ownerDriverTel: '',
       errorObj: '',
-      insuValid: false,
-      logBookValid: false,
-      regNoValid: false,
     };
   },
   computed: {
@@ -761,33 +757,6 @@ export default {
         return localStorage.getItem('language').split('-')[0];
       }
       return 'en';
-    },
-  },
-  watch: {
-    insuNo(val) {
-      this.insuNo = this.insuNo.toUpperCase();
-      this.insuValid = validator('InsuranceCertificate', val, localStorage.countryCode.toLowerCase(), '.insu-no');
-    },
-    logBook(val) {
-      this.logBook = this.logBook.toUpperCase();
-      this.logBookValid = validator('LogBook', val, localStorage.countryCode.toLowerCase(), '.log-book');
-    },
-    regNo(val) {
-      this.regNo = this.regNo.toUpperCase();
-      let BU = 'MBUNumberPlate';
-      const vendor = parseInt(this.vendorType, 10);
-      if ([1, 12, 22, 21, 23, 24, 26, 27, 28].includes(vendor)) {
-        BU = 'MBUNumberPlate';
-      } else if ([2, 3, 5, 6, 10, 13, 14, 17].includes(vendor)) {
-        BU = 'EBUNumberPlate';
-      } else if ([18, 19, 20, 25].includes(vendor)) {
-        BU = 'FBUNumberPlate';
-      }
-      this.regNoValid = validator(BU, this.regNo, localStorage.countryCode.toLowerCase(), '.reg-no');
-    },
-    vendorType() {
-      this.regNoValid = false;
-      this.regNo = '';
     },
   },
   created() {

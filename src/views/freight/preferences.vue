@@ -177,11 +177,11 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.vehicle_number_plate') }}</p>
-              <input class="add-vehicle-input reg-no-0 " v-model="vehicle_data[0].registration_no" @input="regNoValidity(vehicle_data[0].registration_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[0].registration_no" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.vehicle_logbook_number') }}</p>
-              <input class="add-vehicle-input log-book-0" v-model="vehicle_data[0].log_book_no" @input="logBookValidity(vehicle_data[0].log_book_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[0].log_book_no" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.name_of_insurance') }}</p>
@@ -189,11 +189,11 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.insurance_cert_no') }}</p>
-              <input class="add-vehicle-input insu-no-0" v-model="vehicle_data[0].insurance_no" @input="insuCertValidity(vehicle_data[0].insurance_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[0].insurance_no" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.insurance_policy_number') }}</p>
-              <input class="add-vehicle-input policy-no-0" v-model="vehicle_data[0].policy_no" @input="policyValidity(vehicle_data[0].policy_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[0].policy_no" />
             </div>
           </div>
           <div class="vehicle-details-borderline" v-for="n in extra_vehicle" :key="n" :data-index="n">
@@ -219,11 +219,11 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.vehicle_number_plate') }}</p>
-              <input :class="`add-vehicle-input reg-no-${n}`" v-model="vehicle_data[n].registration_no" @input="regNoValidity(vehicle_data[n].registration_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[n].registration_no" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.vehicle_logbook_number') }}</p>
-              <input :class="`add-vehicle-input log-book-${n}`" v-model="vehicle_data[n].log_book_no" @input="logBookValidity(vehicle_data[n].log_book_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[n].log_book_no" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.name_of_insurance') }}</p>
@@ -231,11 +231,11 @@
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.insurance_cert_no') }}</p>
-              <input :class="`add-vehicle-input insu-no-${n}`" v-model="vehicle_data[n].insurance_no" @input="insuCertValidity(vehicle_data[n].insurance_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[n].insurance_no" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.insurance_policy_number') }}</p>
-              <input :class="`add-vehicle-input policy-no-${n}`" v-model="vehicle_data[n].policy_no" @input="policyValidity(vehicle_data[n].policy_no)" />
+              <input class="add-vehicle-input" v-model="vehicle_data[n].policy_no" />
             </div>
             <div class="vehicle-inner-detail" @click="removeVehicle(n)">
               <i class="el-icon-close el-icon-delete-vehicle">
@@ -276,29 +276,29 @@
           <div class="vehicle-details-borderline">
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.name') }}</p>
-              <input class="add-vehicle-input name-0" v-model="recipient_data[0].name" @input="recipientNameValidity(recipient_data[0].name)" />
+              <input class="add-vehicle-input" v-model="recipient_data[0].name" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <vue-tel-input v-model="recipient_data[0].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input phone-0" @validate="Valid" @input="setPhoneInputIndex(0)"></vue-tel-input>
+              <vue-tel-input v-model="recipient_data[0].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input" @validate="Valid" @input="setPhoneInputIndex(0)"></vue-tel-input>
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
-              <input class="add-vehicle-input email-0" v-model="recipient_data[0].email" @input="recipientEmailValidity(recipient_data[0].email)" />
+              <input class="add-vehicle-input" v-model="recipient_data[0].email" />
             </div>
           </div>
           <div class="vehicle-details-borderline" v-for="n in extra_recipient" :key="n" :data-index="n">
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.name') }}</p>
-              <input :class="`add-vehicle-input name-${n}`" v-model="recipient_data[n].name" @input="recipientNameValidity(recipient_data[n].name)" />
+              <input class="add-vehicle-input" v-model="recipient_data[n].name" />
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.phone_number') }}</p>
-              <vue-tel-input v-model="recipient_data[n].phone" v-bind="bindProps" :class="`login__phone-input add-vehicle-input phone-${n}`" @validate="Valid" @input="setPhoneInputIndex(n)"></vue-tel-input>
+              <vue-tel-input v-model="recipient_data[n].phone" v-bind="bindProps" class="login__phone-input add-vehicle-input" @validate="Valid" @input="setPhoneInputIndex(n)"></vue-tel-input>
             </div>
             <div class="vehicle-inner-detail">
               <p class="request-advance-input-labels">{{ $t('preferences.email_address') }}</p>
-              <input :class="`add-vehicle-input email-${n}`" v-model="recipient_data[n].email" @input="recipientEmailValidity(recipient_data[n].email)" />
+              <input class="add-vehicle-input" v-model="recipient_data[n].email" />
             </div>
             <div class="vehicle-inner-detail" @click="removeRecipient(n)">
               <i class="el-icon-close el-icon-delete-vehicle">
@@ -391,7 +391,6 @@
 import axios from 'axios';
 import DataTable from 'vue-materialize-datatable';
 import VueTelInput from 'vue-tel-input';
-import validator from '@sendyit/validation';
 import timezone from '../../mixins/timezone';
 import notify from '../../components/notification';
 import verifier from '../../components/verifier';
@@ -516,13 +515,6 @@ export default {
       },
       phoneInputIndex: 0,
       singleRecipientData: {},
-      regNoValid: false,
-      logBookValid: false,
-      insuCertValid: false,
-      policyValid: false,
-      nameValid: false,
-      phoneValid: false,
-      emailValid: false,
     };
   },
   computed: {
@@ -582,34 +574,8 @@ export default {
         this.recipient_data[this.phoneInputIndex].phoneValidity = isValid;
       }
     },
-    regNoValidity(val) {
-      this.vehicle_data[this.extra_vehicle].registration_no = val.toUpperCase();
-      this.regNoValid = validator('FBUNumberPlate', val.toUpperCase(), localStorage.countryCode.toLowerCase(), `.reg-no-${this.extra_vehicle}`);
-    },
-    logBookValidity(val) {
-      this.vehicle_data[this.extra_vehicle].log_book_no = val.toUpperCase();
-      this.logBookValid = validator('LogBook', val.toUpperCase(), localStorage.countryCode.toLowerCase(), `.log-book-${this.extra_vehicle}`);
-    },
-    insuCertValidity(val) {
-      this.vehicle_data[this.extra_vehicle].insurance_no = val.toUpperCase();
-      this.insuCertValid = validator('InsuranceCertificate', val.toUpperCase(), localStorage.countryCode.toLowerCase(), `.insu-no-${this.extra_vehicle}`);
-    },
-    policyValidity(val) {
-      this.vehicle_data[this.extra_vehicle].policy_no = val.toUpperCase();
-      this.policyValid = validator('InsurancePolicy', val.toUpperCase(), localStorage.countryCode.toLowerCase(), `.policy-no-${this.extra_vehicle}`);
-    },
-    recipientNameValidity(val) {
-      this.nameValid = validator('name', val, localStorage.countryCode.toLowerCase(), `.name-${this.extra_recipient}`);
-    },
-    recipientPhoneValidity(val) {
-      this.phoneValid = validator('phone', val, localStorage.countryCode.toLowerCase(), `.phone-${this.extra_recipient}`);
-    },
-    recipientEmailValidity(val) {
-      this.emailValid = validator('email', val, localStorage.countryCode.toLowerCase(), `.email-${this.extra_recipient}`);
-    },
     setPhoneInputIndex(index) {
       this.phoneInputIndex = index;
-      this.recipientPhoneValidity(this.recipient_data[index].phone);
     },
     setLocation(place) {
       if (!place) {
