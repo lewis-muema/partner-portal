@@ -181,7 +181,7 @@
               <p class="bid-details-subheading" v-else>{{ $t('biddingWebForm.clients_price_offer_per_truck') }}</p>
             </div>
             <p class="bid-details-content bold">
-              <b>{{ formData.currency }}</b><span v-if="!formData.is_offer === true">{{ bidDetails.amount_per_truck }}</span><span v-else>{{ formData.offer_amount }}</span>
+              <b>{{ formData.currency }}</b><span v-if="!formData.is_offer">{{ bidDetails.amount_per_truck }}</span><span v-else>{{ formData.offer_amount }}</span>
             </p>
             <p class="bid-details-subheading">{{ $t('biddingWebForm.total_shipment_amount') }}</p>
             <p class="bid-details-content bold">
