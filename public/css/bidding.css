@@ -402,6 +402,10 @@
   padding: 0px 10px;
   color: #6f6a6a;
 }
+.note{
+  width: 100%;
+  max-width: 250px;
+}
 @media screen and (min-device-width: 1025px) and (-webkit-min-device-pixel-ratio: 1) {
   #bidding {
     width: 80%;
