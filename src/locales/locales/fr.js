@@ -40,6 +40,7 @@ import freightOrders from '../freight/fr/orders';
 import preferences from '../freight/fr/preferences';
 import changeLanguage from '../changeLanguage/fr';
 import withdrawalStatus from '../withdrawalStatus/fr';
+import emailVerification from '../onboardingVerification/en';
 
 const translation = {
   appHeader,
@@ -84,6 +85,7 @@ const translation = {
   preferences,
   changeLanguage,
   withdrawalStatus,
+  emailVerification,
 };
 
 export default translation;
