@@ -1,31 +1,32 @@
 <template>
   <div class="verify_msg">
-    <div v-if="showSuccess" class="verification">
+    <div class="verification">
       <img class="banner-img" src="https://images.sendyit.com/partner_portal/images/details_banner.svg" alt="" />
-      <h2 class="verification-header">{{ $t('emailVerification.congratulations') }} 🎉</h2>
-      <p class="verification-heading">{{ $t('emailVerification.successful_verify') }}</p>
+      <div v-if="showSuccess">
+        <h2 class="verification-header">{{ $t('emailVerification.congratulations') }} 🎉</h2>
+        <p class="verification-heading">{{ $t('emailVerification.successful_verify') }}</p>
+      </div>
+      <div>
+        <h2 class="verification-header">{{ $t('emailVerification.verified_head') }} 🎉</h2>
+        <p class="verification-heading">{{ $t('emailVerification.verified_msg') }}</p>
+      </div>
       <p class="verification-msg">{{ $t('emailVerification.proceed') }}</p>
       <div class="mobile-icons">
         <a class="icon" href="https://play.google.com/store/apps/details?id=com.sendyit.freight"> <img class="store-logo" src="https://images.sendyit.com/partner_portal/images/google_play.svg" alt="" /> </a>
         <a class="icon" href="https://apps.apple.com/ke/app/sendy-freight/id1558197723"> <img class="store-logo" src="https://images.sendyit.com/partner_portal/images/app_store.svg" alt="" /> </a>
       </div>
     </div>
-    <notify class="err_msg" />
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import notify from '../../components/notification';
 
 export default {
-  components: {
-    notify,
-  },
   data() {
     return {
       showSuccess: false,
-      errorMsg: this.$t('emailVerification.error_msg'),
+      alreadyVerified: false,
       config: {
         headers: {
           'Content-Type': 'application/json',
@@ -51,11 +52,8 @@ export default {
           }
         })
         .catch(err => {
-          this.notify(1, 0, this.errorMsg);
+          this.showSuccess = false;
         });
-    },
-    notify(status, type, message) {
-      this.$root.$emit('Notification', status, type, message);
     },
   },
 };
