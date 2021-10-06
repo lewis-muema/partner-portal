@@ -6,7 +6,7 @@
         <h2 class="verification-header">{{ $t('emailVerification.congratulations') }} 🎉</h2>
         <p class="verification-heading">{{ $t('emailVerification.successful_verify') }}</p>
       </div>
-      <div>
+      <div v-else>
         <h2 class="verification-header">{{ $t('emailVerification.verified_head') }} 🎉</h2>
         <p class="verification-heading">{{ $t('emailVerification.verified_msg') }}</p>
       </div>
