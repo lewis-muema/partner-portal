@@ -46,7 +46,6 @@ export default {
       axios
         .post(`${process.env.VUE_APP_AUTH}freight-transporter-service/onboarding/transporter/verify/email`, payload, this.config)
         .then(res => {
-          console.log(res);
           if (res) {
             this.showSuccess = true;
           }
