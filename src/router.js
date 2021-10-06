@@ -30,7 +30,7 @@ import webform from './views/bidding/biddingWebForm.vue';
 import recipient from './views/bidRecipientOnboarding/landing.vue';
 import withdrawalStatus from './views/withdrawalStatus.vue';
 import myWithdrawals from './views/myWithdrawals.vue';
-import emailVerification from './views/freight/emailVerification.vue';
+import emailVerification from './views/onboardingVerification/emailVerification.vue';
 
 
 Vue.use(Router);
@@ -203,7 +203,7 @@ export default new Router({
       component: myWithdrawals,
     },
     {
-      path: '/emailVerification',
+      path: '/verify',
       name: 'emailVerification',
       component: emailVerification,
     },
