@@ -52,7 +52,7 @@
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.weight_of_load') }}</h2>
                 <p class="bid-details-content">{{ formData.tonnes_per_truck }} {{ $t('biddingWebForm.tonnes') }}</p>
                 <div class="extra-note" v-if="formData.note">
-                  <h2 class="bid-details-subheading">Extra Note:</h2>
+                  <h2 class="bid-details-subheading">{{ $t('biddingWebForm.note') }}</h2>
                   <p class="bid-details-content note">{{ formData.note }}</p>
                 </div>
 

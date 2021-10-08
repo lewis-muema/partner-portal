@@ -57,6 +57,7 @@ const translation = {
   open_app: "Ouvrir l'Application",
   valid_amount: 'Veuillez entrer un montant valide',
   expired: 'Malheureusement, cette offre a expiré.',
+  note: 'FR_Additional Note',
 };
 
 export default translation;

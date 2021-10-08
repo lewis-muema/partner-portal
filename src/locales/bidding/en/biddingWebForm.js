@@ -57,6 +57,7 @@ const translation = {
   open_app: 'Open App',
   valid_amount: 'Kindly enter a valid amount',
   expired: 'Unfortunately this bid has expired.',
+  note: 'Additional Note',
 };
 
 export default translation;
