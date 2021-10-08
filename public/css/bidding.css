@@ -463,6 +463,7 @@
   }
   .bid-information {
     border: none;
+    width: 50%;
   }
   .status {
     width: 40%;

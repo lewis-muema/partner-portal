@@ -51,10 +51,6 @@
                 <p class="bid-details-content">{{ formData.cargo_type }}</p>
                 <h2 class="bid-details-subheading">{{ $t('biddingWebForm.weight_of_load') }}</h2>
                 <p class="bid-details-content">{{ formData.tonnes_per_truck }} {{ $t('biddingWebForm.tonnes') }}</p>
-                <div class="extra-note" v-if="formData.note">
-                  <h2 class="bid-details-subheading">Extra Note:</h2>
-                  <p class="bid-details-content note">{{ formData.note }}</p>
-                </div>
 
                 <div v-if="formData.cargo_type_options.length > 1">
                   <h2 class="bid-details-subheading">{{ $t('biddingWebForm.return_container') }}</h2>
@@ -63,6 +59,16 @@
                   <h2 class="bid-details-content">{{ formData.cargo_type_options[1].value }}</h2>
                   <p class="bid-details-subheading">{{ $t('biddingWebForm.no_of_40_containers_moved') }}</p>
                   <h2 class="bid-details-content">{{ formData.cargo_type_options[2].value }}</h2>
+                </div>
+                <div v-if="formData.offer_amount > 0 && formData.is_negotiable">
+                  <h2 class="bid-details-subheading">{{ $t('biddingWebForm.clients_price_offer') }}</h2>
+                  <p class="bid-details-content">
+                    <b>{{ formData.currency }}</b> {{ formData.offer_amount }}
+                  </p>
+                </div>
+                <div class="extra-note" v-if="formData.note">
+                  <h2 class="bid-details-subheading">{{ $t('biddingWebForm.note') }}</h2>
+                  <p class="bid-details-content note">{{ formData.note }}</p>
                 </div>
               </div>
             </div>
