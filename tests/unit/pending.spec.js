@@ -498,6 +498,7 @@ describe('Pending.vue', () => {
   wrapper.vm.orders = order;
   wrapper.vm.vehicles = vehicle;
   wrapper.vm.riders = rider;
+  localStorage.countryCode = 'KE';
   beforeEach(() => {
     moxios.install(axios);
   });
