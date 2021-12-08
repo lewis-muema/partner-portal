@@ -51,9 +51,9 @@
 <script>
 import axios from 'axios';
 import timezone from '../../mixins/timezone';
-import notify from '../../components/notification';
-import verifier from '../../components/verifier';
-import errorHandler from '../../components/errorHandler';
+import notify from '../../components/notification.vue';
+import verifier from '../../components/verifier.vue';
+import errorHandler from '../../components/errorHandler.vue';
 import userPermissionMixin from '../../mixins/userPermissionMixin';
 
 export default {

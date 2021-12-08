@@ -42,11 +42,10 @@
 </template>
 
 <script>
-import S3 from 'aws-s3';
 import axios from 'axios';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
-import notify from '../components/notification';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
+import notify from '../components/notification.vue';
 
 let s3 = '';
 

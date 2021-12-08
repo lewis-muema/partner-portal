@@ -131,8 +131,8 @@ import moment from 'moment';
 import mqtt from 'mqtt';
 import Mixpanel from 'mixpanel';
 import datetime from 'vuejs-datetimepicker';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let client = '';

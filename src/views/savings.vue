@@ -104,8 +104,8 @@ import DataTable from 'vue-materialize-datatable';
 import Datepicker from 'vuejs-datepicker';
 import axios from 'axios';
 import moment from 'moment';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
 import timezone from '../mixins/timezone';
 
 export default {

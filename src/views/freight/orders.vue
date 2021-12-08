@@ -13,9 +13,6 @@
               <input type="text" onfocus="value = ''" class="container__search-element" id="dst" :placeholder="$t('freightOrders.enter_destination')" @input="filterDest()" @keyup.delete="refresh()" />
             </span>
           </div>
-          <!-- <button class="partner-request-advance-button-active" @click="$store.commit('setCreateOrderStatus', true)">
-            Place Order
-          </button> -->
         </div>
         <div class="bids">
           <div id="orders__list-table" class="orders__list-table">
@@ -88,14 +85,12 @@
 </template>
 <script>
 import axios from 'axios';
-import moment from 'moment';
-import S3 from 'aws-s3';
 import 'file-viewer';
 import timezone from '../../mixins/timezone';
-import notify from '../../components/notification';
-import verifier from '../../components/verifier';
-import errorHandler from '../../components/errorHandler';
-import orderCreation from './orderCreation';
+import notify from '../../components/notification.vue';
+import verifier from '../../components/verifier.vue';
+import errorHandler from '../../components/errorHandler.vue';
+import orderCreation from './orderCreation.vue';
 
 export default {
   title: 'Partner Portal - Freight Orders',

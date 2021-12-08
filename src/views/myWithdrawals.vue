@@ -30,7 +30,7 @@
 <script>
 import axios from 'axios';
 import withdrawalItem from './withdrawalItem.vue';
-import errorHandler from '../components/errorHandler';
+import errorHandler from '../components/errorHandler.vue';
 
 export default {
   components: { withdrawalItem, errorHandler },

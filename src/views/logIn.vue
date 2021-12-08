@@ -54,7 +54,6 @@ import $ from 'jquery';
 import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import axios from 'axios';
-import sha1 from 'js-sha1';
 import Mixpanel from 'mixpanel';
 import { Base64 } from 'js-base64';
 import validator from '@sendyit/validation';

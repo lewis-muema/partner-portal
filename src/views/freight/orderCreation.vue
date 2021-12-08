@@ -217,8 +217,6 @@ export default {
   data() {
     return {
       amount: '',
-      pickup: '',
-      destination: '',
       dueDatePickerOptions: {
         disabledDate: this.disabledDueDate,
       },
