@@ -1,7 +1,7 @@
 {
   "change_language": "FR_Change language",
   "choose_preferred_language": "FR_Choose your preferred language",
+  "language_changed": "Votre langue est définie sur le français",
   "save": "FR_Save",
-  "something_went_wrong": "FR_Something went wrong.",
-  "language_changed": "Votre langue est définie sur le français"
+  "something_went_wrong": "FR_Something went wrong while adding the vehicle. {message}. Please try again."
 }

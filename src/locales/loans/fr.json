@@ -1,14 +1,14 @@
 {
-  "from": "FR_From",
-  "to": "FR_To",
-  "loans_for": "FR_Loans for {name} for {monthPeriod}",
-  "no_loans": "FR_No loans found for this period",
-  "amount": "FR_Amount",
+  "amont": "FR_Amount",
+  "amount": "FR_AMOUNT",
   "balance": "FR_Balance",
   "date": "FR_Date",
-  "amont": "FR_Amount",
-  "narrative": "FR_Narrative",
-  "please_select": "FR_Please select both a from and to date",
   "fetching_loans": "FR_Fetching loans",
-  "loading": "FR_LOADING"
+  "from": "FR_From",
+  "loading": "FR_LOADING",
+  "loans_for": "FR_Loans for {name} for {monthPeriod}",
+  "narrative": "FR_Narrative",
+  "no_loans": "FR_No loans found for this period",
+  "please_select": "FR_Please select both a from and to date",
+  "to": "FR_To"
 }

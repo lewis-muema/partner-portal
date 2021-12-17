@@ -1,8 +1,8 @@
 {
-  "dl": "FR_Driving License",
-  "insurance": "FR_Insurance",
-  "type_of_vehicle": "FR_Type of Vehicle",
   "bike_cbd_license": "FR_Bike CBD License",
+  "dl": "FR_Driving License",
+  "fetching": "FR_Fetching Data ....",
+  "insurance": "FR_Insurance",
   "refunds": "FR_Refunds",
-  "fetching": "FR_Fetching Data ...."
+  "type_of_vehicle": "FR_What is the type of your vehicle ?"
 }

@@ -1,17 +1,17 @@
 {
-  "join": "Join",
-  "password": "Password",
-  "password_sent_invite": "This is the password we sent to you in the invite",
-  "sign_up": "Sign Up",
+  "email_address": "Email Address",
+  "enter_code": "Enter Code",
+  "enter_password": "Enter Password",
+  "enter_verification_code": "Enter verification code",
+  "for_security": "For your security, Sendy wants to make sure it’s really you. An SMS with your code was sent to ",
   "have_account": "Already have an account?",
+  "join": "Join",
   "login_here": "Login here",
   "name": "Name",
+  "password": "Password",
+  "password_sent_invite": "This is the password we sent to you in the invite",
   "phone_number": "Phone Number",
-  "email_address": "Email Address",
-  "enter_password": "Enter Password",
+  "sign_up": "Sign Up",
   "verification": "Verification",
-  "for_security": "For your security, Sendy wants to make sure it’s really you. An SMS with your code was sent to ",
-  "enter_verification_code": "Enter verification code",
-  "verify_code": "Verifiy Code",
-  "enter_code": "Enter Code"
+  "verify_code": "Verifiy Code"
 }

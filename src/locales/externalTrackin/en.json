@@ -1,13 +1,13 @@
 {
+  "decrease": "Decrease",
   "decrease_speed": "Decrease speed",
-  "rewind": "Rewind",
-  "play": "Play",
-  "pause": "Pause",
+  "fast": "Fast",
   "fast_forward": "Fast forward",
+  "increase": "Increase",
   "increase_speed": "Increase speed",
   "no_data_returned": "No data has been returned",
-  "provide_all": "Please provide all the parameters",
-  "decrease": "Decrease",
-  "fast": "Fast",
-  "increase": "Increase"
+  "pause": "Pause",
+  "play": "Play",
+  "provide_all": "Kindly provide all values",
+  "rewind": "Rewind"
 }
