@@ -29,6 +29,7 @@
   "failed_edit": "Failed to edit",
   "has_fuel": "Vehicle has fuel",
   "other_reason": "Other reason",
+  "no_reason_given": "No reason given",
   "reason": "Reason",
   "pickup_location": "pickup location",
   "destination": "destination",

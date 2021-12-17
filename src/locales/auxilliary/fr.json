@@ -31,6 +31,7 @@
   "has_fuel": "FR_Vehicle has fuel",
   "other_reason": "FR_Other reason",
   "no_reason_given": "FR_No reason given",
+  "reason": "FR_Reason",
   "pickup_location": "FR_pickup location",
   "destination": "FR_destination",
   "distance": "FR_distance",
