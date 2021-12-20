@@ -392,10 +392,9 @@ import axios from 'axios';
 import DataTable from 'vue-materialize-datatable';
 import VueTelInput from 'vue-tel-input';
 import validator from '@sendyit/validation';
-import timezone from '../../mixins/timezone';
-import notify from '../../components/notification';
-import verifier from '../../components/verifier';
-import errorHandler from '../../components/errorHandler';
+import notify from '../../components/notification.vue';
+import verifier from '../../components/verifier.vue';
+import errorHandler from '../../components/errorHandler.vue';
 import 'vue-tel-input/dist/vue-tel-input.css';
 
 export default {

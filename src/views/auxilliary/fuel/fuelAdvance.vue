@@ -17,10 +17,10 @@
 </template>
 
 <script>
-import Pending from './components/pending';
-import Approved from './components/approved';
-import Rejected from './components/rejected';
-import PlaceRequest from './components/placeRequest';
+import Pending from './components/pending.vue';
+import Approved from './components/approved.vue';
+import Rejected from './components/rejected.vue';
+import PlaceRequest from './components/placeRequest.vue';
 
 
 export default {

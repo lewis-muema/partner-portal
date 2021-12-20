@@ -1,0 +1,7 @@
+{
+  "change_language": "Change language",
+  "choose_preferred_language": "Choose your preferred language",
+  "language_changed": "Your language is set to English",
+  "save": "Save",
+  "something_went_wrong": "Something went wrong while adding the vehicle. {message}. Please try again."
+}

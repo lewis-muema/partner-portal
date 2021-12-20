@@ -1,0 +1,14 @@
+{
+  "amont": "Amount",
+  "amount": "AMOUNT",
+  "balance": "Balance",
+  "date": "Date",
+  "fetching_loans": "Fetching loans",
+  "from": "From",
+  "loading": "LOADING",
+  "loans_for": "Loans for {name} for {monthPeriod}",
+  "narrative": "Narrative",
+  "no_loans": "No loans found for this period",
+  "please_select": "Please select both a from and to date",
+  "to": "To"
+}

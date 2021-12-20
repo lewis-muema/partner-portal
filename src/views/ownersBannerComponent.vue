@@ -34,8 +34,7 @@ export default {
 }
 .owners-banner-logo{
   display: block;
-  margin: auto;
   width: 82%;
-  margin-top: 6%;
+  margin: 6% auto auto;
 }
 </style>

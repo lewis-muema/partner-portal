@@ -1,0 +1,17 @@
+{
+  "email_address": "FR_Email Address",
+  "enter_code": "FR_Enter Code",
+  "enter_password": "FR_Enter Password",
+  "enter_verification_code": "FR_Enter verification code",
+  "for_security": "FR_For your security, Sendy wants to make sure it’s really you. An SMS with your code was sent to ",
+  "have_account": "FR_Already have an account?",
+  "join": "FR_Join",
+  "login_here": "FR_Login here",
+  "name": "FR_Name",
+  "password": "FR_Password",
+  "password_sent_invite": "FR_This is the password we sent to you in the invite",
+  "phone_number": "FR_Phone Number",
+  "sign_up": "FR_Sign Up",
+  "verification": "FR_Verification",
+  "verify_code": "FR_Verifiy Code"
+}

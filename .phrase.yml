@@ -1,0 +1,824 @@
+phrase:
+  access_token: c8e080a8f24f2cc30e997cfa6443aed8118b71eedce0fc78fc82bd6765c59606
+  project_id: da8f74826901e0b91e038dde87914d36
+
+  push:
+    sources:
+    - file: ./src/locales/authLogin/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: authLogin
+    - file: ./src/locales/authLogin/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: authLogin
+
+    - file: ./src/locales/auxilliary/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: auxilliary
+    - file: ./src/locales/auxilliary/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: auxilliary
+
+    - file: src/locales/availableOrders/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: availableOrders
+    - file: src/locales/availableOrders/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: availableOrders
+
+    - file: src/locales/banks/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: banks
+    - file: src/locales/banks/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: banks
+
+    - file: src/locales/bidding/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: bidding
+    - file: src/locales/bidding/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: bidding
+
+    - file: src/locales/bidRecipient/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: bidRecipient
+    - file: src/locales/bidRecipient/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: bidRecipient
+
+    - file: src/locales/cbdStatus/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: cbdStatus
+    - file: src/locales/cbdStatus/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: cbdStatus
+
+    - file: src/locales/changeLanguage/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: changeLanguage
+    - file: src/locales/changeLanguage/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: changeLanguage
+
+    - file: src/locales/dashboard/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: dashboard
+    - file: src/locales/dashboard/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: dashboard
+
+    - file: src/locales/documents/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: documents
+    - file: src/locales/documents/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: documents
+
+    - file: src/locales/driverRequest/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: driverRequest
+    - file: src/locales/driverRequest/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: driverRequest
+
+    - file: src/locales/drivingLicense/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: drivingLicense
+    - file: src/locales/drivingLicense/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: drivingLicense
+
+    - file: src/locales/externalLogin/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: externalLogin
+    - file: src/locales/externalLogin/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: externalLogin
+
+    - file: src/locales/externalTrackin/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: externalTrackin
+    - file: src/locales/externalTrackin/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: externalTrackin
+
+    - file: src/locales/forgotPassword/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: forgotPassword
+    - file: src/locales/forgotPassword/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: forgotPassword
+
+    - file: src/locales/freight/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: freight
+    - file: src/locales/freight/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: freight
+
+    - file: src/locales/headers/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: headers
+    - file: src/locales/headers/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: headers
+
+    - file: src/locales/insurence/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: insurence
+    - file: src/locales/insurence/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: insurence
+
+    - file: src/locales/loans/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: loans
+    - file: src/locales/loans/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: loans
+
+    - file: src/locales/login/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: login
+    - file: src/locales/login/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: login
+
+    - file: src/locales/onboardingVerification/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: onboardingVerification
+    - file: src/locales/onboardingVerification/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: onboardingVerification
+
+    - file: src/locales/orders/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: orders
+    - file: src/locales/orders/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: orders
+
+    - file: src/locales/pending/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: pending
+    - file: src/locales/pending/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: pending
+
+    - file: src/locales/perfomance/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: perfomance
+    - file: src/locales/perfomance/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: perfomance
+
+    - file: src/locales/refund/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: refund
+    - file: src/locales/refund/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: refund
+
+    - file: src/locales/riderTodayStats/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: riderTodayStats
+    - file: src/locales/riderTodayStats/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: riderTodayStats
+
+    - file: src/locales/savings/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: savings
+    - file: src/locales/savings/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: savings
+
+    - file: src/locales/signature/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: signature
+    - file: src/locales/signature/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: signature
+
+    - file: src/locales/statement/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: statement
+    - file: src/locales/statement/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: statement
+
+    - file: src/locales/tracking/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: tracking
+    - file: src/locales/tracking/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: tracking
+
+    - file: src/locales/truckValidationMixin/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: truckValidationMixin
+    - file: src/locales/truckValidationMixin/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: truckValidationMixin
+
+    - file: src/locales/vehicles/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: vehicles
+    - file: src/locales/vehicles/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: vehicles
+
+    - file: src/locales/vehicleStatus/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: vehicles
+    - file: src/locales/vehicleStatus/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: vehicles
+
+    - file: src/locales/withdrawalStatus/en.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+        tags: withdrawalStatus
+    - file: src/locales/withdrawalStatus/fr.json
+      params:
+        file_format: simple_json
+        update_translations: true
+        locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+        tags: withdrawalStatus
+
+  pull:
+    targets:
+      - file: ./src/locales/authLogin/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: authLogin
+      - file: ./src/locales/authLogin/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: authLogin
+
+      - file: ./src/locales/auxilliary/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: auxilliary
+      - file: ./src/locales/auxilliary/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: auxilliary
+
+      - file: src/locales/availableOrders/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: availableOrders
+      - file: src/locales/availableOrders/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: availableOrders
+
+      - file: src/locales/banks/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: banks
+      - file: src/locales/banks/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: banks
+
+      - file: src/locales/bidding/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: bidding
+      - file: src/locales/bidding/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: bidding
+
+      - file: src/locales/bidRecipient/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: bidRecipient
+      - file: src/locales/bidRecipient/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: bidRecipient
+
+      - file: src/locales/cbdStatus/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: cbdStatus
+      - file: src/locales/cbdStatus/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: cbdStatus
+
+      - file: src/locales/changeLanguage/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: changeLanguage
+      - file: src/locales/changeLanguage/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: changeLanguage
+
+      - file: src/locales/dashboard/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: dashboard
+      - file: src/locales/dashboard/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: dashboard
+
+      - file: src/locales/documents/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: documents
+      - file: src/locales/documents/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: documents
+
+      - file: src/locales/driverRequest/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: driverRequest
+      - file: src/locales/driverRequest/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: driverRequest
+
+      - file: src/locales/drivingLicense/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: drivingLicense
+      - file: src/locales/drivingLicense/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: drivingLicense
+
+      - file: src/locales/externalLogin/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: externalLogin
+      - file: src/locales/externalLogin/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: externalLogin
+
+      - file: src/locales/externalTrackin/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: externalTrackin
+      - file: src/locales/externalTrackin/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: externalTrackin
+
+      - file: src/locales/forgotPassword/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: forgotPassword
+      - file: src/locales/forgotPassword/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: forgotPassword
+
+      - file: src/locales/freight/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: freight
+      - file: src/locales/freight/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: freight
+
+      - file: src/locales/headers/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: headers
+      - file: src/locales/headers/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: headers
+
+      - file: src/locales/insurence/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: insurence
+      - file: src/locales/insurence/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: insurence
+
+      - file: src/locales/loans/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: loans
+      - file: src/locales/loans/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: loans
+
+      - file: src/locales/login/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: login
+      - file: src/locales/login/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: login
+
+      - file: src/locales/onboardingVerification/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: onboardingVerification
+      - file: src/locales/onboardingVerification/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: onboardingVerification
+
+      - file: src/locales/orders/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: orders
+      - file: src/locales/orders/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: orders
+
+      - file: src/locales/pending/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: pending
+      - file: src/locales/pending/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: pending
+
+      - file: src/locales/perfomance/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: perfomance
+      - file: src/locales/perfomance/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: perfomance
+
+      - file: src/locales/refund/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: refund
+      - file: src/locales/refund/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: refund
+
+      - file: src/locales/riderTodayStats/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: riderTodayStats
+      - file: src/locales/riderTodayStats/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: riderTodayStats
+
+      - file: src/locales/savings/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: savings
+      - file: src/locales/savings/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: savings
+
+      - file: src/locales/signature/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: signature
+      - file: src/locales/signature/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: signature
+
+      - file: src/locales/statement/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: statement
+      - file: src/locales/statement/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: statement
+
+      - file: src/locales/tracking/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: tracking
+      - file: src/locales/tracking/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: tracking
+
+      - file: src/locales/truckValidationMixin/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: truckValidationMixin
+      - file: src/locales/truckValidationMixin/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: truckValidationMixin
+
+      - file: src/locales/vehicles/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: vehicles
+      - file: src/locales/vehicles/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: vehicles
+
+      - file: src/locales/vehicleStatus/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: vehicles
+      - file: src/locales/vehicleStatus/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: vehicles
+
+      - file: src/locales/withdrawalStatus/en.json
+        params:
+          file_format: simple_json
+          locale_id: 36d9bbd7ed9c476535c047d8934fd7ce
+          tags: withdrawalStatus
+      - file: src/locales/withdrawalStatus/fr.json
+        params:
+          file_format: simple_json
+          locale_id: 0cf1af5620f2e3b07d6e08edc184bfcb
+          tags: withdrawalStatus
+

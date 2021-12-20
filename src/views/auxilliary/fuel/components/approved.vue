@@ -122,8 +122,8 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
-import errorHandler from '../../../../components/errorHandler';
-import verifier from '../../../../components/verifier';
+import errorHandler from '../../../../components/errorHandler.vue';
+import verifier from '../../../../components/verifier.vue';
 
 let timer = '';
 

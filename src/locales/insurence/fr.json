@@ -1,0 +1,19 @@
+{
+  "cancel": "FR_Cancel",
+  "change": "FR_Change",
+  "click_to_upload": "FR_click to upload",
+  "document_declined": "FR_Document declined : Kindy re-upload or contact Customer Support",
+  "document_uploaded_successfully": "FR_Document uploaded successfully .",
+  "drop_files": "FR_Drop file here or",
+  "insurance_certificate_number": "FR_Insurance certificate number",
+  "insurance_document_expires": "FR_Insurance document expires on {expiry_date}",
+  "insurance_document_submitted": "FR_Insurance document submitted",
+  "kindly_upload_insurance": "FR_Kindly upload insurance document",
+  "loading_preview": "FR_Loading Preview ...",
+  "pending_approval": "FR_Pending approval",
+  "policy_number": "FR_Policy number",
+  "provide_all": "FR_Kindly provide all values",
+  "request_refund_error": "FR_Request Refund Error . Try again",
+  "sure_close_dialog": "FR_Are you sure to close this dialog?",
+  "update": "FR_Update"
+}

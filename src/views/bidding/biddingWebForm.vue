@@ -247,12 +247,8 @@
 <script>
 import axios from 'axios';
 import Mixpanel from 'mixpanel';
-import VueI18n from 'vue-i18n';
-import timezone from '../../mixins/timezone';
-import notify from '../../components/notification';
-import verifier from '../../components/verifier';
-import errorHandler from '../../components/errorHandler';
-import logInHeaderVue from '../../components/headers/logInHeader.vue';
+import notify from '../../components/notification.vue';
+import errorHandler from '../../components/errorHandler.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 

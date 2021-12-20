@@ -317,7 +317,7 @@
             name
             value
             class="form-control log-book"
-           :placeholder="$t('vehicles.log_book_number')"
+            :placeholder="$t('vehicles.log_book_number')"
             id="selLog"
             v-model="logBook"
           />
@@ -675,10 +675,9 @@ import VueTelInput from 'vue-tel-input';
 import S3 from 'aws-s3';
 import DataTable from 'vue-materialize-datatable';
 import axios from 'axios';
-import moment from 'moment';
-import validator from '@sendyit/validation';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
+import TelInputOptions from '../telInputOptions';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
 
 let s3 = '';
 
@@ -764,15 +763,15 @@ export default {
     },
   },
   watch: {
-    insuNo(val) {
+    insuNo() {
       this.insuNo = this.insuNo.toUpperCase();
       this.insuValid = validator('InsuranceCertificate', val, localStorage.countryCode.toLowerCase(), '.insu-no');
     },
-    logBook(val) {
+    logBook() {
       this.logBook = this.logBook.toUpperCase();
       this.logBookValid = validator('LogBook', val, localStorage.countryCode.toLowerCase(), '.log-book');
     },
-    regNo(val) {
+    regNo() {
       this.regNo = this.regNo.toUpperCase();
       let BU = 'MBUNumberPlate';
       const vendor = parseInt(this.vendorType, 10);

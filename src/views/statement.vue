@@ -217,10 +217,9 @@ import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 import axios from 'axios';
 import Mixpanel from 'mixpanel';
-import { mapGetters } from 'vuex';
-import notify from '../components/notification';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
+import notify from '../components/notification.vue';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
 import timezone from '../mixins/timezone';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);

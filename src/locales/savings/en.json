@@ -1,0 +1,12 @@
+{
+  "amount": "AMOUNT",
+  "balance": "Balance",
+  "date": "Date",
+  "fetch_savings": "Fetching savings",
+  "from": "From",
+  "narrative": "Narrative",
+  "no_savings": "No savings found for this period",
+  "please_select_both": "Please select both a from and to date",
+  "saving_for": "Savings for {name} for {monthPeriod}",
+  "to": "To"
+}

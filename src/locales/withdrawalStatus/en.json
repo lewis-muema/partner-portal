@@ -1,0 +1,17 @@
+{
+  "amount": "AMOUNT",
+  "btn_with": "New withdrawal",
+  "completed": "Completed",
+  "fail_msg1": "Sorry, We are experiencing some technical difficulties processing your withdrawal.",
+  "fail_msg2": "Please make a new withdrawal in the next <b>15:00 minutes</b>",
+  "failed": "Failed",
+  "home": "Home",
+  "inprogress": "In Progress",
+  "mywithdrawal": "My Withdrawals",
+  "pay_method": "PAYMENT METHOD",
+  "progress": "Progress",
+  "statement": "Statement",
+  "trouble": "Still having trouble? ",
+  "withdraw_fail": "Withdrawal Failed",
+  "withdraw_success": "Withdrawal Successful"
+}
