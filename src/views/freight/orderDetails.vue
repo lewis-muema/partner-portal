@@ -284,6 +284,7 @@
 </template>
 <script>
 import axios from 'axios';
+import S3 from 'aws-s3';
 import 'file-viewer';
 import timezone from '../../mixins/timezone';
 import notify from '../../components/notification.vue';

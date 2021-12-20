@@ -69,6 +69,7 @@
 
 <script>
 import $ from 'jquery';
+import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
 import documentsLoading from './documentsLoading.vue';

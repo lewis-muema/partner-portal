@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import S3 from 'aws-s3';
 import axios from 'axios';
 import verifier from '../components/verifier.vue';
 import errorHandler from '../components/errorHandler.vue';

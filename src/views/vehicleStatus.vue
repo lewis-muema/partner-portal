@@ -89,6 +89,7 @@
 </template>
 
 <script>
+import S3 from 'aws-s3';
 import $ from 'jquery';
 import axios from 'axios';
 import documentsLoading from './documentsLoading.vue';
