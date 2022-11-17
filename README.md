@@ -1,4 +1,4 @@
-# vue_partner_portal
+# Vue Partner Portal
 
 ## Project setup
 ```
