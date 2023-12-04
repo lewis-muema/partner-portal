@@ -48,8 +48,8 @@
 <script>
 import axios from 'axios';
 import statsLoading from './statsLoadingComponent.vue';
-import errorHandler from '../components/errorHandler';
-import notify from '../components/notification';
+import errorHandler from '../components/errorHandler.vue';
+import notify from '../components/notification.vue';
 
 export default {
   name: 'Performance',

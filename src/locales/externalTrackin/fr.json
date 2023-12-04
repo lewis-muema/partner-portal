@@ -1,0 +1,13 @@
+{
+  "decrease": "FR_Decrease",
+  "decrease_speed": "FR_Decrease speed",
+  "fast": "FR_Fast",
+  "fast_forward": "FR_Fast forward",
+  "increase": "FR_Increase",
+  "increase_speed": "FR_Increase speed",
+  "no_data_returned": "FR_No data has been returned",
+  "pause": "FR_Pause",
+  "play": "FR_Play",
+  "provide_all": "FR_Kindly provide all values",
+  "rewind": "FR_Rewind"
+}

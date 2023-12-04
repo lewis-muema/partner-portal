@@ -1,0 +1,16 @@
+{
+  "cancel": "FR_Cancel",
+  "change": "FR_Change",
+  "click_to_upload": "FR_click to upload",
+  "delivery_licence_expires": "FR_Delivery license expires on {expiry_date}",
+  "dl_submited": "FR_Driving License submitted",
+  "document_declined": "FR_Document declined : Kindy re-upload or contact Customer Support",
+  "document_uploaded_successfully": "FR_Document uploaded successfully .",
+  "drop_files_here": "FR_Drop file here or",
+  "kindly_upload_dl": "FR_Kindly upload driving license",
+  "loading_preview": "FR_Loading Preview ...",
+  "pending_approval": "FR_Pending approval",
+  "request_refund_error": "FR_Request Refund Error . Try again",
+  "sure_close_dialogue": "FR_Are you sure to close this dialog?",
+  "update": "FR_Update"
+}

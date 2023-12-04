@@ -1,0 +1,17 @@
+{
+  "amount": "FR_AMOUNT",
+  "btn_with": "FR_New withdrawal",
+  "completed": "FR_Completed",
+  "fail_msg1": "FR_Sorry, We are experiencing some technical difficulties processing your withdrawal.",
+  "fail_msg2": "FR_Please make a new withdrawal in the next <b>15:00 minutes</b>",
+  "failed": "FR_Failed",
+  "home": "FR_Home",
+  "inprogress": "FR_In Progress",
+  "mywithdrawal": "FR_My Withdrawals",
+  "pay_method": "FR_PAYMENT METHOD",
+  "progress": "FR_Progress",
+  "statement": "FR_Statement",
+  "trouble": "FR_Still having trouble? ",
+  "withdraw_fail": "FR_Withdrawal Failed",
+  "withdraw_success": "FR_Withdrawal Successful"
+}

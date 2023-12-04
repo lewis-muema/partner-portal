@@ -58,19 +58,19 @@
               <p>
                 {{ $t('insurance.insurance_certificate_number') }}
               </p>
-              <input type="text" class="request_refund-inputs" v-model="certificate_no" />
+              <input type="text" class="request_refund-inputs cert-no" v-model="certificate_no" />
             </div>
             <div class="request-refund-inputs">
               <p>
                 {{ $t('insurance.policy_number') }}
               </p>
-              <input type="text" class="request_refund-inputs" v-model="policy_no" />
+              <input type="text" class="request_refund-inputs policy-no" v-model="policy_no" />
             </div>
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
           <el-button @click="closeDialog()" class="cancel-refund">{{ $t('insurance.cancel') }}</el-button>
-          <el-button type="primary" @click="initiateUpload()" class="confirm-refund"> {{ $t('insurance.update') }}</el-button>
+          <el-button type="primary" @click="initiateUpload()" class="confirm-refund" :disabled="!(certValid && policyValid)"> {{ $t('insurance.update') }}</el-button>
         </span>
       </el-dialog>
       <notify />
@@ -83,9 +83,10 @@ import $ from 'jquery';
 import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
+import validator from '@sendyit/validation';
 import documentsLoading from './documentsLoading.vue';
-import notify from '../components/notification';
-import errorHandler from '../components/errorHandler';
+import notify from '../components/notification.vue';
+import errorHandler from '../components/errorHandler.vue';
 
 let s3 = '';
 
@@ -112,7 +113,17 @@ export default {
       fileName: '',
       errorObj: '',
       uploading_text: this.$t('insurance.change'),
+      certValid: false,
+      policyValid: false,
     };
+  },
+  watch: {
+    certificate_no() {
+      this.certValid = validator('InsuranceCertificate', this.certificate_no, localStorage.countryCode.toLowerCase(), '.cert-no');
+    },
+    policy_no() {
+      this.policyValid = validator('InsurancePolicy', this.policy_no, localStorage.countryCode.toLowerCase(), '.policy-no');
+    },
   },
   created() {
     this.initiateS3();

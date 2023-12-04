@@ -73,8 +73,8 @@ import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
 import documentsLoading from './documentsLoading.vue';
-import notify from '../components/notification';
-import errorHandler from '../components/errorHandler';
+import notify from '../components/notification.vue';
+import errorHandler from '../components/errorHandler.vue';
 
 let s3 = '';
 

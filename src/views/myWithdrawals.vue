@@ -30,7 +30,7 @@
 <script>
 import axios from 'axios';
 import withdrawalItem from './withdrawalItem.vue';
-import errorHandler from '../components/errorHandler';
+import errorHandler from '../components/errorHandler.vue';
 
 export default {
   components: { withdrawalItem, errorHandler },
@@ -73,7 +73,7 @@ export default {
           const parsedResponse = response.data;
           if (parsedResponse.status && parsedResponse.owner_withdrawals.length > 0) {
             this.failed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'failed');
-            this.processing = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === ('processing' || 'request sent'));
+            this.processing = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'processing');
             this.completed = parsedResponse.owner_withdrawals.filter(el => el.status.toLowerCase() === 'success');
           }
           resolve(response);

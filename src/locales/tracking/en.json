@@ -1,0 +1,20 @@
+{
+  "dont_have_sendy_tracker": "You do not currently have a Sendy issued tracker installed on your vehicle.",
+  "driver": "Driver",
+  "end_date": "End Date",
+  "from": "From",
+  "get_in_touch": "Get in touch with our",
+  "last_seen": "Last seen {minutes} minutes ago",
+  "network_issues": "This could be due to network issues",
+  "offline": "Offline",
+  "online": "Online",
+  "partner_management_team": "Partner Management Team",
+  "speed": "Speed",
+  "start_date": "Start Date",
+  "to": "To",
+  "to_get_one_day": "to get one today.",
+  "track_history": "Track History",
+  "tracker": "Tracker",
+  "true": "true",
+  "vehicle_tracking": "Vehicle Tracking"
+}

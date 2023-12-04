@@ -316,17 +316,15 @@
   </div>
 </template>
 <script>
-// import VueTelInput from 'vue-tel-input';
 import 'vue-tel-input/dist/vue-tel-input.css';
 import { constants } from 'crypto';
 import axios from 'axios';
 import moment from 'moment';
 import Mixpanel from 'mixpanel';
-import notify from '../components/notification';
+import notify from '../components/notification.vue';
 import timezone from '../mixins/timezone';
-import errorHandler from '../components/errorHandler';
-import verifier from '../components/verifier';
-// import truckValidationMixin from '../mixins/truckValidationMixin';
+import errorHandler from '../components/errorHandler.vue';
+import verifier from '../components/verifier.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 let interval = '';

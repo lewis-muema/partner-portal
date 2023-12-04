@@ -1,0 +1,14 @@
+{
+  "amont": "FR_Amount",
+  "amount": "FR_AMOUNT",
+  "balance": "FR_Balance",
+  "date": "FR_Date",
+  "fetching_loans": "FR_Fetching loans",
+  "from": "FR_From",
+  "loading": "FR_LOADING",
+  "loans_for": "FR_Loans for {name} for {monthPeriod}",
+  "narrative": "FR_Narrative",
+  "no_loans": "FR_No loans found for this period",
+  "please_select": "FR_Please select both a from and to date",
+  "to": "FR_To"
+}

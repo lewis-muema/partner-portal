@@ -12,9 +12,9 @@
           </div>
           <div class="item__indicator">
             <p class="item__status">{{ withdrawal.status }}</p>
-            <i v-if="withdrawal.status === ('processing' || 'request sent')" class="fas fa-clock icon icon-proc"></i>
+            <i v-if="withdrawal.status === 'processing'" class="fas fa-clock icon icon-proc"></i>
             <i v-else-if="withdrawal.status === 'failed'" class="fas fa-exclamation-circle icon icon-fail"></i>
-            <i v-else-if="withdrawal.status === 'success'" class="fas fa-check-circle icon icon-comp"></i>
+            <i v-else-if="withdrawal.status === 'completed'" class="fas fa-check-circle icon icon-comp"></i>
           </div>
         </div>
       </router-link>

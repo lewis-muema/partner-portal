@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import fuelAdvance from './fuel/fuelAdvance';
+import fuelAdvance from './fuel/fuelAdvance.vue';
 
 export default {
-  title: 'Partner Portal - Auxilliary services',
+  title: 'Partner Portal - Auxiliary services',
   components: {
     fuelAdvance,
   },

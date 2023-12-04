@@ -34,7 +34,7 @@
 <script>
 import axios from 'axios';
 import Mixpanel from 'mixpanel';
-import notify from '../../components/notification';
+import notify from '../../components/notification.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 

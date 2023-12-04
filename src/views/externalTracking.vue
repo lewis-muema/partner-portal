@@ -66,11 +66,11 @@
 
 <script>
 // eslint-disable-next-line object-curly-newline
-import { TravelMarker, TravelMarkerOptions, TravelData, TravelEvents, EventType } from 'travel-marker';
+import { TravelMarker } from 'travel-marker';
 import axios from 'axios';
 import moment from 'moment';
 import $ from 'jquery';
-// let client = '';
+
 let map = '';
 let bounds = '';
 const loopInterval = [];
@@ -257,12 +257,12 @@ export default {
       });
     },
     getTime() {
-      const time = moment(this.time).format('h:mm:ss a');
-      return time;
+      return moment(this.time)
+        .format('h:mm:ss a');
     },
     getDate() {
-      const date = moment(this.time).format('MMMM Do YYYY');
-      return date;
+      return moment(this.time)
+        .format('MMMM Do YYYY');
     },
     ToolTip(classname, action) {
       $(`.${classname}`).css('opacity', action);

@@ -55,11 +55,11 @@
           </div>
           <div class="partner-documents-container">
             <p class="partner-documents-upload-title">{{ $t('orderDetails.documents') }}</p>
-            <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">{{ $t('orderDetails.upload_documents') }}</button>
+            <button class="partner-documents-upload-button" @click="$modal.show('upload-documents')">{{ $t('orderDetails.upload_document') }}</button>
             <div class="partner-documents-upload-rows" v-if="data.quotation.documents.length">
-              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.type_of_documents') }}</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.type_of_document') }}</span>
               <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.date') }}</span>
-              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.actions') }}</span>
+              <span class="partner-documents-upload-header partner-documents-third-row">{{ $t('orderDetails.action') }}</span>
               <span class="partner-documents-upload-header partner-documents-fourth-row">{{ $t('orderDetails.status') }}</span>
             </div>
             <div class="partner-documents-upload-rows" v-for="(document, index) in data.quotation.documents" :key="`${document.document_name}-${index}`">
@@ -121,8 +121,8 @@
               </div>
               <p class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.select_type_of_doc') }}</p>
               <select name="" id="" class="upload-documents-modal-top-inputs" v-model="documentType">
-                <option v-for="(document, index) in documents" :key="index" :value="document.documentType">
-                  {{ document.documentType }}
+                <option v-for="(document, index) in documents" :key="index" :value="document.document_type">
+                  {{ document.document_type }}
                 </option>
               </select>
               <p v-if="documentType === 'Other'" class="upload-documents-modal-top-input-labels">{{ $t('orderDetails.name_of_document') }}</p>
@@ -284,13 +284,12 @@
 </template>
 <script>
 import axios from 'axios';
-import moment from 'moment';
 import S3 from 'aws-s3';
 import 'file-viewer';
 import timezone from '../../mixins/timezone';
-import notify from '../../components/notification';
-import verifier from '../../components/verifier';
-import errorHandler from '../../components/errorHandler';
+import notify from '../../components/notification.vue';
+import verifier from '../../components/verifier.vue';
+import errorHandler from '../../components/errorHandler.vue';
 import userPermissionMixin from '../../mixins/userPermissionMixin';
 
 let s3 = '';
@@ -340,7 +339,7 @@ export default {
   },
   computed: {
     document_type() {
-      const document = this.documents.filter(obj => obj.documentType === this.documentType);
+      const document = this.documents.filter(obj => obj.document_type === this.documentType);
       return document[0].id;
     },
     fuelSubmitStatus() {

@@ -158,9 +158,9 @@
 <script>
 import axios from 'axios';
 import timezone from '../../../../mixins/timezone';
-import notify from '../../../../components/notification';
-import errorHandler from '../../../../components/errorHandler';
-import verifier from '../../../../components/verifier';
+import notify from '../../../../components/notification.vue';
+import errorHandler from '../../../../components/errorHandler.vue';
+import verifier from '../../../../components/verifier.vue';
 
 let timer = '';
 

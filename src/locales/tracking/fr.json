@@ -1,0 +1,20 @@
+{
+  "dont_have_sendy_tracker": "FR_You do not currently have a Sendy issued tracker installed on your vehicle.",
+  "driver": "FR_Driver",
+  "end_date": "FR_End Date",
+  "from": "FR_From",
+  "get_in_touch": "FR_Get in touch with our",
+  "last_seen": "FR_Last seen {minutes} minutes ago",
+  "network_issues": "FR_This could be due to network issues",
+  "offline": "FR_Offline",
+  "online": "FR_Online",
+  "partner_management_team": "FR_Partner Management Team",
+  "speed": "FR_Speed",
+  "start_date": "FR_Start Date",
+  "to": "FR_To",
+  "to_get_one_day": "FR_to get one today.",
+  "track_history": "FR_Track History",
+  "tracker": "FR_Tracker",
+  "true": "FR_true",
+  "vehicle_tracking": "FR_Vehicle Tracking"
+}

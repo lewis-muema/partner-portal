@@ -178,11 +178,10 @@
 <script>
 import $ from 'jquery';
 import axios from 'axios';
-import moment from 'moment';
 import Mixpanel from 'mixpanel';
-import notify from '../components/notification';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
+import notify from '../components/notification.vue';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL);
 export default {

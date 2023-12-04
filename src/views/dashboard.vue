@@ -70,9 +70,6 @@
       <div class="row">
         <div class="col-md-12">
           <div class="dashboard__mid">
-            <!-- <div class="dashboard__mid-header">
-            <h3 class="dashboard__mid-title">Monthly Recap</h3>
-            </div>-->
             <div class="dashboard__mid-body">
               <div class="row">
                 <div class="col-lg-9">
@@ -193,12 +190,11 @@
 </template>
 
 <script>
-import S3 from 'aws-s3';
 import axios from 'axios';
 import moment from 'moment';
 import chart from '../components/chart.vue';
-import verifier from '../components/verifier';
-import errorHandler from '../components/errorHandler';
+import verifier from '../components/verifier.vue';
+import errorHandler from '../components/errorHandler.vue';
 
 let s3 = '';
 

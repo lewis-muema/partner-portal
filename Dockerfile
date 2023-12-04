@@ -7,8 +7,6 @@ ARG DOCKER_ENV
 ENV DOCKER_ENV=$DOCKER_ENV
 RUN echo ${DOCKER_ENV}
 
-RUN npm config set registry https://registry.npmjs.org/
-
 COPY package*.json ./ 
 RUN npm install 
 

@@ -1,45 +1,49 @@
-import appHeader from '../headers/fr/appHeader';
-import footer from '../headers/fr/footer';
-import truckValidationMxn from '../truckValidationMixin/fr';
-import authLogin from '../authLogin/fr';
-import availableOrders from '../availableOrders/fr';
-import banks from '../banks/fr';
-import cdbStatus from '../cbdStatus/fr';
-import dashboard from '../dashboard/fr';
-import document from '../documents/fr';
-import driverRequest from '../driverRequest/fr';
-import drivingLicence from '../drivingLicense/fr';
-import externalLogin from '../externalLogin/fr';
-import externalTracking from '../externalTrackin/fr';
-import forgotPassword from '../forgotPassword/fr';
-import insurance from '../insurence/fr';
-import loans from '../loans/fr';
-import login from '../login/fr';
-import orders from '../orders/fr';
-import perfomance from '../perfomance/fr';
-import pending from '../pending/fr';
-import refund from '../refund/fr';
-import riderTodayStats from '../riderTodayStats/fr';
-import savings from '../savings/fr';
-import signature from '../signature/fr';
-import statement from '../statement/fr';
-import tracking from '../tracking/fr';
-import vehicles from '../vehicles/fr';
-import vehicleStatus from '../vehicleStatus/fr';
-import biddingWebForm from '../bidding/fr/biddingWebForm';
-import signup from '../bidRecipient/fr/signup';
-import fuelAdvance from '../auxilliary/fr/fuelAdvance';
-import approved from '../auxilliary/fr/components/approved';
-import fuelPending from '../auxilliary/fr/components/pending';
-import placeRequest from '../auxilliary/fr/components/placeRequest';
-import clientSearch from '../freight/fr/clientSearch';
-import freightDashboard from '../freight/fr/dashboard';
-import orderCreation from '../freight/fr/orderCreation';
-import OrderDetails from '../freight/fr/orderDetails';
-import freightOrders from '../freight/fr/orders';
-import preferences from '../freight/fr/preferences';
-import changeLanguage from '../changeLanguage/fr';
-import withdrawalStatus from '../withdrawalStatus/fr';
+import appHeader from '../headers/fr.json';
+import truckValidationMxn from '../truckValidationMixin/fr.json';
+import authLogin from '../authLogin/fr.json';
+import availableOrders from '../availableOrders/fr.json';
+import banks from '../banks/fr.json';
+import cdbStatus from '../cbdStatus/fr.json';
+import dashboard from '../dashboard/fr.json';
+import document from '../documents/fr.json';
+import driverRequest from '../driverRequest/fr.json';
+import drivingLicence from '../drivingLicense/fr.json';
+import externalLogin from '../externalLogin/fr.json';
+import externalTracking from '../externalTrackin/fr.json';
+import forgotPassword from '../forgotPassword/fr.json';
+import insurance from '../insurence/fr.json';
+import loans from '../loans/fr.json';
+import login from '../login/fr.json';
+import orders from '../orders/fr.json';
+import perfomance from '../perfomance/fr.json';
+import pending from '../pending/fr.json';
+import refund from '../refund/fr.json';
+import riderTodayStats from '../riderTodayStats/fr.json';
+import savings from '../savings/fr.json';
+import signature from '../signature/fr.json';
+import statement from '../statement/fr.json';
+import tracking from '../tracking/fr.json';
+import vehicles from '../vehicles/fr.json';
+import vehicleStatus from '../vehicleStatus/fr.json';
+import biddingWebForm from '../bidding/fr.json';
+import signup from '../bidRecipient/fr.json';
+import fuelAdvance from '../auxilliary/fr.json';
+import clientSearch from '../freight/fr.json';
+import changeLanguage from '../changeLanguage/fr.json';
+import withdrawalStatus from '../withdrawalStatus/fr.json';
+import emailVerification from '../onboardingVerification/fr.json';
+
+const footer = appHeader;
+const approved = fuelAdvance;
+const fuelPending = fuelAdvance;
+const placeRequest = fuelAdvance;
+
+const freightDashboard = clientSearch;
+const orderCreation = clientSearch;
+const orderDetails = clientSearch;
+const freightOrders = clientSearch;
+const preferences = clientSearch;
+
 
 const translation = {
   appHeader,
@@ -79,11 +83,12 @@ const translation = {
   clientSearch,
   freightDashboard,
   orderCreation,
-  OrderDetails,
+  orderDetails,
   freightOrders,
   preferences,
   changeLanguage,
   withdrawalStatus,
+  emailVerification,
 };
 
 export default translation;

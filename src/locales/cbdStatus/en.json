@@ -1,0 +1,21 @@
+{
+  "bike_upadate_error": "Bike Status Update Error . Try again",
+  "cancel": "Cancel",
+  "cbd_licence": "Has a CBD license",
+  "cbd_status": "CBD status",
+  "change": "Change",
+  "click_to_upload": "click to upload",
+  "doc_uploaded_successfully": "Document uploaded successfully .",
+  "does_have_cbd_license": "Doesn’t have a CBD license",
+  "drop_files_here": "Drop file here or",
+  "have_cbd_licence": "Do you have a CBD license?",
+  "loading_preview": "Loading Preview ...",
+  "no": "No",
+  "provide_all_values": "Kindly provide all values",
+  "sure_close_dialogue": "Are you sure to close this dialog?",
+  "update": "Update",
+  "update_details": "Update details",
+  "upload_cbd_licence": "Kindly upload cbd license document",
+  "upload_image": "Upload image of your",
+  "yes": "Yes"
+}

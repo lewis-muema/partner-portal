@@ -36,7 +36,7 @@
 
 <script>
 import axios from 'axios';
-import notify from '../../components/notification';
+import notify from '../../components/notification.vue';
 
 export default {
   components: { notify },
